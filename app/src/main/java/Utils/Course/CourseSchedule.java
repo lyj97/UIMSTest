@@ -1,4 +1,4 @@
-package Course;
+package Utils.Course;
 
 public class CourseSchedule {
     private int startWeek;  //开始周
@@ -6,7 +6,7 @@ public class CourseSchedule {
     private int TAG;           //全-0、单-1、双-2 周标志
     private int lessonWeek;   //星期几上课
     private int lessonIndex;  //课程节数
-    private String classroomName;
+    private String classroomName; //教室
 
     public int getStartWeek() {
         return startWeek;

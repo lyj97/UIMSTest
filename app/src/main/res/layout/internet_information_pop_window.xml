@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:padding="10dp"
+    android:orientation="vertical"
+    >
+
+    <LinearLayout
+        android:id="@+id/internet_information_pop_window_main_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/background_login"
+        >
+
+        <TextView
+            android:id="@+id/internet_information_pop_window_title_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="提示"
+            android:textSize="16dp"
+            android:textColor="@color/dark"
+            android:background="@drawable/shape_rectangle_with_radius"
+            />
+
+        <ScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/internet_information_pop_window_main_information_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:background="@drawable/login_edit_text_background"
+                android:layout_marginTop="10dp"
+                android:padding="10dp"
+                android:textSize="14sp"
+                android:text="main_information"
+                />
+
+        </ScrollView>
+
+        <TextView
+            android:id="@+id/internet_information_pop_window_link_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginBottom="10dp"
+            android:padding="5dp"
+            android:textSize="14sp"
+            android:text="link"
+            />
+
+        <TextView
+            android:id="@+id/internet_information_pop_window_confirm_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:padding="10dp"
+            android:text="我知道了"
+            android:textColor="@color/colorAccent"
+            />
+
+    </LinearLayout>
+</RelativeLayout>

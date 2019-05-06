@@ -7,7 +7,7 @@ public class ClassSetConvert {
     private static HashMap<Integer, Integer> lessonIndex_lessonValue = new HashMap<>();
     private static HashMap<Integer, int[]> lessonValue_lessonIndex = new HashMap<>();
 
-    public ClassSetConvert(){
+    static {
 
         lessonIndex_lessonValue.put(1, getTwoNthPower(1));
         lessonIndex_lessonValue.put(2, getTwoNthPower(2));
@@ -58,9 +58,10 @@ public class ClassSetConvert {
 
     private static int getTwoNthPower(int n){
         int value = 1;
-        for(int i=0; i<n; i++){
-            value *= 2;
-        }
+//        for(int i=0; i<n; i++){
+//            value *= 2;
+//        }
+        value <<= n;
         return value;
     }
 

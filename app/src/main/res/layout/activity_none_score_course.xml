@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="3dp"
+    android:background="@drawable/background_login"
+    android:gravity="center">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:text="UIMSTest"
+        android:textSize="20sp"
+        android:padding="3dp"
+        android:textColor="@color/color_whiteBackground"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="5dp"
+        android:textSize="15sp"
+        android:textColor="#FFFFFF"
+        android:text="成绩未发布课程" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="#00000000"
+        android:paddingTop="4dp"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <Spinner
+                android:id="@+id/get_none_score_course_term_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@drawable/spinner_background"
+                android:layout_weight="85" >
+            </Spinner>
+
+            <Button
+                android:id="@+id/get_none_score_course_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="查询"
+                android:layout_weight="15"
+                android:textColor="@color/color_whiteBackground"
+                android:background="@drawable/login_button_background"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/nono_score_course_data_area"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+
+            <ListView
+                android:id="@+id/get_none_score_course_list_view"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:divider="#00000000"
+                android:dividerHeight="5dp"
+                android:padding="4dp"
+                android:layout_weight="85"
+                android:background="@drawable/shape_just_with_radius"
+                >
+            </ListView>
+
+            <Button
+                android:id="@+id/delete_saved_course_information_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="15"
+                android:text="删除本学期缓存数据"
+                android:background="@drawable/shape_warn"
+                />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    >
+
+    <LinearLayout
+        android:id="@+id/course_schedule_change_pop_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true"
+        android:background="#00000000"
+        >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="添加课程调整\nTips:“更换后上课时间”留白，即为添加假期"
+            android:textSize="16dp"
+            android:textColor="@color/dark"
+            android:background="@drawable/shape_rectangle_with_top_radius"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/background_login"
+            >
+
+            <EditText
+                android:id="@+id/course_schedule_change_add_title_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="标题"
+                android:textColor="@color/app_white"
+                />
+
+            <TextView
+                android:id="@+id/course_schedule_change_add_pre_time_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="10dp"
+                android:padding="10dp"
+                android:textSize="16sp"
+                android:hint="原始上课时间"
+                />
+
+            <TextView
+                android:id="@+id/course_schedule_change_add_change_time_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="10dp"
+                android:textSize="16sp"
+                android:hint="更换后上课时间"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/shape_rectangle_bottom_no_radius"
+            >
+
+            <Button
+                android:id="@+id/course_schedule_change_commit_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/login_button_background"
+                android:layout_margin="10dp"
+                android:text="确定"
+                />
+
+            <Button
+                android:id="@+id/course_schedule_change_cancel_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape_with_white_background"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
+                android:text="取消"
+                />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</RelativeLayout>

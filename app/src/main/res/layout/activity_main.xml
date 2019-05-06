@@ -1,27 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="8dp"
-    android:paddingTop="10dp"
-    android:background="@color/color_grayBackground"
-    android:gravity="center">
+    android:padding="3dp"
+    android:paddingTop="15dp"
+    android:background="@drawable/background_login"
+    android:gravity="top">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:text="UIMSTest"
+        android:textSize="20sp"
+        android:padding="3dp"
+        android:textColor="@color/color_whiteBackground"
+        />
+
+    <TextView
+        android:id="@+id/textView_ScoreStatisticsTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="15sp"
+        android:textColor="#FFFFFF"
+        android:text="TextView" />
 
     <TextView
         android:id="@+id/textView_ScoreStatistics"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/color_lightBiueBackground"
-        android:textAlignment="center"
-        android:textSize="12sp"
+        android:gravity="center"
+        android:textColor="#6B767E"
+        android:textSize="14sp"
         android:text="TextView" />
 
-    <ListView
-        android:id="@+id/lv"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:background="@color/color_whiteBackground"
-        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#00000000"
+        android:orientation="vertical">
+
+        <ListView
+            android:id="@+id/lv"
+            android:divider="#00000000"
+            android:dividerHeight="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/shape_just_with_radius"
+            >
+
+        </ListView>
+
+
+    </LinearLayout>
 
 </LinearLayout>

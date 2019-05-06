@@ -1,4 +1,4 @@
-package Course;
+package Utils.Course;
 
 import java.util.Arrays;
 
@@ -42,7 +42,7 @@ public class Course {
 
     @Override
     public String toString() {
-        return "Course{" +
+        return "Utils.Course{" +
                 "id=" + id +
                 ", courseName='" + courseName + '\'' +
                 ", lessonTeacher='" + lessionTeacher + '\'' +
