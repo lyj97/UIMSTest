@@ -20,9 +20,9 @@
 
     <!--渐变-->
     <gradient
-        android:startColor="#6FD9A8"
-        android:centerColor="#63cfc3"
-        android:endColor="#57c5e9">
+        android:startColor="#38D7FF"
+        android:centerColor="#37B9FF"
+        android:endColor="#38D7FF">
 
     </gradient>
 

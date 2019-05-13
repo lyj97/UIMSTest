@@ -1,9 +1,8 @@
-package View;
+package PopWindow;
 
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
-import android.icu.text.SymbolTable;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
@@ -54,7 +53,7 @@ public class InternetInformationPopupWindow extends PopupWindow {
         this.context = context;
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mMenuView = inflater.inflate(R.layout.internet_information_pop_window, null);
+        mMenuView = inflater.inflate(R.layout.pop_window_internet_information, null);
         information_title = mMenuView.findViewById(R.id.internet_information_pop_window_title_text);
         information_main = mMenuView.findViewById(R.id.internet_information_pop_window_main_information_text);
         information_link = mMenuView.findViewById(R.id.internet_information_pop_window_link_text);

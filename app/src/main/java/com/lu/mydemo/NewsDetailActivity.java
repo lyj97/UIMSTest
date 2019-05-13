@@ -1,11 +1,16 @@
 package com.lu.mydemo;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
 import android.text.method.LinkMovementMethod;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.URLSpan;
 import android.util.Log;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
@@ -73,8 +78,25 @@ public class NewsDetailActivity extends AppCompatActivity {
         detailTitle.setText(bundle.getString("title"));
         detailDepartment.setText(bundle.getString("department"));
         detailTime.setText(bundle.getString("time"));
-        detailLink.setText(Html.fromHtml("<a href=\'" + bundle.getString("abs_link") + "\'>ⓘ</a>"));
+        detailLink.setText(Html.fromHtml("<a href=\'" + bundle.getString("abs_link") + "\'>\uD83C\uDF0E浏览器打开</a>"));
         detailLink.setMovementMethod(LinkMovementMethod.getInstance());
+
+        CharSequence text  =  detailLink.getText();
+        if (text instanceof Spannable){
+
+            int  end  =  text.length();
+            Spannable sp  =  (Spannable)detailLink.getText();
+            URLSpan[] urls = sp.getSpans( 0 , end, URLSpan.class );
+
+            SpannableStringBuilder style = new  SpannableStringBuilder(text);
+            style.clearSpans(); // should clear old spans
+            for (URLSpan url : urls){
+                URLSpan myURLSpan=   new  URLSpan(url.getURL());
+                style.setSpan(myURLSpan,sp.getSpanStart(url),sp.getSpanEnd(url),Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                style.setSpan(new ForegroundColorSpan(Color.WHITE), sp.getSpanStart(url), sp.getSpanEnd(url), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);//设置前景色为白色
+            }
+            detailLink.setText(style);
+        }
 
         webView = findViewById(R.id.activity_news_detail_web_view);
         new Thread(new Runnable() {

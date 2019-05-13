@@ -40,7 +40,7 @@ import java.util.Map;
 
 import ToolFor2045_Site.GetInternetInformation;
 import Utils.Course.CourseScheduleChange;
-import View.*;
+import PopWindow.*;
 
 public class CourseScheduleChangeActivity extends AppCompatActivity {
 

@@ -39,6 +39,14 @@
         >
 
         <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="#FFFFFF"
+            android:text="🏠 "
+            />
+
+        <TextView
             android:id="@+id/activity_news_detail_department"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -48,9 +56,11 @@
             android:text="department" />
 
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:textSize="14sp"
+            android:textColor="#FFFFFF"
+            android:text=" ⏰ "
             />
 
         <TextView
@@ -63,12 +73,19 @@
             android:text="time" />
 
         <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            />
+
+        <TextView
             android:id="@+id/activity_news_detail_link"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:textSize="14sp"
             android:textColor="#FFFFFF"
+            android:paddingStart="5dp"
             android:text="" />
 
     </LinearLayout>

@@ -1,9 +1,7 @@
-package View;
+package PopWindow;
 
 import android.app.Activity;
-import android.app.DatePickerDialog;
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.icu.text.SimpleDateFormat;
 import android.icu.util.Calendar;
@@ -11,10 +9,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
 import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
@@ -58,7 +53,7 @@ public class RecommendCourseScheduleChangePopWindow extends PopupWindow {
         ischangeTimeSet = false;
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mMenuView = inflater.inflate(R.layout.recommend_course_schedule_change_pop_window, null);
+        mMenuView = inflater.inflate(R.layout.pop_window_recommend_course_schedule_change, null);
         recommendInformation = mMenuView.findViewById(R.id.recommend_course_schedule_change_information);
         course_list = mMenuView.findViewById(R.id.recommend_course_schedule_change_list);
         commit_button = mMenuView.findViewById(R.id.recommend_course_schedule_change_commit_button);

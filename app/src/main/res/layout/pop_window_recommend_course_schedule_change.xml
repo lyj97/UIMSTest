@@ -29,9 +29,9 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="推荐添加的课程调整"
-                android:textSize="16sp"
+                android:textSize="17sp"
                 android:textStyle="bold"
-                android:textColor="@color/dark"
+                android:textColor="@color/app_white"
                 />
 
             <TextView

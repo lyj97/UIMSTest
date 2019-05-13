@@ -13,12 +13,11 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
@@ -45,13 +44,13 @@ import UIMS.UIMS;
 import UIMSTool.ClassSetConvert;
 import UIMSTool.CourseJSONTransfer;
 import Utils.Course.CourseScheduleChange;
-import View.*;
+import PopWindow.*;
 
 public class LoginActivity extends Activity {
 
     private LinearLayout actiivity_login;
     private LinearLayout information;
-    private LinearLayout login;
+//    private LinearLayout login;
 
     private boolean showInformation = true;
     private LinearLayout switchLayout;
@@ -62,11 +61,11 @@ public class LoginActivity extends Activity {
     private LinearLayout timeInformationLayout;
     private ListView courseList;
 
-    private EditText id_login;
-    private EditText password_login;
-    private CheckBox rememberpassword_login;
-    private CheckBox auto_login;
-    private Button button_login;
+//    private EditText id_login;
+//    private EditText password_login;
+//    private CheckBox rememberpassword_login;
+//    private CheckBox auto_login;
+//    private Button button_login;
     private Button load_internet_inf_button;
     private Button get_save_button;
     private Button getNoneScoreCourseButton;
@@ -115,12 +114,14 @@ public class LoginActivity extends Activity {
     String pass;
 
     int information_layout_height;
-    int login_layout_height;
-    int load_internet_inf_button_layout_height;
-    int get_none_score_course_information_button_layout_height;
+//    int login_layout_height;
+//    int load_internet_inf_button_layout_height;
+//    int get_none_score_course_information_button_layout_height;
 
 //    int course_list_height;
 //    int course_list_layout_height;
+
+    public LoginPopWindow popWindow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,18 +141,18 @@ public class LoginActivity extends Activity {
         UIMSTest = findViewById(R.id.UIMSTest);
         actiivity_login = findViewById(R.id.activity_login);
         information = findViewById(R.id.information);
-        login = findViewById(R.id.login);
-        id_login=(EditText) findViewById(R.id.login_id);
-        password_login=(EditText) findViewById(R.id.login_password);
-        rememberpassword_login=(CheckBox) findViewById(R.id.login_rememberpassword);
-        auto_login=(CheckBox) findViewById(R.id.login_autologin);
-        button_login=(Button) findViewById(R.id.login_button);
+//        login = findViewById(R.id.login);
+//        id_login=(EditText) findViewById(R.id.login_id);
+//        password_login=(EditText) findViewById(R.id.login_password);
+//        rememberpassword_login=(CheckBox) findViewById(R.id.login_rememberpassword);
+//        auto_login=(CheckBox) findViewById(R.id.login_autologin);
+//        button_login=(Button) findViewById(R.id.login_button);
         load_internet_inf_button = findViewById(R.id.load_internet_information_button);
         get_save_button = findViewById(R.id.get_saved_button);
         getNoneScoreCourseButton = findViewById(R.id.load_none_score_course_information_button);
         getNewsButton = findViewById(R.id.get_news_button);
 //        getNewsSavedButton = findViewById(R.id.get_news_saved_button);
-        button_login.setActivated(true);
+//        button_login.setActivated(true);
 
         information_name = findViewById(R.id.information_name);
         information_department = findViewById(R.id.information_department);
@@ -170,9 +171,9 @@ public class LoginActivity extends Activity {
         isMainShow = sp.getBoolean("isMainShow", isMainShow);
 
         information_layout_height = information.getLayoutParams().height;
-        load_internet_inf_button_layout_height = load_internet_inf_button.getLayoutParams().height;
-        login_layout_height = login.getLayoutParams().height;
-        get_none_score_course_information_button_layout_height = getNoneScoreCourseButton.getLayoutParams().height;
+//        load_internet_inf_button_layout_height = load_internet_inf_button.getLayoutParams().height;
+//        login_layout_height = login.getLayoutParams().height;
+//        get_none_score_course_information_button_layout_height = getNoneScoreCourseButton.getLayoutParams().height;
 
         mShowAction = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0.0f,
                 Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF,
@@ -196,12 +197,12 @@ public class LoginActivity extends Activity {
             switchInformation.setText("个人信息(登录后显示)");
 
             hideInformation();
-            load_internet_inf_button.setVisibility(View.INVISIBLE);
-            load_internet_inf_button.getLayoutParams().height = 0;
-            if(!isLocalValueLoaded){
-                getNoneScoreCourseButton.setVisibility(View.INVISIBLE);
-                getNoneScoreCourseButton.getLayoutParams().height = 0;
-            }
+//            load_internet_inf_button.setVisibility(View.INVISIBLE);
+//            load_internet_inf_button.getLayoutParams().height = 0;
+//            if(!isLocalValueLoaded){
+//                getNoneScoreCourseButton.setVisibility(View.INVISIBLE);
+//                getNoneScoreCourseButton.getLayoutParams().height = 0;
+//            }
             actiivity_login.requestLayout();
         }
         else{
@@ -221,32 +222,33 @@ public class LoginActivity extends Activity {
             });
         }
 
-        if (sp.getBoolean("ischeck",false)){
-            rememberpassword_login.setChecked(true);
-            id_login.setText(sp.getString("USER",""));
-            //密文密码
-            password_login.setInputType(PASSWORD_MIWEN);
-            password_login.setText(sp.getString("PASSWORD",""));
-
-            idvalue=sp.getString("USER","");
-            passwordvalue=sp.getString("PASSWORD","");
-
-            if (sp.getBoolean("auto_ischeck",false)){
-                auto_login.setChecked(true);
-                button_login.setActivated(false);
-//                Toast.makeText(LoginActivity.this, "自动登录中，请稍候...", Toast.LENGTH_SHORT).show();
-//                showLoading("自动登录中，请稍候...");
-                autoLoad_Login(true, true);
-//                Intent intent = new Intent(LoginActivity.this,MainActivity.class);
-//                startActivity(intent);
-            }
-            else{
-                autoLoad_Login(true, false);
-            }
-        }
-        else{
-            autoLoad_Login(true, false);
-        }
+//        if (sp.getBoolean("ischeck",false)){
+//            rememberpassword_login.setChecked(true);
+//            id_login.setText(sp.getString("USER",""));
+//            //密文密码
+//            password_login.setInputType(PASSWORD_MIWEN);
+//            password_login.setText(sp.getString("PASSWORD",""));
+//
+//            idvalue=sp.getString("USER","");
+//            passwordvalue=sp.getString("PASSWORD","");
+//
+//            if (sp.getBoolean("auto_ischeck",false)){
+//                auto_login.setChecked(true);
+//                button_login.setActivated(false);
+////                Toast.makeText(LoginActivity.this, "自动登录中，请稍候...", Toast.LENGTH_SHORT).show();
+////                showLoading("自动登录中，请稍候...");
+//                autoLoad_Login(true, true);
+////                Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+////                startActivity(intent);
+//            }
+//            else{
+//                autoLoad_Login(true, false);
+//            }
+//        }
+//        else{
+//            autoLoad_Login(true, false);
+//        }
+        autoLoad_Login(true, false);
 
         if(sp.getBoolean("isSwitchCheck",false)){
             switchToCourseList();
@@ -255,44 +257,54 @@ public class LoginActivity extends Activity {
             switchToInformation();
         }
 
-        button_login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(isLoginIn){
-                    reLogin(true);
-                    return;
-                }
-                id_login.getPaint().setFlags(0);
-                idvalue=id_login.getText().toString();
-                password_login.getPaint().setFlags(0);
-                passwordvalue=password_login.getText().toString();
-                if(idvalue.length() != 8 || !(passwordvalue.length() > 0)){
-                    showWarningAlert("用户名或密码不符合规则", "请输入正确的用户名和密码！");
-                    if(idvalue.length() != 8) id_login.setError("请输入8位教学号");
-                    if(!(passwordvalue.length() > 0)) password_login.setError("请输入密码");
-                    return;
-                }
-                showLoading("登录中，请稍候...");
-                button_login.setText("登录中，请稍候...");
-                button_login.setEnabled(false);
-                button_login.setBackground(getResources().getDrawable(R.drawable.login_button_disable_background));
-                login();
-            }
-        });
+//        button_login.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if(isLoginIn){
+//                    reLogin(true);
+//                    return;
+//                }
+//                id_login.getPaint().setFlags(0);
+//                idvalue=id_login.getText().toString();
+//                password_login.getPaint().setFlags(0);
+//                passwordvalue=password_login.getText().toString();
+//                if(idvalue.length() != 8 || !(passwordvalue.length() > 0)){
+//                    showWarningAlert("用户名或密码不符合规则", "请输入正确的用户名和密码！");
+//                    if(idvalue.length() != 8) id_login.setError("请输入8位教学号");
+//                    if(!(passwordvalue.length() > 0)) password_login.setError("请输入密码");
+//                    return;
+//                }
+//                showLoading("登录中，请稍候...");
+//                button_login.setText("登录中，请稍候...");
+//                button_login.setEnabled(false);
+//                button_login.setBackground(getResources().getDrawable(R.drawable.login_button_disable_background));
+//                login();
+//            }
+//        });
 
         load_internet_inf_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!isLoginIn){
-                    showAlert("请先登录.");
-                    return;
-                }
-                load_internet_inf_button.setEnabled(false);
-                load_internet_inf_button.setText("加载中，请稍候...");
-                load_internet_inf_button.setBackground(getResources().getDrawable(R.drawable.login_button_disable_background));
-//                showResponse("加载中，请稍候...");
-                showLoading("加载中，请稍候...");
-                loadInformation();
+//                if(!isLoginIn){
+//                    showAlert("请先登录.");
+//                    return;
+//                }
+//                load_internet_inf_button.setEnabled(false);
+//                load_internet_inf_button.setText("加载中，请稍候...");
+//                load_internet_inf_button.setBackground(getResources().getDrawable(R.drawable.login_button_disable_background));
+////                showResponse("加载中，请稍候...");
+//                showLoading("加载中，请稍候...");
+//                loadInformation();
+
+                /**
+                 * TODO TEST
+                 */
+                LoginPopWindow window = new LoginPopWindow(LoginActivity.this, findViewById(R.id.activity_login).getHeight(), findViewById(R.id.activity_login).getWidth());
+                window.setFocusable(true);
+                window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+                window.showAtLocation(LoginActivity.this.findViewById(R.id.activity_login), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0); //设置layout在PopupWindow中显示的位置
+                popWindow = window;
+
             }
         });
 
@@ -307,7 +319,7 @@ public class LoginActivity extends Activity {
                     loadLocalInformation(true, false);
                 }
                 else{
-                    showAlert("还没有已经保存的信息哦，登录后更新下信息再试试吧(*^_^*).");
+                    showAlert("还没有已经保存的信息哦，点击\"更新信息\"再试试吧(*^_^*).");
                     get_save_button.setEnabled(true);
                     get_save_button.setBackground(getResources().getDrawable(R.drawable.shape1));
                     get_save_button.setText("成绩查询");
@@ -319,8 +331,14 @@ public class LoginActivity extends Activity {
             @Override
             public void onClick(View v) {
 //                myTestFunction();
-                Intent intent = new Intent(LoginActivity.this,NoneScoreCourseActivity.class);
-                startActivity(intent);
+                if(isLocalValueLoaded){
+                    Intent intent = new Intent(LoginActivity.this,NoneScoreCourseActivity.class);
+                    startActivity(intent);
+//                    overridePendingTransition(R.anim.up_in, R.anim.up_out);
+                }
+                else{
+                    showAlert("还没有已经保存的信息哦，点击\"更新信息\"再试试吧(*^_^*).");
+                }
 //                overridePendingTransition(R.anim.up_in, R.anim.up_out);
             }
         });
@@ -341,45 +359,45 @@ public class LoginActivity extends Activity {
 //            }
 //        });
 
-        rememberpassword_login.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (rememberpassword_login.isChecked()){
-                    Log.d("Login", "记住密码已选中");
-                    sp.edit().putBoolean("ischeck",true).apply();
-                }
-                else {
-                    Log.d("Login", "记住密码没有选中");
-                    sp.edit().remove("USER").apply();
-                    sp.edit().remove("PASSWORD").apply();
-                    sp.edit().putBoolean("ischeck",false).apply();
-                    auto_login.setChecked(false);
-                }
-            }
-        });
-
-        auto_login.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (auto_login.isChecked()){
-                    if(!sp.contains("USER") || !sp.contains("PASSWORD")){
-                        showWarningAlert("错误", "没有已保存的用户名和密码，无法启用自动登录！\n" +
-                                "请勾选“记住密码”后登录一次，再开启本功能.");
-                        auto_login.setChecked(false);
-                        return;
-                    }
-                    Log.d("Login", "自动登录已选中");
-                    sp.edit().putBoolean("auto_ischeck",true).apply();
-                    if(!rememberpassword_login.isChecked()) rememberpassword_login.setChecked(true);
-//                    showAlert("别自动登录啦，每次点一下吧( •̀ ω •́ )y");
+//        rememberpassword_login.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//                if (rememberpassword_login.isChecked()){
+//                    Log.d("Login", "记住密码已选中");
+//                    sp.edit().putBoolean("ischeck",true).apply();
+//                }
+//                else {
+//                    Log.d("Login", "记住密码没有选中");
+//                    sp.edit().remove("USER").apply();
+//                    sp.edit().remove("PASSWORD").apply();
+//                    sp.edit().putBoolean("ischeck",false).apply();
 //                    auto_login.setChecked(false);
-                }
-                else {
-                    Log.d("Login", "自动登录没有选中");
-                    sp.edit().putBoolean("auto_ischeck",false).apply();
-                }
-            }
-        });
+//                }
+//            }
+//        });
+//
+//        auto_login.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//                if (auto_login.isChecked()){
+//                    if(!sp.contains("USER") || !sp.contains("PASSWORD")){
+//                        showWarningAlert("错误", "没有已保存的用户名和密码，无法启用自动登录！\n" +
+//                                "请勾选“记住密码”后登录一次，再开启本功能.");
+//                        auto_login.setChecked(false);
+//                        return;
+//                    }
+//                    Log.d("Login", "自动登录已选中");
+//                    sp.edit().putBoolean("auto_ischeck",true).apply();
+//                    if(!rememberpassword_login.isChecked()) rememberpassword_login.setChecked(true);
+////                    showAlert("别自动登录啦，每次点一下吧( •̀ ω •́ )y");
+////                    auto_login.setChecked(false);
+//                }
+//                else {
+//                    Log.d("Login", "自动登录没有选中");
+//                    sp.edit().putBoolean("auto_ischeck",false).apply();
+//                }
+//            }
+//        });
 
         aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -398,7 +416,7 @@ public class LoginActivity extends Activity {
 //                    overridePendingTransition(R.anim.up_in, R.anim.up_out);
                 }
                 else{
-                    showAlert("还没有已经保存的信息哦，登录后更新下信息再试试吧(*^_^*).");
+                    showAlert("还没有已经保存的信息哦，点击\"更新信息\"再试试吧(*^_^*).");
                 }
             }
         });
@@ -493,17 +511,17 @@ public class LoginActivity extends Activity {
         showCourseList();
     }
 
-    private void showLogin(){
-        login.setVisibility(View.VISIBLE);
-        login.getLayoutParams().height = login_layout_height;
-        login.requestLayout();
-    }
-
-    private void hideLogin(){
-        login.setVisibility(View.INVISIBLE);
-        login.getLayoutParams().height = 0;
-        login.requestLayout();
-    }
+//    private void showLogin(){
+//        login.setVisibility(View.VISIBLE);
+//        login.getLayoutParams().height = login_layout_height;
+//        login.requestLayout();
+//    }
+//
+//    private void hideLogin(){
+//        login.setVisibility(View.INVISIBLE);
+//        login.getLayoutParams().height = 0;
+//        login.requestLayout();
+//    }
 
     private void showInformation(){
         information.setVisibility(View.VISIBLE);
@@ -531,7 +549,7 @@ public class LoginActivity extends Activity {
         courseListLayout.requestLayout();
     }
 
-    private void loginSuccess(){
+    public void loginSuccess(){
         sp.edit().putString("TermJSON", UIMS.getTermJSON().toString()).apply();
         sp.edit().putString("TeachingTermJSON", UIMS.getTeachingTermJSON().toString()).apply();
 
@@ -568,32 +586,32 @@ public class LoginActivity extends Activity {
                     information_week.setText("");
                 }
 
-                load_internet_inf_button.getLayoutParams().height = load_internet_inf_button_layout_height;
-                getNoneScoreCourseButton.getLayoutParams().height = get_none_score_course_information_button_layout_height;
-                load_internet_inf_button.setVisibility(View.VISIBLE);
-                getNoneScoreCourseButton.setVisibility(View.VISIBLE);
-                hideLogin();
+//                load_internet_inf_button.getLayoutParams().height = load_internet_inf_button_layout_height;
+//                getNoneScoreCourseButton.getLayoutParams().height = get_none_score_course_information_button_layout_height;
+//                load_internet_inf_button.setVisibility(View.VISIBLE);
+//                getNoneScoreCourseButton.setVisibility(View.VISIBLE);
+//                hideLogin();
                 if(showInformation) {
                     aSwitch.setChecked(false);
                     switchToInformation();
                 }
                 actiivity_login.requestLayout();
 
-                button_login.setActivated(true);
-                button_login.setText("退出登录");
-                button_login.setEnabled(true);
-                button_login.setBackground(getResources().getDrawable(R.drawable.shape_warn));
+//                button_login.setActivated(true);
+//                button_login.setText("退出登录");
+//                button_login.setEnabled(true);
+//                button_login.setBackground(getResources().getDrawable(R.drawable.shape_warn));
 
             }
         });
 //        finish();
     }
 
-    private void reLogin(){
+    public void reLogin(){
         reLogin(false);
     }
 
-    private void reLogin(final boolean showNotice){
+    public void reLogin(final boolean showNotice){
 
         runOnUiThread(new Runnable() {
             @Override
@@ -603,10 +621,10 @@ public class LoginActivity extends Activity {
                         "删除方法：设置->应用->UIMSTest->存储->清除数据." );
                 isLoginIn = false;
 
-                load_internet_inf_button.setVisibility(View.INVISIBLE);
-                load_internet_inf_button.getLayoutParams().height = 0;
+//                load_internet_inf_button.setVisibility(View.INVISIBLE);
+//                load_internet_inf_button.getLayoutParams().height = 0;
                 hideInformation();
-                showLogin();
+//                showLogin();
                 if(showInformation) {
                     aSwitch.setChecked(false);
                     switchToInformation();
@@ -614,17 +632,16 @@ public class LoginActivity extends Activity {
                 getNoneScoreCourseButton.requestLayout();
                 actiivity_login.requestLayout();
 
-                button_login.setActivated(true);
-                button_login.setText("登录");
-                button_login.setEnabled(true);
-                button_login.setBackground(getResources().getDrawable(R.drawable.login_button_background));
+//                button_login.setText("登录");
+//                button_login.setEnabled(true);
+//                button_login.setBackground(getResources().getDrawable(R.drawable.login_button_background));
 
             }
         });
 //        finish();
     }
 
-    private void loadSuccess(){
+    public void loadSuccess(){
 
         loadLocalInformationSuccess();
 
@@ -722,10 +739,10 @@ public class LoginActivity extends Activity {
                     }
                 });
 
-                if(loginAfterLoad) {
-                    showLoading("自动登录中...");
-                    login(false);
-                }
+//                if(loginAfterLoad) {
+//                    showLoading("自动登录中...");
+//                    login(false);
+//                }
 
             }
         }).start();
@@ -733,15 +750,15 @@ public class LoginActivity extends Activity {
 
     private void loadLocalInformationSuccess(){
         isLocalValueLoaded = true;
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Alerter.hide();
-                getNoneScoreCourseButton.getLayoutParams().height = get_none_score_course_information_button_layout_height;
-                getNoneScoreCourseButton.setVisibility(View.VISIBLE);
-                getNoneScoreCourseButton.requestLayout();
-            }
-        });
+//        runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                Alerter.hide();
+//                getNoneScoreCourseButton.getLayoutParams().height = get_none_score_course_information_button_layout_height;
+//                getNoneScoreCourseButton.setVisibility(View.VISIBLE);
+//                getNoneScoreCourseButton.requestLayout();
+//            }
+//        });
     }
 
     private void getCourseSuccess(){
@@ -878,98 +895,98 @@ public class LoginActivity extends Activity {
         }).start();
     }
 
-    private void login(){
-        login(true);
-    }
-
-    private void login(final boolean showNotice){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-
-                    if (rememberpassword_login.isChecked() && idvalue != null && passwordvalue != null && idvalue.length() == 8 && passwordvalue.length() > 0) {
-                        SharedPreferences.Editor editor = sp.edit();
-                        editor.putString("USER", idvalue);
-                        editor.putString("PASSWORD", passwordvalue);
-                        editor.apply();
-                    }
-
-                    user = idvalue;
-                    pass = passwordvalue;
-
-//                    Log.i("Login", "USER:\t" + user);
-//                    Log.i("Login", "PASS:\t" + pass);
-
-                    if (user == null || pass == null || user.length() != 8 || !(pass.length() > 0)) {
-                        sp.edit().remove("USER").apply();
-                        sp.edit().remove("PASSWORD").apply();
-                        auto_login.setChecked(false);
-                        rememberpassword_login.setChecked(false);
-                        showWarningAlert("获取已保存账号出错，请输入正确的用户名和密码后重新登录.");
-                        return;
-                    }
-
-                    uims = new UIMS(user, pass);
-                    if (showNotice) showLoading("正在连接到UIMS教务系统...");
-                    if (uims.connectToUIMS()) {
-                        if (showNotice) showLoading("正在登录...");
-                        if (uims.login()) {
-//                            showLoading("正在加载用户信息...");
-                            if (uims.getCurrentUserInfo()) {
-//                                showAlert("", "欢迎您, " + uims.getNickName() + " ." + "\n" +
-//                                        "您是UIMS系统第 " + uims.getLoginCounter() + " 位访问者.");
-                                if (uims.getUserInformation())
-                                    if (uims.getTermArray()) loginSuccess();
-                                    else showResponse("Login failed!");
-                                else showResponse("Login failed!");
-                            } else {
-                                showResponse("Login failed!");
-                            }
-                        } else{
+//    public void login(){
+//        login(true);
+//    }
+//
+//    public void login(final boolean showNotice){
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+//
+////                    if (rememberpassword_login.isChecked() && idvalue != null && passwordvalue != null && idvalue.length() == 8 && passwordvalue.length() > 0) {
+////                        SharedPreferences.Editor editor = sp.edit();
+////                        editor.putString("USER", idvalue);
+////                        editor.putString("PASSWORD", passwordvalue);
+////                        editor.apply();
+////                    }
+//
+//                    user = idvalue;
+//                    pass = passwordvalue;
+//
+////                    Log.i("Login", "USER:\t" + user);
+////                    Log.i("Login", "PASS:\t" + pass);
+//
+//                    if (user == null || pass == null || user.length() != 8 || !(pass.length() > 0)) {
+//                        sp.edit().remove("USER").apply();
+//                        sp.edit().remove("PASSWORD").apply();
+//                        auto_login.setChecked(false);
+//                        rememberpassword_login.setChecked(false);
+//                        showWarningAlert("获取已保存账号出错，请输入正确的用户名和密码后重新登录.");
+//                        return;
+//                    }
+//
+//                    uims = new UIMS(user, pass);
+//                    if (showNotice) showLoading("正在连接到UIMS教务系统...");
+//                    if (uims.connectToUIMS()) {
+//                        if (showNotice) showLoading("正在登录...");
+//                        if (uims.login()) {
+////                            showLoading("正在加载用户信息...");
+//                            if (uims.getCurrentUserInfo()) {
+////                                showAlert("", "欢迎您, " + uims.getNickName() + " ." + "\n" +
+////                                        "您是UIMS系统第 " + uims.getLoginCounter() + " 位访问者.");
+//                                if (uims.getUserInformation())
+//                                    if (uims.getTermArray()) loginSuccess();
+//                                    else showResponse("Login failed!");
+//                                else showResponse("Login failed!");
+//                            } else {
 //                                showResponse("Login failed!");
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Alerter.hide();
-                                    showWarningAlert("", "登录失败，请检查用户名和密码是否正确.\n\n" +
-                                            "教务账号：\t您的教学号\n" +
-                                            "教务密码：\t默认密码为身份证号后六位");
-                                    button_login.setText("重新登录");
-                                    button_login.setEnabled(true);
-                                    button_login.setBackground(getResources().getDrawable(R.drawable.login_button_background));
-
-                                    rememberpassword_login.setChecked(false);//错误的账号密码，取消记住密码
-                                    auto_login.setChecked(false);//错误的账号密码，禁止启用自动登录
-
-                                    return;
-                                }
-                            });
-                        }
-                    }
-                    else{
-//                            showResponse("Login failed!");
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Alerter.hide();
-                                showWarningAlert("", "登录失败，请检查是否连接校园网！\n\n" +
-                                        "您可以连接JLU.NET或JLU.TEST;\n" +
-                                        "若您未开通校园网，可以考虑连接JLU.PC，此时无需登录到网络，完成“信息更新”后即可断开，切回流量。");
-                                button_login.setText("重新登录");
-                                button_login.setEnabled(true);
-                                button_login.setBackground(getResources().getDrawable(R.drawable.login_button_background));
-                                return;
-                            }
-                        });
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    showResponse("Login failed!");
-                }
-            }
-        }).start();
-    }
+//                            }
+//                        } else{
+////                                showResponse("Login failed!");
+//                            runOnUiThread(new Runnable() {
+//                                @Override
+//                                public void run() {
+//                                    Alerter.hide();
+//                                    showWarningAlert("", "登录失败，请检查用户名和密码是否正确.\n\n" +
+//                                            "教务账号：\t您的教学号\n" +
+//                                            "教务密码：\t默认密码为身份证号后六位");
+//                                    button_login.setText("重新登录");
+//                                    button_login.setEnabled(true);
+//                                    button_login.setBackground(getResources().getDrawable(R.drawable.login_button_background));
+//
+//                                    rememberpassword_login.setChecked(false);//错误的账号密码，取消记住密码
+//                                    auto_login.setChecked(false);//错误的账号密码，禁止启用自动登录
+//
+//                                    return;
+//                                }
+//                            });
+//                        }
+//                    }
+//                    else{
+////                            showResponse("Login failed!");
+//                        runOnUiThread(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                Alerter.hide();
+//                                showWarningAlert("", "登录失败，请检查是否连接校园网！\n\n" +
+//                                        "您可以连接JLU.NET或JLU.TEST;\n" +
+//                                        "若您未开通校园网，可以考虑连接JLU.PC，此时无需登录到网络，完成“信息更新”后即可断开，切回流量。");
+//                                button_login.setText("重新登录");
+//                                button_login.setEnabled(true);
+//                                button_login.setBackground(getResources().getDrawable(R.drawable.login_button_background));
+//                                return;
+//                            }
+//                        });
+//                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                    showResponse("Login failed!");
+//                }
+//            }
+//        }).start();
+//    }
 
     private boolean isLocalInformationAvailable(){
         return (sp.contains("ScoreJSON") && sp.contains("CourseJSON") && sp.contains("ScoreStatisticsJSON") && sp.contains("StudentJSON") && sp.contains("CourseTypeJSON") && sp.contains("CourseSelectTypeJSON") && sp.contains("TermJSON")  && sp.contains("TeachingTermJSON"));
@@ -1444,9 +1461,9 @@ public class LoginActivity extends Activity {
                                         showWarningAlert("", "登录失败，请检查用户名和密码是否正确.\n\n" +
                                                 "教务账号：\t您的教学号\n" +
                                                 "教务密码：\t默认密码为身份证号后六位");
-                                        button_login.setText("重新登录");
-                                        button_login.setEnabled(true);
-                                        button_login.setBackground(getResources().getDrawable(R.drawable.login_button_background));
+//                                        button_login.setText("重新登录");
+//                                        button_login.setEnabled(true);
+//                                        button_login.setBackground(getResources().getDrawable(R.drawable.login_button_background));
                                         return;
                                     }
                                 });
@@ -1459,9 +1476,9 @@ public class LoginActivity extends Activity {
                                 public void run() {
                                     Alerter.hide();
                                     showWarningAlert("", "登录失败，请检查是否连接校园网！");
-                                    button_login.setText("重新登录");
-                                    button_login.setEnabled(true);
-                                    button_login.setBackground(getResources().getDrawable(R.drawable.login_button_background));
+//                                    button_login.setText("重新登录");
+//                                    button_login.setEnabled(true);
+//                                    button_login.setBackground(getResources().getDrawable(R.drawable.login_button_background));
                                     return;
                                 }
                             });
@@ -1477,6 +1494,15 @@ public class LoginActivity extends Activity {
         }).start();
     }
 
+    public void dismissPopWindow(){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                popWindow.dismiss();
+            }
+        });
+    }
+
     public void showResponse(final String string) {
         runOnUiThread(new Runnable() {
             @Override
@@ -1484,9 +1510,9 @@ public class LoginActivity extends Activity {
                 Alerter.hide();
                 if (string.toLowerCase().contains("failed")) {
                     showWarningAlert("", "获取数据失败，请稍后重试.");
-                    button_login.setText("重新登录");
-                    button_login.setEnabled(true);
-                    button_login.setBackground(getResources().getDrawable(R.drawable.login_button_background));
+//                    button_login.setText("重新登录");
+//                    button_login.setEnabled(true);
+//                    button_login.setBackground(getResources().getDrawable(R.drawable.login_button_background));
                     return;
                 }
                 Toast.makeText(LoginActivity.this, string, Toast.LENGTH_SHORT).show();

@@ -8,8 +8,8 @@
     >
 
     <LinearLayout
-        android:id="@+id/course_schedule_change_pop_layout"
-        android:layout_width="fill_parent"
+        android:id="@+id/pop_window_login_pop_layout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:orientation="vertical"
@@ -21,9 +21,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="添加课程调整\nTips:“更换后上课时间”留白，即为添加假期"
-            android:textSize="16dp"
-            android:textColor="@color/dark"
+            android:text="更新信息"
+            android:textSize="17dp"
+            android:paddingTop="20dp"
+            android:paddingBottom="10dp"
+            android:textColor="@color/app_white"
             android:background="@drawable/shape_rectangle_with_top_radius"
             />
 
@@ -35,34 +37,31 @@
             >
 
             <EditText
-                android:id="@+id/course_schedule_change_add_title_text"
+                android:id="@+id/pop_window_login_id"
+                android:inputType="number"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
+                android:layout_gravity="center_horizontal"
                 android:gravity="center"
-                android:hint="标题"
-                android:textColor="@color/app_white"
-                />
-
-            <TextView
-                android:id="@+id/course_schedule_change_add_pre_time_text"
+                android:layout_marginTop="15dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:background="@drawable/login_edit_text_background"
+                android:windowSoftInputMode="stateHidden"
+                android:hint="@string/textlogin_id"/>
+            <EditText
+                android:id="@+id/pop_window_login_password"
+                android:inputType="textPassword"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
+                android:layout_gravity="center_horizontal"
                 android:gravity="center"
-                android:layout_marginTop="10dp"
-                android:padding="10dp"
-                android:textSize="16sp"
-                android:hint="原始上课时间"
-                />
-
-            <TextView
-                android:id="@+id/course_schedule_change_add_change_time_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:padding="10dp"
-                android:textSize="16sp"
-                android:hint="更换后上课时间"
-                />
+                android:layout_marginTop="15dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:background="@drawable/login_edit_text_background"
+                android:windowSoftInputMode="stateHidden"
+                android:hint="@string/textlogin_password"/>
 
         </LinearLayout>
 
@@ -74,16 +73,16 @@
             >
 
             <Button
-                android:id="@+id/course_schedule_change_commit_button"
+                android:id="@+id/pop_window_login_commit_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/login_button_background"
                 android:layout_margin="10dp"
-                android:text="确定"
+                android:text="登录并更新信息"
                 />
 
             <Button
-                android:id="@+id/course_schedule_change_cancel_button"
+                android:id="@+id/pop_window_login_cancel_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/shape_with_white_background"
@@ -93,7 +92,17 @@
                 android:text="取消"
                 />
 
+            <TextView
+                android:id="@+id/pop_window_login_delete_saved_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="8dp"
+                android:text="删除账号信息"
+                />
+
         </LinearLayout>
 
     </LinearLayout>
+
 </RelativeLayout>

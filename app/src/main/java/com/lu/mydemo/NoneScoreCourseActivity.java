@@ -10,13 +10,18 @@ import android.os.Bundle;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Spinner;
@@ -36,6 +41,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import PopWindow.LoginGetSelectCoursePopWindow;
+import PopWindow.LoginPopWindow;
 import UIMS.UIMS;
 
 public class NoneScoreCourseActivity extends AppCompatActivity {
@@ -52,8 +59,10 @@ public class NoneScoreCourseActivity extends AppCompatActivity {
 
     int delete_local_course_information_button_layout_hight;
 
-    HashMap<String, String> termName_TermId = new HashMap<>();
-    HashMap<String, String> termId_termName = new HashMap<>();
+    public HashMap<String, String> termName_TermId = new HashMap<>();
+    public HashMap<String, String> termId_termName = new HashMap<>();
+
+    public LoginGetSelectCoursePopWindow popWindow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,29 +87,51 @@ public class NoneScoreCourseActivity extends AppCompatActivity {
 
         searchButton.setOnClickListener(new View.OnClickListener() {
             String termName = "";
+            String termId = "";
 
             @Override
             public void onClick(View v) {
-                List<Map<String, Object>> datalist = getListHint("查询中，请稍候...");
-                listView.setAdapter(new SimpleAdapter(context, datalist, R.layout.course_list_ietm, new String[]{"title", "context1"}, new int[]{R.id.get_none_score_course_title, R.id.get_none_score_course_context1}));
-                deleteSavedCourseInformationButton.getLayoutParams().height = 0;
-                deleteSavedCourseInformationButton.setVisibility(View.INVISIBLE);
-                dataArea.requestLayout();
                 try{
                     termName = spinner.getSelectedItem().toString();
+                    termId = termName_TermId.get(termName);
+
+                    if(termName == null || termId == null || !(termName.length() > 0) || !(termId.length() > 0)){
+                        showWarningAlert("数据出错");
+                        return;
+                    }
+
+                    /**
+                     * TODO TEST
+                     */
+
+                    if(sharedPreferences.contains("CourseHistory_" + termId)){
+                        showLoading("由本地加载【" + termName + "】数据中，请稍候...");
+                        UIMS.setCourseHistoryJSON(JSONObject.fromObject(sharedPreferences.getString("CourseHistory_" + termId, "")));
+                        getNoneScoreCourseSuccess();
+                        return;
+                    }
+
+                    showAlert("本地暂未缓存【" + termName + "】数据，请连接校园网获取数据.");
+                    LoginGetSelectCoursePopWindow window = new LoginGetSelectCoursePopWindow(NoneScoreCourseActivity.this, termName, findViewById(R.id.none_score_course_layout).getHeight(), findViewById(R.id.none_score_course_layout).getWidth());
+                    window.setFocusable(true);
+                    window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+                    window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+                    window.showAtLocation(NoneScoreCourseActivity.this.findViewById(R.id.none_score_course_layout), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0); //设置layout在PopupWindow中显示的位置
+                    popWindow = window;
+
                     Log.i("TermName", termName);
                 } catch(Exception e){
                     e.printStackTrace();
                     getInformationFailed();
                 }
-                if(termName != null && termName.length() > 0) getNoneScoreCourse(termName_TermId.get(termName));
-                else getInformationFailed();
+//                if(termName != null && termName.length() > 0) getNoneScoreCourse(termName_TermId.get(termName));
+//                else getInformationFailed();
             }
         });
 
-        deleteSavedCourseInformationButton.setOnClickListener(new View.OnClickListener() {
+        deleteSavedCourseInformationButton.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public void onClick(View v) {
+            public boolean onLongClick(View v) {
                 sharedPreferences.edit().remove("CourseHistory_" + termName_TermId.get(spinner.getSelectedItem().toString())).apply();
                 showResponse("已删除【" + spinner.getSelectedItem().toString() + "】数据.");
                 List<Map<String, Object>> datalist = new ArrayList<>();
@@ -108,6 +139,32 @@ public class NoneScoreCourseActivity extends AppCompatActivity {
                 deleteSavedCourseInformationButton.getLayoutParams().height = 0;
                 deleteSavedCourseInformationButton.setVisibility(View.INVISIBLE);
                 dataArea.requestLayout();
+                return true;
+            }
+        });
+
+        deleteSavedCourseInformationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showAlert("您只需刷新【选课发生变化】学期的数据",
+                        "一般情况下，您只需要点击首页“更新信息”按钮，即可查看最新的“成绩未发布课程”.\n" +
+                                "只有在进行了“选课”/“退补选”后，才需要刷新本学期选课数据.\n" +
+                                "如需刷新当前学期数据，请长按“删除本学期缓存数据”.\n");
+            }
+        });
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                listView.setAdapter(null);
+                deleteSavedCourseInformationButton.getLayoutParams().height = 0;
+                deleteSavedCourseInformationButton.setVisibility(View.INVISIBLE);
+                dataArea.requestLayout();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
 
@@ -117,73 +174,73 @@ public class NoneScoreCourseActivity extends AppCompatActivity {
         if(LoginActivity.isLocalValueLoaded){
             spinner.setAdapter(new ArrayAdapter(this, R.layout.select_item, R.id.select_text_item, getTermArray()));
         }
-        else if(LoginActivity.isLoginIn && LoginActivity.uims != null && UIMS.getId_scorePercent().size() > 0) {
-            spinner.setAdapter(new ArrayAdapter(this, R.layout.select_item, R.id.select_text_item, getTermArray()));
-        }
-        else if(LoginActivity.isLoginIn && LoginActivity.uims != null){
-            final UIMS uims = LoginActivity.uims;
-            final Context context = this;
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Alerter.create(NoneScoreCourseActivity.this)
-                            .setText("本地暂无教学学期数据\n检测到您已登录，如需从教务获取所需数据，请点击此消息。")
-                            .enableSwipeToDismiss()
-                            .enableProgress(true)
-                            .setProgressColorRes(R.color.color_21)
-                            .setDuration(5000)
-                            .setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    new Thread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            try {
-                                                showLoading("查询中，请稍候...");
-                                                if (uims.getTermArray()) {
-//                                                    showResponse("查询学期列表成功！");
-                                                } else {
-                                                    showResponse("Login failed!");
-                                                    ((NoneScoreCourseActivity) context).finish();
-                                                    return;
-                                                }
-                                                if (!(UIMS.getId_scorePercent().size() > 0) &&uims.getScoreStatistics() && uims.getRecentScore()) {
-//                                                    showResponse("查询成绩成功！");
-                                                }
-                                            } catch (Exception e) {
-                                                e.printStackTrace();
-                                                showResponse("Login failed!");
-                                                ((NoneScoreCourseActivity) context).finish();
-                                            } finally {
-                                                if (!(UIMS.getId_scorePercent().size() > 0)){
-                                                    showResponse("查询所需数据失败！");
-                                                    ((NoneScoreCourseActivity) context).finish();
-                                                }
-                                                else {
-                                                    loadSuccess();
-                                                    ((NoneScoreCourseActivity) context).finish();
-                                                    Intent intent = new Intent(LoginActivity.context, NoneScoreCourseActivity.class);
-                                                    startActivity(intent);
-//                                                    overridePendingTransition(R.anim.up_in, R.anim.up_out);
-                                                }
-                                            }
-                                        }
-                                    }).start();
-                                }
-                            })
-                            .setOnHideListener(new OnHideAlertListener() {
-                                @Override
-                                public void onHide() {
-                                    if(!(UIMS.getId_scorePercent().size() > 0)){
-                                        getInformationFailed();
-                                    }
-                                }
-                            })
-                            .setBackgroundColorInt(getResources().getColor(R.color.color_alerter_background))
-                            .show();
-                }
-            });
-        }
+//        else if(LoginActivity.isLoginIn && LoginActivity.uims != null && UIMS.getId_scorePercent().size() > 0) {
+//            spinner.setAdapter(new ArrayAdapter(this, R.layout.select_item, R.id.select_text_item, getTermArray()));
+//        }
+//        else if(LoginActivity.isLoginIn && LoginActivity.uims != null){
+//            final UIMS uims = LoginActivity.uims;
+//            final Context context = this;
+//            runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    Alerter.create(NoneScoreCourseActivity.this)
+//                            .setText("本地暂无教学学期数据\n检测到您已登录，如需从教务获取所需数据，请点击此消息。")
+//                            .enableSwipeToDismiss()
+//                            .enableProgress(true)
+//                            .setProgressColorRes(R.color.color_21)
+//                            .setDuration(5000)
+//                            .setOnClickListener(new View.OnClickListener() {
+//                                @Override
+//                                public void onClick(View v) {
+//                                    new Thread(new Runnable() {
+//                                        @Override
+//                                        public void run() {
+//                                            try {
+//                                                showLoading("查询中，请稍候...");
+//                                                if (uims.getTermArray()) {
+////                                                    showResponse("查询学期列表成功！");
+//                                                } else {
+//                                                    showResponse("Login failed!");
+//                                                    ((NoneScoreCourseActivity) context).finish();
+//                                                    return;
+//                                                }
+//                                                if (!(UIMS.getId_scorePercent().size() > 0) &&uims.getScoreStatistics() && uims.getRecentScore()) {
+////                                                    showResponse("查询成绩成功！");
+//                                                }
+//                                            } catch (Exception e) {
+//                                                e.printStackTrace();
+//                                                showResponse("Login failed!");
+//                                                ((NoneScoreCourseActivity) context).finish();
+//                                            } finally {
+//                                                if (!(UIMS.getId_scorePercent().size() > 0)){
+//                                                    showResponse("查询所需数据失败！");
+//                                                    ((NoneScoreCourseActivity) context).finish();
+//                                                }
+//                                                else {
+//                                                    loadSuccess();
+//                                                    ((NoneScoreCourseActivity) context).finish();
+//                                                    Intent intent = new Intent(LoginActivity.context, NoneScoreCourseActivity.class);
+//                                                    startActivity(intent);
+////                                                    overridePendingTransition(R.anim.up_in, R.anim.up_out);
+//                                                }
+//                                            }
+//                                        }
+//                                    }).start();
+//                                }
+//                            })
+//                            .setOnHideListener(new OnHideAlertListener() {
+//                                @Override
+//                                public void onHide() {
+//                                    if(!(UIMS.getId_scorePercent().size() > 0)){
+//                                        getInformationFailed();
+//                                    }
+//                                }
+//                            })
+//                            .setBackgroundColorInt(getResources().getColor(R.color.color_alerter_background))
+//                            .show();
+//                }
+//            });
+//        }
         else{
             showResponse("本地暂无教学学期数据，且您还未登录，请登录后重试。");
             finish();
@@ -212,16 +269,26 @@ public class NoneScoreCourseActivity extends AppCompatActivity {
     }
 
     private void getNoneScoreCourse(final String termID){
-        if(sharedPreferences.contains("CourseHistory_" + termID)){
-            showLoading("由本地加载【" + termId_termName.get(termID) + "】数据中，请稍候...");
-            UIMS.setCourseHistoryJSON(JSONObject.fromObject(sharedPreferences.getString("CourseHistory_" + termID, "")));
-            getgetNoneScoreCourseSuccess();
-            return;
-        }
-        final UIMS uims = LoginActivity.uims;
-        if(uims == null || !LoginActivity.isLoginIn){
+        getNoneScoreCourse(termID, null);
+    }
+
+    public void getNoneScoreCourse(final String termID, UIMS myUims){
+
+        final List<Map<String, Object>> datalist = getListHint("查询中...");
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                listView.setAdapter(new SimpleAdapter(NoneScoreCourseActivity.this, datalist, R.layout.course_list_ietm, new String[]{"title", "context1"}, new int[]{R.id.get_none_score_course_title, R.id.get_none_score_course_context1}));
+                deleteSavedCourseInformationButton.getLayoutParams().height = 0;
+                deleteSavedCourseInformationButton.setVisibility(View.INVISIBLE);
+                dataArea.requestLayout();
+            }
+        });
+
+        final UIMS uims = (myUims == null ? LoginActivity.uims : myUims);
+        if(uims == null){
             showAlert("本地暂无【" + termId_termName.get(termID) + "】数据，且您还未登录，请登录后重试。");
-            getgetNoneScoreCourseFailed();
+            getNoneScoreCourseFailed();
             return;
         }
         showLoading("加载【" + termId_termName.get(termID) + "】数据中，请稍候...");
@@ -232,7 +299,7 @@ public class NoneScoreCourseActivity extends AppCompatActivity {
                 try {
                     if (uims.getCourseHistory(termID)) {
                         sharedPreferences.edit().putString("CourseHistory_" + termID, UIMS.getCourseHistoryJSON().toString()).apply();
-                        getgetNoneScoreCourseSuccess();
+                        getNoneScoreCourseSuccess();
                     } else {
                         getInformationFailed();
                     }
@@ -244,7 +311,7 @@ public class NoneScoreCourseActivity extends AppCompatActivity {
         }).start();
     }
 
-    private void getgetNoneScoreCourseSuccess(){
+    private void getNoneScoreCourseSuccess(){
         Alerter.hide();
         final Context context = this;
         runOnUiThread(new Runnable() {
@@ -259,20 +326,18 @@ public class NoneScoreCourseActivity extends AppCompatActivity {
         });
     }
 
-    private void getgetNoneScoreCourseFailed(){
-        List<Map<String, Object>> datalist = new ArrayList<>();
-        listView.setAdapter(new SimpleAdapter(this, datalist, R.layout.course_list_ietm, new String[]{"title", "context1"}, new int[]{R.id.get_none_score_course_title, R.id.get_none_score_course_context1}));
-        listView.requestLayout();
+    public void getNoneScoreCourseFailed(){
+        final List<Map<String, Object>> datalist = new ArrayList<>();
+        setListviewAdapter(listView, new SimpleAdapter(NoneScoreCourseActivity.this, datalist, R.layout.course_list_ietm, new String[]{"title", "context1"}, new int[]{R.id.get_none_score_course_title, R.id.get_none_score_course_context1}));
     }
 
     private void getInformationFailed(){
 //        showResponse("Get Information failed!");
-        showResponse("获取信息失败！请尝试登录后点击\"查询成绩\"按钮.");
+        showResponse("获取信息失败！请尝试点击\"更新信息\"按钮.");
         Alerter.hide();
 
         List<Map<String, Object>> datalist = new ArrayList<>();
-        listView.setAdapter(new SimpleAdapter(this, datalist, R.layout.course_list_ietm, new String[]{"title", "context1"}, new int[]{R.id.get_none_score_course_title, R.id.get_none_score_course_context1}));
-        listView.requestLayout();
+        setListviewAdapter(listView, new SimpleAdapter(NoneScoreCourseActivity.this, datalist, R.layout.course_list_ietm, new String[]{"title", "context1"}, new int[]{R.id.get_none_score_course_title, R.id.get_none_score_course_context1}));
 
         finish();
     }
@@ -369,6 +434,25 @@ public class NoneScoreCourseActivity extends AppCompatActivity {
 
     }
 
+    private void setListviewAdapter(final ListView listView, final ListAdapter adapter){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                listView.setAdapter(adapter);
+                listView.requestLayout();
+            }
+        });
+    }
+
+    public void dismissPopWindow(){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                popWindow.dismiss();
+            }
+        });
+    }
+
     class colorAdapter extends SimpleAdapter {
         List<? extends Map<String, ?>> mdata;
 
@@ -444,6 +528,34 @@ public class NoneScoreCourseActivity extends AppCompatActivity {
                         .setText(message)
                         .enableSwipeToDismiss()
                         .setBackgroundColorInt(getResources().getColor(R.color.color_alerter_background))
+                        .show();
+            }
+        });
+    }
+
+    public void showWarningAlert(final String message) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Alerter.create(NoneScoreCourseActivity.this)
+                        .setTitle("提示")
+                        .setText(message)
+                        .enableSwipeToDismiss()
+                        .setBackgroundColorInt(getResources().getColor(R.color.color_alerter_warning_background))
+                        .show();
+            }
+        });
+    }
+
+    public void showWarningAlert(final String title, final String message) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Alerter.create(NoneScoreCourseActivity.this)
+                        .setTitle(title)
+                        .setText(message)
+                        .enableSwipeToDismiss()
+                        .setBackgroundColorInt(getResources().getColor(R.color.color_alerter_warning_background))
                         .show();
             }
         });

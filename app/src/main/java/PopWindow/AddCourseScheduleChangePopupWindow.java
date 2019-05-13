@@ -1,20 +1,17 @@
-package View;
+package PopWindow;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
-import android.icu.text.SimpleDateFormat;
 import android.icu.util.Calendar;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
-import android.view.ViewGroup.LayoutParams;
-import android.view.WindowManager;
 import android.view.animation.Animation;
-import android.view.animation.TranslateAnimation;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -56,7 +53,7 @@ public class AddCourseScheduleChangePopupWindow extends PopupWindow {
         ischangeTimeSet = false;
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mMenuView = inflater.inflate(R.layout.add_course_schedule_pop_window, null);
+        mMenuView = inflater.inflate(R.layout.pop_window_add_course_schedule, null);
         title_text = mMenuView.findViewById(R.id.course_schedule_change_add_title_text);
         pre_time_text = mMenuView.findViewById(R.id.course_schedule_change_add_pre_time_text);
         change_time_text = mMenuView.findViewById(R.id.course_schedule_change_add_change_time_text);
@@ -195,6 +192,16 @@ public class AddCourseScheduleChangePopupWindow extends PopupWindow {
             stringBuilder.append(dayOfMonth);
         }
         return stringBuilder.toString();
+    }
+
+    @Override
+    public void dismiss() {
+        super.dismiss();
+        InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        View view = context.getWindow().peekDecorView();
+        if(view != null){
+            inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 
     public String getTitle() {

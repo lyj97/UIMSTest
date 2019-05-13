@@ -67,7 +67,7 @@ public class NewsSavedActivity extends AppCompatActivity {
                 Bundle bundle = new Bundle();
                 bundle.putString("title", (String) dataList.get(adapterPosition).get("title"));
                 bundle.putString("department", (String) dataList.get(adapterPosition).get("department"));
-                bundle.putString("time", "收藏时间：" + dataList.get(adapterPosition).get("time"));
+                bundle.putString("time", "收藏于：" + dataList.get(adapterPosition).get("time").toString().substring(2));
                 bundle.putString("link", (String) dataList.get(adapterPosition).get("link"));
                 bundle.putString("abs_link", (String) dataList.get(adapterPosition).get("abs_link"));
                 bundle.putBoolean("flagTop", (boolean) dataList.get(adapterPosition).get("flagTop"));
