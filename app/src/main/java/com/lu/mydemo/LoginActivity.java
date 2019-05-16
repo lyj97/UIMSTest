@@ -184,7 +184,7 @@ public class LoginActivity extends Activity {
             });
         }
 
-        loadLocalInformation(false);
+        if(isLocalInformationAvailable()) loadLocalInformation(false);
 
         load_internet_inf_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -407,6 +407,13 @@ public class LoginActivity extends Activity {
 
                 loadTime();
                 getCourseSuccess();
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        CourseJSONTransfer.transferCourseList(UIMS.getCourseJSON());
+                    }
+                }).start();
             }
         }).start();
 
@@ -421,8 +428,6 @@ public class LoginActivity extends Activity {
                     showLoading("正在加载本地数据...");
 
                     loadCourseInformation();
-
-                    CourseJSONTransfer.transferCourseList(UIMS.getCourseJSON());
 
                     UIMS.setScoreJSON(JSONObject.fromObject(sp.getString("ScoreJSON", "")));
                     UIMS.setStudentJSON(JSONObject.fromObject(sp.getString("StudentJSON", "")));

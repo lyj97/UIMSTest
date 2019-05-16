@@ -73,18 +73,8 @@ public class WeekCourseActivity extends AppCompatActivity implements View.OnClic
      * 2秒后刷新界面，模拟网络请求
      */
     private void requestData() {
-        showLoading("加载中，请稍候...");
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                handler.sendEmptyMessage(0x123);
-            }
-        }).start();
+//        showLoading("加载中，请稍候...");
+        handler.sendEmptyMessage(0x123);
     }
 
     Handler handler=new Handler(){

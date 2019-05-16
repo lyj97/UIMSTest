@@ -173,6 +173,13 @@ public class NoneScoreCourseActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        ColorManager.loadConfig(getApplicationContext(), NoneScoreCourseActivity.this);
+        changeTheme();
+    }
+
     private void setSpinnerItems(){
         if(LoginActivity.isLocalValueLoaded){
             spinner.setAdapter(new ArrayAdapter(this, R.layout.select_item, R.id.select_text_item, getTermArray()));
