@@ -15,7 +15,7 @@
         android:bottom="5dp"/>
     <!--边框-->
     <stroke
-        android:color="@color/colorAccent"
+        android:color="@color/colorPrimary"
         android:dashGap="5dp"
         android:dashWidth="5dp"
         android:width="2dp">

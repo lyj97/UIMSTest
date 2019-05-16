@@ -12,6 +12,8 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.URLSpan;
 import android.util.Log;
+import android.view.Window;
+import android.view.WindowManager;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
@@ -38,6 +40,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import Config.ColorManager;
 import UIMS.Address;
 import okhttp3.Cookie;
 import okhttp3.CookieJar;
@@ -73,12 +76,14 @@ public class NewsDetailActivity extends AppCompatActivity {
         detailTime = findViewById(R.id.activity_news_detail_time);
         detailLink = findViewById(R.id.activity_news_detail_link);
 
+        changeTheme();
+
         Intent intent = getIntent();
         bundle = intent.getBundleExtra("bundle");
         detailTitle.setText(bundle.getString("title"));
         detailDepartment.setText(bundle.getString("department"));
         detailTime.setText(bundle.getString("time"));
-        detailLink.setText(Html.fromHtml("<a href=\'" + bundle.getString("abs_link") + "\'>\uD83C\uDF0E浏览器打开</a>"));
+        detailLink.setText(Html.fromHtml("<a href=\'" + bundle.getString("abs_link") + "\'>浏览器打开</a>"));
         detailLink.setMovementMethod(LinkMovementMethod.getInstance());
 
         CharSequence text  =  detailLink.getText();
@@ -179,6 +184,16 @@ public class NewsDetailActivity extends AppCompatActivity {
         }
     }
 
+    private void changeTheme(){
+        Window window = getWindow();
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
+                | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(ColorManager.getPrimaryColor());
+
+        findViewById(R.id.activity_news_detail).setBackground(ColorManager.getMainBackground());
+    }
+
     public void showLoading(final String message) {
         runOnUiThread(new Runnable() {
             @Override
@@ -186,9 +201,9 @@ public class NewsDetailActivity extends AppCompatActivity {
                 Alerter.create(NewsDetailActivity.this)
                         .setText(message)
                         .enableProgress(true)
-                        .setProgressColorRes(R.color.color_21)
+                        .setProgressColorRes(R.color.color_alerter_progress_bar)
                         .setDuration(10000)
-                        .setBackgroundColorInt(getResources().getColor(R.color.color_alerter_background))
+                        .setBackgroundColorInt(ColorManager.getTopAlertBackgroundColor())
                         .show();
             }
         });

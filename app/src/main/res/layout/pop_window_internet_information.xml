@@ -65,7 +65,7 @@
             android:layout_gravity="end"
             android:padding="10dp"
             android:text="我知道了"
-            android:textColor="@color/colorAccent"
+            android:textColor="@color/colorPrimary"
             />
 
     </LinearLayout>

@@ -5,11 +5,14 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.icu.util.Calendar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -22,6 +25,8 @@ import com.lu.mydemo.R;
 
 import java.util.Date;
 import java.util.Locale;
+
+import Config.ColorManager;
 
 public class AddCourseScheduleChangePopupWindow extends PopupWindow {
 
@@ -59,6 +64,8 @@ public class AddCourseScheduleChangePopupWindow extends PopupWindow {
         change_time_text = mMenuView.findViewById(R.id.course_schedule_change_add_change_time_text);
         commit_button = mMenuView.findViewById(R.id.course_schedule_change_commit_button);
         cancel_button = mMenuView.findViewById(R.id.course_schedule_change_cancel_button);
+
+        changeTheme();
 
         //取消按钮
         cancel_button.setOnClickListener(new OnClickListener() {
@@ -114,7 +121,7 @@ public class AddCourseScheduleChangePopupWindow extends PopupWindow {
                         pre_time = getTimeString(year, month, dayOfMonth);
                         ispreTimeSet = true;
                         commit_button.setText("确定");
-                        commit_button.setBackground(context.getResources().getDrawable(R.drawable.login_button_background));
+                        commit_button.setBackground(context.getResources().getDrawable(R.drawable.button_internet_background));
                         commit_button.setEnabled(true);
                     }
                 }, cal.get(Calendar.YEAR),  cal.get(Calendar.MONTH),  cal.get(Calendar.DAY_OF_MONTH)).show();
@@ -131,7 +138,7 @@ public class AddCourseScheduleChangePopupWindow extends PopupWindow {
                         change_time = getTimeString(year, month, dayOfMonth);
                         ischangeTimeSet = true;
                         commit_button.setText("确定");
-                        commit_button.setBackground(context.getResources().getDrawable(R.drawable.login_button_background));
+                        commit_button.setBackground(context.getResources().getDrawable(R.drawable.button_internet_background));
                         commit_button.setEnabled(true);
                     }
                 }, cal.get(Calendar.YEAR),  cal.get(Calendar.MONTH),  cal.get(Calendar.DAY_OF_MONTH)).show();
@@ -202,6 +209,13 @@ public class AddCourseScheduleChangePopupWindow extends PopupWindow {
         if(view != null){
             inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
+    }
+
+    private void changeTheme(){
+        Log.i("Theme", "Change theme.");
+        mMenuView.findViewById(R.id.course_schedule_change_pop_layout_title).setBackgroundColor(ColorManager.getPrimaryColor());
+        mMenuView.findViewById(R.id.course_schedule_change_pop_layout_main_information).setBackground(ColorManager.getMainBackground());
+        commit_button.setBackground(ColorManager.getInternetInformationButtonBackground());
     }
 
     public String getTitle() {

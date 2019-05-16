@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -38,6 +39,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import Config.ColorManager;
 import ToolFor2045_Site.GetInternetInformation;
 import Utils.Course.CourseScheduleChange;
 import PopWindow.*;
@@ -74,6 +76,8 @@ public class CourseScheduleChangeActivity extends AppCompatActivity {
         doubt_text_view = findViewById(R.id.course_schedule_change_recommend_doubt);
         add_button = findViewById(R.id.course_schedule_change_add_button);
 
+        changeTheme();
+
         isRecommendAllowed = sharedPreferences.getBoolean("isRecommendAllowed", false);
 
         if(isRecommendAllowed) recommend_switch.setChecked(true);
@@ -100,7 +104,7 @@ public class CourseScheduleChangeActivity extends AppCompatActivity {
                             .setText("已删除【" + dataList.get(position).get("context1") + "】课程调整\n\n" +
                                     "如需撤销，请点击此处.")
                             .enableSwipeToDismiss()
-                            .setProgressColorRes(R.color.color_21)
+                            .setProgressColorRes(R.color.color_alerter_progress_bar)
                             .setDuration(6000)
                             .setOnClickListener(new View.OnClickListener() {
                                 @Override
@@ -110,7 +114,7 @@ public class CourseScheduleChangeActivity extends AppCompatActivity {
                                     Alerter.hide();
                                 }
                             })
-                            .setBackgroundColorInt(getResources().getColor(R.color.color_alerter_background))
+                            .setBackgroundColorInt(ColorManager.getTopAlertBackgroundColor())
                             .show();
                     tempJsonObject = new JSONObject();
                     tempJsonObject.put("title", dataList.get(position).get("title"));
@@ -306,6 +310,16 @@ public class CourseScheduleChangeActivity extends AppCompatActivity {
         return new MainAdapter(this);
     }
 
+    private void changeTheme(){
+        Window window = getWindow();
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
+                | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(ColorManager.getPrimaryColor());
+
+        findViewById(R.id.course_schedule_change_add_layout).setBackground(ColorManager.getMainBackground());
+    }
+
     public void showAlert(final String message) {
         runOnUiThread(new Runnable() {
             @Override
@@ -314,7 +328,7 @@ public class CourseScheduleChangeActivity extends AppCompatActivity {
                         .setTitle("提示")
                         .setText(message)
                         .enableSwipeToDismiss()
-                        .setBackgroundColorInt(getResources().getColor(R.color.color_alerter_background))
+                        .setBackgroundColorInt(ColorManager.getTopAlertBackgroundColor())
                         .show();
             }
         });
@@ -327,10 +341,10 @@ public class CourseScheduleChangeActivity extends AppCompatActivity {
                 Alerter.create(CourseScheduleChangeActivity.this)
                         .setText(message)
                         .enableProgress(true)
-                        .setProgressColorRes(R.color.color_21)
+                        .setProgressColorRes(R.color.color_alerter_progress_bar)
 //                        .setIcon(R.drawable.ic_autorenew_black_24dp)
                         .setDuration(10000)
-                        .setBackgroundColorInt(getResources().getColor(R.color.color_alerter_background))
+                        .setBackgroundColorInt(ColorManager.getTopAlertBackgroundColor())
                         .show();
             }
         });
@@ -344,7 +358,7 @@ public class CourseScheduleChangeActivity extends AppCompatActivity {
                         .setTitle(title)
                         .setText(message)
                         .enableSwipeToDismiss()
-                        .setBackgroundColorInt(getResources().getColor(R.color.color_alerter_background))
+                        .setBackgroundColorInt(ColorManager.getTopAlertBackgroundColor())
                         .show();
             }
         });

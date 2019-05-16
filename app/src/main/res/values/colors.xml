@@ -12,6 +12,7 @@
     <color name="colorlogin_button">#5C82C2</color>
     <color name="color_alerter_background">#D554A4DA</color>
     <color name="color_alerter_warning_background">#D5F1923D</color>
+    <color name="color_alerter_progress_bar">#FF9800</color>
     <color name="color_list_item_top_background">#D29CF3FF</color>
     <color name="colorwarn_button">#BFD55D5D</color>
     <color name="color_spinner_background">#EE31AFE7</color>
@@ -25,6 +26,14 @@
     <color name="color_popWindowBackground">#C486A8B9</color>
     <color name="color_no_color">#00000000</color>
 
+    <color name="colorPrimary_Pink">#D15CA2</color>
+    <color name="colorPrimaryDark_Pink">#D15CA2</color>
+    <color name="colorAccent_Pink">#DAEB32BD</color>
+    <color name="color_alerter_background_pink">#D5B149D8</color>
+    <color name="color_notice_text_pink">#CA51E4</color>
+    <color name="color_collected_news_text_pink">#5E36D1</color>
+    <color name="color_spinner_background_pink">#EEB636DA</color>
+
     <color name="course_bixiu">#FF6B62</color>
     <color name="course_xuanxiu">#00BCD4</color>
     <color name="course_xianxuan">#FF9800</color>
@@ -36,30 +45,4 @@
     <color name="course_buxiu">#03A9F4</color>
     <color name="course_bangdinggongxuan">#147CA5</color>
 
-    <color name="color_1">#EF9A9A</color>
-    <color name="color_2">#E53935</color>
-    <color name="color_3">#F8BBD0</color>
-    <color name="color_4">#D81B60</color>
-    <color name="color_5">#880E4F</color>
-    <color name="color_6">#CE93D8</color>
-    <color name="color_7">#8E24AA</color>
-    <color name="color_8">#4A148C</color>
-    <color name="color_9">#B39DDB</color>
-    <color name="color_10">#673AB7</color>
-    <color name="color_11">#311B92</color>
-    <color name="color_12">#3D5AFE</color>
-    <color name="color_13">#29B6F6</color>
-    <color name="color_14">#26C6DA</color>
-    <color name="color_15">#26A69A</color>
-    <color name="color_16">#4CAF50</color>
-    <color name="color_17">#8BC34A</color>
-    <color name="color_18">#CDDC39</color>
-    <color name="color_19">#FFEB3B</color>
-    <color name="color_20">#FFC107</color>
-    <color name="color_21">#FF9800</color>
-    <color name="color_22">#FF5722</color>
-    <color name="color_23">#795548</color>
-    <color name="color_24">#9E9E9E</color>
-    <color name="color_25">#607D8B</color>
-    <color name="color_26">#000000</color>
 </resources>

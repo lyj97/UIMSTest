@@ -43,7 +43,7 @@
             android:layout_height="wrap_content"
             android:textSize="14sp"
             android:textColor="#FFFFFF"
-            android:text="🏠 "
+            android:background="@drawable/ic_home_white_24dp"
             />
 
         <TextView
@@ -60,7 +60,7 @@
             android:layout_height="wrap_content"
             android:textSize="14sp"
             android:textColor="#FFFFFF"
-            android:text=" ⏰ "
+            android:background="@drawable/ic_access_time_white_24dp"
             />
 
         <TextView
@@ -76,6 +76,14 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/ic_public_white_24dp"
             />
 
         <TextView

@@ -18,6 +18,7 @@
         >
 
         <TextView
+            android:id="@+id/pop_window_login_pop_layout_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -30,6 +31,7 @@
             />
 
         <LinearLayout
+            android:id="@+id/pop_window_login_pop_layout__main_information"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -76,7 +78,7 @@
                 android:id="@+id/pop_window_login_commit_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/login_button_background"
+                android:background="@drawable/button_internet_background"
                 android:layout_margin="10dp"
                 android:text="登录并更新信息"
                 />

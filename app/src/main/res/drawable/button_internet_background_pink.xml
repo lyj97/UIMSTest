@@ -7,8 +7,8 @@
 
     <!--大小-->
     <!--<size-->
-        <!--android:width="600dp"-->
-        <!--android:height="50dp">-->
+    <!--android:width="600dp"-->
+    <!--android:height="50dp">-->
 
     <!--</size>-->
 
@@ -20,9 +20,9 @@
 
     <!--渐变-->
     <gradient
-        android:startColor="#38D7FF"
-        android:centerColor="#37B9FF"
-        android:endColor="#38D7FF">
+        android:startColor="#BE4C94"
+        android:centerColor="#C32ECE"
+        android:endColor="#BE4C94">
 
     </gradient>
 

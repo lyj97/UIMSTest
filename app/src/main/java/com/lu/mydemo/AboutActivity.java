@@ -12,10 +12,13 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.URLSpan;
 import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import net.sf.json.JSONObject;
 
+import Config.ColorManager;
 import PopWindow.InternetInformationPopupWindow;
 
 public class AboutActivity extends AppCompatActivity {
@@ -34,6 +37,8 @@ public class AboutActivity extends AppCompatActivity {
         link_to_uimstest = findViewById(R.id.activity_about_link_to_uimstest);
         link_to_qq = findViewById(R.id.activity_about_link_to_qq);
         link_to_group = findViewById(R.id.activity_about_link_to_group);
+
+        changeTheme();
 
         application_icon_text_view.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,6 +114,16 @@ public class AboutActivity extends AppCompatActivity {
             }
             textView.setText(style);
         }
+    }
+
+    private void changeTheme(){
+        Window window = getWindow();
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
+                | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(ColorManager.getPrimaryColor());
+
+        findViewById(R.id.activity_about_layout).setBackground(ColorManager.getMainBackground());
     }
 
 }

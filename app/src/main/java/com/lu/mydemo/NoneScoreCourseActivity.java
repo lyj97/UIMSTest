@@ -41,6 +41,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import Config.ColorManager;
 import PopWindow.LoginGetSelectCoursePopWindow;
 import PopWindow.LoginPopWindow;
 import UIMS.UIMS;
@@ -76,6 +77,8 @@ public class NoneScoreCourseActivity extends AppCompatActivity {
         searchButton = findViewById(R.id.get_none_score_course_button);
         deleteSavedCourseInformationButton = findViewById(R.id.delete_saved_course_information_button);
         listView = findViewById(R.id.get_none_score_course_list_view);
+
+        changeTheme();
 
         delete_local_course_information_button_layout_hight = deleteSavedCourseInformationButton.getLayoutParams().height;
 
@@ -467,6 +470,7 @@ public class NoneScoreCourseActivity extends AppCompatActivity {
                 convertView = LinearLayout.inflate(getBaseContext(), R.layout.course_list_ietm, null);
             }//这个TextView是R.layout.list_item里面的，修改这个字体的颜色
             TextView textView = (TextView) convertView.findViewById(R.id.get_none_score_course_title);
+            textView.setTextColor(ColorManager.getNews_normal_text_color());
             //获取每次进来时 mData里面存的值  若果相同则变颜色
             //根据Key值取出装入的数据，然后进行比较
             String ss=(String)mdata.get(position).get("type");
@@ -495,6 +499,18 @@ public class NoneScoreCourseActivity extends AppCompatActivity {
         }
     }
 
+    private void changeTheme(){
+        Window window = getWindow();
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
+                | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(ColorManager.getPrimaryColor());
+
+        findViewById(R.id.none_score_course_layout).setBackground(ColorManager.getMainBackground());
+        searchButton.setBackground(ColorManager.getInternetInformationButtonBackground());
+        spinner.setBackground(ColorManager.getSpinnerBackground());
+    }
+
     public void showResponse(final String string){
         runOnUiThread(new Runnable() {
             @Override
@@ -513,7 +529,7 @@ public class NoneScoreCourseActivity extends AppCompatActivity {
                         .setTitle("提示")
                         .setText(message)
                         .enableSwipeToDismiss()
-                        .setBackgroundColorInt(getResources().getColor(R.color.color_alerter_background))
+                        .setBackgroundColorInt(ColorManager.getTopAlertBackgroundColor())
                         .show();
             }
         });
@@ -527,7 +543,7 @@ public class NoneScoreCourseActivity extends AppCompatActivity {
                         .setTitle(title)
                         .setText(message)
                         .enableSwipeToDismiss()
-                        .setBackgroundColorInt(getResources().getColor(R.color.color_alerter_background))
+                        .setBackgroundColorInt(ColorManager.getTopAlertBackgroundColor())
                         .show();
             }
         });
@@ -568,9 +584,9 @@ public class NoneScoreCourseActivity extends AppCompatActivity {
                 Alerter.create(NoneScoreCourseActivity.this)
                         .setText(message)
                         .enableProgress(true)
-                        .setProgressColorRes(R.color.color_21)
+                        .setProgressColorRes(R.color.color_alerter_progress_bar)
                         .setDuration(10000)
-                        .setBackgroundColorInt(getResources().getColor(R.color.color_alerter_background))
+                        .setBackgroundColorInt(ColorManager.getTopAlertBackgroundColor())
                         .show();
             }
         });

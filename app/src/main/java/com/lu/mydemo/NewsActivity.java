@@ -11,6 +11,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.lu.mydemo.sample.adapter.BaseAdapter;
@@ -32,6 +34,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import Config.ColorManager;
 import ToolFor2045_Site.GetInternetInformation;
 import Utils.News.News;
 
@@ -60,6 +63,8 @@ public class NewsActivity extends AppCompatActivity {
         myCollectionTextView = findViewById(R.id.activity_news_my_collection);
         swipeRecyclerView = findViewById(R.id.activity_news_SwipeRecyclerView);
         myAdapter = createAdapter();
+
+        changeTheme();
 
         swipeRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         swipeRecyclerView.setOnItemClickListener(new OnItemClickListener() {
@@ -133,42 +138,12 @@ public class NewsActivity extends AppCompatActivity {
                     myAdapter.notifyDataSetChanged();
                 }
                 else{
-
-//                    showAlert("您已经收藏过\n" +
-//                            "【" + dataList.get(adapterPosition).get("title") + "】\n" +
-//                            "无需重复收藏.");
-                    //取消收藏的恢复过程
-//                    Alerter.create(NewsActivity.this)
-//                            .setText("已取消收藏\n" +
-//                                    "【" + dataList.get(adapterPosition).get("title") + "】\n\n" +
-//                                    "如需撤销，请点击此处.")
-//                            .enableSwipeToDismiss()
-//                            .setProgressColorRes(R.color.color_21)
-//                            .setDuration(6000)
-//                            .setOnClickListener(new View.OnClickListener() {
-//                                @Override
-//                                public void onClick(View v) {
-//                                    News.add(tempJsonObject, getApplicationContext(), true);
-//                                    myAdapter.notifyDataSetChanged();
-//                                    Alerter.hide();
-//                                }
-//                            })
-//                            .setBackgroundColorInt(getResources().getColor(R.color.color_alerter_background))
-//                            .show();
-//                    tempJsonObject = new JSONObject();
-//                    tempJsonObject.put("title", dataList.get(adapterPosition).get("title"));
-//                    tempJsonObject.put("department", dataList.get(adapterPosition).get("department"));
-//                    tempJsonObject.put("time", dataList.get(adapterPosition).get("time"));
-//                    tempJsonObject.put("link", dataList.get(adapterPosition).get("link"));
-//                    tempJsonObject.put("abs_link", dataList.get(adapterPosition).get("abs_link"));
-//                    tempJsonObject.put("flagTop", dataList.get(adapterPosition).get("flagTop"));
                     if(!News.delete((String) dataList.get(adapterPosition).get("title"))){
                         showWarningAlert("删除收藏失败！");
                     }
                     else{
                         myAdapter.notifyDataSetChanged();
                     }
-
                 }
 
             }
@@ -342,15 +317,15 @@ public class NewsActivity extends AppCompatActivity {
             public void setData(String title, String department, String time, boolean flagTop) {
 
                 if(flagTop){
-                    this.tvTitle.setTextColor(getResources().getColor(R.color.color_notice_text));
+                    this.tvTitle.setTextColor(ColorManager.getNews_notice_text_color());
                     this.tvTitle.setText("[置顶] " + title);
                 }
                 else {
-                    tvTitle.setTextColor(Color.parseColor("#03A9F4"));
+                    tvTitle.setTextColor(ColorManager.getNews_normal_text_color());
                     this.tvTitle.setText(title);
                 }
                 if(News.contains(title, getApplicationContext())){
-                    this.tvTitle.setTextColor(getResources().getColor(R.color.color_collected_news_text));
+                    this.tvTitle.setTextColor(ColorManager.getNews_collected_text_color());
                     this.tvTitle.setText(this.tvTitle.getText() + " [已收藏]");
                 }
 
@@ -366,6 +341,16 @@ public class NewsActivity extends AppCompatActivity {
 
     }
 
+    private void changeTheme(){
+        Window window = getWindow();
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
+                | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(ColorManager.getPrimaryColor());
+
+        findViewById(R.id.activity_news).setBackground(ColorManager.getMainBackground());
+    }
+
     public void showAlert(final String message) {
         runOnUiThread(new Runnable() {
             @Override
@@ -374,7 +359,7 @@ public class NewsActivity extends AppCompatActivity {
                         .setTitle("提示")
                         .setText(message)
                         .enableSwipeToDismiss()
-                        .setBackgroundColorInt(getResources().getColor(R.color.color_alerter_background))
+                        .setBackgroundColorInt(ColorManager.getTopAlertBackgroundColor())
                         .show();
             }
         });
@@ -387,9 +372,9 @@ public class NewsActivity extends AppCompatActivity {
                 Alerter.create(NewsActivity.this)
                         .setText(message)
                         .enableProgress(true)
-                        .setProgressColorRes(R.color.color_21)
+                        .setProgressColorRes(R.color.color_alerter_progress_bar)
                         .setDuration(10000)
-                        .setBackgroundColorInt(getResources().getColor(R.color.color_alerter_background))
+                        .setBackgroundColorInt(ColorManager.getTopAlertBackgroundColor())
                         .show();
             }
         });
@@ -403,7 +388,7 @@ public class NewsActivity extends AppCompatActivity {
                         .setTitle(title)
                         .setText(message)
                         .enableSwipeToDismiss()
-                        .setBackgroundColorInt(getResources().getColor(R.color.color_alerter_background))
+                        .setBackgroundColorInt(ColorManager.getTopAlertBackgroundColor())
                         .show();
             }
         });

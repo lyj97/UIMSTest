@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_login"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -32,36 +31,23 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
-            android:paddingTop="5dp"
+            android:padding="10dp"
             android:orientation="horizontal"
             >
 
-            <LinearLayout
-                android:id="@+id/time_information_layout"
+            <TextView
+                android:id="@+id/time_information"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:layout_gravity="center"
-                android:paddingLeft="10dp"
-                android:orientation="horizontal"
-                >
+                android:layout_height="wrap_content" />
 
-                <TextView
-                    android:id="@+id/time_information"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="✎"
-                    />
-
-
-            </LinearLayout>
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="✎"-->
+                <!--/>-->
 
             <TextView
                 android:layout_width="0dp"
@@ -69,83 +55,88 @@
                 android:layout_weight="1"
                 />
 
-            <LinearLayout
-                android:id="@+id/switch_layout"
+            <TextView
+                android:id="@+id/term_information"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:layout_gravity="center"
-                android:paddingRight="10dp"
-                android:orientation="horizontal"
-                >
+                android:layout_height="wrap_content" />
 
-                <TextView
-                    android:id="@+id/switch_information"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="5dp"
-                    android:text="个人信息"
-                    />
+            <!--<LinearLayout-->
+                <!--android:id="@+id/switch_layout"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:gravity="center"-->
+                <!--android:layout_gravity="center"-->
+                <!--android:paddingRight="10dp"-->
+                <!--android:orientation="horizontal"-->
+                <!--&gt;-->
 
-                <Switch
-                    android:id="@+id/switcher"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    />
+                <!--<TextView-->
+                    <!--android:id="@+id/switch_information"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:paddingLeft="5dp"-->
+                    <!--android:paddingRight="5dp"-->
+                    <!--android:text="个人信息"-->
+                    <!--/>-->
 
-            </LinearLayout>
+                <!--<Switch-->
+                    <!--android:id="@+id/switcher"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--/>-->
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/information"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:padding="20dp"
-            android:gravity="center"
-            android:orientation="vertical"
-            >
-
-            <TextView
-                android:id="@+id/information_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="information"
-                android:layout_gravity="center"
-                android:gravity="center"
-                />
-
-            <TextView
-                android:id="@+id/information_department"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="dept"
-                android:layout_gravity="center"
-                android:gravity="center"
-                />
-
-            <TextView
-                android:id="@+id/information_term"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="10dp"
-                android:text="term"
-                android:layout_gravity="center"
-                android:gravity="center"
-                />
-
-            <TextView
-                android:id="@+id/information_week"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="week"
-                android:layout_gravity="center"
-                android:gravity="center"
-                />
+            <!--</LinearLayout>-->
 
         </LinearLayout>
+
+        <!--<LinearLayout-->
+            <!--android:id="@+id/information"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:padding="20dp"-->
+            <!--android:gravity="center"-->
+            <!--android:orientation="vertical"-->
+            <!--&gt;-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/information_name"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="information"-->
+                <!--android:layout_gravity="center"-->
+                <!--android:gravity="center"-->
+                <!--/>-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/information_department"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="dept"-->
+                <!--android:layout_gravity="center"-->
+                <!--android:gravity="center"-->
+                <!--/>-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/information_term"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:paddingTop="10dp"-->
+                <!--android:text="term"-->
+                <!--android:layout_gravity="center"-->
+                <!--android:gravity="center"-->
+                <!--/>-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/information_week"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="week"-->
+                <!--android:layout_gravity="center"-->
+                <!--android:gravity="center"-->
+                <!--/>-->
+
+        <!--</LinearLayout>-->
 
         <LinearLayout
             android:id="@+id/course_list_layout"
@@ -291,7 +282,7 @@
                         <!--android:id="@+id/login_button"-->
                         <!--android:layout_width="match_parent"-->
                         <!--android:layout_height="50dp"-->
-                        <!--android:background="@drawable/login_button_background"-->
+                        <!--android:background="@drawable/button_internet_background"-->
                         <!--android:text="@string/text_loginbutton"-->
                         <!--android:textSize="18dp"-->
                         <!--android:textColor="@color/colorlogin_text"/>-->
@@ -300,7 +291,7 @@
                         android:id="@+id/get_news_button"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
-                        android:background="@drawable/shape1"
+                        android:background="@drawable/button_local_background"
                         android:text="校内通知"
                         android:textSize="18dp"
                         android:textColor="@color/colorlogin_text"/>
@@ -310,7 +301,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:layout_marginTop="15dp"
-                        android:background="@drawable/shape1"
+                        android:background="@drawable/button_local_background"
                         android:text="成绩查询"
                         android:textSize="18dp"
                         android:textColor="@color/colorlogin_text"/>
@@ -320,7 +311,7 @@
                         <!--android:layout_width="match_parent"-->
                         <!--android:layout_height="50dp"-->
                         <!--android:layout_marginTop="15dp"-->
-                        <!--android:background="@drawable/shape1"-->
+                        <!--android:background="@drawable/button_local_background"-->
                         <!--android:text="课程调整管理"-->
                         <!--android:textSize="18dp"-->
                         <!--android:textColor="@color/colorlogin_text"/>-->
@@ -330,7 +321,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:layout_marginTop="15dp"
-                        android:background="@drawable/shape1"
+                        android:background="@drawable/button_local_background"
                         android:text="成绩未发布课程"
                         android:textSize="18dp"
                         android:textColor="@color/colorlogin_text"/>
@@ -340,7 +331,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:layout_marginTop="15dp"
-                        android:background="@drawable/login_button_background"
+                        android:background="@drawable/button_internet_background"
                         android:text="更新信息"
                         android:textSize="18dp"
                         android:textColor="@color/colorlogin_text"/>
@@ -352,6 +343,13 @@
                         android:paddingTop="15dp"
                         android:text="ⓘ关于UIMSTest"
                         />
+
+                    <TextView
+                        android:id="@+id/login_color_test"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="15dp"
+                        android:text="Color Test"/>
 
                 </LinearLayout>
 

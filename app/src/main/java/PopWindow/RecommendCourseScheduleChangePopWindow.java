@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.icu.text.SimpleDateFormat;
 import android.icu.util.Calendar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -28,6 +29,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+
+import Config.ColorManager;
 
 public class RecommendCourseScheduleChangePopWindow extends PopupWindow {
 
@@ -58,6 +61,8 @@ public class RecommendCourseScheduleChangePopWindow extends PopupWindow {
         course_list = mMenuView.findViewById(R.id.recommend_course_schedule_change_list);
         commit_button = mMenuView.findViewById(R.id.recommend_course_schedule_change_commit_button);
         cancel_button = mMenuView.findViewById(R.id.recommend_course_schedule_change_cancel_button);
+
+        changeTheme();
 
         courseScheduleChangeJSON = jsonObject;
 
@@ -224,6 +229,8 @@ public class RecommendCourseScheduleChangePopWindow extends PopupWindow {
             TextView context2 = convertView.findViewById(R.id.course_schedule_change_list_item_context2);
             TextView split2 = convertView.findViewById(R.id.course_schedule_change_list_item_split2);
 
+            ((TextView) mMenuView.findViewById(R.id.course_schedule_change_list_item_title)).setTextColor(ColorManager.getPrimaryColor());
+
             //根据Key值取出装入的数据，然后进行比较
             try {
                 String ss = ((String) mdata.get(position).get("context2"));
@@ -242,6 +249,13 @@ public class RecommendCourseScheduleChangePopWindow extends PopupWindow {
             //Log.i("TAG", (String) mData.get(position).get("text"));
             return super.getView(position, convertView, parent);
         }
+    }
+
+    private void changeTheme(){
+        Log.i("Theme", "Change theme.");
+        mMenuView.findViewById(R.id.recommend_course_schedule_change_pop_layout_title).setBackgroundColor(ColorManager.getPrimaryColor());
+        course_list.setBackground(ColorManager.getMainBackground());
+        commit_button.setBackground(ColorManager.getInternetInformationButtonBackground());
     }
 
 }

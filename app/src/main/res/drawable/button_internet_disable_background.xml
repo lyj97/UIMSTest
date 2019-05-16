@@ -18,20 +18,28 @@
 
     </corners>
 
-    <!--边框-->
-    <stroke
-        android:color="@color/colorPrimary"
-        android:dashGap="5dp"
-        android:dashWidth="5dp"
-        android:width="1dp">
-
-    </stroke>
-
     <!--设置内边距-->
     <padding android:left="5dp"
         android:right="5dp"
         android:top="5dp"
         android:bottom="5dp"/>
+
+    <!--渐变-->
+    <gradient
+        android:startColor="#5938D7FF"
+        android:centerColor="#5937B9FF"
+        android:endColor="#5938D7FF">
+
+    </gradient>
+
+    <!--边框-->
+    <stroke
+        android:color="@color/colorPrimary"
+        android:dashGap="5dp"
+        android:dashWidth="5dp"
+        android:width="2dp">
+
+    </stroke>
 
 
 </shape>

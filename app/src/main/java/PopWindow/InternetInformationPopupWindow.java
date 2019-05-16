@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -15,6 +16,8 @@ import android.widget.TextView;
 import com.lu.mydemo.R;
 
 import net.sf.json.JSONObject;
+
+import Config.ColorManager;
 
 public class InternetInformationPopupWindow extends PopupWindow {
 
@@ -58,6 +61,8 @@ public class InternetInformationPopupWindow extends PopupWindow {
         information_main = mMenuView.findViewById(R.id.internet_information_pop_window_main_information_text);
         information_link = mMenuView.findViewById(R.id.internet_information_pop_window_link_text);
         confirm_text = mMenuView.findViewById(R.id.internet_information_pop_window_confirm_text);
+
+        changeTheme();
 
         information_title.setText(title);
         information_main.setText(information);
@@ -110,6 +115,12 @@ public class InternetInformationPopupWindow extends PopupWindow {
             }
         });
 
+    }
+
+    private void changeTheme(){
+        Log.i("Theme", "Change theme.");
+        mMenuView.findViewById(R.id.internet_information_pop_window_main_layout).setBackground(ColorManager.getMainBackground());
+        confirm_text.setTextColor(ColorManager.getPrimaryColor());
     }
 
 }

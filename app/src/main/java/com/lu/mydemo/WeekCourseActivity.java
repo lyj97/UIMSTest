@@ -14,6 +14,8 @@ import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,6 +29,7 @@ import com.zhuangfei.timetable.view.WeekView;
 
 import java.util.List;
 
+import Config.ColorManager;
 import Utils.Course.MySubject;
 import Utils.Course.SubjectRepertory;
 
@@ -44,14 +47,23 @@ public class WeekCourseActivity extends AppCompatActivity implements View.OnClic
     int target = -1;
     AlertDialog alertDialog;
 
+    int now_week;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_week_course);
 
+        Bundle bundle =  getIntent().getBundleExtra("bundle");
+        target = (int) bundle.getLong("now_week");
+        now_week = target;
+
         titleTextView = findViewById(R.id.week_course_title);
-        layout = findViewById(R.id.testLinearLayout);
+        layout = findViewById(R.id.weekCourseLayout);
         layout.setOnClickListener(this);
+
+        changeTheme();
+
         initTimetableView();
 
         requestData();
@@ -81,18 +93,6 @@ public class WeekCourseActivity extends AppCompatActivity implements View.OnClic
             super.handleMessage(msg);
             if(alertDialog!=null) alertDialog.hide();
             mySubjects = SubjectRepertory.loadDefaultSubjects();
-
-            //增加广告
-//            MySubject adSubject=new MySubject();
-//            adSubject.setName("【广告】");
-//            adSubject.setStart(1);
-//            adSubject.setStep(2);
-//            adSubject.setDay(7);
-//            List<Integer> list= new ArrayList<>();
-//            for(int i=1;i<=20;i++) list.add(i);
-//            adSubject.setWeekList(list);
-//            adSubject.setUrl(AD_URL);
-//            mySubjects.add(adSubject);
 
             mWeekView.source(mySubjects).showView();
             mTimetableView.source(mySubjects).showView();
@@ -163,30 +163,6 @@ public class WeekCourseActivity extends AppCompatActivity implements View.OnClic
                         titleTextView.setText("第" + curWeek + "周");
                     }
                 })
-//                .callback(new OnItemBuildAdapter(){
-//                    @Override
-//                    public void onItemUpdate(FrameLayout layout, TextView textView, TextView countTextView, Schedule schedule, GradientDrawable gd) {
-//                        super.onItemUpdate(layout, textView, countTextView, schedule, gd);
-//                        if(schedule.getName().equals("【广告】")){
-//                            layout.removeAllViews();
-//                            ImageView imageView=new ImageView(WeekCourseActivity.this);
-//                            imageView.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
-//                            layout.addView(imageView);
-////                            String url= (String) schedule.getExtras().get(MySubject.EXTRAS_AD_URL);
-//
-////                            Glide.with(SimpleActivity.this)
-////                                    .load(url)
-////                                    .into(imageView);
-//
-//                            imageView.setOnClickListener(new View.OnClickListener() {
-//                                @Override
-//                                public void onClick(View v) {
-//                                    Toast.makeText(WeekCourseActivity.this,"进入广告网页链接",Toast.LENGTH_SHORT).show();
-//                                }
-//                            });
-//                        }
-//                    }
-//                })
                 .showView();
     }
 
@@ -249,7 +225,7 @@ public class WeekCourseActivity extends AppCompatActivity implements View.OnClic
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.testLinearLayout:
+            case R.id.weekCourseLayout:
                 //如果周次选择已经显示了，那么将它隐藏，更新课程、日期
                 //否则，显示
                 if (mWeekView.isShowing()) hideWeekView();
@@ -262,6 +238,7 @@ public class WeekCourseActivity extends AppCompatActivity implements View.OnClic
      * 隐藏周次选择，此时需要将课表的日期恢复到本周并将课表切换到当前周
      */
     public void hideWeekView(){
+        target = now_week;
         mWeekView.isShow(false);
         titleTextView.setTextColor(getResources().getColor(R.color.app_white));
         int cur = mTimetableView.curWeek();
@@ -275,6 +252,16 @@ public class WeekCourseActivity extends AppCompatActivity implements View.OnClic
         titleTextView.setTextColor(getResources().getColor(R.color.color_dark_text));
     }
 
+    private void changeTheme(){
+        Window window = getWindow();
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
+                | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(ColorManager.getPrimaryColor());
+
+        findViewById(R.id.weekCourseLayout).setBackground(ColorManager.getMainBackground());
+    }
+
     public void showAlert(final String message){
         runOnUiThread(new Runnable() {
             @Override
@@ -283,7 +270,7 @@ public class WeekCourseActivity extends AppCompatActivity implements View.OnClic
                         .setTitle("提示")
                         .setText(message)
                         .enableSwipeToDismiss()
-                        .setBackgroundColorInt(getResources().getColor(R.color.color_alerter_background))
+                        .setBackgroundColorInt(ColorManager.getTopAlertBackgroundColor())
                         .show();
             }
         });
@@ -296,9 +283,9 @@ public class WeekCourseActivity extends AppCompatActivity implements View.OnClic
                 Alerter.create(WeekCourseActivity.this)
                         .setText(message)
                         .enableProgress(true)
-                        .setProgressColorRes(R.color.color_21)
+                        .setProgressColorRes(R.color.color_alerter_progress_bar)
                         .setDuration(10000)
-                        .setBackgroundColorInt(getResources().getColor(R.color.color_alerter_background))
+                        .setBackgroundColorInt(ColorManager.getTopAlertBackgroundColor())
                         .show();
             }
         });
@@ -312,7 +299,7 @@ public class WeekCourseActivity extends AppCompatActivity implements View.OnClic
                         .setTitle(title)
                         .setText(message)
                         .enableSwipeToDismiss()
-                        .setBackgroundColorInt(getResources().getColor(R.color.color_alerter_background))
+                        .setBackgroundColorInt(ColorManager.getTopAlertBackgroundColor())
                         .show();
             }
         });

@@ -18,20 +18,22 @@
 
     </corners>
 
+    <!--&lt;!&ndash;渐变&ndash;&gt;-->
+    <!--<gradient-->
+    <!--android:startColor="#856FD9A8"-->
+    <!--android:centerColor="#8563CFC3"-->
+    <!--android:endColor="#7557C5E9">-->
+
+    <!--</gradient>-->
+
     <!--边框-->
     <stroke
-        android:color="@color/colorPrimary"
+        android:color="@color/color_spinner_background_pink"
         android:dashGap="5dp"
         android:dashWidth="5dp"
         android:width="1dp">
 
     </stroke>
-
-    <!--设置内边距-->
-    <padding android:left="5dp"
-        android:right="5dp"
-        android:top="5dp"
-        android:bottom="5dp"/>
 
 
 </shape>

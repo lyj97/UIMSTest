@@ -7,8 +7,8 @@
 
     <!--大小-->
     <!--<size-->
-    <!--android:width="600dp"-->
-    <!--android:height="50dp">-->
+        <!--android:width="600dp"-->
+        <!--android:height="50dp">-->
 
     <!--</size>-->
 
@@ -18,14 +18,13 @@
 
     </corners>
 
-    <!--边框-->
-    <stroke
-        android:color="@color/colorPrimary"
-        android:dashGap="5dp"
-        android:dashWidth="5dp"
-        android:width="1dp">
+    <!--渐变-->
+    <gradient
+        android:startColor="#36C8EE"
+        android:centerColor="#34A8E7"
+        android:endColor="#36C8EE">
 
-    </stroke>
+    </gradient>
 
     <!--设置内边距-->
     <padding android:left="5dp"

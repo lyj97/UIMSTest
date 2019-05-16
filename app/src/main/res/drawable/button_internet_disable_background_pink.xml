@@ -26,15 +26,15 @@
 
     <!--渐变-->
     <gradient
-        android:startColor="#5938D7FF"
-        android:centerColor="#5937B9FF"
-        android:endColor="#5938D7FF">
+        android:startColor="#59BE4C94"
+        android:centerColor="#59C32ECE"
+        android:endColor="#59BE4C94">
 
     </gradient>
 
     <!--边框-->
     <stroke
-        android:color="@color/colorAccent"
+        android:color="@color/colorPrimary_Pink"
         android:dashGap="5dp"
         android:dashWidth="5dp"
         android:width="2dp">

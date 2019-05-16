@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import java.util.ArrayList;
@@ -31,6 +32,7 @@ import com.tapadoo.alerter.Alerter;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+import Config.ColorManager;
 import UIMS.UIMS;
 
 public class MainActivity extends Activity
@@ -54,6 +56,9 @@ public class MainActivity extends Activity
         scoreStatisticsTextView = findViewById(R.id.textView_ScoreStatistics);
         scoreStatisticsTitleTextView = findViewById(R.id.textView_ScoreStatisticsTitle);
         courseTypeID_courseType = UIMS.getCourseTypeId_courseType();
+
+        changeTheme();
+
         final List<Map<String, Object>> datalist = getScoreList();
         ListView lv = (ListView) findViewById(R.id.lv);
 
@@ -234,7 +239,7 @@ public class MainActivity extends Activity
                         .setDuration(4000)
                         .hideIcon()
 //                        .enableProgress(true)
-                        .setBackgroundColorInt(getResources().getColor(R.color.color_alerter_background))
+                        .setBackgroundColorInt(ColorManager.getTopAlertBackgroundColor())
                         .show();
             }
         });
@@ -259,6 +264,16 @@ public class MainActivity extends Activity
         });
     }
 
+    private void changeTheme(){
+        Window window = getWindow();
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
+                | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(ColorManager.getPrimaryColor());
+
+        findViewById(R.id.activity_main).setBackground(ColorManager.getMainBackground());
+    }
+
     public void showAlert(final String message){
         runOnUiThread(new Runnable() {
             @Override
@@ -267,7 +282,7 @@ public class MainActivity extends Activity
                         .setTitle("提示")
                         .setText(message)
                         .enableSwipeToDismiss()
-                        .setBackgroundColorInt(getResources().getColor(R.color.color_alerter_background))
+                        .setBackgroundColorInt(ColorManager.getTopAlertBackgroundColor())
                         .show();
             }
         });
@@ -281,7 +296,7 @@ public class MainActivity extends Activity
                         .setTitle(title)
                         .setText(message)
                         .enableSwipeToDismiss()
-                        .setBackgroundColorInt(getResources().getColor(R.color.color_alerter_background))
+                        .setBackgroundColorInt(ColorManager.getTopAlertBackgroundColor())
                         .show();
             }
         });

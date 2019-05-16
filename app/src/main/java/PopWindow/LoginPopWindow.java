@@ -18,6 +18,7 @@ import com.lu.mydemo.LoginActivity;
 import com.lu.mydemo.R;
 import com.tapadoo.alerter.Alerter;
 
+import Config.ColorManager;
 import UIMS.UIMS;
 
 public class LoginPopWindow extends PopupWindow {
@@ -55,6 +56,8 @@ public class LoginPopWindow extends PopupWindow {
         commitButton = mMenuView.findViewById(R.id.pop_window_login_commit_button);
         cancelButton = mMenuView.findViewById(R.id.pop_window_login_cancel_button);
         deleteSavedText = mMenuView.findViewById(R.id.pop_window_login_delete_saved_text);
+
+        changeTheme();
 
         user.setText(sp.getString("USER",""));
         password.setText(sp.getString("PASSWORD",""));
@@ -260,7 +263,7 @@ public class LoginPopWindow extends PopupWindow {
             public void run() {
                 commitButton.setText(commitButtonText);
                 commitButton.setEnabled(false);
-                commitButton.setBackground(context.getResources().getDrawable(R.drawable.login_button_disable_background));
+                commitButton.setBackground(context.getResources().getDrawable(R.drawable.button_internet_disable_background));
             }
         });
     }
@@ -271,7 +274,7 @@ public class LoginPopWindow extends PopupWindow {
             public void run() {
                 commitButton.setText(commitButtonText);
                 commitButton.setEnabled(true);
-                commitButton.setBackground(context.getResources().getDrawable(R.drawable.login_button_background));
+                commitButton.setBackground(context.getResources().getDrawable(R.drawable.button_internet_background));
             }
         });
     }
@@ -284,6 +287,13 @@ public class LoginPopWindow extends PopupWindow {
         if(view != null){
             inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
+    }
+
+    private void changeTheme(){
+        Log.i("Theme", "Change theme.");
+        mMenuView.findViewById(R.id.pop_window_login_pop_layout_title).setBackgroundColor(ColorManager.getPrimaryColor());
+        mMenuView.findViewById(R.id.pop_window_login_pop_layout__main_information).setBackground(ColorManager.getMainBackground());
+        commitButton.setBackground(ColorManager.getInternetInformationButtonBackground());
     }
 
 }
