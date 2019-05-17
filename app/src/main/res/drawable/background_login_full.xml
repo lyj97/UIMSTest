@@ -3,8 +3,8 @@
     <!-- 渐变色 -->
     <gradient
         android:angle="90"
-        android:endColor="@color/colorPrimary_Pink"
-        android:centerColor="#E6CC9FCE"
+        android:endColor="@color/colorPrimary"
+        android:centerColor="@color/color_Background"
         android:startColor="@color/color_grayBackground"
         android:type="linear"/>
 

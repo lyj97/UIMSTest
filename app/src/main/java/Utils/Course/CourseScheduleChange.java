@@ -179,12 +179,13 @@ public class CourseScheduleChange {
     }
 
     public static boolean containsDate(Context context, String date){
-        Log.i("CourseScheduleChange", "containsDate:\t" + date);
         showHashMap();
         if(sp == null || courseScheduleChangeJSON == null){
             getPreviousTime_changeTime(context);
         }
-        return (previousTime_changeTime.containsKey(date));
+        boolean containsDate = previousTime_changeTime.containsKey(date);
+        Log.i("CourseScheduleChange", "containsDate:\t" + date + " " + containsDate);
+        return containsDate;
     }
 
     public static boolean containsDate(Context context, JSONArray array){

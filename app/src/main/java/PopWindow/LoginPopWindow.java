@@ -263,7 +263,7 @@ public class LoginPopWindow extends PopupWindow {
             public void run() {
                 commitButton.setText(commitButtonText);
                 commitButton.setEnabled(false);
-                commitButton.setBackground(context.getResources().getDrawable(R.drawable.button_internet_disable_background));
+                commitButton.setBackground(ColorManager.getInternetInformationButtonBackground_disable_full());
             }
         });
     }
@@ -274,7 +274,7 @@ public class LoginPopWindow extends PopupWindow {
             public void run() {
                 commitButton.setText(commitButtonText);
                 commitButton.setEnabled(true);
-                commitButton.setBackground(context.getResources().getDrawable(R.drawable.button_internet_background));
+                commitButton.setBackground(ColorManager.getInternetInformationButtonBackground_full());
             }
         });
     }
@@ -293,7 +293,7 @@ public class LoginPopWindow extends PopupWindow {
         Log.i("Theme", "Change theme.");
         mMenuView.findViewById(R.id.pop_window_login_pop_layout_title).setBackgroundColor(ColorManager.getPrimaryColor());
         mMenuView.findViewById(R.id.pop_window_login_pop_layout__main_information).setBackground(ColorManager.getMainBackground());
-        commitButton.setBackground(ColorManager.getInternetInformationButtonBackground());
+        commitButton.setBackground(ColorManager.getInternetInformationButtonBackground_full());
     }
 
 }

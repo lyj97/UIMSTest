@@ -19,11 +19,13 @@ import android.widget.TextView;
 import net.sf.json.JSONObject;
 
 import Config.ColorManager;
+import Config.Version;
 import PopWindow.InternetInformationPopupWindow;
 
 public class AboutActivity extends AppCompatActivity {
 
     private TextView application_icon_text_view;
+    private TextView application_version_name;
     private TextView link_to_uimstest;
     private TextView link_to_qq;
     private TextView link_to_group;
@@ -34,11 +36,14 @@ public class AboutActivity extends AppCompatActivity {
         setContentView(R.layout.activity_about);
 
         application_icon_text_view = findViewById(R.id.activity_about_application_icon);
+        application_version_name = findViewById(R.id.activity_about_application_version_name);
         link_to_uimstest = findViewById(R.id.activity_about_link_to_uimstest);
         link_to_qq = findViewById(R.id.activity_about_link_to_qq);
         link_to_group = findViewById(R.id.activity_about_link_to_group);
 
         changeTheme();
+
+        application_version_name.setText("Ver " + Version.getVersionName());
 
         application_icon_text_view.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,7 +128,7 @@ public class AboutActivity extends AppCompatActivity {
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.setStatusBarColor(ColorManager.getPrimaryColor());
 
-        findViewById(R.id.activity_about_layout).setBackground(ColorManager.getMainBackground());
+        findViewById(R.id.activity_about_layout).setBackground(ColorManager.getMainBackground_full());
     }
 
 }

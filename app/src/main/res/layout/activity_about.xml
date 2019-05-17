@@ -49,6 +49,7 @@
                 android:background="@mipmap/ic_launcher_foreground"/>
 
             <TextView
+                android:id="@+id/activity_about_application_version_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=""/>

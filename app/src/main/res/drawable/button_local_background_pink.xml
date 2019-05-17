@@ -3,7 +3,7 @@
     <!--设置圆角-->
     <corners android:radius="60dp" />
     <!--设置button的颜色-->
-    <solid android:color="@color/colorPrimary_Pink"/>
+    <solid android:color="@color/color_getSaved_button_bg_pink"/>
     <!--设置button的大小-->
     <!--<size-->
     <!--android:height="60dp"-->

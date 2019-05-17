@@ -255,7 +255,7 @@ public class RecommendCourseScheduleChangePopWindow extends PopupWindow {
         Log.i("Theme", "Change theme.");
         mMenuView.findViewById(R.id.recommend_course_schedule_change_pop_layout_title).setBackgroundColor(ColorManager.getPrimaryColor());
         course_list.setBackground(ColorManager.getMainBackground());
-        commit_button.setBackground(ColorManager.getInternetInformationButtonBackground());
+        commit_button.setBackground(ColorManager.getInternetInformationButtonBackground_full());
     }
 
 }

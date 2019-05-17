@@ -50,7 +50,7 @@ import PopWindow.*;
 
 public class LoginActivity extends Activity {
 
-    private LinearLayout actiivity_login;
+    private LinearLayout activity_login;
 
     private TextView timeInformation;
     private TextView termInformation;
@@ -109,7 +109,7 @@ public class LoginActivity extends Activity {
         termInformation = findViewById(R.id.term_information);
         courseList = findViewById(R.id.course_list);
         UIMSTest = findViewById(R.id.UIMSTest);
-        actiivity_login = findViewById(R.id.activity_login);
+        activity_login = findViewById(R.id.activity_login);
         load_internet_inf_button = findViewById(R.id.load_internet_information_button);
         get_save_button = findViewById(R.id.get_saved_button);
         getNoneScoreCourseButton = findViewById(R.id.load_none_score_course_information_button);
@@ -130,7 +130,7 @@ public class LoginActivity extends Activity {
         changeTheme();
         theme = ColorManager.getThemeName();
 
-        actiivity_login.setBackground(ColorManager.getMainBackground());
+        activity_login.setBackground(ColorManager.getMainBackground_full());
         findViewById(R.id.login_color_test).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -165,7 +165,7 @@ public class LoginActivity extends Activity {
         }
 
         if(!isLoginIn) {
-            actiivity_login.requestLayout();
+            activity_login.requestLayout();
         }
         else{
             loginSuccess();
@@ -369,7 +369,7 @@ public class LoginActivity extends Activity {
                 isLoginIn = false;
 
                 getNoneScoreCourseButton.requestLayout();
-                actiivity_login.requestLayout();
+                activity_login.requestLayout();
 
             }
         });
@@ -967,6 +967,14 @@ public class LoginActivity extends Activity {
                         Log.i("GetInternetInformation", "Object is NULL.");
                         return;
                     }
+
+                    try {
+                        int internetVersion = object.getInt("VersionCode");
+                        Log.i("Version", "" + internetVersion);
+                    } catch (Exception e){
+                        e.printStackTrace();
+                    }
+
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -992,11 +1000,11 @@ public class LoginActivity extends Activity {
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.setStatusBarColor(ColorManager.getPrimaryColor());
 
-        actiivity_login.setBackground(ColorManager.getMainBackground());
+        activity_login.setBackground(ColorManager.getMainBackground_full());
         getNewsButton.setBackground(ColorManager.getLocalInformationButtonBackground());
         get_save_button.setBackground(ColorManager.getLocalInformationButtonBackground());
         getNoneScoreCourseButton.setBackground(ColorManager.getLocalInformationButtonBackground());
-        load_internet_inf_button.setBackground(ColorManager.getInternetInformationButtonBackground());
+        load_internet_inf_button.setBackground(ColorManager.getInternetInformationButtonBackground_full());
     }
 
     public static void loadColorConfig(){

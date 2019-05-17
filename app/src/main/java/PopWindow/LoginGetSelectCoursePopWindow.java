@@ -230,6 +230,6 @@ public class LoginGetSelectCoursePopWindow extends PopupWindow {
         Log.i("Theme", "Change theme.");
         mMenuView.findViewById(R.id.pop_window_login_pop_layout_title).setBackgroundColor(ColorManager.getPrimaryColor());
         mMenuView.findViewById(R.id.pop_window_login_pop_layout__main_information).setBackground(ColorManager.getMainBackground());
-        commitButton.setBackground(ColorManager.getInternetInformationButtonBackground());
+        commitButton.setBackground(ColorManager.getInternetInformationButtonBackground_full());
     }
 }
