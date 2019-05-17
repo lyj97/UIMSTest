@@ -23,7 +23,7 @@
     <color name="color_grayBackground">#E0E0E0</color>
     <color name="color_whiteBackground">#FFFFFF</color>
     <color name="color_lightBlueBackground">#93D4E0</color>
-    <color name="color_popWindowBackground">#C486A8B9</color>
+    <color name="color_popWindowBackground">#B386A8B9</color>
     <color name="color_no_color">#00000000</color>
 
     <color name="colorPrimary_Pink">#CCD166A6</color>
@@ -35,6 +35,7 @@
     <color name="color_spinner_background_pink">#EEB636DA</color>
     <color name="color_getSaved_button_bg_pink">#E6DF5DB9</color>
     <color name="color_getSaved_disable_button_bg_pink">#80DF5DB9</color>
+    <color name="color_popWindowBackground_pink">#B3A786B9</color>
 
     <color name="course_bixiu">#FF6B62</color>
     <color name="course_xuanxiu">#00BCD4</color>

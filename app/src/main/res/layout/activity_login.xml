@@ -147,7 +147,7 @@
                     <Button
                         android:id="@+id/get_news_button"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
+                        android:layout_height="wrap_content"
                         android:background="@drawable/button_local_background"
                         android:text="校内通知"
                         android:textSize="18dp"
@@ -156,7 +156,7 @@
                     <Button
                         android:id="@+id/get_saved_button"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="15dp"
                         android:background="@drawable/button_local_background"
                         android:text="成绩查询"
@@ -166,7 +166,7 @@
                     <Button
                         android:id="@+id/load_none_score_course_information_button"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="15dp"
                         android:background="@drawable/button_local_background"
                         android:text="成绩未发布课程"
@@ -176,7 +176,7 @@
                     <Button
                         android:id="@+id/load_internet_information_button"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="15dp"
                         android:background="@drawable/button_internet_background"
                         android:text="更新信息"
