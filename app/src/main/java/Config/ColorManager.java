@@ -10,7 +10,7 @@ public class ColorManager {
 
     /**
      * primaryColor
-     * 全局渐变背景（上方）颜色
+     * 全局渐变背景
      * 获取本地顶信息按钮颜色
      * 获取网络信息按钮（渐变）颜色
      * 获取网络信息按钮（渐变）颜色(disable)
@@ -32,10 +32,14 @@ public class ColorManager {
     private static int news_notice_text_color;
     private static int news_collected_text_color;
     private static int news_normal_text_color;
+    private static int popwindow_background_color;
     private static Drawable mainBackground;
+    private static Drawable mainBackground_full;
     private static Drawable localInformationButtonBackground;
     private static Drawable internetInformationButtonBackground;
+    private static Drawable internetInformationButtonBackground_full;
     private static Drawable internetInformationButtonBackground_disable;
+    private static Drawable internetInformationButtonBackground_disable_full;
     private static Drawable spinnerBackground;
 
     private static String themeName;
@@ -44,57 +48,7 @@ public class ColorManager {
         ColorManager.context = context;
         sp = context.getSharedPreferences("ColorConfig", Context.MODE_PRIVATE);
 
-        themeName = sp.getString("theme", "blue");
-
-        switch (themeName){
-            case "blue" : {
-                primaryColor = context.getColor(R.color.colorPrimary);
-                primaryDarkColor = context.getColor(R.color.colorPrimaryDark);
-                topAlertBackgroundColor = context.getColor(R.color.color_alerter_background);
-
-                news_normal_text_color = context.getColor(R.color.colorPrimary);
-                news_notice_text_color = context.getColor(R.color.color_notice_text);
-                news_collected_text_color = context.getColor(R.color.color_collected_news_text);
-
-                mainBackground = context.getDrawable(R.drawable.background_login);
-                localInformationButtonBackground = context.getDrawable(R.drawable.button_local_background);
-                internetInformationButtonBackground = context.getDrawable(R.drawable.button_internet_background);
-                internetInformationButtonBackground_disable = context.getDrawable(R.drawable.button_internet_disable_background);
-                spinnerBackground = context.getDrawable(R.drawable.spinner_background);
-                break;
-            }
-            case "pink" : {
-                primaryColor = context.getColor(R.color.colorPrimary_Pink);
-                primaryDarkColor = context.getColor(R.color.colorPrimaryDark_Pink);
-                topAlertBackgroundColor = context.getColor(R.color.color_alerter_background_pink);
-
-                news_normal_text_color = context.getColor(R.color.colorPrimary_Pink);
-                news_notice_text_color = context.getColor(R.color.color_notice_text_pink);
-                news_collected_text_color = context.getColor(R.color.color_collected_news_text_pink);
-
-                mainBackground = context.getDrawable(R.drawable.background_login_pink);
-                localInformationButtonBackground = context.getDrawable(R.drawable.button_local_background_pink);
-                internetInformationButtonBackground = context.getDrawable(R.drawable.button_internet_background_pink);
-                internetInformationButtonBackground_disable = context.getDrawable(R.drawable.button_internet_disable_background_pink);
-                spinnerBackground = context.getDrawable(R.drawable.spinner_background_pink);
-                break;
-            }
-            default:{
-                primaryColor = context.getColor(R.color.colorPrimary);
-                primaryDarkColor = context.getColor(R.color.colorPrimaryDark);
-                topAlertBackgroundColor = context.getColor(R.color.color_alerter_background);
-
-                news_normal_text_color = context.getColor(R.color.colorPrimary);
-                news_notice_text_color = context.getColor(R.color.color_notice_text);
-                news_collected_text_color = context.getColor(R.color.color_collected_news_text);
-
-                mainBackground = context.getDrawable(R.drawable.background_login);
-                localInformationButtonBackground = context.getDrawable(R.drawable.button_local_background);
-                internetInformationButtonBackground = context.getDrawable(R.drawable.button_internet_background);
-                internetInformationButtonBackground_disable = context.getDrawable(R.drawable.button_internet_disable_background);
-                spinnerBackground = context.getDrawable(R.drawable.spinner_background);
-            }
-        }
+        loadConfig();
     }
 
     public static void loadConfig(Context applicationContext, Context activityContext){
@@ -116,10 +70,15 @@ public class ColorManager {
                 news_notice_text_color = context.getColor(R.color.color_notice_text);
                 news_collected_text_color = context.getColor(R.color.color_collected_news_text);
 
+                popwindow_background_color = context.getColor(R.color.color_popWindowBackground);
+
                 mainBackground = context.getDrawable(R.drawable.background_login);
+                mainBackground_full = context.getDrawable(R.drawable.background_login_full);
                 localInformationButtonBackground = context.getDrawable(R.drawable.button_local_background);
                 internetInformationButtonBackground = context.getDrawable(R.drawable.button_internet_background);
+                internetInformationButtonBackground_full = context.getDrawable(R.drawable.button_internet_background_full);
                 internetInformationButtonBackground_disable = context.getDrawable(R.drawable.button_internet_disable_background);
+                internetInformationButtonBackground_disable_full = context.getDrawable(R.drawable.button_internet_disable_background_full);
                 spinnerBackground = context.getDrawable(R.drawable.spinner_background);
                 break;
             }
@@ -132,10 +91,15 @@ public class ColorManager {
                 news_notice_text_color = context.getColor(R.color.color_notice_text_pink);
                 news_collected_text_color = context.getColor(R.color.color_collected_news_text_pink);
 
+                popwindow_background_color = context.getColor(R.color.color_popWindowBackground_pink);
+
                 mainBackground = context.getDrawable(R.drawable.background_login_pink);
+                mainBackground_full = context.getDrawable(R.drawable.background_login_pink_full);
                 localInformationButtonBackground = context.getDrawable(R.drawable.button_local_background_pink);
                 internetInformationButtonBackground = context.getDrawable(R.drawable.button_internet_background_pink);
+                internetInformationButtonBackground_full = context.getDrawable(R.drawable.button_internet_background_pink_full);
                 internetInformationButtonBackground_disable = context.getDrawable(R.drawable.button_internet_disable_background_pink);
+                internetInformationButtonBackground_disable_full = context.getDrawable(R.drawable.button_internet_disable_background_pink_full);
                 spinnerBackground = context.getDrawable(R.drawable.spinner_background_pink);
                 break;
             }
@@ -148,10 +112,15 @@ public class ColorManager {
                 news_notice_text_color = context.getColor(R.color.color_notice_text);
                 news_collected_text_color = context.getColor(R.color.color_collected_news_text);
 
+                popwindow_background_color = context.getColor(R.color.color_popWindowBackground);
+
                 mainBackground = context.getDrawable(R.drawable.background_login);
+                mainBackground_full = context.getDrawable(R.drawable.background_login_full);
                 localInformationButtonBackground = context.getDrawable(R.drawable.button_local_background);
                 internetInformationButtonBackground = context.getDrawable(R.drawable.button_internet_background);
+                internetInformationButtonBackground_full = context.getDrawable(R.drawable.button_internet_background_full);
                 internetInformationButtonBackground_disable = context.getDrawable(R.drawable.button_internet_disable_background);
+                internetInformationButtonBackground_disable_full = context.getDrawable(R.drawable.button_internet_disable_background_full);
                 spinnerBackground = context.getDrawable(R.drawable.spinner_background);
             }
         }
@@ -181,6 +150,18 @@ public class ColorManager {
         return internetInformationButtonBackground_disable;
     }
 
+    public static Drawable getMainBackground_full() {
+        return mainBackground_full;
+    }
+
+    public static Drawable getInternetInformationButtonBackground_full() {
+        return internetInformationButtonBackground_full;
+    }
+
+    public static Drawable getInternetInformationButtonBackground_disable_full() {
+        return internetInformationButtonBackground_disable_full;
+    }
+
     public static int getTopAlertBackgroundColor() {
         return topAlertBackgroundColor;
     }
@@ -195,6 +176,10 @@ public class ColorManager {
 
     public static int getNews_normal_text_color() {
         return news_normal_text_color;
+    }
+
+    public static int getPopwindow_background_color() {
+        return popwindow_background_color;
     }
 
     public static Drawable getSpinnerBackground() {

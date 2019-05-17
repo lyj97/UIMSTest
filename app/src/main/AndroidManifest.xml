@@ -20,8 +20,7 @@
         <activity android:name=".WeekCourseActivity" />
         <activity android:name=".NoneScoreCourseActivity" />
         <activity
-            android:name=".LoginActivity"
-            android:windowSoftInputMode="adjustResize|stateHidden">
+            android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />

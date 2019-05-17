@@ -286,7 +286,7 @@ public class NewsSavedActivity extends AppCompatActivity {
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.setStatusBarColor(ColorManager.getPrimaryColor());
 
-        findViewById(R.id.activity_news_saved).setBackground(ColorManager.getMainBackground());
+        findViewById(R.id.activity_news_saved).setBackground(ColorManager.getMainBackground_full());
     }
 
     public void showAlert(final String message) {

@@ -191,7 +191,7 @@ public class NewsDetailActivity extends AppCompatActivity {
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.setStatusBarColor(ColorManager.getPrimaryColor());
 
-        findViewById(R.id.activity_news_detail).setBackground(ColorManager.getMainBackground());
+        findViewById(R.id.activity_news_detail).setBackground(ColorManager.getMainBackground_full());
     }
 
     public void showLoading(final String message) {

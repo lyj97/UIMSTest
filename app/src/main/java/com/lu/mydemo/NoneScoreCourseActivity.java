@@ -173,6 +173,13 @@ public class NoneScoreCourseActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        ColorManager.loadConfig(getApplicationContext(), NoneScoreCourseActivity.this);
+        changeTheme();
+    }
+
     private void setSpinnerItems(){
         if(LoginActivity.isLocalValueLoaded){
             spinner.setAdapter(new ArrayAdapter(this, R.layout.select_item, R.id.select_text_item, getTermArray()));
@@ -506,7 +513,7 @@ public class NoneScoreCourseActivity extends AppCompatActivity {
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.setStatusBarColor(ColorManager.getPrimaryColor());
 
-        findViewById(R.id.none_score_course_layout).setBackground(ColorManager.getMainBackground());
+        findViewById(R.id.none_score_course_layout).setBackground(ColorManager.getMainBackground_full());
         searchButton.setBackground(ColorManager.getInternetInformationButtonBackground());
         spinner.setBackground(ColorManager.getSpinnerBackground());
     }

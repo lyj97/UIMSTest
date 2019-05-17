@@ -271,7 +271,7 @@ public class MainActivity extends Activity
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.setStatusBarColor(ColorManager.getPrimaryColor());
 
-        findViewById(R.id.activity_main).setBackground(ColorManager.getMainBackground());
+        findViewById(R.id.activity_main).setBackground(ColorManager.getMainBackground_full());
     }
 
     public void showAlert(final String message){

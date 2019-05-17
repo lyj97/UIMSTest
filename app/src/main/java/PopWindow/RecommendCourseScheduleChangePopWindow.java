@@ -101,7 +101,7 @@ public class RecommendCourseScheduleChangePopWindow extends PopupWindow {
         //设置SelectPicPopupWindow弹出窗体动画效果
         this.setAnimationStyle(R.style.AnimationActivity);
         //实例化一个ColorDrawable颜色为半透明
-        ColorDrawable dw = new ColorDrawable(context.getResources().getColor(R.color.color_popWindowBackground));
+        ColorDrawable dw = new ColorDrawable(ColorManager.getPopwindow_background_color());
         //设置SelectPicPopupWindow弹出窗体的背景
         this.setBackgroundDrawable(dw);
         //mMenuView添加OnTouchListener监听判断获取触屏位置如果在选择框外面则销毁弹出框
@@ -255,7 +255,7 @@ public class RecommendCourseScheduleChangePopWindow extends PopupWindow {
         Log.i("Theme", "Change theme.");
         mMenuView.findViewById(R.id.recommend_course_schedule_change_pop_layout_title).setBackgroundColor(ColorManager.getPrimaryColor());
         course_list.setBackground(ColorManager.getMainBackground());
-        commit_button.setBackground(ColorManager.getInternetInformationButtonBackground());
+        commit_button.setBackground(ColorManager.getInternetInformationButtonBackground_full());
     }
 
 }

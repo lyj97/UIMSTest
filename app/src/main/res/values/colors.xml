@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#D367D5F7</color>
-    <color name="colorPrimaryDark">#D367D5F7</color>
+    <color name="colorPrimary">#CC67D5F7</color>
+    <color name="colorPrimaryDark">#CC67D5F7</color>
     <color name="colorAccent">#DA58BFEE</color>
     <color name="colorLoginEditText">#E1F2FF</color>
     <color name="colorlogin_text">#FFFFFF</color>
@@ -16,23 +16,26 @@
     <color name="color_list_item_top_background">#D29CF3FF</color>
     <color name="colorwarn_button">#BFD55D5D</color>
     <color name="color_spinner_background">#EE31AFE7</color>
-    <color name="color_getSaved_button_bg">#E96CDCE6</color>
-    <color name="color_getSaved_disable_button_bg">#8878D1D1</color>
+    <color name="color_getSaved_button_bg">#E66CDCE6</color>
+    <color name="color_getSaved_disable_button_bg">#8078D1D1</color>
     <color name="colorlogin_button_disable">#BA777777</color>
     <color name="color_Background">#DFCEE4E7</color>
     <color name="color_grayBackground">#E0E0E0</color>
     <color name="color_whiteBackground">#FFFFFF</color>
     <color name="color_lightBlueBackground">#93D4E0</color>
-    <color name="color_popWindowBackground">#C486A8B9</color>
+    <color name="color_popWindowBackground">#B386A8B9</color>
     <color name="color_no_color">#00000000</color>
 
-    <color name="colorPrimary_Pink">#D15CA2</color>
-    <color name="colorPrimaryDark_Pink">#D15CA2</color>
+    <color name="colorPrimary_Pink">#CCD166A6</color>
+    <color name="colorPrimaryDark_Pink">#CCD166A6</color>
     <color name="colorAccent_Pink">#DAEB32BD</color>
-    <color name="color_alerter_background_pink">#D5B149D8</color>
-    <color name="color_notice_text_pink">#CA51E4</color>
-    <color name="color_collected_news_text_pink">#5E36D1</color>
+    <color name="color_alerter_background_pink">#CCB149D8</color>
+    <color name="color_notice_text_pink">#E6DA51E4</color>
+    <color name="color_collected_news_text_pink">#834AD1</color>
     <color name="color_spinner_background_pink">#EEB636DA</color>
+    <color name="color_getSaved_button_bg_pink">#E6DF5DB9</color>
+    <color name="color_getSaved_disable_button_bg_pink">#80DF5DB9</color>
+    <color name="color_popWindowBackground_pink">#B3A786B9</color>
 
     <color name="course_bixiu">#FF6B62</color>
     <color name="course_xuanxiu">#00BCD4</color>
