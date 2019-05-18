@@ -18,12 +18,10 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.SimpleAdapter;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,7 +44,7 @@ import UIMS.UIMS;
 import UIMSTool.ClassSetConvert;
 import UIMSTool.CourseJSONTransfer;
 import Utils.Course.CourseScheduleChange;
-import PopWindow.*;
+import View.PopWindow.*;
 
 public class LoginActivity extends Activity {
 
@@ -137,6 +135,9 @@ public class LoginActivity extends Activity {
                 if (theme.equals("blue")) {
                     ColorManager.saveTheme("pink");
                     theme = "pink";
+                } else if (theme.equals("pink")) {
+                    ColorManager.saveTheme("green");
+                    theme = "green";
                 } else {
                     ColorManager.saveTheme("blue");
                     theme = "blue";
@@ -528,7 +529,8 @@ public class LoginActivity extends Activity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    timeInformation.setTextColor(Color.parseColor("#63696D"));
+                    timeInformation.setTextColor(Color.BLACK);
+                    termInformation.setTextColor(Color.BLACK);
                     timeInformation.setText(now_time + " " + dayOfWeekName[day_of_week]);
                     if(now_week <= weeks) termInformation.setText(termName + "\n 第 " + now_week + " 周(共 " + weeks + " 周) ");
                     else termInformation.setText(termName + "\n本学期已结束，假期快乐！");
@@ -971,6 +973,7 @@ public class LoginActivity extends Activity {
                     try {
                         int internetVersion = object.getInt("VersionCode");
                         Log.i("Version", "" + internetVersion);
+                        if(internetVersion <= 10207) return;
                     } catch (Exception e){
                         e.printStackTrace();
                     }

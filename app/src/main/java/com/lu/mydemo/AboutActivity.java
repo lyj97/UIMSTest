@@ -20,7 +20,7 @@ import net.sf.json.JSONObject;
 
 import Config.ColorManager;
 import Config.Version;
-import PopWindow.InternetInformationPopupWindow;
+import View.PopWindow.InternetInformationPopupWindow;
 
 public class AboutActivity extends AppCompatActivity {
 

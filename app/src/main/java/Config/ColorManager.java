@@ -103,6 +103,27 @@ public class ColorManager {
                 spinnerBackground = context.getDrawable(R.drawable.spinner_background_pink);
                 break;
             }
+            case "green" : {
+                primaryColor = context.getColor(R.color.colorPrimary_Green);
+                primaryDarkColor = context.getColor(R.color.colorPrimaryDark_Green);
+                topAlertBackgroundColor = context.getColor(R.color.color_alerter_background_Green);
+
+                news_normal_text_color = context.getColor(R.color.colorPrimary_Green);
+                news_notice_text_color = context.getColor(R.color.color_notice_text_Green);
+                news_collected_text_color = context.getColor(R.color.color_collected_news_text_Green);
+
+                popwindow_background_color = context.getColor(R.color.color_popWindowBackground_Green);
+
+                mainBackground = context.getDrawable(R.drawable.background_login_green);
+                mainBackground_full = context.getDrawable(R.drawable.background_login_green_full);
+                localInformationButtonBackground = context.getDrawable(R.drawable.button_local_background_green);
+                internetInformationButtonBackground = context.getDrawable(R.drawable.button_internet_background_green);
+                internetInformationButtonBackground_full = context.getDrawable(R.drawable.button_internet_background_green_full);
+                internetInformationButtonBackground_disable = context.getDrawable(R.drawable.button_internet_disable_background_green);
+                internetInformationButtonBackground_disable_full = context.getDrawable(R.drawable.button_internet_disable_background_green_full);
+                spinnerBackground = context.getDrawable(R.drawable.spinner_background_green);
+                break;
+            }
             default:{
                 primaryColor = context.getColor(R.color.colorPrimary);
                 primaryDarkColor = context.getColor(R.color.colorPrimaryDark);

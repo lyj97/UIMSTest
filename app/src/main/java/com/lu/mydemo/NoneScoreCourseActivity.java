@@ -1,22 +1,15 @@
 package com.lu.mydemo;
 
-import android.app.ActivityOptions;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.transition.Transition;
-import android.transition.TransitionInflater;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -29,9 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tapadoo.alerter.Alerter;
-import com.tapadoo.alerter.OnHideAlertListener;
 
-import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import java.util.ArrayList;
@@ -42,8 +33,7 @@ import java.util.List;
 import java.util.Map;
 
 import Config.ColorManager;
-import PopWindow.LoginGetSelectCoursePopWindow;
-import PopWindow.LoginPopWindow;
+import View.PopWindow.LoginGetSelectCoursePopWindow;
 import UIMS.UIMS;
 
 public class NoneScoreCourseActivity extends AppCompatActivity {

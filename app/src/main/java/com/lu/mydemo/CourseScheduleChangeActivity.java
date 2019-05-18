@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -24,6 +25,11 @@ import com.lu.mydemo.sample.adapter.BaseAdapter;
 import com.lu.mydemo.sample.adapter.MainAdapter;
 import com.tapadoo.alerter.Alerter;
 import com.yanzhenjie.recyclerview.OnItemClickListener;
+import com.yanzhenjie.recyclerview.OnItemMenuClickListener;
+import com.yanzhenjie.recyclerview.SwipeMenu;
+import com.yanzhenjie.recyclerview.SwipeMenuBridge;
+import com.yanzhenjie.recyclerview.SwipeMenuCreator;
+import com.yanzhenjie.recyclerview.SwipeMenuItem;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 import com.yanzhenjie.recyclerview.touch.OnItemMoveListener;
 
@@ -42,7 +48,7 @@ import java.util.Map;
 import Config.ColorManager;
 import ToolFor2045_Site.GetInternetInformation;
 import Utils.Course.CourseScheduleChange;
-import PopWindow.*;
+import View.PopWindow.*;
 
 public class CourseScheduleChangeActivity extends AppCompatActivity {
 
@@ -80,26 +86,30 @@ public class CourseScheduleChangeActivity extends AppCompatActivity {
 
         isRecommendAllowed = sharedPreferences.getBoolean("isRecommendAllowed", false);
 
-        if(isRecommendAllowed) recommend_switch.setChecked(true);
+        if (isRecommendAllowed) recommend_switch.setChecked(true);
         else recommend_switch.setChecked(false);
 
         dataList = getChangeList();
 
         myAdapter = createAdapter();
-        OnItemMoveListener mItemMoveListener = new OnItemMoveListener() {
-
+        swipeRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        swipeRecyclerView.setSwipeMenuCreator(new SwipeMenuCreator() {
             @Override
-            public boolean onItemMove(RecyclerView.ViewHolder srcHolder, RecyclerView.ViewHolder targetHolder) {
-                return false;
+            public void onCreateMenu(SwipeMenu leftMenu, SwipeMenu rightMenu, int position) {
+                SwipeMenuItem collectItem = new SwipeMenuItem(CourseScheduleChangeActivity.this);
+                collectItem.setImage(getResources().getDrawable(R.drawable.ic_delete_black_24dp));
+                collectItem.setText("删除");
+                collectItem.setHeight(ViewGroup.MarginLayoutParams.MATCH_PARENT);
+                collectItem.setBackground(getResources().getDrawable(R.drawable.shape_collect_swap_menu_background));
+
+                rightMenu.addMenuItem(collectItem);
             }
-
+        });
+        swipeRecyclerView.setOnItemMenuClickListener(new OnItemMenuClickListener() {
             @Override
-            public void onItemDismiss(RecyclerView.ViewHolder srcHolder) {
-                // 此方法在Item在侧滑删除时被调用。
-                // 从数据源移除该Item对应的数据，并刷新Adapter。
-                int position = srcHolder.getAdapterPosition();
-
-                if(CourseScheduleChange.delete(((String) dataList.get(position).get("context1")).substring(0, 10))){
+            public void onItemClick(SwipeMenuBridge menuBridge, int adapterPosition) {
+                int position = menuBridge.getPosition();
+                if (CourseScheduleChange.delete(((String) dataList.get(position).get("context1")).substring(0, 10))) {
                     Alerter.create(CourseScheduleChangeActivity.this)
                             .setText("已删除【" + dataList.get(position).get("context1") + "】课程调整\n\n" +
                                     "如需撤销，请点击此处.")
@@ -123,12 +133,9 @@ public class CourseScheduleChangeActivity extends AppCompatActivity {
                     dataList.remove(position);
                     myAdapter.notifyItemRemoved(position);
                 }
-
             }
-        };
-        swipeRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        swipeRecyclerView.setItemViewSwipeEnabled(true);
-        swipeRecyclerView.setOnItemMoveListener(mItemMoveListener);
+        });
+
         swipeRecyclerView.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int adapterPosition) {
@@ -152,7 +159,7 @@ public class CourseScheduleChangeActivity extends AppCompatActivity {
                         CourseScheduleChange.add(popupWindow.getTitle(), popupWindow.getPre_time(), popupWindow.getChange_time());
                         flushList();
                     }
-                }, findViewById(R.id.course_schedule_change_add_layout).getHeight(),  findViewById(R.id.course_schedule_change_add_layout).getWidth());
+                }, findViewById(R.id.course_schedule_change_add_layout).getHeight(), findViewById(R.id.course_schedule_change_add_layout).getWidth());
                 popupWindow.setFocusable(true);
                 popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
                 popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
@@ -160,7 +167,7 @@ public class CourseScheduleChangeActivity extends AppCompatActivity {
                 popupWindow.setOnDismissListener(new poponDismissListener());
 //                popupWindow.setAnimationStyle(R.style.popwin_anim_style);
                 //显示窗口
-                popupWindow.showAtLocation(CourseScheduleChangeActivity.this.findViewById(R.id.course_schedule_change_add_layout), Gravity.BOTTOM| Gravity.CENTER_HORIZONTAL, 0, 0); //设置layout在PopupWindow中显示的位置
+                popupWindow.showAtLocation(CourseScheduleChangeActivity.this.findViewById(R.id.course_schedule_change_add_layout), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0); //设置layout在PopupWindow中显示的位置
             }
         });
 
@@ -176,17 +183,16 @@ public class CourseScheduleChangeActivity extends AppCompatActivity {
         recommend_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(recommend_switch.isChecked()){
+                if (recommend_switch.isChecked()) {
                     sharedPreferences.edit().putBoolean("isRecommendAllowed", true).apply();
-                    if(!isRecommendShowed) getRecommend();
-                }
-                else {
+                    if (!isRecommendShowed) getRecommend();
+                } else {
                     sharedPreferences.edit().putBoolean("isRecommendAllowed", false).apply();
                 }
             }
         });
 
-        if(!isRecommendAllowed || isRecommendShowed) return;
+        if (!isRecommendAllowed || isRecommendShowed) return;
         else {
             getRecommend();
         }

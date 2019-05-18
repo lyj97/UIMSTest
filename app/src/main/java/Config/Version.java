@@ -4,7 +4,7 @@ public class Version {
 
     private static int versionMajor = 1;
     private static int versionMinor = 2;
-    private static int versionPatch = 6;
+    private static int versionPatch = 7;
 
     public static String getVersionName(){
         return versionMajor + "." + versionMinor + "." + versionPatch;
