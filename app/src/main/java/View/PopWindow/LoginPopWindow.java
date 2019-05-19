@@ -299,8 +299,8 @@ public class LoginPopWindow extends PopupWindow {
         mMenuView.findViewById(R.id.pop_window_login_pop_layout_title).setBackgroundColor(ColorManager.getPrimaryColor());
         mMenuView.findViewById(R.id.pop_window_login_pop_layout__main_information).setBackground(ColorManager.getMainBackground());
         commitButton.setBackground(ColorManager.getInternetInformationButtonBackground_full());
-        user.setBackground(ColorManager.getSpinnerBackground());
-        password.setBackground(ColorManager.getSpinnerBackground());
+        user.setBackground(ColorManager.getSpinnerBackground_full());
+        password.setBackground(ColorManager.getSpinnerBackground_full());
     }
 
 }

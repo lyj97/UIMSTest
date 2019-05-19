@@ -169,7 +169,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="15dp"
                         android:background="@drawable/button_local_background"
-                        android:text="成绩未发布课程"
+                        android:text="课程与考试"
                         android:textSize="18dp"
                         android:textColor="@color/colorlogin_text"/>
 

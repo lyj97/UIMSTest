@@ -95,8 +95,8 @@ public class LoginGetSelectCoursePopWindow extends PopupWindow {
                                 context.showLoading("正在登录...");
                                 if (uims.login()) {
                                     if (uims.getCurrentUserInfo()) {
-                                        context.getNoneScoreCourse(context.termName_TermId.get(termName), uims);
-                                        context.dismissPopWindow();
+                                        context.noneScoreFragment.getNoneScoreCourse(context.noneScoreFragment.termName_TermId.get(termName), uims);
+                                        context.noneScoreFragment.dismissPopWindow();
                                     }
                                     else{
                                         context.showWarningAlert("获取信息失败！");
@@ -236,7 +236,7 @@ public class LoginGetSelectCoursePopWindow extends PopupWindow {
         mMenuView.findViewById(R.id.pop_window_login_pop_layout_title).setBackgroundColor(ColorManager.getPrimaryColor());
         mMenuView.findViewById(R.id.pop_window_login_pop_layout__main_information).setBackground(ColorManager.getMainBackground());
         commitButton.setBackground(ColorManager.getInternetInformationButtonBackground_full());
-        user.setBackground(ColorManager.getSpinnerBackground());
-        password.setBackground(ColorManager.getSpinnerBackground());
+        user.setBackground(ColorManager.getSpinnerBackground_full());
+        password.setBackground(ColorManager.getSpinnerBackground_full());
     }
 }

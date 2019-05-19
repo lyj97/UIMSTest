@@ -2,6 +2,7 @@ package View.PopWindow;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
 import android.icu.util.Calendar;
@@ -18,6 +19,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.lu.mydemo.R;
 
@@ -25,21 +27,23 @@ import java.util.Date;
 import java.util.Locale;
 
 import Config.ColorManager;
+import Utils.Exam.ExamSchedule;
 
-public class AddCourseScheduleChangePopupWindow extends PopupWindow {
+public class AddCourseExamPopupWindow extends PopupWindow {
 
     private View mMenuView;
 
+    private TextView layout_title;
     private EditText title_text;
-    private TextView pre_time_text;
-    private TextView change_time_text;
+    private TextView exam_date_text;
+    private TextView exam_time_text;
 
     private Button commit_button;
     private Button cancel_button;
 
     private String title;
-    private String pre_time;
-    private String change_time;
+    private String exam_date;
+    private String exam_time;
 
     public Animation mExitAnim;//退出动画
     public Animation mEnterAnim;//进入动画
@@ -47,9 +51,11 @@ public class AddCourseScheduleChangePopupWindow extends PopupWindow {
     private boolean ispreTimeSet = false;
     private boolean ischangeTimeSet = false;
 
+    private boolean overWrite = false;
+
     private Activity context;
 
-    public AddCourseScheduleChangePopupWindow(final Activity context, final OnClickListener commitButtonOnClickListener, int height, int width) {
+    public AddCourseExamPopupWindow(final Activity context, final OnClickListener commitButtonOnClickListener, int height, int width) {
         super(context);
         this.context = context;
         ispreTimeSet = false;
@@ -57,13 +63,19 @@ public class AddCourseScheduleChangePopupWindow extends PopupWindow {
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mMenuView = inflater.inflate(R.layout.pop_window_add_course_schedule, null);
+        layout_title = mMenuView.findViewById(R.id.course_schedule_change_pop_layout_title);
         title_text = mMenuView.findViewById(R.id.course_schedule_change_add_title_text);
-        pre_time_text = mMenuView.findViewById(R.id.course_schedule_change_add_pre_time_text);
-        change_time_text = mMenuView.findViewById(R.id.course_schedule_change_add_change_time_text);
+        exam_date_text = mMenuView.findViewById(R.id.course_schedule_change_add_pre_time_text);
+        exam_time_text = mMenuView.findViewById(R.id.course_schedule_change_add_change_time_text);
         commit_button = mMenuView.findViewById(R.id.course_schedule_change_commit_button);
         cancel_button = mMenuView.findViewById(R.id.course_schedule_change_cancel_button);
 
         changeTheme();
+
+        layout_title.setText("添加考试");
+        title_text.setHint("科目");
+        exam_date_text.setText("日期");
+        exam_time_text.setText("时间");
 
         //取消按钮
         cancel_button.setOnClickListener(new OnClickListener() {
@@ -78,28 +90,39 @@ public class AddCourseScheduleChangePopupWindow extends PopupWindow {
         commit_button.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!ispreTimeSet) {
-                    commit_button.setText("请设置开始时间");
-                    commit_button.setBackground(context.getResources().getDrawable(R.drawable.shape_disable));
+                title = (title_text.getText() == null) ? "" : title_text.getText().toString();
+                if (!ispreTimeSet) {
+                    commit_button.setText("请设置日期");
+                    commit_button.setBackground(ColorManager.getInternetInformationButtonBackground_disable_full());
+                    commit_button.setEnabled(false);
+                    return;
+                }
+
+                if (!ischangeTimeSet) {
+                    commit_button.setText("请设置时间");
+                    commit_button.setBackground(ColorManager.getInternetInformationButtonBackground_disable_full());
                     commit_button.setEnabled(false);
                     return;
                 }
 //                    pre_time_text.setError("请输入要改变课程的日期");
 //                if(!ischangeTimeSet) change_time_text.setError("请输入改变后的日期");
 
-                if(pre_time_text.getText().equals(change_time_text.getText())){
-                    commit_button.setText("开始时间与结束时间不能相同");
-                    commit_button.setBackground(context.getResources().getDrawable(R.drawable.shape_disable));
-                    commit_button.setEnabled(false);
-                    return;
+                if (ExamSchedule.cantainsTitle(title)) {
+                    if (overWrite) {
+                        commitButtonOnClickListener.onClick(commit_button);
+                        dismiss();
+                        return;
+                    }
+                    commit_button.setText("确认覆盖已有同名考试");
+                    commit_button.setBackground(context.getResources().getDrawable(R.drawable.shape_warn));
+                    overWrite = true;
                 }
 
-                if(ispreTimeSet) {
-                    title = (title_text.getText() == null) ? "" : title_text.getText().toString();
-                    if(!ischangeTimeSet) change_time = "0000-00-00";
+                else{
                     commitButtonOnClickListener.onClick(commit_button);
                     dismiss();
                 }
+
             }
         });
 
@@ -109,14 +132,14 @@ public class AddCourseScheduleChangePopupWindow extends PopupWindow {
 
 //        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-        pre_time_text.setOnClickListener(new OnClickListener() {
+        exam_date_text.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 new DatePickerDialog(context, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        pre_time_text.setText(year + "-" + (month + 1) + "-" + dayOfMonth);
-                        pre_time = getTimeString(year, month, dayOfMonth);
+                        exam_date_text.setText(year + "-" + (month + 1) + "-" + dayOfMonth);
+                        exam_date = getDataString(year, month, dayOfMonth);
                         ispreTimeSet = true;
                         commit_button.setText("确定");
                         commit_button.setBackground(ColorManager.getInternetInformationButtonBackground_full());
@@ -126,20 +149,20 @@ public class AddCourseScheduleChangePopupWindow extends PopupWindow {
             }
         });
 
-        change_time_text.setOnClickListener(new OnClickListener() {
+        exam_time_text.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DatePickerDialog(context, new DatePickerDialog.OnDateSetListener() {
+                new TimePickerDialog(context, new TimePickerDialog.OnTimeSetListener() {
                     @Override
-                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        change_time_text.setText(year + "-" + (month + 1) + "-" + dayOfMonth);
-                        change_time = getTimeString(year, month, dayOfMonth);
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        exam_time_text.setText(getTimeString(hourOfDay, minute));
+                        exam_time = getTimeString(hourOfDay, minute);
                         ischangeTimeSet = true;
                         commit_button.setText("确定");
                         commit_button.setBackground(ColorManager.getInternetInformationButtonBackground_full());
                         commit_button.setEnabled(true);
                     }
-                }, cal.get(Calendar.YEAR),  cal.get(Calendar.MONTH),  cal.get(Calendar.DAY_OF_MONTH)).show();
+                }, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), true).show();
             }
         });
 
@@ -180,7 +203,36 @@ public class AddCourseScheduleChangePopupWindow extends PopupWindow {
 
     }
 
-    private String getTimeString(int year, int month, int dayOfMonth){
+    public AddCourseExamPopupWindow(final Activity context, final OnClickListener commitButtonOnClickListener, int height, int width, String courseName){
+        this(context, commitButtonOnClickListener, height, width);
+
+        title_text.setText(courseName);
+        title_text.setEnabled(false);
+
+    }
+
+    private String getTimeString(int hour, int minute){
+        StringBuilder stringBuilder = new StringBuilder();
+
+        if(hour < 10){
+            stringBuilder.append(0);
+            stringBuilder.append(hour);
+        }
+        else {
+            stringBuilder.append(hour);
+        }
+        stringBuilder.append(":");
+        if(minute < 10){
+            stringBuilder.append(0);
+            stringBuilder.append(minute);
+        }
+        else {
+            stringBuilder.append(minute);
+        }
+        return stringBuilder.toString();
+    }
+
+    private String getDataString(int year, int month, int dayOfMonth){
         StringBuilder stringBuilder = new StringBuilder();
 
         stringBuilder.append(year);
@@ -207,6 +259,7 @@ public class AddCourseScheduleChangePopupWindow extends PopupWindow {
     @Override
     public void dismiss() {
         super.dismiss();
+        overWrite = false;
         InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         View view = context.getWindow().peekDecorView();
         if(view != null){
@@ -225,11 +278,11 @@ public class AddCourseScheduleChangePopupWindow extends PopupWindow {
         return title;
     }
 
-    public String getPre_time() {
-        return pre_time;
+    public String getExam_date() {
+        return exam_date;
     }
 
-    public String getChange_time() {
-        return change_time;
+    public String getExam_time() {
+        return exam_time;
     }
 }

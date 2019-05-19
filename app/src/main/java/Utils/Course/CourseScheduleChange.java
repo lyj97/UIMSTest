@@ -77,7 +77,7 @@ public class CourseScheduleChange {
             previousTime_changeTime.put(object.getString("previousTime"), object);
             return save();
         } catch (Exception e){
-            e.printStackTrace();;
+            e.printStackTrace();
             return false;
         }
     }

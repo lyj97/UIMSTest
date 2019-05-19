@@ -41,6 +41,7 @@ public class ColorManager {
     private static Drawable internetInformationButtonBackground_disable;
     private static Drawable internetInformationButtonBackground_disable_full;
     private static Drawable spinnerBackground;
+    private static Drawable spinnerBackground_full;
 
     private static String themeName;
 
@@ -80,6 +81,7 @@ public class ColorManager {
                 internetInformationButtonBackground_disable = context.getDrawable(R.drawable.button_internet_disable_background);
                 internetInformationButtonBackground_disable_full = context.getDrawable(R.drawable.button_internet_disable_background_full);
                 spinnerBackground = context.getDrawable(R.drawable.spinner_background);
+                spinnerBackground_full = context.getDrawable(R.drawable.spinner_background_full);
                 break;
             }
             case "pink" : {
@@ -101,6 +103,7 @@ public class ColorManager {
                 internetInformationButtonBackground_disable = context.getDrawable(R.drawable.button_internet_disable_background_pink);
                 internetInformationButtonBackground_disable_full = context.getDrawable(R.drawable.button_internet_disable_background_pink_full);
                 spinnerBackground = context.getDrawable(R.drawable.spinner_background_pink);
+                spinnerBackground_full = context.getDrawable(R.drawable.spinner_background_pink_full);
                 break;
             }
             case "green" : {
@@ -122,6 +125,7 @@ public class ColorManager {
                 internetInformationButtonBackground_disable = context.getDrawable(R.drawable.button_internet_disable_background_green);
                 internetInformationButtonBackground_disable_full = context.getDrawable(R.drawable.button_internet_disable_background_green_full);
                 spinnerBackground = context.getDrawable(R.drawable.spinner_background_green);
+                spinnerBackground_full = context.getDrawable(R.drawable.spinner_background_green_full);
                 break;
             }
             default:{
@@ -143,6 +147,7 @@ public class ColorManager {
                 internetInformationButtonBackground_disable = context.getDrawable(R.drawable.button_internet_disable_background);
                 internetInformationButtonBackground_disable_full = context.getDrawable(R.drawable.button_internet_disable_background_full);
                 spinnerBackground = context.getDrawable(R.drawable.spinner_background);
+                spinnerBackground_full = context.getDrawable(R.drawable.spinner_background_full);
             }
         }
     }
@@ -205,6 +210,10 @@ public class ColorManager {
 
     public static Drawable getSpinnerBackground() {
         return spinnerBackground;
+    }
+
+    public static Drawable getSpinnerBackground_full() {
+        return spinnerBackground_full;
     }
 
     public static String getThemeName() {

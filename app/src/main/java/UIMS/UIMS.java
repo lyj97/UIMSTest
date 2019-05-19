@@ -56,7 +56,7 @@ public class UIMS {
     static HashMap<String, String> termId_termName = new HashMap<>();//学期ID-NAME
     static HashMap<String, JSONObject> id_scorePercent = new HashMap<>();//asID-scorePercent
     static HashMap<String, String> courseTypeId_courseType = new HashMap<>();
-    static HashMap<String, String> courseSelectTypeId_courseSlectTypeName = new HashMap<>();//选课类型ID_选课类型名称
+    static HashMap<String, String> courseSelectTypeId_courseSelectTypeName = new HashMap<>();//选课类型ID_选课类型名称
     static HashMap<String, String> courseId_courseTypeId = new HashMap<>();
     static HashMap<String, JSONObject> noScoreCourseId_course = new HashMap<>();
 
@@ -829,12 +829,12 @@ public class UIMS {
     }
 
     public static void dealCourseSelectType(){
-        courseSelectTypeId_courseSlectTypeName = new HashMap<>();
+        courseSelectTypeId_courseSelectTypeName = new HashMap<>();
         JSONArray value = courseSelectTypeJSON.getJSONArray("value");
         JSONObject temp;
         for(int i=0; i<value.size(); i++){
             temp = value.getJSONObject(i);
-            courseSelectTypeId_courseSlectTypeName.put(temp.getString("dictId"), temp.getString("name"));
+            courseSelectTypeId_courseSelectTypeName.put(temp.getString("dictId"), temp.getString("name"));
         }
     }
 
@@ -954,12 +954,12 @@ public class UIMS {
         dealCourseSelectType();
     }
 
-    public static HashMap<String, String> getCourseSelectTypeId_courseSlectTypeName() {
-        return courseSelectTypeId_courseSlectTypeName;
+    public static HashMap<String, String> getCourseSelectTypeId_courseSelectTypeName() {
+        return courseSelectTypeId_courseSelectTypeName;
     }
 
-    public static void setCourseSelectTypeId_courseSlectTypeName(HashMap<String, String> courseSelectTypeId_courseSlectTypeName) {
-        UIMS.courseSelectTypeId_courseSlectTypeName = courseSelectTypeId_courseSlectTypeName;
+    public static void setCourseSelectTypeId_courseSelectTypeName(HashMap<String, String> courseSelectTypeId_courseSlectTypeName) {
+        UIMS.courseSelectTypeId_courseSelectTypeName = courseSelectTypeId_courseSlectTypeName;
     }
 
     public static JSONObject getStudentJSON() {

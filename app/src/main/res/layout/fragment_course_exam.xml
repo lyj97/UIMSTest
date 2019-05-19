@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/course_exam_fragment_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingStart="15sp"
+        android:paddingEnd="15sp"
+        android:gravity="center"
+        >
+
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="课程调整推荐: "-->
+            <!--/>-->
+
+        <!--<Switch-->
+            <!--android:id="@+id/course_schedule_change_recommend_switch"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:showText="true"-->
+            <!--android:textOn="开"-->
+            <!--android:textOff="关"-->
+            <!--/>-->
+
+        <!--<TextView-->
+            <!--android:id="@+id/course_schedule_change_recommend_doubt"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="   ¿   "-->
+            <!--/>-->
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            />
+
+        <Button
+            android:id="@+id/course_exam_fragment_add_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:gravity="center"
+            android:layout_gravity="right"
+            android:background="#00000000"
+            android:text="添加"
+            />
+
+    </LinearLayout>
+
+    <com.yanzhenjie.recyclerview.SwipeRecyclerView
+        android:id="@+id/course_exam_fragment_SwipeRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </com.yanzhenjie.recyclerview.SwipeRecyclerView>
+
+</LinearLayout>

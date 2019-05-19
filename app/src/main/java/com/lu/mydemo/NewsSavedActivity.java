@@ -263,7 +263,7 @@ public class NewsSavedActivity extends AppCompatActivity {
                     this.tvTitle.setText("[收藏置顶] " + title);
                 }
                 else {
-                    tvTitle.setTextColor(Color.parseColor("#03A9F4"));
+                    tvTitle.setTextColor(ColorManager.getPrimaryColor());
                     this.tvTitle.setText(title);
                 }
 
