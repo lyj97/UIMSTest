@@ -112,7 +112,7 @@ public class AddCourseScheduleChangePopupWindow extends PopupWindow {
         pre_time_text.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DatePickerDialog(context, new DatePickerDialog.OnDateSetListener() {
+                new DatePickerDialog(context, ColorManager.getDatePickerDialogTheme(), new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         pre_time_text.setText(year + "-" + (month + 1) + "-" + dayOfMonth);
@@ -129,7 +129,7 @@ public class AddCourseScheduleChangePopupWindow extends PopupWindow {
         change_time_text.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DatePickerDialog(context, new DatePickerDialog.OnDateSetListener() {
+                new DatePickerDialog(context, ColorManager.getDatePickerDialogTheme(), new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         change_time_text.setText(year + "-" + (month + 1) + "-" + dayOfMonth);

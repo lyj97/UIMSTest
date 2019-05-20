@@ -94,6 +94,22 @@
         >
 
         <TextView
+            android:id="@+id/activity_about_change_color"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="更改主题色"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""/>
+
+        <TextView
             android:id="@+id/activity_about_link_to_qq"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -32,6 +32,45 @@
         <item name="android:windowExitAnimation">@anim/pop_exit_anim</item>
     </style>
 
+    <style name="MyDatePickerDialogTheme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@color/app_white</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimary</item>
+    </style>
+
+    <style name="MyDatePickerDialogTheme_Pink" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@color/app_white</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:textColor">@color/colorPrimary_Pink</item>
+        <item name="colorAccent">@color/colorPrimary_Pink</item>
+        <item name="colorPrimary">@color/colorPrimary_Pink</item>
+        <item name="colorPrimaryDark">@color/colorPrimary_Pink</item>
+    </style>
+
+    <style name="MyDatePickerDialogTheme_Green" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@color/app_white</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:textColor">@color/colorPrimary_Green</item>
+        <item name="colorAccent">@color/colorPrimary_Green</item>
+        <item name="colorPrimary">@color/colorPrimary_Green</item>
+        <item name="colorPrimaryDark">@color/colorPrimary_Green</item>
+    </style>
+
 </resources>
 
 <!--<style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">-->

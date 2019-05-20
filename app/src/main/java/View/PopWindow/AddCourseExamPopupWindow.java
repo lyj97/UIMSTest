@@ -135,7 +135,7 @@ public class AddCourseExamPopupWindow extends PopupWindow {
         exam_date_text.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DatePickerDialog(context, new DatePickerDialog.OnDateSetListener() {
+                new DatePickerDialog(context, ColorManager.getDatePickerDialogTheme(), new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         exam_date_text.setText(year + "-" + (month + 1) + "-" + dayOfMonth);
@@ -152,7 +152,7 @@ public class AddCourseExamPopupWindow extends PopupWindow {
         exam_time_text.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                new TimePickerDialog(context, new TimePickerDialog.OnTimeSetListener() {
+                new TimePickerDialog(context, ColorManager.getDatePickerDialogTheme(), new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                         exam_time_text.setText(getTimeString(hourOfDay, minute));

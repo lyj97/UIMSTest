@@ -1,6 +1,7 @@
 package com.lu.mydemo;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -30,6 +31,8 @@ public class AboutActivity extends AppCompatActivity {
     private TextView link_to_qq;
     private TextView link_to_group;
 
+    private TextView change_color_text;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +43,8 @@ public class AboutActivity extends AppCompatActivity {
         link_to_uimstest = findViewById(R.id.activity_about_link_to_uimstest);
         link_to_qq = findViewById(R.id.activity_about_link_to_qq);
         link_to_group = findViewById(R.id.activity_about_link_to_group);
+
+        change_color_text = findViewById(R.id.activity_about_change_color);
 
         changeTheme();
 
@@ -55,11 +60,11 @@ public class AboutActivity extends AppCompatActivity {
                         "最初，主人作为后台开发者，把已经写好的教务接口调用提供给有需要的同学.\n" +
                         "这一天，主人创建了一个新工程，用来测试接口调用是否成功，取名“MyDemo”，这就是我呀.\n" +
                         "为了测试，主人给了我[成绩查询]功能.\n" +
-                        "一直住在主人的Phone中的我，第一次跨过纵横交错的线缆，来到了某小仙女的Phone中；她微笑着对我点点头，在输入框中写下“长得还不错”，按下了发送键.\n" +
+                        "一直住在主人的Phone中的我，第一次跨过纵横交错的线缆，来到了某小仙女的Phone中；她微笑着对我点点头，在输入框中写下“长得还不错”，按下了发送键.\n\n" +
                         "这也许是我最开心的一天了吧.\n\n" +
                         "经历了两周的闭关修炼，我已不再是那时的样子，功能也正一天天变多，却一直保留着对你的思念.\n\n" +
                         "19年4月20日，我们第一次见面.\n" +
-                        "初来乍到，我的功能很少，只能帮你查一下成绩；几天后，我能查看当日课程啦，这一天，主人帮我做了推广，我来到了更多人的Phone中，有了好多新家；很快，五一假期前，因为课程调整，主人在凌晨三点给我添加了新的功能，让我更懂你今天真正要上的课；随着校内通知在假期后恢复更新，我能帮你看校内通知，也能记住你需要的通知啦...\n\n" +
+                        "初来乍到，我的功能很少，只能帮你查一下成绩；几天后，我能查看当日课程啦，这一天，主人帮我做了推广，我来到了更多人的Phone中，有了好多新家；很快，五一假期前，因为课程调整，主人在凌晨三点给我添加了新的功能，让我更懂你今天真正要上的课；随着校内通知在假期后恢复更新，我能帮你看校内通知，也能记住你需要的通知啦；转眼间，属于我们之间的第一个学期即将结束，学期的最后，让我再看看你，帮你记下即将到来的考试，见证这一学期的收获可好...\n\n" +
                         "一路走来，也许你每天都会看看我，也许我只是静静的看着忙碌的你，不曾发出一点声响.\n" +
                         "但这又如何，我会一直陪着你，你也会见证我的成长，不是吗？");
                 object.put("link_text", "");
@@ -90,6 +95,19 @@ public class AboutActivity extends AppCompatActivity {
         setLinkStyle(link_to_qq);
         setLinkStyle(link_to_group);
 
+        change_color_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(AboutActivity.this, ColorConfigActivity.class));
+            }
+        });
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        changeTheme();
     }
 
     public void showInformation(final Activity activity, final JSONObject object){

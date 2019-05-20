@@ -33,6 +33,7 @@ public class ColorManager {
     private static int news_collected_text_color;
     private static int news_normal_text_color;
     private static int popwindow_background_color;
+    private static int datePickerDialogTheme;
     private static Drawable mainBackground;
     private static Drawable mainBackground_full;
     private static Drawable localInformationButtonBackground;
@@ -72,6 +73,7 @@ public class ColorManager {
                 news_collected_text_color = context.getColor(R.color.color_collected_news_text);
 
                 popwindow_background_color = context.getColor(R.color.color_popWindowBackground);
+                datePickerDialogTheme = R.style.MyDatePickerDialogTheme;
 
                 mainBackground = context.getDrawable(R.drawable.background_login);
                 mainBackground_full = context.getDrawable(R.drawable.background_login_full);
@@ -94,6 +96,7 @@ public class ColorManager {
                 news_collected_text_color = context.getColor(R.color.color_collected_news_text_pink);
 
                 popwindow_background_color = context.getColor(R.color.color_popWindowBackground_pink);
+                datePickerDialogTheme = R.style.MyDatePickerDialogTheme_Pink;
 
                 mainBackground = context.getDrawable(R.drawable.background_login_pink);
                 mainBackground_full = context.getDrawable(R.drawable.background_login_pink_full);
@@ -116,6 +119,7 @@ public class ColorManager {
                 news_collected_text_color = context.getColor(R.color.color_collected_news_text_Green);
 
                 popwindow_background_color = context.getColor(R.color.color_popWindowBackground_Green);
+                datePickerDialogTheme = R.style.MyDatePickerDialogTheme_Green;
 
                 mainBackground = context.getDrawable(R.drawable.background_login_green);
                 mainBackground_full = context.getDrawable(R.drawable.background_login_green_full);
@@ -206,6 +210,10 @@ public class ColorManager {
 
     public static int getPopwindow_background_color() {
         return popwindow_background_color;
+    }
+
+    public static int getDatePickerDialogTheme() {
+        return datePickerDialogTheme;
     }
 
     public static Drawable getSpinnerBackground() {

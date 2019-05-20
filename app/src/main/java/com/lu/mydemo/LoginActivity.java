@@ -39,6 +39,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import Config.ColorManager;
+import Config.Version;
 import ToolFor2045_Site.GetInternetInformation;
 import UIMS.UIMS;
 import UIMSTool.ClassSetConvert;
@@ -93,7 +94,7 @@ public class LoginActivity extends Activity {
 
     public LoginPopWindow popWindow;
 
-    private String theme = "blue";
+//    private String theme = "blue";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,26 +127,25 @@ public class LoginActivity extends Activity {
          */
         loadColorConfig();
         changeTheme();
-        theme = ColorManager.getThemeName();
-
-        activity_login.setBackground(ColorManager.getMainBackground_full());
-        findViewById(R.id.login_color_test).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (theme.equals("blue")) {
-                    ColorManager.saveTheme("pink");
-                    theme = "pink";
-                } else if (theme.equals("pink")) {
-                    ColorManager.saveTheme("green");
-                    theme = "green";
-                } else {
-                    ColorManager.saveTheme("blue");
-                    theme = "blue";
-                }
-
-                changeTheme();
-            }
-        });
+//        theme = ColorManager.getThemeName();
+//
+//        findViewById(R.id.login_color_test).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (theme.equals("blue")) {
+//                    ColorManager.saveTheme("pink");
+//                    theme = "pink";
+//                } else if (theme.equals("pink")) {
+//                    ColorManager.saveTheme("green");
+//                    theme = "green";
+//                } else {
+//                    ColorManager.saveTheme("blue");
+//                    theme = "blue";
+//                }
+//
+//                changeTheme();
+//            }
+//        });
 
         isMainShow = sp.getBoolean("isMainShow", isMainShow);
 
@@ -973,7 +973,7 @@ public class LoginActivity extends Activity {
                     try {
                         int internetVersion = object.getInt("VersionCode");
                         Log.i("Version", "" + internetVersion);
-                        if(internetVersion <= 10207) return;
+                        if(internetVersion <= Version.getVersionCode()) return;
                     } catch (Exception e){
                         e.printStackTrace();
                     }

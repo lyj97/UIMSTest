@@ -12,15 +12,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".AboutActivity"/>
+        <activity android:name=".ColorConfigActivity"></activity>
+        <activity android:name=".AboutActivity" />
         <activity android:name=".NewsSavedActivity" />
         <activity android:name=".NewsDetailActivity" />
         <activity android:name=".NewsActivity" />
         <activity android:name=".CourseScheduleChangeActivity" />
         <activity android:name=".WeekCourseActivity" />
         <activity android:name=".NoneScoreCourseActivity" />
-        <activity
-            android:name=".LoginActivity">
+        <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
