@@ -65,7 +65,8 @@
             <com.yanzhenjie.recyclerview.SwipeRecyclerView
                 android:id="@+id/get_none_score_course_SwipeRecyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_weight="8">
 
             </com.yanzhenjie.recyclerview.SwipeRecyclerView>
 
@@ -73,7 +74,9 @@
                 android:id="@+id/delete_saved_course_information_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="15"
+                android:layout_weight="2"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
                 android:text="删除本学期缓存数据"
                 android:background="@drawable/shape_warn"
                 />

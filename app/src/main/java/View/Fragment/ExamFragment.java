@@ -215,6 +215,10 @@ public class ExamFragment extends Fragment {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         Locale.setDefault(Locale.CHINA);
 
+        Calendar cal = Calendar.getInstance();
+        final String[] dayOfWeekName = new String[]{"","星期一","星期二","星期三","星期四","星期五","星期六","星期日"};
+        int day_of_week;
+
         try {
             Iterator<JSONObject> iterator = examList.iterator();
 
@@ -224,11 +228,16 @@ public class ExamFragment extends Fragment {
                 temp = iterator.next();
                 map = new HashMap<>();
 
-                map.put("title", temp.getString("title"));
-                map.put("time", temp.getString("time"));
-                map.put("flagTop", temp.getBoolean("flagTop"));
-
                 Date exam_date = df.parse(temp.getString("time"));
+
+                cal.setTime(exam_date);
+                day_of_week = cal.get(Calendar.DAY_OF_WEEK) - 1;
+                if (day_of_week <= 0)
+                    day_of_week = 7;
+
+                map.put("title", temp.getString("title"));
+                map.put("time", temp.getString("time").split(" ")[0] + "(" + dayOfWeekName[day_of_week] + ") " + temp.getString("time").split(" ")[1]);
+                map.put("flagTop", temp.getBoolean("flagTop"));
 
                 int day_distance = getTimeDistance(new Date(), exam_date);
 
@@ -244,13 +253,6 @@ public class ExamFragment extends Fragment {
 
                 dataList.add(map);
             }
-
-            dataList.sort(new Comparator<Map<String, Object>>() {
-                @Override
-                public int compare(Map<String, Object> o1, Map<String, Object> o2) {
-                    return ((String)o1.get("time")).compareTo((String)o2.get("time"));
-                }
-            });
 
             return dataList;
 

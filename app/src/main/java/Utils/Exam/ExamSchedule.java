@@ -11,6 +11,8 @@ import net.sf.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -61,11 +63,23 @@ public class ExamSchedule {
                     temp = value.getJSONObject(i);
                     if(!title_index.containsKey(temp.getString("title"))) {
                         courseTitle_exam.add(temp);
-                        title_index.put(temp.getString("title"), courseTitle_exam.size() - 1);
                     }
                     else{
                         courseTitle_exam.set(title_index.get(temp.getString("title")), temp);
                     }
+                }
+
+                Collections.sort(courseTitle_exam, new Comparator<JSONObject>() {
+                    @Override
+                    public int compare(JSONObject o1, JSONObject o2) {
+                        return o1.getString("time").compareTo(o2.getString("time"));
+                    }
+                });
+
+                title_index = new HashMap<>();
+                int i = 0;
+                for(JSONObject object : courseTitle_exam){
+                    title_index.put(object.getString("title"), i++);
                 }
 
             } catch (Exception e){
@@ -94,11 +108,13 @@ public class ExamSchedule {
 
     }
 
-    public static boolean cantainsTitle(String title){
+    public static boolean containsTitle(String title){
         return title_index.containsKey(title);
     }
 
     public static String getExamTime(String title){
+        Log.i("ExamSchedule", "getExamTime[title:\t" + title + "\tindex:\t" + title_index.get(title) + "\ttime:\t" + courseTitle_exam.get(title_index.get(title)).getString("time"));
+        showHashMap();
         return courseTitle_exam.get(title_index.get(title)).getString("time");
     }
 
@@ -244,7 +260,19 @@ public class ExamSchedule {
                 for(int i=0; i<value.size(); i++){
                     temp = value.getJSONObject(i);
                     courseTitle_exam.add(temp);
-                    title_index.put(temp.getString("title"), i);
+                }
+
+                Collections.sort(courseTitle_exam, new Comparator<JSONObject>() {
+                    @Override
+                    public int compare(JSONObject o1, JSONObject o2) {
+                        return o1.getString("time").compareTo(o2.getString("time"));
+                    }
+                });
+
+                title_index = new HashMap<>();
+                int i = 0;
+                for(JSONObject object : courseTitle_exam){
+                    title_index.put(object.getString("title"), i++);
                 }
 
             } catch (Exception e){

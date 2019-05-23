@@ -23,6 +23,7 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
@@ -171,7 +172,7 @@ public class RecommendCourseScheduleChangePopWindow extends PopupWindow {
 
                 dataList.add(map);
             }
-            dataList.sort(new Comparator<Map<String, Object>>() {
+            Collections.sort(dataList, new Comparator<Map<String, Object>>() {
                 @Override
                 public int compare(Map<String, Object> o1, Map<String, Object> o2) {
                     return ((String)o1.get("context1")).compareTo((String)o2.get("context1"));

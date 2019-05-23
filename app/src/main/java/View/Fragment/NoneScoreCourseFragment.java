@@ -35,6 +35,7 @@ import com.lu.mydemo.R;
 import com.lu.mydemo.sample.adapter.BaseAdapter;
 import com.lu.mydemo.sample.adapter.MainAdapter;
 import com.tapadoo.alerter.Alerter;
+import com.yanzhenjie.recyclerview.OnItemClickListener;
 import com.yanzhenjie.recyclerview.OnItemMenuClickListener;
 import com.yanzhenjie.recyclerview.SwipeMenu;
 import com.yanzhenjie.recyclerview.SwipeMenuBridge;
@@ -45,6 +46,7 @@ import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 import net.sf.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
@@ -315,7 +317,7 @@ public class NoneScoreCourseFragment extends Fragment {
         }
 //        showResponse("termId_termName.size:\t" + termId_termName.size());
         Log.i("termId_termName.size", "" + termId_termName.size());
-        terms.sort(new Comparator<String>() {
+        Collections.sort(terms, new Comparator<String>() {
             @Override
             public int compare(String o1, String o2) {
                 return o2.compareTo(o1);
@@ -436,7 +438,7 @@ public class NoneScoreCourseFragment extends Fragment {
                 map.put("context1", "学分：" + credit);
                 map.put("type", selectType);
 
-                if(ExamSchedule.cantainsTitle(courseName)){
+                if(ExamSchedule.containsTitle(courseName)){
 
                     String time_str = ExamSchedule.getExamTime(courseName);
                     Date exam_date = df.parse(time_str);
@@ -470,6 +472,14 @@ public class NoneScoreCourseFragment extends Fragment {
 
                 dataList.add(map);
             }
+
+            //按类别排序
+            Collections.sort(dataList, new Comparator<HashMap<String, Object>>() {
+                @Override
+                public int compare(HashMap<String, Object> o1, HashMap<String, Object> o2) {
+                    return ((String) o1.get("type")).compareTo((String) o2.get("type"));
+                }
+            });
 
             return dataList;
 

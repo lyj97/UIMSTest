@@ -107,7 +107,7 @@ public class AddCourseExamPopupWindow extends PopupWindow {
 //                    pre_time_text.setError("请输入要改变课程的日期");
 //                if(!ischangeTimeSet) change_time_text.setError("请输入改变后的日期");
 
-                if (ExamSchedule.cantainsTitle(title)) {
+                if (ExamSchedule.containsTitle(title)) {
                     if (overWrite) {
                         commitButtonOnClickListener.onClick(commit_button);
                         dismiss();
