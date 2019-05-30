@@ -41,6 +41,8 @@ public class MainActivity extends Activity
     TextView scoreStatisticsTitleTextView;
     TextView scoreStatisticsTextView;
 
+    private TextView navigation_back;
+
     HashMap<Integer, String> index_id = new HashMap<>();
     HashMap<String, String> courseTypeID_courseType;
 
@@ -56,6 +58,8 @@ public class MainActivity extends Activity
         scoreStatisticsTextView = findViewById(R.id.textView_ScoreStatistics);
         scoreStatisticsTitleTextView = findViewById(R.id.textView_ScoreStatisticsTitle);
         courseTypeID_courseType = UIMS.getCourseTypeId_courseType();
+
+        navigation_back = findViewById(R.id.activity_main_navigation_back_text);
 
         changeTheme();
 
@@ -96,6 +100,13 @@ public class MainActivity extends Activity
             @Override
             public void onClick(View v) {
                 showAlert("关于\"必修平均成绩(绩点)\"", "数据由本地计算得出.\n\n计算方法：\n必修课程首次成绩(绩点)的加权平均数;\n权值为科目学分.\n\n本数据仅供参考，不代表教务成绩统计结果，请知悉.");
+            }
+        });
+
+        navigation_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
 

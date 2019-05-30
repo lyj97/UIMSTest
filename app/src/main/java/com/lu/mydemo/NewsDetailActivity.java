@@ -12,6 +12,7 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.URLSpan;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.webkit.WebResourceRequest;
@@ -60,6 +61,8 @@ public class NewsDetailActivity extends AppCompatActivity {
     private TextView detailTime;
     private TextView detailLink;
 
+    private TextView navigation_back;
+
     private WebView webView;
 
     private Bundle bundle;
@@ -75,6 +78,8 @@ public class NewsDetailActivity extends AppCompatActivity {
         detailDepartment = findViewById(R.id.activity_news_detail_department);
         detailTime = findViewById(R.id.activity_news_detail_time);
         detailLink = findViewById(R.id.activity_news_detail_link);
+
+        navigation_back = findViewById(R.id.activity_news_detail_navigation_back_text);
 
         changeTheme();
 
@@ -102,6 +107,13 @@ public class NewsDetailActivity extends AppCompatActivity {
             }
             detailLink.setText(style);
         }
+
+        navigation_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         webView = findViewById(R.id.activity_news_detail_web_view);
         new Thread(new Runnable() {

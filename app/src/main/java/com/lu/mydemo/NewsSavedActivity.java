@@ -45,6 +45,8 @@ public class NewsSavedActivity extends AppCompatActivity {
     private BaseAdapter myAdapter;
     private List<Map<String, Object>> dataList;
 
+    private TextView navigation_back;
+
     private static JSONObject tempJsonObject;
 
     @Override
@@ -54,6 +56,8 @@ public class NewsSavedActivity extends AppCompatActivity {
 
         swipeRecyclerView = findViewById(R.id.activity_news_saved_SwipeRecyclerView);
         myAdapter = createAdapter();
+
+        navigation_back = findViewById(R.id.activity_news_saved_navigation_back_text);
 
         changeTheme();
 
@@ -145,6 +149,13 @@ public class NewsSavedActivity extends AppCompatActivity {
 
                 }
 
+            }
+        });
+
+        navigation_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
     }

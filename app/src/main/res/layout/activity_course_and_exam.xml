@@ -8,28 +8,62 @@
     android:paddingTop="15dp"
     android:background="@drawable/background_login"
     >
-
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:textStyle="bold"
-        android:text="UIMSTest"
-        android:textSize="20sp"
-        android:padding="3dp"
-        android:textColor="@color/color_whiteBackground"
-        />
+        android:orientation="horizontal"
+        android:gravity="center">
 
-    <!--<TextView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_gravity="center"-->
-        <!--android:gravity="center"-->
-        <!--android:padding="4dp"-->
-        <!--android:text="课程临时调整管理"-->
-        <!--android:textColor="@color/color_whiteBackground"-->
-        <!--android:textSize="15sp" />-->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/course_and_exam_layout_navigation_back_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/ic_arrow_back_white_24dp"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:text="UIMSTest"
+                android:textSize="20sp"
+                android:padding="3dp"
+                android:textColor="@color/color_whiteBackground"
+                />
+
+            <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:gravity="center"-->
+            <!--android:padding="4dp"-->
+            <!--android:text="课程临时调整管理"-->
+            <!--android:textColor="@color/color_whiteBackground"-->
+            <!--android:textSize="15sp" />-->
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/course_and_exam_layout_viewpager"

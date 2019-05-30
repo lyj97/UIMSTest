@@ -39,6 +39,8 @@ public class WeekCourseActivity extends AppCompatActivity implements View.OnClic
     TimetableView mTimetableView;
     WeekView mWeekView;
 
+    private TextView navigation_back;
+
     LinearLayout layout;
     TextView titleTextView;
     List<MySubject> mySubjects;
@@ -61,6 +63,15 @@ public class WeekCourseActivity extends AppCompatActivity implements View.OnClic
         titleTextView = findViewById(R.id.week_course_title);
         layout = findViewById(R.id.weekCourseLayout);
         layout.setOnClickListener(this);
+
+        navigation_back = findViewById(R.id.activity_week_course_navigation_back_text);
+
+        navigation_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         changeTheme();
 

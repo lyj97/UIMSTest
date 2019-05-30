@@ -65,6 +65,8 @@ public class CourseScheduleChangeActivity extends AppCompatActivity {
     private AddCourseScheduleChangePopupWindow popupWindow;
     private RecommendCourseScheduleChangePopWindow recommendPopWindow;
 
+    private TextView navigation_back;
+
     private static boolean isRecommendShowed = false;
     private static boolean isRecommendAllowed;
 
@@ -82,6 +84,8 @@ public class CourseScheduleChangeActivity extends AppCompatActivity {
         recommend_switch = findViewById(R.id.course_schedule_change_recommend_switch);
         doubt_text_view = findViewById(R.id.course_schedule_change_recommend_doubt);
         add_button = findViewById(R.id.course_schedule_change_add_button);
+
+        navigation_back = findViewById(R.id.course_schedule_change_navigation_back_text);
 
         changeTheme();
 
@@ -190,6 +194,13 @@ public class CourseScheduleChangeActivity extends AppCompatActivity {
                 } else {
                     sharedPreferences.edit().putBoolean("isRecommendAllowed", false).apply();
                 }
+            }
+        });
+
+        navigation_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
 

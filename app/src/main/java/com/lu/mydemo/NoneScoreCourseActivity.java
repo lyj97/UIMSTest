@@ -7,9 +7,11 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tapadoo.alerter.Alerter;
@@ -25,6 +27,8 @@ public class NoneScoreCourseActivity extends AppCompatActivity {
 
     private ViewPager courseExamLayout;
 
+    private TextView navigation_back;
+
     public NoneScoreCourseFragment noneScoreFragment;
     public ExamFragment examFragment;
 
@@ -35,6 +39,15 @@ public class NoneScoreCourseActivity extends AppCompatActivity {
         setContentView(R.layout.activity_course_and_exam);
 
         courseExamLayout = findViewById(R.id.course_and_exam_layout_viewpager);
+
+        navigation_back = findViewById(R.id.course_and_exam_layout_navigation_back_text);
+
+        navigation_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
     }
 

@@ -31,6 +31,8 @@ public class AboutActivity extends AppCompatActivity {
     private TextView link_to_qq;
     private TextView link_to_group;
 
+    private TextView navigation_back;
+
     private TextView change_color_text;
 
     @Override
@@ -43,6 +45,8 @@ public class AboutActivity extends AppCompatActivity {
         link_to_uimstest = findViewById(R.id.activity_about_link_to_uimstest);
         link_to_qq = findViewById(R.id.activity_about_link_to_qq);
         link_to_group = findViewById(R.id.activity_about_link_to_group);
+
+        navigation_back = findViewById(R.id.activity_about_navigation_back_text);
 
         change_color_text = findViewById(R.id.activity_about_change_color);
 
@@ -94,6 +98,13 @@ public class AboutActivity extends AppCompatActivity {
         setLinkStyle(link_to_uimstest);
         setLinkStyle(link_to_qq);
         setLinkStyle(link_to_group);
+
+        navigation_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         change_color_text.setOnClickListener(new View.OnClickListener() {
             @Override

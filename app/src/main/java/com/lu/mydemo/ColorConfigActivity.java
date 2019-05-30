@@ -18,6 +18,8 @@ public class ColorConfigActivity extends AppCompatActivity {
     private TextView text_view_pink;
     private TextView text_view_green;
 
+    private TextView navigation_back;
+
     private String theme = ColorManager.getThemeName();
 
     @Override
@@ -30,6 +32,8 @@ public class ColorConfigActivity extends AppCompatActivity {
         text_view_blue = findViewById(R.id.color_config_blue_text);
         text_view_pink = findViewById(R.id.color_config_pink_text);
         text_view_green = findViewById(R.id.color_config_green_text);
+
+        navigation_back = findViewById(R.id.color_config_navigation_back_text);
 
         changeTheme();
 
@@ -68,6 +72,13 @@ public class ColorConfigActivity extends AppCompatActivity {
         text_view_blue.setOnClickListener(onClickListener);
         text_view_pink.setOnClickListener(onClickListener);
         text_view_green.setOnClickListener(onClickListener);
+
+        navigation_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
     }
 

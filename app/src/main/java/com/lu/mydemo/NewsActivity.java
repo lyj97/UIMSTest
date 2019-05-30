@@ -45,6 +45,8 @@ public class NewsActivity extends AppCompatActivity {
     private BaseAdapter myAdapter;
     private List<Map<String, Object>> dataList;
 
+    private TextView navigation_back;
+
     private GetInternetInformation loadClient = new GetInternetInformation();
 
     private int currentPage = 1;
@@ -63,6 +65,8 @@ public class NewsActivity extends AppCompatActivity {
         myCollectionTextView = findViewById(R.id.activity_news_my_collection);
         swipeRecyclerView = findViewById(R.id.activity_news_SwipeRecyclerView);
         myAdapter = createAdapter();
+
+        navigation_back = findViewById(R.id.activity_news_navigation_back_text);
 
         changeTheme();
 
@@ -154,6 +158,13 @@ public class NewsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(NewsActivity.this, NewsSavedActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        navigation_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
 
