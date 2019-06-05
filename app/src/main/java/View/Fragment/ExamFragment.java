@@ -356,7 +356,6 @@ public class ExamFragment extends Fragment {
 
         @Override
         public void onDismiss() {
-            // TODO Auto-generated method stub
             //Log.v("List_noteTypeActivity:", "我是关闭事件");
             backgroundAlpha(1f);
         }

@@ -123,30 +123,10 @@ public class LoginActivity extends Activity {
         linearLayoutView_down_text = findViewById(R.id.LinearLayoutView_down_text);
 
         /**
-         * TODO Test
          * 改变主题颜色
          */
         loadColorConfig();
         changeTheme();
-//        theme = ColorManager.getThemeName();
-//
-//        findViewById(R.id.login_color_test).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (theme.equals("blue")) {
-//                    ColorManager.saveTheme("pink");
-//                    theme = "pink";
-//                } else if (theme.equals("pink")) {
-//                    ColorManager.saveTheme("green");
-//                    theme = "green";
-//                } else {
-//                    ColorManager.saveTheme("blue");
-//                    theme = "blue";
-//                }
-//
-//                changeTheme();
-//            }
-//        });
 
         isMainShow = sp.getBoolean("isMainShow", isMainShow);
 
@@ -193,7 +173,7 @@ public class LoginActivity extends Activity {
             public void onClick(View v) {
 
                 /**
-                 * TODO TEST
+                 * TODO TEST 登录逻辑
                  */
                 LoginPopWindow window = new LoginPopWindow(LoginActivity.this, findViewById(R.id.activity_login).getHeight(), findViewById(R.id.activity_login).getWidth());
                 window.setFocusable(true);
@@ -974,6 +954,7 @@ public class LoginActivity extends Activity {
                     try {
                         int internetVersion = object.getInt("VersionCode");
                         Log.i("Version", "" + internetVersion);
+                        // TODO Version Control
                         if(internetVersion <= Version.getVersionCode()) return;
                     } catch (Exception e){
                         e.printStackTrace();
