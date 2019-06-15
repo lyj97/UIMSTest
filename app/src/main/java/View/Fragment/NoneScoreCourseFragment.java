@@ -71,6 +71,7 @@ public class NoneScoreCourseFragment extends Fragment {
     SharedPreferences sharedPreferences;
 
     Spinner spinner;
+    private ArrayList<String> termList;
 
     Button searchButton;
     Button deleteSavedCourseInformationButton;
@@ -222,11 +223,13 @@ public class NoneScoreCourseFragment extends Fragment {
             public boolean onLongClick(View v) {
                 sharedPreferences.edit().remove("CourseHistory_" + termName_TermId.get(spinner.getSelectedItem().toString())).apply();
                 showResponse("已删除【" + spinner.getSelectedItem().toString() + "】数据.");
-                dataList = new ArrayList<>();
+//                dataList = new ArrayList<>();
 //                listView.setAdapter(new SimpleAdapter(context, datalist, R.layout.course_list_ietm, new String[]{"title", "context1"}, new int[]{R.id.get_none_score_course_title, R.id.get_none_score_course_context1}));
+                flushList(new ArrayList());
                 deleteSavedCourseInformationButton.getLayoutParams().height = 0;
                 deleteSavedCourseInformationButton.setVisibility(View.INVISIBLE);
                 dataArea.requestLayout();
+                isCourseListShowing = false;
                 return true;
             }
         });
@@ -282,7 +285,9 @@ public class NoneScoreCourseFragment extends Fragment {
 
     private void setSpinnerItems(){
         if(LoginActivity.isLocalValueLoaded){
-            spinner.setAdapter(new ArrayAdapter(context, R.layout.select_item, R.id.select_text_item, getTermArray()));
+            termList = getTermArray();
+            spinner.setAdapter(new ArrayAdapter(context, R.layout.select_item, R.id.select_text_item, termList));
+            spinner.setSelection(termList.indexOf(UIMS.getTermName()));
         }
         else{
             showResponse("本地暂无教学学期数据，且您还未登录，请登录后重试。");
@@ -732,8 +737,9 @@ public class NoneScoreCourseFragment extends Fragment {
                 Alerter.create(context)
                         .setText(message)
                         .enableProgress(true)
+                        .setDismissable(false)
                         .setProgressColorRes(R.color.color_alerter_progress_bar)
-                        .setDuration(10000)
+                        .setDuration(Integer.MAX_VALUE)
                         .setBackgroundColorInt(ColorManager.getTopAlertBackgroundColor())
                         .show();
             }

@@ -12,7 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ColorConfigActivity"></activity>
+        <activity android:name=".PingjiaoActivity"></activity>
+        <activity android:name=".ColorConfigActivity" />
         <activity android:name=".AboutActivity" />
         <activity android:name=".NewsSavedActivity" />
         <activity android:name=".NewsDetailActivity" />

@@ -195,8 +195,9 @@ public class NoneScoreCourseActivity extends AppCompatActivity {
                 Alerter.create(NoneScoreCourseActivity.this)
                         .setText(message)
                         .enableProgress(true)
+                        .setDismissable(false)
                         .setProgressColorRes(R.color.color_alerter_progress_bar)
-                        .setDuration(10000)
+                        .setDuration(Integer.MAX_VALUE)
                         .setBackgroundColorInt(ColorManager.getTopAlertBackgroundColor())
                         .show();
             }

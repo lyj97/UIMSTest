@@ -321,8 +321,9 @@ public class NewsSavedActivity extends AppCompatActivity {
                 Alerter.create(NewsSavedActivity.this)
                         .setText(message)
                         .enableProgress(true)
+                        .setDismissable(false)
                         .setProgressColorRes(R.color.color_alerter_progress_bar)
-                        .setDuration(10000)
+                        .setDuration(Integer.MAX_VALUE)
                         .setBackgroundColorInt(ColorManager.getTopAlertBackgroundColor())
                         .show();
             }

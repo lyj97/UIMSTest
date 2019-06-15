@@ -28,6 +28,7 @@ import android.widget.Toast;
 import com.tapadoo.alerter.Alerter;
 
 import net.sf.json.JSONArray;
+import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
 
 import java.util.ArrayList;
@@ -60,7 +61,7 @@ public class LoginActivity extends Activity {
     private Button get_save_button;
     private Button getNoneScoreCourseButton;
     private Button getNewsButton;
-    private SharedPreferences sp;
+    private static SharedPreferences sp;
     private static final int PASSWORD_MIWEN = 0x81;
 
     private TextView enterWeekCourseTextView;
@@ -75,12 +76,14 @@ public class LoginActivity extends Activity {
 
     private boolean isMainShow = true;
     private static boolean isInternetInformationShowed;
-    private static boolean reLoadTodayCourse = false;
+    private static boolean isCourseNeedReload = false;
+    private static boolean reLoadTodayCourse = true;
     private boolean listHaveHeadFoot = false;
 
     public static long now_week;//当前周
     public static int weeks;//共多少周
     private int day_of_week;//今天周几
+    public static final int MAX_WEEK_NUMBER = 30;//设置学期最大教学周数，用于时间正确性判断
 
     private int clickCount = 0;
     private TextView UIMSTest;
@@ -94,6 +97,7 @@ public class LoginActivity extends Activity {
     String pass;
 
     public LoginPopWindow popWindow;
+    public LoginGetCourseSchedulePopupWindow courseSchedulePopupWindow;
 
 //    private String theme = "blue";
 
@@ -122,11 +126,22 @@ public class LoginActivity extends Activity {
         login_main_view = findViewById(R.id.login_main_view);
         linearLayoutView_down_text = findViewById(R.id.LinearLayoutView_down_text);
 
+        //TODO TEST
+        TextView test = findViewById(R.id.login_test);
+        test.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(LoginActivity.this, PingjiaoActivity.class));
+            }
+        });
+
         /**
          * 改变主题颜色
          */
         loadColorConfig();
         changeTheme();
+
+        isCourseNeedReload = sp.getBoolean("isCourseNeedReload", false);
 
         isMainShow = sp.getBoolean("isMainShow", isMainShow);
 
@@ -153,6 +168,7 @@ public class LoginActivity extends Activity {
             loginSuccess();
         }
 
+        // i love you.
         if(sp.getBoolean("showEgg", true)){
             UIMSTest.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -166,7 +182,7 @@ public class LoginActivity extends Activity {
             });
         }
 
-        if(isLocalInformationAvailable()) loadLocalInformation(false);
+//        if(isLocalInformationAvailable()) loadLocalInformation(false);
 
         load_internet_inf_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -259,7 +275,7 @@ public class LoginActivity extends Activity {
                     hideMainView();
                 }
                 else {
-                    showMainVoew();
+                    showMainView();
                 }
             }
         });
@@ -293,9 +309,14 @@ public class LoginActivity extends Activity {
         ColorManager.loadConfig(getApplicationContext(), this);
         changeTheme();
 
-        loadTime();
-        getCourseSuccess();
-        reLoadTodayCourse = false;
+        if(!isLocalValueLoaded && isLocalInformationAvailable()) loadLocalInformation(false);
+        else loadCourseInformation();
+
+        if(isLocalValueLoaded && isCourseNeedReload){
+            showWarningAlertWithCancel_OKButton("需要刷新课程信息", "当前学期已经改变，请刷新本地课程信息。");
+        }
+
+//        if(reLoadTodayCourse) loadCourseInformation();
 
     }
 
@@ -309,7 +330,7 @@ public class LoginActivity extends Activity {
         sp.edit().putBoolean("isMainShow", isMainShow).apply();
     }
 
-    public void showMainVoew(){
+    public void showMainView(){
         login_main_view.startAnimation(mShowAction);
         login_main_view.setVisibility(View.VISIBLE);
         linearLayoutView_down_text.setText("⇩隐藏下方区域");
@@ -318,6 +339,7 @@ public class LoginActivity extends Activity {
     }
 
     public void loginSuccess() {
+        sp.edit().putString("CurrentUserInfoJSON", UIMS.getCurrentUserInfoJSON().toString()).apply();
         sp.edit().putString("TermJSON", UIMS.getTermJSON().toString()).apply();
         sp.edit().putString("TeachingTermJSON", UIMS.getTeachingTermJSON().toString()).apply();
 
@@ -327,7 +349,12 @@ public class LoginActivity extends Activity {
         isLoginIn = true;
 
         try {
-            JSONObject value = teachingTermJSON.getJSONArray("value").getJSONObject(0);
+            JSONObject value;
+            try{
+                value = teachingTermJSON.getJSONArray("value").getJSONObject(0);
+            }catch (JSONException e){
+                value = teachingTermJSON;
+            }
             weeks = value.getInt("weeks");
             loadTime();
             getCourseSuccess();
@@ -379,13 +406,11 @@ public class LoginActivity extends Activity {
         });
     }
 
-    private void loadCourseInformation(){
+    public void loadCourseInformation(){
 
         new Thread(new Runnable() {
             @Override
             public void run() {
-                UIMS.setTeachingTerm(JSONObject.fromObject(sp.getString("TeachingTermJSON", "")));
-                UIMS.setCourseJSON(JSONObject.fromObject(sp.getString("CourseJSON", "")));
 
                 loadTime();
                 getCourseSuccess();
@@ -409,39 +434,51 @@ public class LoginActivity extends Activity {
                 if(!isLocalValueLoaded) {
                     showLoading("正在加载本地数据...");
 
-                    loadCourseInformation();
-
+                    UIMS.setCurrentUserInfoJSON(JSONObject.fromObject(sp.getString("CurrentUserInfoJSON", "")));
                     UIMS.setScoreJSON(JSONObject.fromObject(sp.getString("ScoreJSON", "")));
                     UIMS.setStudentJSON(JSONObject.fromObject(sp.getString("StudentJSON", "")));
                     UIMS.setCourseTypeJSON(JSONObject.fromObject(sp.getString("CourseTypeJSON", "")));
                     UIMS.setCourseSelectTypeJSON(JSONObject.fromObject(sp.getString("CourseSelectTypeJSON", "")));
                     UIMS.setScoreStatisticsJSON(JSONObject.fromObject(sp.getString("ScoreStatisticsJSON", "")));
                     UIMS.setTermJSON(JSONObject.fromObject(sp.getString("TermJSON", "")));
+                    UIMS.setTeachingTerm(JSONObject.fromObject(sp.getString("TeachingTermJSON", "")));
+                    UIMS.setCourseJSON(JSONObject.fromObject(sp.getString("CourseJSON", "")));
+
+                    loadCourseInformation();
                 }
 
                 final JSONObject teachingTermJSON = UIMS.getTeachingTermJSON();
 
                 try {
-                    JSONObject value = teachingTermJSON.getJSONArray("value").getJSONObject(0);
+                    JSONObject value;
+                    try{
+                        value = teachingTermJSON.getJSONArray("value").getJSONObject(0);
+                    }catch (JSONException e){
+                        value = teachingTermJSON;
+                    }
                     weeks = value.getInt("weeks");
                     loadTime();
-                    getCourseSuccess();
+//                    getCourseSuccess();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
 
-                Alerter.hide();
-
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        get_save_button.setEnabled(true);
-                        get_save_button.setText("成绩查询");
-                        loadLocalInformationSuccess();
-                        if(show) {
-                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            startActivity(intent);
+                        try {
+                            if (show) {
+                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                startActivity(intent);
 //                            overridePendingTransition(R.anim.up_in, R.anim.up_out);
+                            }
+                            Alerter.hide();
+                            get_save_button.setEnabled(true);
+                            get_save_button.setText("成绩查询");
+                            loadLocalInformationSuccess();
+                        }catch (Exception e){
+                            showWarningAlert(e.getMessage());
+                            e.printStackTrace();
                         }
                     }
                 });
@@ -452,10 +489,14 @@ public class LoginActivity extends Activity {
 
     private void loadLocalInformationSuccess(){
         isLocalValueLoaded = true;
+        if(isCourseNeedReload){
+            showWarningAlertWithCancel_OKButton("需要刷新课程信息", "当前学期已经改变，请刷新本地课程信息。");
+        }
     }
 
     private void getCourseSuccess(){
         try {
+            if(!reLoadTodayCourse) return;
             final List<Map<String, Object>> datalist = getCourseList();
             runOnUiThread(new Runnable() {
                 @Override
@@ -469,6 +510,7 @@ public class LoginActivity extends Activity {
                     }
                 }
             });
+            reLoadTodayCourse = false;
         } catch (Exception e){
             runOnUiThread(new Runnable() {
                 @Override
@@ -489,10 +531,16 @@ public class LoginActivity extends Activity {
         try {
             JSONObject teachingTermJSON = UIMS.getTeachingTermJSON();
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-            JSONObject value = teachingTermJSON.getJSONArray("value").getJSONObject(0);
+            JSONObject value;
+            try{
+                value = teachingTermJSON.getJSONArray("value").getJSONObject(0);
+            }catch (JSONException e){
+                value = teachingTermJSON;
+            }
             final String now_time = df.format(new Date());
             final String termName = value.getString("termName");
-            long startTime = df.parse(value.getString("startDate").split("T")[0]).getTime();
+            long startDate = df.parse(value.getString("startDate").split("T")[0]).getTime();
+//            long vacationDate = df.parse(value.getString("vacationDate").split("T")[0]).getTime();
             long now = df.parse(now_time).getTime();
 
             Locale.setDefault(Locale.CHINA);
@@ -503,9 +551,10 @@ public class LoginActivity extends Activity {
             if (day_of_week <= 0)
                 day_of_week = 7;
 
-            Log.i("GetCourse", "day_of_week:\t" + day_of_week);
+            Log.i("loadTime", "day_of_week:\t" + day_of_week);
 
-            now_week = (now - startTime) / (1000 * 3600 * 24 * 7) + 1;
+            now_week = (now - startDate) / (1000 * 3600 * 24 * 7) + 1;
+//            weeks = (int) (vacationDate - startDate / (1000 * 3600 * 24 * 7));
 
             runOnUiThread(new Runnable() {
                 @Override
@@ -513,8 +562,15 @@ public class LoginActivity extends Activity {
                     timeInformation.setTextColor(Color.BLACK);
                     termInformation.setTextColor(Color.BLACK);
                     timeInformation.setText(now_time + " " + dayOfWeekName[day_of_week]);
-                    if(now_week <= weeks) termInformation.setText(termName + "\n 第 " + now_week + " 周(共 " + weeks + " 周) ");
-                    else termInformation.setText(termName + "\n本学期已结束，假期快乐！");
+                    if(now_week < 0 || now_week > MAX_WEEK_NUMBER){
+                        termInformation.setText(termName + "\n 当前学期可能有误");
+                        termInformation.setTextColor(Color.RED);
+                    }
+                    else {
+                        if (now_week <= weeks)
+                            termInformation.setText(termName + "\n 第 " + now_week + " 周(共 " + weeks + " 周) ");
+                        else termInformation.setText(termName + "\n本学期已结束，假期快乐！");
+                    }
                 }
             });
 
@@ -589,7 +645,7 @@ public class LoginActivity extends Activity {
     }
 
     private boolean isLocalInformationAvailable(){
-        return (sp.contains("ScoreJSON") && sp.contains("CourseJSON") && sp.contains("ScoreStatisticsJSON") && sp.contains("StudentJSON") && sp.contains("CourseTypeJSON") && sp.contains("CourseSelectTypeJSON") && sp.contains("TermJSON")  && sp.contains("TeachingTermJSON"));
+        return (sp.contains("CurrentUserInfoJSON") && sp.contains("ScoreJSON") && sp.contains("CourseJSON") && sp.contains("ScoreStatisticsJSON") && sp.contains("StudentJSON") && sp.contains("CourseTypeJSON") && sp.contains("CourseSelectTypeJSON") && sp.contains("TermJSON")  && sp.contains("TeachingTermJSON"));
     }
 
     private List<Map<String, Object>> getCourseListNotice(String str){
@@ -1014,6 +1070,25 @@ public class LoginActivity extends Activity {
         LoginActivity.reLoadTodayCourse = reLoadTodayCourse;
     }
 
+    public static void setIsCourseNeedReload(boolean isCourseNeedReload) {
+        LoginActivity.isCourseNeedReload = isCourseNeedReload;
+        sp.edit().putBoolean("isCourseNeedReload", isCourseNeedReload).apply();
+    }
+
+    public static void saveTeachingTerm(){
+        sp.edit().putString("TeachingTermJSON", UIMS.getTeachingTermJSON().toString()).apply();
+        LoginActivity.setIsCourseNeedReload(true);
+    }
+
+    public static void saveCourseJSON(){
+        sp.edit().putString("CourseJSON", UIMS.getCourseJSON().toString()).apply();
+    }
+
+    public static void saveScoreJSON(){
+        sp.edit().putString("ScoreJSON", UIMS.getScoreJSON().toString()).apply();
+        sp.edit().putString("ScoreStatisticsJSON", UIMS.getScoreStatisticsJSON().toString()).apply();
+    }
+
     private void myTestFunction(){
         new Thread(new Runnable() {
             @Override
@@ -1146,6 +1221,15 @@ public class LoginActivity extends Activity {
         });
     }
 
+    public void dismissCourseSchedulePopWindow(){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                courseSchedulePopupWindow.dismiss();
+            }
+        });
+    }
+
     public void showResponse(final String string) {
         runOnUiThread(new Runnable() {
             @Override
@@ -1171,8 +1255,9 @@ public class LoginActivity extends Activity {
                 Alerter.create(LoginActivity.this)
                         .setText(message)
                         .enableProgress(true)
+                        .setDismissable(false)
                         .setProgressColorRes(R.color.color_alerter_progress_bar)
-                        .setDuration(10000)
+                        .setDuration(Integer.MAX_VALUE)
                         .setBackgroundColorInt(ColorManager.getTopAlertBackgroundColor())
                         .show();
             }
@@ -1230,6 +1315,38 @@ public class LoginActivity extends Activity {
                         .setText(message)
                         .enableSwipeToDismiss()
                         .setBackgroundColorInt(getResources().getColor(R.color.color_alerter_warning_background))
+                        .show();
+            }
+        });
+    }
+
+    public void showWarningAlertWithCancel_OKButton(final String title, final String message){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Alerter.create(LoginActivity.this)
+                        .setTitle(title)
+                        .setText(message)
+                        .addButton("取消", R.style.AlertButton, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Alerter.hide();
+                            }
+                        })
+                        .addButton("更新", R.style.AlertButton, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                LoginGetCourseSchedulePopupWindow window = new LoginGetCourseSchedulePopupWindow(LoginActivity.this, UIMS.getTermName(), findViewById(R.id.activity_login).getHeight(), findViewById(R.id.activity_login).getWidth());
+                                window.setFocusable(true);
+                                window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+                                window.showAtLocation(LoginActivity.this.findViewById(R.id.activity_login), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0); //设置layout在PopupWindow中显示的位置
+                                courseSchedulePopupWindow = window;
+                                Alerter.hide();
+                            }
+                        })
+                        .setBackgroundColorInt(getResources().getColor(R.color.color_alerter_warning_background))
+                        .enableSwipeToDismiss()
+                        .setDuration(Integer.MAX_VALUE)
                         .show();
             }
         });

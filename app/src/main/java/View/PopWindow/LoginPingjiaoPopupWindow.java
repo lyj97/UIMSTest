@@ -15,20 +15,22 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.lu.mydemo.LoginActivity;
-import com.lu.mydemo.NoneScoreCourseActivity;
+import com.lu.mydemo.MainActivity;
+import com.lu.mydemo.PingjiaoActivity;
 import com.lu.mydemo.R;
 import com.tapadoo.alerter.Alerter;
 
 import Config.ColorManager;
 import UIMS.UIMS;
 
-public class LoginGetSelectCoursePopWindow extends PopupWindow {
+public class LoginPingjiaoPopupWindow extends PopupWindow {
 
     private View mMenuView;
 
     private EditText user;
     private EditText password;
 
+    private TextView titleTextView;
     private Button commitButton;
     private Button cancelButton;
     private TextView deleteSavedText;
@@ -43,7 +45,7 @@ public class LoginGetSelectCoursePopWindow extends PopupWindow {
 
     public static boolean loginSuccess = false;
 
-    public LoginGetSelectCoursePopWindow(final NoneScoreCourseActivity context, final String termName, int height, int width) {
+    public LoginPingjiaoPopupWindow(final PingjiaoActivity context, int height, int width, final View.OnClickListener listener, String title, String commit_text) {
         super(context);
         this.context = context;
         sp = LoginActivity.context.getSharedPreferences("userInfo", Context.MODE_PRIVATE);//共用LoginActivity账户
@@ -54,6 +56,7 @@ public class LoginGetSelectCoursePopWindow extends PopupWindow {
         user = mMenuView.findViewById(R.id.pop_window_login_id);
         password = mMenuView.findViewById(R.id.pop_window_login_password);
 
+        titleTextView = mMenuView.findViewById(R.id.pop_window_login_pop_layout_title);
         commitButton = mMenuView.findViewById(R.id.pop_window_login_commit_button);
         cancelButton = mMenuView.findViewById(R.id.pop_window_login_cancel_button);
         deleteSavedText = mMenuView.findViewById(R.id.pop_window_login_delete_saved_text);
@@ -63,7 +66,8 @@ public class LoginGetSelectCoursePopWindow extends PopupWindow {
         user.setText(sp.getString("USER",""));
         password.setText(sp.getString("PASSWORD",""));
 
-        commitButton.setText("获取" + termName + "课程信息");
+        titleTextView.setText(title);
+        commitButton.setText(commit_text);
 
         commitButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,8 +99,14 @@ public class LoginGetSelectCoursePopWindow extends PopupWindow {
                                 context.showLoading("正在登录...");
                                 if (uims.login()) {
                                     if (uims.getCurrentUserInfo(false)) {
-                                        context.noneScoreFragment.getNoneScoreCourse(context.noneScoreFragment.termName_TermId.get(termName), uims);
-                                        context.noneScoreFragment.dismissPopWindow();
+                                        LoginActivity.saveScoreJSON();
+                                        context.showAlert("登录成功！");
+                                        context.setLogin(true);
+                                        context.setUims(uims);
+                                        context.addText("登录成功！");
+                                        context.addText("欢迎您, " + uims.getNickName() + " .");
+                                        listener.onClick(null);
+                                        context.dismissPingjiaoPopWindow();
                                     }
                                     else{
                                         context.showWarningAlert("获取信息失败！");
@@ -239,4 +249,5 @@ public class LoginGetSelectCoursePopWindow extends PopupWindow {
         user.setBackground(ColorManager.getSpinnerBackground_full());
         password.setBackground(ColorManager.getSpinnerBackground_full());
     }
+
 }

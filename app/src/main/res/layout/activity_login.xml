@@ -191,12 +191,12 @@
                         android:text="ⓘ关于UIMSTest"
                         />
 
-                    <!--<TextView-->
-                        <!--android:id="@+id/login_color_test"-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:paddingTop="15dp"-->
-                        <!--android:text="Change color !"/>-->
+                    <TextView
+                        android:id="@+id/login_test"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="15dp"
+                        android:text="教学质量评价测试 !"/>
 
                 </LinearLayout>
 

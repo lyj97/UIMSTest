@@ -159,8 +159,6 @@ public class NewsDetailActivity extends AppCompatActivity {
                 .connectTimeout(10, TimeUnit.SECONDS)
                 .build();
         try {
-//            final MediaType MEDIA_TYPE_NORAML_FORM = MediaType.parse("application/x-www-form-urlencoded;charset=utf-8");
-//            RequestBody body = RequestBody.create(MEDIA_TYPE_NORAML_FORM,"link=" + bundle.getString("link"));
             FormBody formBody = new FormBody.Builder()
                     .add("link", bundle.getString("link"))
                     .build();
@@ -213,8 +211,9 @@ public class NewsDetailActivity extends AppCompatActivity {
                 Alerter.create(NewsDetailActivity.this)
                         .setText(message)
                         .enableProgress(true)
+                        .setDismissable(false)
                         .setProgressColorRes(R.color.color_alerter_progress_bar)
-                        .setDuration(10000)
+                        .setDuration(Integer.MAX_VALUE)
                         .setBackgroundColorInt(ColorManager.getTopAlertBackgroundColor())
                         .show();
             }

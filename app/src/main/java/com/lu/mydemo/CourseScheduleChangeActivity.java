@@ -14,9 +14,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.PopupWindow;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,6 +51,7 @@ import java.util.Map;
 
 import Config.ColorManager;
 import ToolFor2045_Site.GetInternetInformation;
+import UIMS.UIMS;
 import Utils.Course.CourseScheduleChange;
 import View.PopWindow.*;
 
@@ -66,6 +70,13 @@ public class CourseScheduleChangeActivity extends AppCompatActivity {
     private RecommendCourseScheduleChangePopWindow recommendPopWindow;
 
     private TextView navigation_back;
+
+    private Spinner spinner;
+    private ArrayList<String> termList;
+    private boolean opening = true;//标识Activity刚刚打开，不要设置教学周
+
+    public HashMap<String, String> termName_TermId = new HashMap<>();
+    public HashMap<String, String> termId_termName = new HashMap<>();
 
     private static boolean isRecommendShowed = false;
     private static boolean isRecommendAllowed;
@@ -87,7 +98,11 @@ public class CourseScheduleChangeActivity extends AppCompatActivity {
 
         navigation_back = findViewById(R.id.course_schedule_change_navigation_back_text);
 
+        spinner = findViewById(R.id.course_schedule_change_term_spinner);
+
         changeTheme();
+
+        setSpinnerItems();
 
         isRecommendAllowed = sharedPreferences.getBoolean("isRecommendAllowed", false);
 
@@ -197,6 +212,35 @@ public class CourseScheduleChangeActivity extends AppCompatActivity {
             }
         });
 
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if(opening) {
+                    Log.w("SetTerm", "Ignored! (opening)");
+                    opening = false;
+                    return;
+                }
+                String term = termList.get(position);
+                Log.i("Term", term);
+                JSONObject termJSON = UIMS.getTermJSON(termName_TermId.get(term));
+                if(termJSON != null){
+                    Log.i("TermJSON", termJSON.toString());
+                    UIMS.setTeachingTerm(termJSON);
+                    LoginActivity.saveTeachingTerm();
+                    Toast.makeText(CourseScheduleChangeActivity.this, "当前学期已设为：\t" + UIMS.getTermName(), Toast.LENGTH_SHORT).show();
+                }
+                else{
+//                    Toast.makeText(CourseScheduleChangeActivity.this, "TermJSON is NULL!", Toast.LENGTH_SHORT).show();
+                    Log.e("TermJSON", "TermJSON is NULL!");
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
         navigation_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -208,6 +252,8 @@ public class CourseScheduleChangeActivity extends AppCompatActivity {
         else {
             getRecommend();
         }
+
+        opening = false;
     }
 
     private void getRecommend(){
@@ -324,6 +370,39 @@ public class CourseScheduleChangeActivity extends AppCompatActivity {
         }
     }
 
+    private void setSpinnerItems(){
+        if(LoginActivity.isLocalValueLoaded){
+            termList = getTermArray();
+            spinner.setAdapter(new ArrayAdapter(this, R.layout.select_item, R.id.select_text_item, termList));
+            spinner.setSelection(termList.indexOf(UIMS.getTermName()));
+        }
+        else{
+            showResponse("本地暂无学期数据，请刷新信息后重试。");
+//            finish();
+        }
+    }
+
+    private ArrayList<String> getTermArray(){
+        ArrayList<String> terms = new ArrayList<>();
+        termId_termName = UIMS.getTermId_termName();
+        Iterator<Map.Entry<String, String>> iterator = termId_termName.entrySet().iterator();
+        Map.Entry<String, String> entry;
+        while (iterator.hasNext()) {
+            entry = iterator.next();
+            termName_TermId.put(entry.getValue(), entry.getKey());
+            terms.add(entry.getValue());
+        }
+//        showResponse("termId_termName.size:\t" + termId_termName.size());
+        Log.i("termId_termName.size", "" + termId_termName.size());
+        Collections.sort(terms, new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                return o2.compareTo(o1);
+            }
+        });
+        return terms;
+    }
+
     protected MainAdapter createAdapter() {
         return new MainAdapter(this);
     }
@@ -336,6 +415,16 @@ public class CourseScheduleChangeActivity extends AppCompatActivity {
         window.setStatusBarColor(ColorManager.getPrimaryColor());
 
         findViewById(R.id.course_schedule_change_add_layout).setBackground(ColorManager.getMainBackground_full());
+    }
+
+    public void showResponse(final String string){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(CourseScheduleChangeActivity.this, string, Toast.LENGTH_SHORT).show();
+//                showAlert(string);
+            }
+        });
     }
 
     public void showAlert(final String message) {
@@ -359,9 +448,9 @@ public class CourseScheduleChangeActivity extends AppCompatActivity {
                 Alerter.create(CourseScheduleChangeActivity.this)
                         .setText(message)
                         .enableProgress(true)
+                        .setDismissable(false)
                         .setProgressColorRes(R.color.color_alerter_progress_bar)
-//                        .setIcon(R.drawable.ic_autorenew_black_24dp)
-                        .setDuration(10000)
+                        .setDuration(Integer.MAX_VALUE)
                         .setBackgroundColorInt(ColorManager.getTopAlertBackgroundColor())
                         .show();
             }

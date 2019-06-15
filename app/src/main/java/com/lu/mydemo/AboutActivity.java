@@ -83,7 +83,7 @@ public class AboutActivity extends AppCompatActivity {
         link_to_uimstest.setAutoLinkMask(0);
         link_to_uimstest.setLinksClickable(true);
 
-        CharSequence charSequence_link_to_qq = Html.fromHtml("<a href=\'http://qm.qq.com/cgi-bin/qm/qr?k=pKnSWjj6Y-KoZg9CG6_Qqa5qFXsBd2oQ#\'>意见反馈请点此处</a>");
+        CharSequence charSequence_link_to_qq = Html.fromHtml("<a href=\'mqqwpa://im/chat?chat_type=wpa&uin=1159386449\'>意见反馈请点此处</a>");
         link_to_qq.setText(charSequence_link_to_qq);
         link_to_qq.setMovementMethod(LinkMovementMethod.getInstance());
         link_to_qq.setAutoLinkMask(0);

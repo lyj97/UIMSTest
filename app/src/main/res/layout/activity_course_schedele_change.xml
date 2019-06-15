@@ -53,7 +53,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:padding="4dp"
-                android:text="课程临时调整管理"
+                android:text="学期﹠课程临时调整"
                 android:textColor="@color/color_whiteBackground"
                 android:textSize="15sp" />
 
@@ -63,6 +63,32 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingStart="15sp"
+        android:paddingEnd="15sp"
+        android:gravity="center"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:text="当前学期："
+            />
+
+        <Spinner
+            android:id="@+id/course_schedule_change_term_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="7">
+        </Spinner>
 
     </LinearLayout>
 
@@ -112,6 +138,7 @@
             android:layout_gravity="right"
             android:background="#00000000"
             android:text="添加"
+            android:textColor="#FFFFFF"
             />
 
     </LinearLayout>

@@ -15,14 +15,14 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.lu.mydemo.LoginActivity;
-import com.lu.mydemo.NoneScoreCourseActivity;
+import com.lu.mydemo.MainActivity;
 import com.lu.mydemo.R;
 import com.tapadoo.alerter.Alerter;
 
 import Config.ColorManager;
 import UIMS.UIMS;
 
-public class LoginGetSelectCoursePopWindow extends PopupWindow {
+public class LoginGetScorePopupWindow extends PopupWindow {
 
     private View mMenuView;
 
@@ -43,7 +43,7 @@ public class LoginGetSelectCoursePopWindow extends PopupWindow {
 
     public static boolean loginSuccess = false;
 
-    public LoginGetSelectCoursePopWindow(final NoneScoreCourseActivity context, final String termName, int height, int width) {
+    public LoginGetScorePopupWindow(final MainActivity context, int height, int width) {
         super(context);
         this.context = context;
         sp = LoginActivity.context.getSharedPreferences("userInfo", Context.MODE_PRIVATE);//共用LoginActivity账户
@@ -63,7 +63,7 @@ public class LoginGetSelectCoursePopWindow extends PopupWindow {
         user.setText(sp.getString("USER",""));
         password.setText(sp.getString("PASSWORD",""));
 
-        commitButton.setText("获取" + termName + "课程信息");
+        commitButton.setText("更新成绩");
 
         commitButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,8 +95,12 @@ public class LoginGetSelectCoursePopWindow extends PopupWindow {
                                 context.showLoading("正在登录...");
                                 if (uims.login()) {
                                     if (uims.getCurrentUserInfo(false)) {
-                                        context.noneScoreFragment.getNoneScoreCourse(context.noneScoreFragment.termName_TermId.get(termName), uims);
-                                        context.noneScoreFragment.dismissPopWindow();
+                                        uims.getScoreStatistics();
+                                        uims.getRecentScore();
+                                        LoginActivity.saveScoreJSON();
+                                        context.showAlert("成绩刷新成功！");
+                                        context.reloadScoreList();
+                                        context.dismissGetScorePopWindow();
                                     }
                                     else{
                                         context.showWarningAlert("获取信息失败！");
@@ -239,4 +243,5 @@ public class LoginGetSelectCoursePopWindow extends PopupWindow {
         user.setBackground(ColorManager.getSpinnerBackground_full());
         password.setBackground(ColorManager.getSpinnerBackground_full());
     }
+
 }
