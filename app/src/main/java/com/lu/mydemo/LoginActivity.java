@@ -418,7 +418,7 @@ public class LoginActivity extends Activity {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        CourseJSONTransfer.transferCourseList(UIMS.getCourseJSON());
+                        CourseJSONTransfer.transferCourseList(UIMS.getCourseJSON(), true);
                     }
                 }).start();
             }
