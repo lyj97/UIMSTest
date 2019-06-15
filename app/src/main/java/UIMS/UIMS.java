@@ -864,6 +864,7 @@ public class UIMS {
             JSONObject object = JSONObject.fromObject(entityStringBuilder.toString());
             HashSet<String> names = new HashSet<>();
 
+            System.out.println(object);
             try {//输出内容
 
                 JSONArray value = (JSONArray) object.get("value");
