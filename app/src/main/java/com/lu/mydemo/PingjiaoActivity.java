@@ -226,36 +226,52 @@ public class PingjiaoActivity extends AppCompatActivity {
                                             char[] puzzle_chars;
                                             String ans;
 
-                                            for(int i=0; i<list.size(); i++){
-                                                pingjiao_inf = uims.post_pingjiao(list.get(i));
-                                                puzzle = pingjiao_inf.getString("puzzle");
-                                                parts = puzzle.split("_");
-                                                answer = getAnswer(parts, names, puzzle.length());
-                                                System.out.println(answer);
-                                                targetClar = pingjiao_inf.getJSONObject("targetClar");
-                                                addText("person:");
-                                                addText(targetClar.getString("person"));
-                                                addText("notes:");
-                                                addText(targetClar.getString("notes"));
-                                                addText("puzzle:");
-                                                addText(puzzle);
-                                                addText("answer:");
-                                                addText(answer.toString());
-                                                if(answer.size() == 1) {
-                                                    ans = null;
-                                                    name_chars = answer.get(0).toCharArray();
-                                                    puzzle_chars = puzzle.toCharArray();
-                                                    for (int j = 0; j < name_chars.length; j++) {
-                                                        if (name_chars[j] != puzzle_chars[j])
-                                                            ans = name_chars[j] + "";
-                                                    }
-                                                    Log.w("TestInfo", "Due to TEST, return now!");
-                                                    if (ans != null){
-                                                        if(uims.post_pingjiao_tijiao(list.get(i), ans)){
-                                                            addText("【评教成功！】");
+                                            try {
+                                                for (int i = 0; i < list.size(); i++) {
+                                                    pingjiao_inf = uims.post_pingjiao(list.get(i));
+                                                    puzzle = pingjiao_inf.getString("puzzle");
+                                                    parts = puzzle.split("_");
+                                                    answer = getAnswer(parts, names, puzzle.length());
+                                                    System.out.println(answer);
+                                                    targetClar = pingjiao_inf.getJSONObject("targetClar");
+                                                    addText("person:");
+                                                    addText(targetClar.getString("person"));
+                                                    addText("notes:");
+                                                    addText(targetClar.getString("notes"));
+                                                    addText("puzzle:");
+                                                    addText(puzzle);
+                                                    addText("answer:");
+                                                    addText(answer.toString());
+                                                    if (answer.size() == 1) {
+                                                        ans = null;
+                                                        name_chars = answer.get(0).toCharArray();
+                                                        puzzle_chars = puzzle.toCharArray();
+                                                        for (int j = 0; j < name_chars.length; j++) {
+                                                            if (name_chars[j] != puzzle_chars[j])
+                                                                ans = name_chars[j] + "";
+                                                        }
+                                                        Log.w("TestInfo", "Due to TEST, return now!");
+                                                        if (ans != null) {
+                                                            if (uims.post_pingjiao_tijiao(list.get(i), ans)) {
+                                                                addText("【评教成功！】");
+                                                            }
                                                         }
                                                     }
                                                 }
+                                            }catch (Exception e){
+                                                for (int i = 0; i < list.size(); i++) {
+                                                    pingjiao_inf = uims.post_pingjiao(list.get(i));
+                                                    targetClar = pingjiao_inf.getJSONObject("targetClar");
+                                                    addText("person:");
+                                                    addText(targetClar.getString("person"));
+                                                    addText("notes:");
+                                                    addText(targetClar.getString("notes"));
+                                                    if (uims.post_pingjiao_tijiao(list.get(i), "")) {
+                                                        addText("【评教成功！】");
+                                                    }
+                                                }
+                                                addText("【评教可能已经完成，请返回后重新操作以确认！】");
+                                                throw e;
                                             }
 
                                             addText("【评教已完成！】");

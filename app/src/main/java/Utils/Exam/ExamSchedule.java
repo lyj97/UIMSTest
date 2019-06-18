@@ -156,15 +156,17 @@ public class ExamSchedule {
         }
     }
 
-    public static boolean add(String title, String time){
-        return add(title, "", time);
+    public static boolean add(String title, String time, String place){
+        return add(title, "", time, place);
     }
 
-    public static boolean add(String title, String xkkh, String time){
+    public static boolean add(String title, String xkkh, String time, String place){
+        if(place == null) place = "";
         JSONObject object = new JSONObject();
         object.put("title", title);
         object.put("xkkh", xkkh);
         object.put("time", time);
+        object.put("place", place);
         object.put("flagTop", false);
         Log.i("ExamSchedule", "Added:\t" + object);
         if(!title_index.containsKey(object.getString("title"))) {

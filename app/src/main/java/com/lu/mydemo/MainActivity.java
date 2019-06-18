@@ -82,11 +82,6 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scrolling);
 
-        //TODO TEST
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
-//        getSupportActionBar().setTitle("");
-
 //        sp = this.getSharedPreferences("ScoreStatistics", Context.MODE_PRIVATE);
 //        isShow = sp.getBoolean("show", true);
 
@@ -147,21 +142,10 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-    }
+        long finishTime = System.currentTimeMillis();
+        Log.i("Time", (finishTime - (long) getIntent().getBundleExtra("bundle").get("startTime")) / 1000 + "");
 
-//    private void changeScoreStatisticsState(boolean show) {
-//        if (show) {
-//            scoreStatisticsTextViewControl.setText("⇧隐藏成绩统计");
-//            scoreStatisticsTextView.setVisibility(View.VISIBLE);
-//            isShow = true;
-//            sp.edit().putBoolean("show", true).apply();
-//        } else {
-//            scoreStatisticsTextViewControl.setText("⇩展开成绩统计");
-//            scoreStatisticsTextView.setVisibility(View.INVISIBLE);
-//            isShow = false;
-//            sp.edit().putBoolean("show", false).apply();
-//        }
-//    }
+    }
 
     private void loadScoreList(){
         new Thread(new Runnable() {

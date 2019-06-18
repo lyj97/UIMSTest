@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    >
+
+    <LinearLayout
+        android:id="@+id/add_exam_pop_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true"
+        android:background="#00000000"
+        >
+
+        <TextView
+            android:id="@+id/add_exam_pop_layout_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="添加考试"
+            android:textSize="16dp"
+            android:textColor="@color/app_white"
+            android:background="@drawable/shape_rectangle_with_top_radius"
+            />
+
+        <LinearLayout
+            android:id="@+id/add_exam_pop_layout_main_information"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/background_login"
+            >
+
+            <EditText
+                android:id="@+id/add_exam_add_title_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="科目"
+                android:textColor="@color/app_white"
+                />
+
+            <TextView
+                android:id="@+id/add_exam_add_date_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="10dp"
+                android:padding="10dp"
+                android:textSize="16sp"
+                android:hint="日期"
+                />
+
+            <TextView
+                android:id="@+id/add_exam_add_time_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="10dp"
+                android:textSize="16sp"
+                android:hint="时间"
+                />
+
+            <EditText
+                android:id="@+id/add_exam_add_place_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="10dp"
+                android:textSize="16sp"
+                android:hint="地点"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/shape_rectangle_bottom_no_radius"
+            >
+
+            <Button
+                android:id="@+id/add_exam_commit_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_internet_background"
+                android:layout_margin="10dp"
+                android:text="确定"
+                />
+
+            <Button
+                android:id="@+id/add_exam_cancel_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape_with_white_background"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
+                android:text="取消"
+                />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</RelativeLayout>

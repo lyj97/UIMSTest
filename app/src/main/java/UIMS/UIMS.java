@@ -1,6 +1,5 @@
 package UIMS;
 
-import android.content.Context;
 import android.util.Log;
 
 import net.sf.json.JSONArray;
@@ -20,7 +19,6 @@ import okhttp3.CookieJar;
 import okhttp3.FormBody;
 import okhttp3.HttpUrl;
 import okhttp3.MediaType;
-import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -81,7 +79,7 @@ public class UIMS {
             .followSslRedirects(false)
             .connectTimeout(10, TimeUnit.SECONDS)
             .build();
-    MultipartBody.Builder builder;
+//    MultipartBody.Builder builder;
     MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
     public UIMS(String user, String pass){
@@ -91,7 +89,7 @@ public class UIMS {
 
     public boolean connectToUIMS() {//连接教务，获取第一个JSON
         try {
-            builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
+//            builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
             Request request = new Request.Builder()
                     .url(Address.hostAddress + "/ntms/")
                     .header("User-Agent", "Mozilla/5.0 (Windows NT 9.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36")

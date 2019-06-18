@@ -101,8 +101,8 @@ public class ExamFragment extends Fragment {
                 popupWindow = new AddCourseExamPopupWindow(context, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(context, "确认添加:" + popupWindow.getTitle(), Toast.LENGTH_SHORT).show();
-                        ExamSchedule.add(popupWindow.getTitle(), popupWindow.getExam_date() + " " + popupWindow.getExam_time());
+                        Toast.makeText(context, "已添加:" + popupWindow.getTitle(), Toast.LENGTH_SHORT).show();
+                        ExamSchedule.add(popupWindow.getTitle(), popupWindow.getExam_date() + " " + popupWindow.getExam_time(), popupWindow.getExam_place());
                         NoneScoreCourseFragment.setFlush();
                         flushList();
                     }
@@ -161,7 +161,8 @@ public class ExamFragment extends Fragment {
                         .show();
                 tempJsonObject = new JSONObject();
                 tempJsonObject.put("title", dataList.get(adapterPosition).get("title"));
-                tempJsonObject.put("time", dataList.get(adapterPosition).get("time"));
+                tempJsonObject.put("time", ((String) dataList.get(adapterPosition).get("time")).substring(0, 10) + ((String) dataList.get(adapterPosition).get("time")).substring(15));
+                tempJsonObject.put("place", dataList.get(adapterPosition).get("place"));
                 tempJsonObject.put("xkkh", "");
                 tempJsonObject.put("flagTop", false);
                 ExamSchedule.delete(adapterPosition);
@@ -238,6 +239,12 @@ public class ExamFragment extends Fragment {
                 map.put("title", temp.getString("title"));
                 map.put("time", temp.getString("time").split(" ")[0] + "(" + dayOfWeekName[day_of_week] + ") " + temp.getString("time").split(" ")[1]);
                 map.put("flagTop", temp.getBoolean("flagTop"));
+                try{
+                    map.put("place", temp.getString("place"));
+                }catch (Exception e){
+//                    e.printStackTrace();
+                    map.put("place", "");
+                }
 
                 int day_distance = getTimeDistance(new Date(), exam_date);
 
@@ -295,7 +302,7 @@ public class ExamFragment extends Fragment {
             catch (Exception e){
                 e.printStackTrace();
             }
-            holder.setData((String) mDataList.get(position).get("title"), (String) mDataList.get(position).get("time"), (String) mDataList.get(position).get("time_left"), flagTop);
+            holder.setData((String) mDataList.get(position).get("title"), (String) mDataList.get(position).get("time"), (String) mDataList.get(position).get("time_left"), flagTop, (String) mDataList.get(position).get("place"));
         }
 
         class ViewHolder extends MainAdapter.ViewHolder {
@@ -311,7 +318,7 @@ public class ExamFragment extends Fragment {
                 tvTime = itemView.findViewById(R.id.news_list_item_time);
             }
 
-            public void setData(String title, String time, String time_left, boolean flagTop) {
+            public void setData(String title, String time, String time_left, boolean flagTop, String place) {
 
                 tvTitle.setTextColor(ColorManager.getNews_normal_text_color());
 
@@ -324,7 +331,12 @@ public class ExamFragment extends Fragment {
                     this.tvTitle.setText(title);
                 }
 
-                this.tvDepartment.setText(time);
+                if(place != null && place.length() > 0){
+                    this.tvDepartment.setText(time + ", " + place);
+                }
+                else {
+                    this.tvDepartment.setText(time);
+                }
                 this.tvTime.setText(time_left);
 
                 if(time_left.length() == 0 && time.length() == 0){
@@ -369,6 +381,9 @@ public class ExamFragment extends Fragment {
         endCalendar.setTime(endDate);
         long beginTime = beginCalendar.getTime().getTime();
         long endTime = endCalendar.getTime().getTime();
+
+        if(beginTime > endTime) return -1;//只适用于判断已过endtime
+
         int betweenDays = (int)((endTime - beginTime) / (1000 * 60 * 60 *24));//先算出两时间的毫秒数之差大于一天的天数
 
         endCalendar.add(Calendar.DAY_OF_MONTH, -betweenDays);//使endCalendar减去这些天数，将问题转换为两时间的毫秒数之差不足一天的情况
@@ -376,7 +391,7 @@ public class ExamFragment extends Fragment {
         if(beginCalendar.get(Calendar.DAY_OF_MONTH)==endCalendar.get(Calendar.DAY_OF_MONTH))//比较两日期的DAY_OF_MONTH是否相等
             return betweenDays + 1;	//相等说明确实跨天了
         else
-            return betweenDays + 0;	//不相等说明确实未跨天
+            return betweenDays;	//不相等说明确实未跨天
     }
 
 }

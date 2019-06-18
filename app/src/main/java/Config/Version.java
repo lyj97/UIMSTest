@@ -4,7 +4,8 @@ public class Version {
 
     private static int versionMajor = 1;
     private static int versionMinor = 2;
-    private static int versionPatch = 9;
+    private static int versionPatch = 10;
+    private static boolean isBeta = true;
 
     public static String getVersionName(){
         return versionMajor + "." + versionMinor + "." + versionPatch;
@@ -14,4 +15,7 @@ public class Version {
         return versionMajor * 10000 + versionMinor * 100 + versionPatch;
     }
 
+    public static boolean isIsBeta() {
+        return isBeta;
+    }
 }

@@ -131,7 +131,12 @@ public class LoginActivity extends Activity {
         test.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(LoginActivity.this, PingjiaoActivity.class));
+                if(isLocalValueLoaded){
+                    startActivity(new Intent(LoginActivity.this, PingjiaoActivity.class));
+                }
+                else{
+                    showAlert("还没有已经保存的信息哦，点击\"更新信息\"再试试吧(*^_^*).");
+                }
             }
         });
 
@@ -310,17 +315,21 @@ public class LoginActivity extends Activity {
         changeTheme();
 
         if(!isLocalValueLoaded && isLocalInformationAvailable()) loadLocalInformation(false);
-        else loadCourseInformation();
+//        else loadCourseInformation();
 
         if(isLocalValueLoaded && isCourseNeedReload){
             showWarningAlertWithCancel_OKButton("需要刷新课程信息", "当前学期已经改变，请刷新本地课程信息。");
         }
 
-//        if(reLoadTodayCourse) loadCourseInformation();
+        if(reLoadTodayCourse) loadCourseInformation();
 
     }
 
-
+    @Override
+    protected void onStop() {
+        super.onStop();
+        reLoadTodayCourse = true;
+    }
 
     public void hideMainView(){
         login_main_view.startAnimation(mHiddenAction);
@@ -468,7 +477,11 @@ public class LoginActivity extends Activity {
                     public void run() {
                         try {
                             if (show) {
+                                long startTime = System.currentTimeMillis();
+                                Bundle bundle = new Bundle();
+                                bundle.putLong("startTime", startTime);
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                intent.putExtra("bundle", bundle);
                                 startActivity(intent);
 //                            overridePendingTransition(R.anim.up_in, R.anim.up_out);
                             }

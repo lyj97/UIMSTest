@@ -200,7 +200,7 @@ public class NoneScoreCourseFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         Toast.makeText(context, "已添加【" + popupWindow.getTitle() + "】考试", Toast.LENGTH_SHORT).show();
-                        ExamSchedule.add(popupWindow.getTitle(), popupWindow.getExam_date() + " " + popupWindow.getExam_time());
+                        ExamSchedule.add(popupWindow.getTitle(), popupWindow.getExam_date() + " " + popupWindow.getExam_time(), popupWindow.getExam_place());
                         flushList();
                         ExamFragment.setFlush();
                     }

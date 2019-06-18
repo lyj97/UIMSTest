@@ -52,7 +52,8 @@ public class AboutActivity extends AppCompatActivity {
 
         changeTheme();
 
-        application_version_name.setText("Ver " + Version.getVersionName());
+        if(Version.isIsBeta()) application_version_name.setText("Ver " + Version.getVersionName() + " (BETA)");
+        else application_version_name.setText("Ver " + Version.getVersionName());
 
         application_icon_text_view.setOnClickListener(new View.OnClickListener() {
             @Override

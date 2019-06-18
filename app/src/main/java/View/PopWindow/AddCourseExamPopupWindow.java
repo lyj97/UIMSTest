@@ -37,6 +37,7 @@ public class AddCourseExamPopupWindow extends PopupWindow {
     private EditText title_text;
     private TextView exam_date_text;
     private TextView exam_time_text;
+    private EditText exam_place_text;
 
     private Button commit_button;
     private Button cancel_button;
@@ -44,6 +45,7 @@ public class AddCourseExamPopupWindow extends PopupWindow {
     private String title;
     private String exam_date;
     private String exam_time;
+    private String exam_place;
 
     public Animation mExitAnim;//退出动画
     public Animation mEnterAnim;//进入动画
@@ -62,20 +64,22 @@ public class AddCourseExamPopupWindow extends PopupWindow {
         ischangeTimeSet = false;
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mMenuView = inflater.inflate(R.layout.pop_window_add_course_schedule, null);
-        layout_title = mMenuView.findViewById(R.id.course_schedule_change_pop_layout_title);
-        title_text = mMenuView.findViewById(R.id.course_schedule_change_add_title_text);
-        exam_date_text = mMenuView.findViewById(R.id.course_schedule_change_add_pre_time_text);
-        exam_time_text = mMenuView.findViewById(R.id.course_schedule_change_add_change_time_text);
-        commit_button = mMenuView.findViewById(R.id.course_schedule_change_commit_button);
-        cancel_button = mMenuView.findViewById(R.id.course_schedule_change_cancel_button);
+        mMenuView = inflater.inflate(R.layout.pop_window_add_exam, null);
+        layout_title = mMenuView.findViewById(R.id.add_exam_pop_layout_title);
+        title_text = mMenuView.findViewById(R.id.add_exam_add_title_text);
+        exam_date_text = mMenuView.findViewById(R.id.add_exam_add_date_text);
+        exam_time_text = mMenuView.findViewById(R.id.add_exam_add_time_text);
+        exam_place_text = mMenuView.findViewById(R.id.add_exam_add_place_text);
+        commit_button = mMenuView.findViewById(R.id.add_exam_commit_button);
+        cancel_button = mMenuView.findViewById(R.id.add_exam_cancel_button);
 
         changeTheme();
 
-        layout_title.setText("添加考试");
-        title_text.setHint("科目");
-        exam_date_text.setText("日期");
-        exam_time_text.setText("时间");
+//        layout_title.setText("添加考试");
+//        title_text.setHint("科目");
+//        exam_date_text.setText("日期");
+//        exam_time_text.setText("时间");
+//        exam_place_text.setText("地点");
 
         //取消按钮
         cancel_button.setOnClickListener(new OnClickListener() {
@@ -91,6 +95,7 @@ public class AddCourseExamPopupWindow extends PopupWindow {
             @Override
             public void onClick(View v) {
                 title = (title_text.getText() == null) ? "" : title_text.getText().toString();
+                exam_place = (exam_place_text.getText() == null) ? "" : exam_place_text.getText().toString();
                 if (!ispreTimeSet) {
                     commit_button.setText("请设置日期");
                     commit_button.setBackground(ColorManager.getInternetInformationButtonBackground_disable_full());
@@ -104,8 +109,6 @@ public class AddCourseExamPopupWindow extends PopupWindow {
                     commit_button.setEnabled(false);
                     return;
                 }
-//                    pre_time_text.setError("请输入要改变课程的日期");
-//                if(!ischangeTimeSet) change_time_text.setError("请输入改变后的日期");
 
                 if (ExamSchedule.containsTitle(title)) {
                     if (overWrite) {
@@ -269,13 +272,17 @@ public class AddCourseExamPopupWindow extends PopupWindow {
 
     private void changeTheme(){
         Log.i("Theme", "Change theme.");
-        mMenuView.findViewById(R.id.course_schedule_change_pop_layout_title).setBackgroundColor(ColorManager.getPrimaryColor());
-        mMenuView.findViewById(R.id.course_schedule_change_pop_layout_main_information).setBackground(ColorManager.getMainBackground());
+        mMenuView.findViewById(R.id.add_exam_pop_layout_title).setBackgroundColor(ColorManager.getPrimaryColor());
+        mMenuView.findViewById(R.id.add_exam_pop_layout_main_information).setBackground(ColorManager.getMainBackground());
         commit_button.setBackground(ColorManager.getInternetInformationButtonBackground_full());
     }
 
     public String getTitle() {
         return title;
+    }
+
+    public String getExam_place() {
+        return exam_place;
     }
 
     public String getExam_date() {

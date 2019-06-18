@@ -87,6 +87,8 @@ public class MainAdapter extends BaseAdapter<MainAdapter.ViewHolder> {
         }
 
         public void setData(String title, String department, String time, boolean flagTop){}
+
+        public void setData(String title, String department, String time, boolean flagTop, String place){}
     }
 
 }
