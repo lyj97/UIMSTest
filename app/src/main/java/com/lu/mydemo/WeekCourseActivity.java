@@ -50,6 +50,7 @@ public class WeekCourseActivity extends AppCompatActivity implements View.OnClic
     AlertDialog alertDialog;
 
     int now_week;
+    int weeks;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +60,7 @@ public class WeekCourseActivity extends AppCompatActivity implements View.OnClic
         Bundle bundle =  getIntent().getBundleExtra("bundle");
         target = (int) bundle.getLong("now_week");
         now_week = target;
+        weeks = (int) bundle.getLong("weeks");
 
         titleTextView = findViewById(R.id.week_course_title);
         layout = findViewById(R.id.weekCourseLayout);
@@ -110,7 +112,7 @@ public class WeekCourseActivity extends AppCompatActivity implements View.OnClic
 
         //设置周次选择属性
         mWeekView.curWeek((int)LoginActivity.now_week)
-                .itemCount(LoginActivity.weeks > 0 ? LoginActivity.weeks : 20)
+                .itemCount(weeks)
                 .callback(new IWeekView.OnWeekItemClickedListener() {
                     @Override
                     public void onWeekClicked(int week) {
@@ -182,7 +184,7 @@ public class WeekCourseActivity extends AppCompatActivity implements View.OnClic
      * 对话框修改当前周次
      */
     protected void onWeekLeftLayoutClicked() {
-        final String items[] = new String[20];
+        final String[] items = new String[weeks];
         int itemCount = mWeekView.itemCount();
         for (int i = 0; i < itemCount; i++) {
             items[i] = "第" + (i + 1) + "周";
@@ -203,6 +205,7 @@ public class WeekCourseActivity extends AppCompatActivity implements View.OnClic
                 if (target != -1) {
                     mWeekView.curWeek(target + 1).updateView();
                     mTimetableView.changeWeekForce(target + 1);
+                    Toast.makeText(WeekCourseActivity.this, "当前周数由学期设置自动计算，您的设置不会被保存！", Toast.LENGTH_SHORT).show();
                 }
             }
         });

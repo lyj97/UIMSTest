@@ -19,6 +19,7 @@ import com.lu.mydemo.MainActivity;
 import com.lu.mydemo.R;
 import com.tapadoo.alerter.Alerter;
 
+import CJCX.CJCX;
 import Config.ColorManager;
 import UIMS.UIMS;
 
@@ -97,6 +98,15 @@ public class LoginGetScorePopupWindow extends PopupWindow {
                                     if (uims.getCurrentUserInfo(false)) {
                                         uims.getScoreStatistics();
                                         uims.getRecentScore();
+                                        if(MainActivity.isCjcx_enable()) {
+                                            CJCX cjcx = new CJCX(uims.getUser(), uims.getPass());
+                                            if (cjcx.login()) {
+                                                if (cjcx.getScore()) {
+                                                    context.showAlert("CJCX查询成功！");
+                                                    MainActivity.saveCJCXScore();
+                                                }
+                                            }
+                                        }
                                         LoginActivity.saveScoreJSON();
                                         context.showAlert("成绩刷新成功！");
                                         context.reloadScoreList();
@@ -126,13 +136,29 @@ public class LoginGetScorePopupWindow extends PopupWindow {
                                 }
                             } else {
 //                            showResponse("Login failed!");
+                                if(MainActivity.isCjcx_enable()) {
+                                    context.showLoading("连接UIMS失败！\n\n" +
+                                            "正在尝试校外(CJCX)查询，请稍候...");
+                                    CJCX cjcx = new CJCX(uims.getUser(), uims.getPass());
+                                    if (cjcx.login()) {
+                                        if (cjcx.getScore()) {
+                                            context.showAlert("CJCX查询成功！");
+                                            MainActivity.saveCJCXScore();
+                                            context.reloadScoreList();
+                                            context.dismissGetScorePopWindow();
+                                            return;
+                                        }
+                                    }
+                                }
+                                LoginActivity.saveScoreJSON();
                                 context.runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
                                         Alerter.hide();
                                         context.showWarningAlert("", "登录失败，请检查是否连接校园网！\n\n" +
                                                 "您可以连接JLU.NET或JLU.TEST;\n" +
-                                                "若您未开通校园网，可以考虑连接JLU.PC，此时无需登录到网络，完成“信息更新”后即可断开，切回流量。");
+                                                "若您未开通校园网，可以考虑连接JLU.PC，此时无需登录到网络，完成“信息更新”后即可断开，切回流量。\n\n" +
+                                                "若您在校外，请在设置中勾选\"启用校外查询(CJCX)\"");
                                         dealFinish("重新登录");
                                         return;
                                     }

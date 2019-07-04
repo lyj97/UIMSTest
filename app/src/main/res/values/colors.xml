@@ -28,9 +28,9 @@
 
     <color name="colorPrimary_Pink">#E6F378C1</color>
     <color name="colorPrimaryDark_Pink">#E6F378C1</color>
-    <color name="colorAccent_Pink">#DAEB32BD</color>
-    <color name="color_alerter_background_pink">#CCB149D8</color>
-    <color name="color_notice_text_pink">#E6DB56D9</color>
+    <color name="colorAccent_Pink">#DABA32EB</color>
+    <color name="color_alerter_background_pink">#D7DA39EC</color>
+    <color name="color_notice_text_pink">#E6AA58DB</color>
     <color name="color_collected_news_text_pink">#994AD1</color>
     <color name="color_spinner_background_pink">#EEB636DA</color>
     <color name="color_getSaved_button_bg_pink">#E6DF5DB9</color>

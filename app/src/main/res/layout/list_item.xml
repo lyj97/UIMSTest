@@ -5,8 +5,8 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:gravity="center"
-    android:layout_marginStart="5dp"
-    android:layout_marginEnd="5dp"
+    android:layout_marginTop="5dp"
+    android:padding="2dp"
     android:background="@drawable/listitem_selector"
     android:orientation="horizontal">
 
@@ -45,7 +45,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="context"
+                    android:text="context1"
                     android:textSize="12sp" />
 
                 <TextView
@@ -53,7 +53,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="context"
+                    android:text="context3"
                     android:textSize="12sp" />
 
             </LinearLayout>
@@ -79,7 +79,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:textStyle="bold"
-                    android:text="score"
+                    android:text="score\n(context2)"
                     android:textSize="15sp" />
 
             </LinearLayout>
@@ -105,7 +105,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:textStyle="bold"
-                    android:text="g_score"
+                    android:text="g_score\n(context4)"
                     android:textSize="15sp" />
 
             </LinearLayout>

@@ -366,6 +366,7 @@ public class NoneScoreCourseFragment extends Fragment {
                         getInformationFailed();
                     }
                 } catch (Exception e){
+                    e.printStackTrace();
                     showResponse("加载数据失败！");
                     ((NoneScoreCourseActivity) context).finish();
                 }
@@ -374,11 +375,11 @@ public class NoneScoreCourseFragment extends Fragment {
     }
 
     private void getNoneScoreCourseSuccess(){
-        Alerter.hide();
         isCourseListShowing = true;
         context.runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                Alerter.hide();
                 deleteSavedCourseInformationButton.getLayoutParams().height = delete_local_course_information_button_layout_hight;
                 deleteSavedCourseInformationButton.setVisibility(View.VISIBLE);
                 flushList(getCourseList());
@@ -430,6 +431,7 @@ public class NoneScoreCourseFragment extends Fragment {
 
                 entry = iterator.next();
                 courseJSON = entry.getValue();
+//                Log.i("Course", courseJSON.toString());
                 courseInfo = courseJSON.getJSONObject("lesson").getJSONObject("courseInfo");
 //                teachingTerm = courseJSON.getJSONObject("teachingTerm");
                 apl = courseJSON.getJSONObject("apl");
@@ -437,7 +439,19 @@ public class NoneScoreCourseFragment extends Fragment {
                 courseName = courseInfo.getString("courName");
 //                termName = teachingTerm.getString("termName");
                 selectType = apl.getString("selectType");
-                credit = apl.getString("credit");
+                try {
+                    credit = apl.getString("credit");
+                } catch (Exception e){
+                    try {
+                        credit = apl.getJSONObject("planDetail").getString("credit");
+                    }catch (Exception e1){
+                        e1.printStackTrace();
+                        credit = "--";
+                        showWarningAlert("Error", e1.getMessage());
+                    }
+//                    e.printStackTrace();
+                }
+
 
                 map.put("title", courseName + "（" + courseSelectTypeId_courseSelectTypeName.get(selectType) + "）");
                 map.put("context1", "学分：" + credit);

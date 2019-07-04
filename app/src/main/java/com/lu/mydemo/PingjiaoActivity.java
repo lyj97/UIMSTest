@@ -29,6 +29,7 @@ public class PingjiaoActivity extends AppCompatActivity {
 
     TextView backText;
     TextView mainText;
+    double Ver = 0.1;
 
     UIMS uims;
     boolean isLogin = false;
@@ -56,6 +57,8 @@ public class PingjiaoActivity extends AppCompatActivity {
 
         showWarningAlertWithCancel_OKButton("评教", "需要评教吗？\n" +
                 "评价方式：全部好评，没有建议。");
+
+        addText("评教测试版本：" + Ver);
     }
 
     public void addText(final String str){
@@ -209,11 +212,6 @@ public class PingjiaoActivity extends AppCompatActivity {
                                                 addText("【您已经完成评教！】");
                                                 return;
                                             }
-                                            HashSet<String> names = uims.getClassStudentName();
-                                            System.out.println(names);
-                                            System.out.println(list);
-                                            addText("names:");
-                                            addText(names.toString());
                                             addText("list:");
                                             addText(list.toString());
 
@@ -227,6 +225,11 @@ public class PingjiaoActivity extends AppCompatActivity {
                                             String ans;
 
                                             try {
+                                                HashSet<String> names = uims.getClassStudentName();
+                                                System.out.println(names);
+                                                System.out.println(list);
+                                                addText("names:");
+                                                addText(names.toString());
                                                 for (int i = 0; i < list.size(); i++) {
                                                     pingjiao_inf = uims.post_pingjiao(list.get(i));
                                                     puzzle = pingjiao_inf.getString("puzzle");

@@ -14,6 +14,8 @@ public class ColorConfigActivity extends AppCompatActivity {
 
     private LinearLayout activity_color_config_layout;
 
+//    private LinearLayout config_text;
+
     private TextView text_view_blue;
     private TextView text_view_pink;
     private TextView text_view_green;
@@ -28,6 +30,8 @@ public class ColorConfigActivity extends AppCompatActivity {
         setContentView(R.layout.activity_color_config);
 
         activity_color_config_layout = findViewById(R.id.activity_color_config_layout);
+
+//        config_text = findViewById(R.id.color_config_text_layout);
 
         text_view_blue = findViewById(R.id.color_config_blue_text);
         text_view_pink = findViewById(R.id.color_config_pink_text);
@@ -68,6 +72,8 @@ public class ColorConfigActivity extends AppCompatActivity {
                 }
             }
         };
+
+//        config_text.setOnClickListener(onClickListener);
 
         text_view_blue.setOnClickListener(onClickListener);
         text_view_pink.setOnClickListener(onClickListener);

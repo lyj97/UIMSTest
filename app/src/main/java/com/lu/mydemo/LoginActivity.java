@@ -254,6 +254,7 @@ public class LoginActivity extends Activity {
 
                     Bundle bundle = new Bundle();
                     bundle.putLong("now_week", now_week);
+                    bundle.putLong("weeks", weeks);
 
                     intent.putExtra("bundle", bundle);
                     startActivity(intent);
@@ -454,6 +455,7 @@ public class LoginActivity extends Activity {
                     UIMS.setCourseJSON(JSONObject.fromObject(sp.getString("CourseJSON", "")));
 
                     loadCourseInformation();
+//                    MainActivity.getScoreList();
                 }
 
                 final JSONObject teachingTermJSON = UIMS.getTeachingTermJSON();
@@ -477,11 +479,11 @@ public class LoginActivity extends Activity {
                     public void run() {
                         try {
                             if (show) {
-                                long startTime = System.currentTimeMillis();
+//                                long startTime = System.currentTimeMillis();
                                 Bundle bundle = new Bundle();
-                                bundle.putLong("startTime", startTime);
+//                                bundle.putLong("startTime", startTime);
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                intent.putExtra("bundle", bundle);
+//                                intent.putExtra("bundle", bundle);
                                 startActivity(intent);
 //                            overridePendingTransition(R.anim.up_in, R.anim.up_out);
                             }
@@ -525,10 +527,11 @@ public class LoginActivity extends Activity {
             });
             reLoadTodayCourse = false;
         } catch (Exception e){
+            e.printStackTrace();
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    courseList.setAdapter(new noCourseBetterAdapter(context, getCourseListNotice("暂无课程信息\n请登录后点击\"更新信息\"刷新本地数据."), R.layout.today_course_list_item, new String[]{"index", "title", "context1"}, new int[]{R.id.get_none_score_course_title_index, R.id.get_none_score_course_title, R.id.get_none_score_course_context1}));
+                    courseList.setAdapter(new noCourseBetterAdapter(context, getCourseListNotice("暂无课程信息\n请点击\"更新信息\"登录并刷新本地数据."), R.layout.today_course_list_item, new String[]{"index", "title", "context1"}, new int[]{R.id.get_none_score_course_title_index, R.id.get_none_score_course_title, R.id.get_none_score_course_context1}));
                     if(!listHaveHeadFoot) {
                         courseList.addHeaderView(new ViewStub(context));
                         courseList.addFooterView(new ViewStub(context));
@@ -847,7 +850,13 @@ public class LoginActivity extends Activity {
         cal.setTime(new Date());
 
         JSONObject teachingTermJSON = UIMS.getTeachingTermJSON();
-        JSONObject value = teachingTermJSON.getJSONArray("value").getJSONObject(0);
+        JSONObject value;
+        try {
+            value = teachingTermJSON.getJSONArray("value").getJSONObject(0);
+        }catch (Exception e){
+            e.printStackTrace();
+            value = teachingTermJSON;
+        }
         long startTime = df.parse(value.getString("startDate").split("T")[0]).getTime();
         final long temp_week = (time - startTime) / (1000 * 3600 * 24 * 7) + 1;
 

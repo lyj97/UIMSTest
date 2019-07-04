@@ -718,6 +718,7 @@ public class UIMS {
             scoreJSON = JSONObject.fromObject(entityStringBuilder.toString());
 
             studentJSON = scoreJSON.getJSONArray("value").getJSONObject(0).getJSONObject("student");
+            setStudentJSON(studentJSON);
 
             scoreJSON = addScorePercent(scoreJSON);
             dealScorePercent();
@@ -821,7 +822,14 @@ public class UIMS {
         //TODO TEST
 //        if(year == null) year = "2016";
 
-        if(adcId== null || department== null || year== null || school== null) return null;
+        if(adcId== null || department== null || year== null || school== null) {
+            throw new NegativeArraySizeException("Error! Get names failed!" +
+                    1 + ":\t" + adcId + "\n" +
+                    2 + ":\t" + department + "\n" +
+                    3 + ":\t" + year + "\n" +
+                    4 + ":\t" + school);
+//            return null;
+        }
 
         try {
             JSONObject request_json1 = new JSONObject();
@@ -921,8 +929,6 @@ public class UIMS {
 //        System.out.println("jssionid:\t" + jssionid);
 //        System.out.println("student_id:\t" + student_id);
 //        System.out.println("term_id:\t" + term_id);
-
-            HashMap<String, String> map = new HashMap();
 
             JSONObject request_json1 = new JSONObject();
             request_json1.put("blank", "Y");

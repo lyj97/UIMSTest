@@ -32,6 +32,7 @@ public class AboutActivity extends AppCompatActivity {
     private TextView link_to_group;
 
     private TextView navigation_back;
+    private TextView settingText;
 
     private TextView change_color_text;
 
@@ -47,6 +48,7 @@ public class AboutActivity extends AppCompatActivity {
         link_to_group = findViewById(R.id.activity_about_link_to_group);
 
         navigation_back = findViewById(R.id.activity_about_navigation_back_text);
+        settingText = findViewById(R.id.activity_about_navigation_setting_text);
 
         change_color_text = findViewById(R.id.activity_about_change_color);
 
@@ -104,6 +106,13 @@ public class AboutActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+
+        settingText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(AboutActivity.this, SettingActivity.class));
             }
         });
 

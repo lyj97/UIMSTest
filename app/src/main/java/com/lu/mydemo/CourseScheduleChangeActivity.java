@@ -73,10 +73,9 @@ public class CourseScheduleChangeActivity extends AppCompatActivity {
 
     private Spinner spinner;
     private ArrayList<String> termList;
-    private boolean opening = true;//标识Activity刚刚打开，不要设置教学周
 
-    public HashMap<String, String> termName_TermId = new HashMap<>();
-    public HashMap<String, String> termId_termName = new HashMap<>();
+    public static HashMap<String, String> termName_TermId = new HashMap<>();
+    public static HashMap<String, String> termId_termName = new HashMap<>();
 
     private static boolean isRecommendShowed = false;
     private static boolean isRecommendAllowed;
@@ -215,15 +214,19 @@ public class CourseScheduleChangeActivity extends AppCompatActivity {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if(opening) {
-                    Log.w("SetTerm", "Ignored! (opening)");
-                    opening = false;
-                    return;
-                }
                 String term = termList.get(position);
                 Log.i("Term", term);
-                JSONObject termJSON = UIMS.getTermJSON(termName_TermId.get(term));
-                if(termJSON != null){
+                if(term != null){
+                    if(term.equals(UIMS.getTermName())){
+                        Log.i("SetTerm", "Ignored! Term not change.");
+                        LoginActivity.setIsCourseNeedReload(false);
+                        return;
+                    }
+                    JSONObject termJSON = UIMS.getTermJSON(term);
+                    if(termJSON == null){
+                        showWarningAlert("ERROR", "TermJSON is null.");
+                        return;
+                    }
                     Log.i("TermJSON", termJSON.toString());
                     UIMS.setTeachingTerm(termJSON);
                     LoginActivity.saveTeachingTerm();
@@ -253,7 +256,7 @@ public class CourseScheduleChangeActivity extends AppCompatActivity {
             getRecommend();
         }
 
-        opening = false;
+//        opening = false;
     }
 
     private void getRecommend(){
@@ -382,7 +385,7 @@ public class CourseScheduleChangeActivity extends AppCompatActivity {
         }
     }
 
-    private ArrayList<String> getTermArray(){
+    public static ArrayList<String> getTermArray(){
         ArrayList<String> terms = new ArrayList<>();
         termId_termName = UIMS.getTermId_termName();
         Iterator<Map.Entry<String, String>> iterator = termId_termName.entrySet().iterator();
@@ -427,20 +430,6 @@ public class CourseScheduleChangeActivity extends AppCompatActivity {
         });
     }
 
-    public void showAlert(final String message) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Alerter.create(CourseScheduleChangeActivity.this)
-                        .setTitle("提示")
-                        .setText(message)
-                        .enableSwipeToDismiss()
-                        .setBackgroundColorInt(ColorManager.getTopAlertBackgroundColor())
-                        .show();
-            }
-        });
-    }
-
     public void showLoading(final String message) {
         runOnUiThread(new Runnable() {
             @Override
@@ -457,6 +446,20 @@ public class CourseScheduleChangeActivity extends AppCompatActivity {
         });
     }
 
+    public void showAlert(final String message) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Alerter.create(CourseScheduleChangeActivity.this)
+                        .setTitle("提示")
+                        .setText(message)
+                        .enableSwipeToDismiss()
+                        .setBackgroundColorInt(ColorManager.getTopAlertBackgroundColor())
+                        .show();
+            }
+        });
+    }
+
     public void showAlert(final String title, final String message) {
         runOnUiThread(new Runnable() {
             @Override
@@ -466,6 +469,34 @@ public class CourseScheduleChangeActivity extends AppCompatActivity {
                         .setText(message)
                         .enableSwipeToDismiss()
                         .setBackgroundColorInt(ColorManager.getTopAlertBackgroundColor())
+                        .show();
+            }
+        });
+    }
+
+    public void showWarningAlert(final String message) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Alerter.create(CourseScheduleChangeActivity.this)
+                        .setTitle("提示")
+                        .setText(message)
+                        .enableSwipeToDismiss()
+                        .setBackgroundColorInt(getResources().getColor(R.color.color_alerter_warning_background))
+                        .show();
+            }
+        });
+    }
+
+    public void showWarningAlert(final String title, final String message) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Alerter.create(CourseScheduleChangeActivity.this)
+                        .setTitle(title)
+                        .setText(message)
+                        .enableSwipeToDismiss()
+                        .setBackgroundColorInt(getResources().getColor(R.color.color_alerter_warning_background))
                         .show();
             }
         });

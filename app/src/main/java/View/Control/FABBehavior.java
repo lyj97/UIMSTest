@@ -31,7 +31,7 @@ public class FABBehavior extends FloatingActionButton.Behavior {
     @Override
     public void onNestedPreScroll(@NonNull CoordinatorLayout coordinatorLayout, @NonNull FloatingActionButton child, @NonNull View target, int dx, int dy, @NonNull int[] consumed, int type) {
         if (mainTextArea == null)
-            mainTextArea = coordinatorLayout.findViewById(R.id.activity_main_textView_ScoreStatistics);
+            mainTextArea = coordinatorLayout.findViewById(R.id.activity_main_ScoreStatistics);
 
         Log.i(TAG, "onNestedPreScroll");
         super.onNestedPreScroll(coordinatorLayout, child, target, dx, dy, consumed, type);
