@@ -40,6 +40,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import CJCX.CJCX;
 import Config.ColorManager;
 import Config.Version;
 import ToolFor2045_Site.GetInternetInformation;
@@ -455,7 +456,9 @@ public class LoginActivity extends Activity {
                     UIMS.setCourseJSON(JSONObject.fromObject(sp.getString("CourseJSON", "")));
 
                     loadCourseInformation();
-//                    MainActivity.getScoreList();
+                    CJCX.loadCJCXJSON(getApplicationContext());
+                    MainActivity.context = getApplicationContext();
+                    MainActivity.getScoreList();
                 }
 
                 final JSONObject teachingTermJSON = UIMS.getTeachingTermJSON();

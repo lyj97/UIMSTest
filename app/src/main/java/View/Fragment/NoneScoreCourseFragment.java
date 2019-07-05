@@ -55,6 +55,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import CJCX.CJCX;
 import Config.ColorManager;
 import UIMS.UIMS;
 import Utils.Exam.ExamSchedule;
@@ -151,6 +152,7 @@ public class NoneScoreCourseFragment extends Fragment {
                     if(sharedPreferences.contains("CourseHistory_" + termId)){
                         showLoading("由本地加载【" + termName + "】数据中，请稍候...");
                         UIMS.setCourseHistoryJSON(JSONObject.fromObject(sharedPreferences.getString("CourseHistory_" + termId, "")));
+                        UIMS.dealNoScoreCourseWithCJCXScore(CJCX.getId_JSON().keySet());
                         getNoneScoreCourseSuccess();
                         return;
                     }

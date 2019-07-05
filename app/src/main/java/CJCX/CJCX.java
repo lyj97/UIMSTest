@@ -1,5 +1,8 @@
 package CJCX;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -8,9 +11,12 @@ import java.util.HashMap;
 import Net.HTTP;
 import UIMS.Address;
 import UIMS.GetMD5;
+import UIMS.UIMS;
 import okhttp3.FormBody;
 
 public class CJCX {
+
+    static SharedPreferences sp;
 
     String user;
     String pass;
@@ -101,6 +107,41 @@ public class CJCX {
     public static void setCJCXScoreJSON(JSONObject CJCXScoreJSON) {
         CJCX.CJCXScoreJSON = CJCXScoreJSON;
         dealJSON();
+    }
+
+    public static void saveCJCXJSON(Context context, JSONObject object){
+        if(sp == null){
+            sp = context.getSharedPreferences("CJCXScore", Context.MODE_PRIVATE);
+        }
+        try {
+            sp.edit().putString("CJCXScore", object.toString()).apply();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public static void saveCJCXJSON(Context context){
+        if(sp == null){
+            sp = context.getSharedPreferences("CJCXScore", Context.MODE_PRIVATE);
+        }
+        try {
+            if(CJCX.CJCXScoreJSON != null) {
+                sp.edit().putString("CJCXScore", CJCX.CJCXScoreJSON.toString()).apply();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public static void loadCJCXJSON(Context context){
+        if(sp == null){
+            sp = context.getSharedPreferences("CJCXScore", Context.MODE_PRIVATE);
+        }
+        try{
+            setCJCXScoreJSON(new JSONObject(sp.getString("CJCXScore", "")));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public static HashMap<String, JSONObject> getId_JSON() {

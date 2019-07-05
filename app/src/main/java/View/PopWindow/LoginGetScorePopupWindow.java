@@ -98,7 +98,7 @@ public class LoginGetScorePopupWindow extends PopupWindow {
                                     if (uims.getCurrentUserInfo(false)) {
                                         uims.getScoreStatistics();
                                         uims.getRecentScore();
-                                        if(MainActivity.isCjcx_enable()) {
+                                        if(MainActivity.isCJCX_enable()) {
                                             CJCX cjcx = new CJCX(uims.getUser(), uims.getPass());
                                             if (cjcx.login()) {
                                                 if (cjcx.getScore()) {
@@ -136,7 +136,7 @@ public class LoginGetScorePopupWindow extends PopupWindow {
                                 }
                             } else {
 //                            showResponse("Login failed!");
-                                if(MainActivity.isCjcx_enable()) {
+                                if(MainActivity.isCJCX_enable()) {
                                     context.showLoading("连接UIMS失败！\n\n" +
                                             "正在尝试校外(CJCX)查询，请稍候...");
                                     CJCX cjcx = new CJCX(uims.getUser(), uims.getPass());

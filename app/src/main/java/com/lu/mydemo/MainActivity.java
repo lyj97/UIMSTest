@@ -105,6 +105,8 @@ public class MainActivity extends AppCompatActivity
 
     private static boolean reLoadSocreList = true;
 
+    public static Context context;
+
 //    private boolean isShow = true;
 //    private SharedPreferences sp;
 
@@ -115,6 +117,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scrolling);
         sp = getApplicationContext().getSharedPreferences("ScoreSelectInfo", Context.MODE_PRIVATE);
+        context = getApplicationContext();
 
         bixiu_select = sp.getBoolean("bixiu_select", true);
         xuanxiu_select = sp.getBoolean("xuanxiu_select", true);
@@ -936,23 +939,37 @@ public class MainActivity extends AppCompatActivity
     }
 
     public static void saveCJCXScore(){
-        if(CJCX.getCJCXScoreJSON() != null) sp.edit().putString("CJCXScore", CJCX.getCJCXScoreJSON().toString()).apply();
-    }
-
-    public static void loadCJCXScore(){
-        try {
-            if (sp.contains("CJCXScore"))
-                CJCX.setCJCXScoreJSON(new org.json.JSONObject(sp.getString("CJCXScore", "")));
-        }catch (Exception e){
-            e.printStackTrace();
+        if(context != null){
+            CJCX.saveCJCXJSON(context);
+        }
+        else{
+            Log.e("CJCXScore", "MainActivity.context is NULL! Can't save!");
         }
     }
 
-    public static boolean isCjcx_enable() {
+    public static void loadCJCXScore(){
+        if(context != null){
+            if(sp != null && sp.contains("CJCXScore")){
+                try {
+                    CJCX.saveCJCXJSON(context, new org.json.JSONObject(sp.getString("CJCXScore", "")));
+                    sp.edit().remove("CJCXScore").apply();
+                    Log.i("CJCXScore", "Save pri.");
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+            CJCX.loadCJCXJSON(context);
+        }
+        else{
+            Log.e("CJCXScore", "MainActivity.context is NULL! Can't load!");
+        }
+    }
+
+    public static boolean isCJCX_enable() {
         return cjcx_enable;
     }
 
-    public static void setCjcx_enable(boolean cjcx_enable) {
+    public static void setCJCX_enable(boolean cjcx_enable) {
         MainActivity.cjcx_enable = cjcx_enable;
         sp.edit().putBoolean("cjcx_enable", cjcx_enable).apply();
         Log.i("ScoreCustom", "cjcx_enable:\t" + cjcx_enable);

@@ -22,7 +22,6 @@ import net.sf.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import CJCX.CJCX;
 import Config.ColorManager;
 import UIMS.UIMS;
 
@@ -145,7 +144,7 @@ public class SettingActivity extends AppCompatActivity {
                         break;
                     }
                     case R.id.activity_setting_score_cjcx_checkbox : {
-                        MainActivity.setCjcx_enable(check_box_cjcx_enable.isChecked());
+                        MainActivity.setCJCX_enable(check_box_cjcx_enable.isChecked());
                         break;
                     }
                 }
@@ -306,7 +305,7 @@ public class SettingActivity extends AppCompatActivity {
         check_box_xianxuan.setChecked(MainActivity.isXianxuan_select());
         check_box_xiaoxuanxiu.setChecked(MainActivity.isXiaoxuanxiu_select());
         check_box_PE.setChecked(MainActivity.isPE_select());
-        check_box_cjcx_enable.setChecked(MainActivity.isCjcx_enable());
+        check_box_cjcx_enable.setChecked(MainActivity.isCJCX_enable());
     }
 
     private ColorStateList getColorStateListTest() {

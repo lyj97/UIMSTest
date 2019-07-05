@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Cookie;
@@ -1343,6 +1344,13 @@ public class UIMS {
             if(!id_scorePercent.containsKey(lsrId)) noScoreCourseId_course.put(lsrId, tempCourse);
         }
 //        Log.i("NSC.size", noScoreCourseId_course.size() + "");
+    }
+
+    public static void dealNoScoreCourseWithCJCXScore(Set<String> class_ids){
+        Log.i("UIMS", "NoneScoreCourse:\t" + noScoreCourseId_course);
+        for(String id : class_ids){
+            noScoreCourseId_course.remove(id);
+        }
     }
 
     public static void dealTermArray(){
