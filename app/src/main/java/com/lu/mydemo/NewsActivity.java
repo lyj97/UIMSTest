@@ -139,14 +139,16 @@ public class NewsActivity extends AppCompatActivity {
                     News.add(tempJsonObject, getApplicationContext());
 
 //                    showAlert("收藏成功", (String) dataList.get(adapterPosition).get("title"));
-                    myAdapter.notifyDataSetChanged();
+                    //只刷新数据变化的条目
+                    myAdapter.notifyItemChanged(adapterPosition);
                 }
                 else{
                     if(!News.delete((String) dataList.get(adapterPosition).get("title"))){
                         showWarningAlert("删除收藏失败！");
                     }
                     else{
-                        myAdapter.notifyDataSetChanged();
+                        //只刷新数据变化的条目
+                        myAdapter.notifyItemChanged(adapterPosition);
                     }
                 }
 

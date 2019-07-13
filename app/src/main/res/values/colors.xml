@@ -13,6 +13,7 @@
     <color name="color_alerter_background">#D554A4DA</color>
     <color name="color_alerter_warning_background">#D5F1923D</color>
     <color name="color_alerter_progress_bar">#FF9800</color>
+    <color name="color_alerter_error_background">#D5F13D58</color>
     <color name="color_list_item_top_background">#D29CF3FF</color>
     <color name="colorwarn_button">#BFD55D5D</color>
     <color name="color_spinner_background">#EE31AFE7</color>

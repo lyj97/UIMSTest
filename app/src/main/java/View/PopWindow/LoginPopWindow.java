@@ -14,7 +14,7 @@ import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.lu.mydemo.LoginActivity;
+import com.lu.mydemo.MainActivity;
 import com.lu.mydemo.R;
 import com.tapadoo.alerter.Alerter;
 
@@ -42,7 +42,7 @@ public class LoginPopWindow extends PopupWindow {
 
     public static boolean loginSuccess = false;
 
-    public LoginPopWindow(final LoginActivity context, int height, int width) {
+    public LoginPopWindow(final MainActivity context, int height, int width) {
         super(context);
         this.context = context;
         sp = context.getSharedPreferences("userInfo", Context.MODE_PRIVATE);

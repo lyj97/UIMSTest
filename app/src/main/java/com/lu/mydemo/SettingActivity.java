@@ -20,8 +20,8 @@ import com.tapadoo.alerter.Alerter;
 import net.sf.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
+import CJCX.CJCX;
 import Config.ColorManager;
 import UIMS.UIMS;
 
@@ -44,6 +44,9 @@ public class SettingActivity extends AppCompatActivity {
 
     private CheckBox check_box_cjcx_enable;
     private TextView text_cjcx_enable;
+
+    private CheckBox check_box_test;
+    private TextView text_test;
 
     private TextView text_view_blue;
     private TextView text_view_pink;
@@ -75,6 +78,9 @@ public class SettingActivity extends AppCompatActivity {
         check_box_cjcx_enable = findViewById(R.id.activity_setting_score_cjcx_checkbox);
         text_cjcx_enable = findViewById(R.id.activity_setting_score_cjcx_text);
 
+        check_box_test = findViewById(R.id.activity_setting_test_enable_checkbox);
+        text_test = findViewById(R.id.activity_setting_test_enable_text);
+
         text_view_blue = findViewById(R.id.activity_setting_color_blue_text);
         text_view_pink = findViewById(R.id.activity_setting_color_pink_text);
         text_view_green = findViewById(R.id.activity_setting_color_green_text);
@@ -87,6 +93,8 @@ public class SettingActivity extends AppCompatActivity {
 
         loadScoreSelect();
 
+        loadTestSelect();
+
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -96,7 +104,7 @@ public class SettingActivity extends AppCompatActivity {
                     if(term != null){
                         if(term.equals(UIMS.getTermName())){
                             Log.i("SetTerm", "Ignored! Term not change.");
-                            LoginActivity.setIsCourseNeedReload(false);
+                            MainActivity.setIsCourseNeedReload(false);
                             return;
                         }
                         JSONObject termJSON = UIMS.getTermJSON(term);
@@ -106,7 +114,7 @@ public class SettingActivity extends AppCompatActivity {
                         }
                         Log.i("TermJSON", termJSON.toString());
                         UIMS.setTeachingTerm(termJSON);
-                        LoginActivity.saveTeachingTerm();
+                        MainActivity.saveTeachingTerm();
                         Toast.makeText(SettingActivity.this, "当前学期已设为：\t" + UIMS.getTermName(), Toast.LENGTH_SHORT).show();
                     } else {
 //                    Toast.makeText(CourseScheduleChangeActivity.this, "TermJSON is NULL!", Toast.LENGTH_SHORT).show();
@@ -125,26 +133,30 @@ public class SettingActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 //                Toast.makeText(SettingActivity.this, "OnCheckedChange!", Toast.LENGTH_SHORT).show();
-                MainActivity.setReLoadSocreList(true);
+                ScoreActivity.setReLoadSocreList(true);
                 switch (buttonView.getId()){
                     case R.id.activity_setting_score_xuanxiu_checkbox : {
-                        MainActivity.setXuanxiu_select(check_box_xuanxiu.isChecked());
+                        ScoreActivity.setXuanxiu_select(check_box_xuanxiu.isChecked());
                         break;
                     }
                     case R.id.activity_setting_score_xianxuan_checkbox : {
-                        MainActivity.setXianxuan_select(check_box_xianxuan.isChecked());
+                        ScoreActivity.setXianxuan_select(check_box_xianxuan.isChecked());
                         break;
                     }
                     case R.id.activity_setting_score_xiaoxuanxiu_checkbox : {
-                        MainActivity.setXiaoxuanxiu_select(check_box_xiaoxuanxiu.isChecked());
+                        ScoreActivity.setXiaoxuanxiu_select(check_box_xiaoxuanxiu.isChecked());
                         break;
                     }
                     case R.id.activity_setting_score_PE_checkbox : {
-                        MainActivity.setPE_select(check_box_PE.isChecked());
+                        ScoreActivity.setPE_select(check_box_PE.isChecked());
                         break;
                     }
                     case R.id.activity_setting_score_cjcx_checkbox : {
-                        MainActivity.setCJCX_enable(check_box_cjcx_enable.isChecked());
+                        CJCX.setCJCXEnable(getApplicationContext(), check_box_cjcx_enable.isChecked());
+                        break;
+                    }
+                    case R.id.activity_setting_test_enable_checkbox : {
+                        MainActivity.setAcceptTestFun(check_box_test.isChecked());
                         break;
                     }
                 }
@@ -157,19 +169,19 @@ public class SettingActivity extends AppCompatActivity {
 //                Toast.makeText(SettingActivity.this, "OnClick!", Toast.LENGTH_SHORT).show();
 //                switch (v.getId()) {
 //                    case R.id.activity_setting_score_xuanxiu_checkbox: {
-//                        MainActivity.setXuanxiu_select(check_box_xuanxiu.isChecked());
+//                        ScoreActivity.setXuanxiu_select(check_box_xuanxiu.isChecked());
 //                        break;
 //                    }
 //                    case R.id.activity_setting_score_xianxuan_checkbox: {
-//                        MainActivity.setXianxuan_select(check_box_xianxuan.isChecked());
+//                        ScoreActivity.setXianxuan_select(check_box_xianxuan.isChecked());
 //                        break;
 //                    }
 //                    case R.id.activity_setting_score_xiaoxuanxiu_checkbox: {
-//                        MainActivity.setXiaoxuanxiu_select(check_box_xiaoxuanxiu.isChecked());
+//                        ScoreActivity.setXiaoxuanxiu_select(check_box_xiaoxuanxiu.isChecked());
 //                        break;
 //                    }
 //                    case R.id.activity_setting_score_PE_checkbox: {
-//                        MainActivity.setPE_select(check_box_PE.isChecked());
+//                        ScoreActivity.setPE_select(check_box_PE.isChecked());
 //                        break;
 //                    }
 //                }
@@ -185,6 +197,8 @@ public class SettingActivity extends AppCompatActivity {
         check_box_xianxuan.setOnCheckedChangeListener(onCheckedChangeListener);
         check_box_xiaoxuanxiu.setOnCheckedChangeListener(onCheckedChangeListener);
         check_box_PE.setOnCheckedChangeListener(onCheckedChangeListener);
+        check_box_cjcx_enable.setOnCheckedChangeListener(onCheckedChangeListener);
+        check_box_test.setOnCheckedChangeListener(onCheckedChangeListener);
 
         View.OnClickListener text_onClick = new View.OnClickListener() {
             @Override
@@ -210,6 +224,10 @@ public class SettingActivity extends AppCompatActivity {
                         check_box_cjcx_enable.setChecked(! check_box_cjcx_enable.isChecked());
                         break;
                     }
+                    case R.id.activity_setting_test_enable_text:{
+                        check_box_test.setChecked(! check_box_test.isChecked());
+                        break;
+                    }
                 }
             }
         };
@@ -218,6 +236,8 @@ public class SettingActivity extends AppCompatActivity {
         text_xianxuan.setOnClickListener(text_onClick);
         text_PE.setOnClickListener(text_onClick);
         text_xiaoxuanxiu.setOnClickListener(text_onClick);
+        text_cjcx_enable.setOnClickListener(text_onClick);
+        text_test.setOnClickListener(text_onClick);
 
         View.OnClickListener onClickListener = new View.OnClickListener() {
             @Override
@@ -280,10 +300,11 @@ public class SettingActivity extends AppCompatActivity {
     }
 
     private void setSpinnerItems(){
-        if(LoginActivity.isLocalValueLoaded){
+        if(MainActivity.isLocalValueLoaded){
             termList = CourseScheduleChangeActivity.getTermArray();
             if(!(termList.size() > 0)){
-                termList = (ArrayList<String>) Arrays.asList(new String[]{"暂无学期数据，请在首页点击“刷新信息”按钮"});
+                termList = new ArrayList<>();
+                termList.add("暂无学期数据\n请在首页点击“刷新信息”按钮");
                 spinner.setAdapter(new ArrayAdapter(this, R.layout.select_item, R.id.select_text_item, termList));
                 hasTerm = false;
             }
@@ -295,17 +316,23 @@ public class SettingActivity extends AppCompatActivity {
         }
         else{
             hasTerm = false;
-            termList = (ArrayList<String>) Arrays.asList(new String[]{"暂无学期数据，请在首页点击“刷新信息”按钮"});
+            termList = new ArrayList<>();
+            termList.add("暂无学期数据\n请在首页点击“刷新信息”按钮");
+            spinner.setAdapter(new ArrayAdapter(this, R.layout.select_item, R.id.select_text_item, termList));
 //            finish();
         }
     }
 
     private void loadScoreSelect() {
-        check_box_xuanxiu.setChecked(MainActivity.isXuanxiu_select());
-        check_box_xianxuan.setChecked(MainActivity.isXianxuan_select());
-        check_box_xiaoxuanxiu.setChecked(MainActivity.isXiaoxuanxiu_select());
-        check_box_PE.setChecked(MainActivity.isPE_select());
-        check_box_cjcx_enable.setChecked(MainActivity.isCJCX_enable());
+        check_box_xuanxiu.setChecked(ScoreActivity.isXuanxiu_select());
+        check_box_xianxuan.setChecked(ScoreActivity.isXianxuan_select());
+        check_box_xiaoxuanxiu.setChecked(ScoreActivity.isXiaoxuanxiu_select());
+        check_box_PE.setChecked(ScoreActivity.isPE_select());
+        check_box_cjcx_enable.setChecked(CJCX.isIsCJCXEnable());
+    }
+
+    private void loadTestSelect(){
+        check_box_test.setChecked(MainActivity.isAcceptTestFun());
     }
 
     private ColorStateList getColorStateListTest() {

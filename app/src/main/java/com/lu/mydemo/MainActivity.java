@@ -4,661 +4,1369 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
+import android.icu.text.SimpleDateFormat;
+import android.icu.util.Calendar;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.Toolbar;
-import android.transition.Transition;
-import android.transition.TransitionInflater;
-import android.util.AttributeSet;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
+import android.widget.ScrollView;
 import android.widget.SimpleAdapter;
-import android.view.View;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.data.BarEntry;
-import com.lu.mydemo.sample.adapter.BaseAdapter;
-import com.lu.mydemo.sample.adapter.MainAdapter;
 import com.tapadoo.alerter.Alerter;
-import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 
-import net.sf.json.JSON;
 import net.sf.json.JSONArray;
+import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 import CJCX.CJCX;
 import Config.ColorManager;
+import Config.Version;
+import ToolFor2045_Site.GetInternetInformation;
 import UIMS.UIMS;
-import View.PopWindow.LoginGetScorePopupWindow;
-import View.View.LinearLayoutForListView;
-import View.View.ListViewForScrollView;
+import UIMSTool.ClassSetConvert;
+import UIMSTool.CourseJSONTransfer;
+import Utils.Course.CourseScheduleChange;
+import Utils.Score.ScoreInf;
+import View.PopWindow.*;
 
-public class MainActivity extends AppCompatActivity
-{
+public class MainActivity extends Activity {
 
-//    TextView scoreStatisticsTextViewControl;
-//    TextView centerTitle;
-    static SharedPreferences sp;
+    private LinearLayout activity_login;
 
-    LinearLayout scoreStatisticsLayout;
-    TextView first_score;
-    TextView first_gpa;
-    TextView best_score;
-    TextView best_gpa;
-    TextView first_bixiu_score;
-    TextView first_bixiu_gpa;
-    TextView first_bixiu_with_addition_score;
-    TextView first_bixiu_with_addition_gpa;
+    private TextView timeInformation;
+    private TextView termInformation;
+    private ListView courseList;
 
-    TextView backTextView;
-    TextView settingText;
+    private Button load_internet_inf_button;
+    private Button get_save_button;
+    private Button getNoneScoreCourseButton;
+    private Button getNewsButton;
+    private static SharedPreferences sp;
+    private static final int PASSWORD_MIWEN = 0x81;
 
-    FloatingActionButton fab;
+    private TextView enterWeekCourseTextView;
 
-    private SwipeRecyclerView swipeRecyclerView;
-    private BaseAdapter myAdapter;
-    private static List<Map<String, Object>> dataList;
+    private TextView about_text_view;
 
-//    private TextView navigation_back;
+    private TextView test;
 
-    static HashMap<Integer, String> index_id = new HashMap<>();
-    static HashMap<String, String> courseTypeID_courseType = new HashMap<>();
+    private ScrollView login_main_view;
+    private TextView linearLayoutView_down_text;
 
-    private static int requiredScoreSum = 0;
-    private static double requiredGPASum = 0;
-    private static double requiredCreditSum = 0;
+    private TranslateAnimation mShowAction;
+    private TranslateAnimation mHiddenAction ;
 
-    private static int required_custom_ScoreSum = 0;
-    private static double required_custom_GPASum = 0;
-    private static double required_custom_CreditSum = 0;
+    private boolean isMainShow = true;
+    private static boolean isInternetInformationShowed;
+    private static boolean isCourseNeedReload = false;
+    private static boolean reLoadTodayCourse = true;
+    private boolean listHaveHeadFoot = false;
 
-    private static boolean bixiu_select = true;
-    private static boolean xuanxiu_select = true;
-    private static boolean xianxuan_select = true;
-    private static boolean xiaoxuanxiu_select = false;
-    private static boolean PE_select = false;
-    private static boolean chongxiu_select = false;
+    public static long now_week;//当前周
+    public static int weeks;//共多少周
+    private int day_of_week;//今天周几
+    public static final int MAX_VOCATION_WEEK_NUMBER = 9;//设置学期最大教学周数，用于时间正确性判断
 
-    private static boolean cjcx_enable = true;
+    private int clickCount = 0;
+    private TextView UIMSTest;
 
-    private static boolean reLoadSocreList = true;
-
+    public static UIMS uims;
+//    public static boolean isLoginIn = false;
+    public static boolean isLocalValueLoaded = false;
     public static Context context;
 
-//    private boolean isShow = true;
-//    private SharedPreferences sp;
+    String user;
+    String pass;
 
-    public LoginGetScorePopupWindow getScorePopupWindow;
+    public LoginPopWindow popWindow;
+    public LoginGetCourseSchedulePopupWindow courseSchedulePopupWindow;
+
+    private static boolean acceptTestFun = false;
+
+    private Handler myViewHandler;
+
+//    private String theme = "blue";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_scrolling);
-        sp = getApplicationContext().getSharedPreferences("ScoreSelectInfo", Context.MODE_PRIVATE);
-        context = getApplicationContext();
+        //找到相应的布局及控件
+        setContentView(R.layout.activity_login);
 
-        bixiu_select = sp.getBoolean("bixiu_select", true);
-        xuanxiu_select = sp.getBoolean("xuanxiu_select", true);
-        xianxuan_select = sp.getBoolean("xianxuan_select", true);
-        xiaoxuanxiu_select = sp.getBoolean("xiaoxuanxiu_select", false);
-        PE_select = sp.getBoolean("PE_select", false);
-        chongxiu_select = sp.getBoolean("chongxiu_select", false);
+        sp = this.getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+        context = this;
+        timeInformation = findViewById(R.id.time_information);
+        termInformation = findViewById(R.id.term_information);
+        courseList = findViewById(R.id.course_list);
+        UIMSTest = findViewById(R.id.UIMSTest);
+        activity_login = findViewById(R.id.activity_login);
+        load_internet_inf_button = findViewById(R.id.load_internet_information_button);
+        get_save_button = findViewById(R.id.get_saved_button);
+        getNoneScoreCourseButton = findViewById(R.id.load_none_score_course_information_button);
+        getNewsButton = findViewById(R.id.get_news_button);
 
-        cjcx_enable = sp.getBoolean("cjcx_enable", true);
+        enterWeekCourseTextView = findViewById(R.id.enterWeekCourseTextView);
 
-//        sp = this.getSharedPreferences("ScoreStatistics", Context.MODE_PRIVATE);
-//        isShow = sp.getBoolean("show", true);
+        about_text_view = findViewById(R.id.login_goto_about_text_view);
 
-//        scoreStatisticsTextViewControl = findViewById(R.id.activity_main_textView_ScoreStatisticsControl);
-//        scoreStatisticsTitleTextView = findViewById(R.id.textView_ScoreStatisticsTitle);
-        backTextView = findViewById(R.id.activity_scrolling_layout_back_text);
-        settingText = findViewById(R.id.activity_scrolling_layout_setting_text);
+        login_main_view = findViewById(R.id.login_main_view);
+        linearLayoutView_down_text = findViewById(R.id.LinearLayoutView_down_text);
 
-        fab = findViewById(R.id.activity_scrolling_fab);
+        //TODO TEST
+        test = findViewById(R.id.login_test);
+        test.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(isLocalValueLoaded){
+                    startActivity(new Intent(MainActivity.this, PingjiaoActivity.class));
+                }
+                else{
+                    showAlert("还没有已经保存的信息哦，点击\"更新信息\"再试试吧(*^_^*).");
+                }
+            }
+        });
 
-        scoreStatisticsLayout = findViewById(R.id.activity_main_ScoreStatistics);
-        first_score = findViewById(R.id.activity_main_ScoreStatistics_first_score);
-        first_gpa = findViewById(R.id.activity_main_ScoreStatistics_first_gpa);
-        best_score = findViewById(R.id.activity_main_ScoreStatistics_best_score);
-        best_gpa = findViewById(R.id.activity_main_ScoreStatistics_best_gpa);
-        first_bixiu_score = findViewById(R.id.activity_main_ScoreStatistics_first_bixiu_score);
-        first_bixiu_gpa = findViewById(R.id.activity_main_ScoreStatistics_first_bixiu_gpa);
-        first_bixiu_with_addition_score = findViewById(R.id.activity_main_ScoreStatistics_first_bixiu_with_addition_score);
-        first_bixiu_with_addition_gpa = findViewById(R.id.activity_main_ScoreStatistics_first_bixiu_with_addition_gpa);
-
-        swipeRecyclerView = findViewById(R.id.activity_main_recycler_view);
-
-//        navigation_back = findViewById(R.id.activity_main_navigation_back_text);
-
+        /**
+         * 改变主题颜色
+         */
+        loadColorConfig();
         changeTheme();
 
-        showLoading("加载中...");
+        isCourseNeedReload = sp.getBoolean("isCourseNeedReload", false);
 
-        swipeRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        swipeRecyclerView.setOnItemClickListener(new com.yanzhenjie.recyclerview.OnItemClickListener() {
+        isMainShow = sp.getBoolean("isMainShow", isMainShow);
+
+        mShowAction = new TranslateAnimation(
+                Animation.RELATIVE_TO_SELF, 0.0f,
+                Animation.RELATIVE_TO_SELF, 0.0f,
+                Animation.RELATIVE_TO_SELF, 1.0f,
+                Animation.RELATIVE_TO_SELF, 0.0f);
+        mShowAction.setDuration(500);
+
+        mHiddenAction = new TranslateAnimation(
+                Animation.RELATIVE_TO_SELF, 0.0f,
+                Animation.RELATIVE_TO_SELF, 0.0f,
+                Animation.RELATIVE_TO_SELF, 0.0f,
+                Animation.RELATIVE_TO_SELF, 1.0f);
+        mHiddenAction.setDuration(500);
+
+        myViewHandler = new Handler(){
             @Override
-            public void onItemClick(View view, int adapterPosition) {
-                showPercent(index_id.get(adapterPosition), ((String) dataList.get(adapterPosition).get("context1")).contains("是"));
+            public void handleMessage(Message msg) {
+                switch (msg.what){
+                    case 0 :{
+                        if(!isMainShow) login_main_view.setVisibility(View.GONE);
+                    }
+                }
             }
-        });
-        swipeRecyclerView.setAdapter(createAdapter());
+        };
 
-        scoreStatisticsLayout.setOnClickListener(new View.OnClickListener() {
+        if(!(timeInformation.getText().length() > 0)) timeInformation.setText("时间(首次查询后刷新)");
+
+        if(!isMainShow){
+            hideMainView();
+        }
+
+//        if(!isLoginIn) {
+//            activity_login.requestLayout();
+//        }
+//        else{
+//            loginSuccess();
+//        }
+
+        // i love you.
+        if(sp.getBoolean("showEgg", true)){
+            UIMSTest.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    clickCount++;
+                    if(clickCount == 7 && sp.getBoolean("showEgg", true)){
+                        showAlert("", "I LOVE YOU. (❤ ω ❤)");
+                        sp.edit().putBoolean("showEgg", false).apply();
+                    }
+                }
+            });
+        }
+
+//        if(isLocalInformationAvailable()) loadLocalInformation(false);
+
+        load_internet_inf_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showAlert("关于\"平均成绩(绩点)\"", "数据由本地计算得出.计算方法：课程首次成绩(绩点)的加权平均数;(权值为科目学分.)\n本数据仅供参考，不代表教务成绩统计结果，请知悉.\n\n" +
-                        "仅必修：只包含必修课程首次成绩统计；\n" +
-                        "首次成绩：包含必修/选修/限选课成绩。【不包含校选修（公选选修）课】");
-            }
-        });
 
-//        navigation_back.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                finish();
-//            }
-//        });
-
-        //TODO TEST 成绩统计隐藏测试
-//        scoreStatisticsTextViewControl.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                changeScoreStatisticsState(!isShow);
-//            }
-//        });
-//        changeScoreStatisticsState(isShow);
-
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //TODO flush score
-//                Toast.makeText(MainActivity.this, "FLUSH!", Toast.LENGTH_SHORT).show();
-                LoginGetScorePopupWindow window = new LoginGetScorePopupWindow(MainActivity.this, findViewById(R.id.activity_scrolling_layout).getHeight(), findViewById(R.id.activity_scrolling_layout).getWidth());
+                /**
+                 * TODO TEST 登录逻辑
+                 */
+                LoginPopWindow window = new LoginPopWindow(MainActivity.this, findViewById(R.id.activity_login).getHeight(), findViewById(R.id.activity_login).getWidth());
                 window.setFocusable(true);
                 window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-                window.showAtLocation(MainActivity.this.findViewById(R.id.activity_scrolling_layout), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0); //设置layout在PopupWindow中显示的位置
-                getScorePopupWindow = window;
+                window.showAtLocation(MainActivity.this.findViewById(R.id.activity_login), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0); //设置layout在PopupWindow中显示的位置
+                popWindow = window;
+
             }
         });
 
-        settingText.setOnClickListener(new View.OnClickListener() {
+        get_save_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, SettingActivity.class));
+                get_save_button.setEnabled(false);
+                get_save_button.setText("数据转换中，请稍候...");
+
+                //TODO TEST 成绩查询不验证数据直接进入
+//                CJCX.loadCJCXJSON(getApplicationContext());
+//                ScoreActivity.context = getApplicationContext();
+                Intent intent = new Intent(MainActivity.this, ScoreActivity.class);
+                startActivity(intent);
+
+//                if(isLocalInformationAvailable()){
+////                    showLoading("数据转换中，请稍候...");
+//                    loadLocalInformation(true);
+//                }
+//                else{
+//                    showAlert("还没有已经保存的信息哦，点击\"更新信息\"再试试吧(*^_^*).");
+//                    get_save_button.setEnabled(true);
+//                    get_save_button.setText("成绩查询");
+//                }
             }
         });
 
-        backTextView.setOnClickListener(new View.OnClickListener() {
+        getNoneScoreCourseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+//                myTestFunction();
+                if(isLocalValueLoaded){
+                    Intent intent = new Intent(MainActivity.this,NoneScoreCourseActivity.class);
+                    startActivity(intent);
+//                    overridePendingTransition(R.anim.up_in, R.anim.up_out);
+                }
+                else{
+                    showAlert("还没有已经保存的信息哦，点击\"更新信息\"再试试吧(*^_^*).");
+                }
+//                overridePendingTransition(R.anim.up_in, R.anim.up_out);
             }
         });
 
-        loadScoreList();
-//        long finishTime = System.currentTimeMillis();
-//        Log.i("Time", (finishTime - (long) getIntent().getBundleExtra("bundle").get("startTime")) / 1000 + "");
+        getNewsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this,NewsActivity.class);
+                startActivity(intent);
+            }
+        });
 
+        enterWeekCourseTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(isLocalValueLoaded){
+                    Intent intent = new Intent(MainActivity.this,WeekCourseActivity.class);
+
+                    Bundle bundle = new Bundle();
+                    bundle.putLong("now_week", now_week);
+                    bundle.putLong("weeks", weeks);
+
+                    intent.putExtra("bundle", bundle);
+                    startActivity(intent);
+//                    overridePendingTransition(R.anim.up_in, R.anim.up_out);
+                }
+                else{
+                    showAlert("还没有已经保存的信息哦，点击\"更新信息\"再试试吧(*^_^*).");
+                }
+            }
+        });
+
+        about_text_view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this,AboutActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        linearLayoutView_down_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(isMainShow){
+                    hideMainView();
+                }
+                else {
+                    showMainView();
+                }
+            }
+        });
+
+        timeInformation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this,CourseScheduleChangeActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        termInformation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this,CourseScheduleChangeActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        isInternetInformationShowed = sp.getBoolean("isInternetInformationShowed", false);
+        Log.i("GetInternetInformation", "isInternetInformationShowed:\t" + isInternetInformationShowed);
+        if(!isInternetInformationShowed) getInternetInformation();
+
+        acceptTestFun = sp.getBoolean("acceptTestFun", false);
+        if(!acceptTestFun) {
+            hideTestFun();
+        }
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        if(reLoadSocreList) reloadScoreList();
-        getScoreStatistics();
-    }
+        Alerter.hide();
 
-    public void loadScoreList(){
+        ColorManager.loadConfig(getApplicationContext(), this);
+        changeTheme();
+
+        // TODO TEST 忽略本地数据加载
+//        Log.e("TEST", "Local information ignored for TEST!");
         new Thread(new Runnable() {
             @Override
             public void run() {
-                if(cjcx_enable){
-                    loadCJCXScore();
-                }
-                getScoreList();
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Log.i("ScoreListSize", "Size:\t" + dataList.size());
-                        getScoreStatistics();
-                        myAdapter = createAdapter();
-                        swipeRecyclerView.setAdapter(myAdapter);
-                        myAdapter.notifyDataSetChanged(dataList);
-                        Alerter.hide();
-                    }
-                });
-//                final List<Map<String, Object>> datalist = getScoreList();
-//                final ListViewForScrollView lv = findViewById(R.id.activity_main_list_view);
-//
-//                runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        lv.setAdapter(new colorAdapter(MainActivity.this, datalist, R.layout.list_item, new String[]{"title", "context1", "context2", "context3", "context4"}, new int[]{R.id.list_item_title, R.id.list_item_context1, R.id.list_item_context2, R.id.list_item_context3, R.id.list_item_context4}));
-//                        lv.addHeaderView(new ViewStub(MainActivity.this));
-//                        lv.addFooterView(new ViewStub(MainActivity.this));
-//                        lv.setSelector(new ColorDrawable(Color.TRANSPARENT));
-//                        lv.setOnItemClickListener(new OnItemClickListener() {
-//                            //list点击事件
-//                            @Override
-//                            public void onItemClick(AdapterView<?> p1, View p2, int p3, long p4) {
-//                                // TODO: Implement this method
-////                Toast.makeText(MainActivity.this, "TEMP", Toast.LENGTH_SHORT).show();
-////                Alerter.create(MainActivity.this)
-////                        .setTitle("Title")
-////                        .setText("p1:\t" + p1 + "\n" +
-////                                "p2:\t" + p2 + "\n" +
-////                                "p3:\t" + p3 + "\n" +
-////                                "p4:\t" + p4 + "\n"
-////                        )
-////                        .enableSwipeToDismiss()
-////                        .setBackgroundColorInt(Color.rgb(100,100,100))
-////                        .show();
-////                Log.i("MainActivity:showPercent", index_id.get(p3 - 1) + ((String) datalist.get(p3 - 1).get("context1")).contains("是"));
-//                                showPercent(index_id.get(p3 - 1), ((String) datalist.get(p3 - 1).get("context1")).contains("是"));
-//                            }
-//                        });
-//                        Alerter.hide();
-//                    }
-//                });
+                if (!isLocalValueLoaded && isLocalInformationAvailable())
+                    loadLocalInformation(false);
+                else loadCourseInformation();
+                CJCX.loadCJCXJSON(getApplicationContext());
+                CJCX.loadCJCXTermJSON(getApplicationContext());
+                ScoreActivity.context = getApplicationContext();
+                ScoreInf.loadScoreList();
+//                Log.i("TEST:ScoreInf", ScoreInf.getDataList().toString());
             }
         }).start();
+
+        if(isLocalValueLoaded && isCourseNeedReload){
+            showWarningAlertWithCancel_OKButton("需要刷新课程信息", "当前学期已经改变，请刷新本地课程信息。");
+        }
+
+        if(reLoadTodayCourse) loadCourseInformation();
+
+        if(!acceptTestFun) hideTestFun();
+
     }
 
-    public void reloadScoreList(){
-        reLoadSocreList = true;
-        getScoreList();
+    @Override
+    protected void onStop() {
+        super.onStop();
+        reLoadTodayCourse = true;
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        if(!hasFocus) {
+            get_save_button.setText("成绩查询");
+            get_save_button.setEnabled(true);
+        }
+    }
+
+    protected void hideTestFun(){
+        test.setVisibility(View.GONE);
+    }
+
+    public void hideMainView(){
+        login_main_view.startAnimation(mHiddenAction);
+        login_main_view.setVisibility(View.INVISIBLE);
+        linearLayoutView_down_text.setText("⇧显示下方区域");
+        isMainShow = false;
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(500);
+                    myViewHandler.sendEmptyMessage(0);//刷新页面
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+        sp.edit().putBoolean("isMainShow", isMainShow).apply();
+    }
+
+    public void showMainView(){
+        login_main_view.startAnimation(mShowAction);
+        login_main_view.setVisibility(View.VISIBLE);
+        linearLayoutView_down_text.setText("⇩隐藏下方区域");
+        isMainShow = true;
+        sp.edit().putBoolean("isMainShow", isMainShow).apply();
+    }
+
+    public void loginSuccess() {
+        sp.edit().putString("CurrentUserInfoJSON", UIMS.getCurrentUserInfoJSON().toString()).apply();
+        sp.edit().putString("TermJSON", UIMS.getTermJSON().toString()).apply();
+        sp.edit().putString("TeachingTermJSON", UIMS.getTeachingTermJSON().toString()).apply();
+
+        final JSONObject informationJSON = UIMS.getInformationJSON();
+        final JSONObject teachingTermJSON = UIMS.getTeachingTermJSON();
+
+//        isLoginIn = true;
+
+        try {
+            JSONObject value;
+            try{
+                value = teachingTermJSON.getJSONArray("value").getJSONObject(0);
+            }catch (JSONException e){
+                value = teachingTermJSON;
+            }
+            weeks = value.getInt("weeks");
+            loadTime();
+            getCourseSuccess();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void reLogin(){
+        reLogin(false);
+    }
+
+    public void reLogin(final boolean showNotice){
+
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                myAdapter = createAdapter();
-                swipeRecyclerView.setAdapter(myAdapter);
-                myAdapter.notifyDataSetChanged(dataList);
-                getScoreStatistics();
+                Alerter.hide();
+                if(showNotice) showAlert("如需登录其他账号，请删除本应用数据，以避免出现数据错误.\n\n" +
+                        "删除方法：设置->应用->UIMSTest->存储->清除数据." );
+//                isLoginIn = false;
+
+                getNoneScoreCourseButton.requestLayout();
+                activity_login.requestLayout();
+
             }
         });
-//        final List<Map<String, Object>> datalist = getScoreList();
-//        final ListViewForScrollView lv = findViewById(R.id.activity_main_list_view);
-//
-//        runOnUiThread(new Runnable() {
-//            @Override
-//            public void run() {
-//                lv.setAdapter(new colorAdapter(MainActivity.this, datalist, R.layout.list_item, new String[]{"title", "context1", "context2", "context3", "context4"}, new int[]{R.id.list_item_title, R.id.list_item_context1, R.id.list_item_context2, R.id.list_item_context3, R.id.list_item_context4}));
-////                lv.addHeaderView(new ViewStub(MainActivity.this));
-////                lv.addFooterView(new ViewStub(MainActivity.this));
-////                lv.setSelector(new ColorDrawable(Color.TRANSPARENT));
-////                lv.setOnItemClickListener(new OnItemClickListener() {
-////                    //list点击事件
-////                    @Override
-////                    public void onItemClick(AdapterView<?> p1, View p2, int p3, long p4) {
-////                        // TODO: Implement this method
-////                        showPercent(index_id.get(p3 - 1), ((String) datalist.get(p3 - 1).get("context1")).contains("是"));
-////                    }
-////                });
-//            }
-//        });
     }
 
-    public static void getScoreList(){
+    public void loadSuccess(){
+        sp.edit().putString("ScoreJSON", UIMS.getScoreJSON().toString()).apply();
+        sp.edit().putString("CourseJSON", UIMS.getCourseJSON().toString()).apply();
+        sp.edit().putString("StudentJSON", UIMS.getStudentJSON().toString()).apply();
+        sp.edit().putString("CourseTypeJSON", UIMS.getCourseTypeJSON().toString()).apply();
+        sp.edit().putString("CourseSelectTypeJSON", UIMS.getCourseSelectTypeJSON().toString()).apply();
+        sp.edit().putString("ScoreStatisticsJSON", UIMS.getScoreStatisticsJSON().toString()).apply();
 
-        if(!reLoadSocreList) return;
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                showAlert("信息刷新成功", "以后大部分功能就不需要校园网啦!\n" +
+                        "祝使用愉快呀！");
+            }
+        });
 
-        reLoadSocreList = false;
+        loadLocalInformationSuccess(null);
+        getCourseSuccess();
+    }
 
-        courseTypeID_courseType = UIMS.getCourseTypeId_courseType();
-        dataList = new ArrayList<>();
-        Map<String,Object> map;
+    public void loadCourseInformation(){
 
-        JSONObject scoreJSON = UIMS.getScoreJSON();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
 
-        JSONArray scores = scoreJSON.getJSONArray("value");
+                loadTime();
+                getCourseSuccess();
 
-        double adviceCredit;
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        CourseJSONTransfer.transferCourseList(UIMS.getCourseJSON(), true);
+                    }
+                }).start();
+            }
+        }).start();
+
+    }
+
+    private void loadLocalInformation(final boolean show) {
+
+        if (!isLocalValueLoaded) {
+            showLoading("正在加载本地数据...");
+
+            UIMS.setCurrentUserInfoJSON(JSONObject.fromObject(sp.getString("CurrentUserInfoJSON", "")));
+            UIMS.setScoreJSON(JSONObject.fromObject(sp.getString("ScoreJSON", "")));
+            UIMS.setStudentJSON(JSONObject.fromObject(sp.getString("StudentJSON", "")));
+            UIMS.setCourseTypeJSON(JSONObject.fromObject(sp.getString("CourseTypeJSON", "")));
+            UIMS.setCourseSelectTypeJSON(JSONObject.fromObject(sp.getString("CourseSelectTypeJSON", "")));
+            UIMS.setScoreStatisticsJSON(JSONObject.fromObject(sp.getString("ScoreStatisticsJSON", "")));
+            UIMS.setTermJSON(JSONObject.fromObject(sp.getString("TermJSON", "")));
+            UIMS.setTeachingTerm(JSONObject.fromObject(sp.getString("TeachingTermJSON", "")));
+            UIMS.setCourseJSON(JSONObject.fromObject(sp.getString("CourseJSON", "")));
+
+            loadCourseInformation();
+            CJCX.loadCJCXJSON(getApplicationContext());
+            CJCX.loadCJCXTermJSON(getApplicationContext());
+            ScoreActivity.context = getApplicationContext();
+//            ScoreActivity.getScoreList();
+
+            ScoreInf.loadScoreList();
+//            Log.i("TEST:ScoreInf", ScoreInf.getDataList().toString());
+
+        }
+
+        final JSONObject teachingTermJSON = UIMS.getTeachingTermJSON();
 
         try {
-
-            for (int i = 0; i < scores.size(); i++) {
-                map = new HashMap<>();
-
-                JSONObject temp = scores.getJSONObject(i);
-                JSONObject teachingTerm = temp.getJSONObject("teachingTerm");
-                JSONObject course = temp.getJSONObject("course");
-                String asId = temp.getString("asId");
-                String courName = course.getString("courName");
-                String termName = teachingTerm.getString("termName");
-                String courScore = temp.getString("score");
-                int scoreNum = temp.getInt("scoreNum");
-                String isReselect = (temp.getString("isReselect").contains("Y")) ? "是" : "否";
-                String gPoint = temp.getString("gpoint");
-                String dateScore = temp.getString("dateScore");
-                String type5 = temp.getString("type5");
-                adviceCredit = course.getDouble("adviceCredit");
-                dateScore = dateScore.replaceAll("T", "  ");
-
-                map.put("asId", asId);
-                index_id.put(i, asId);
-                map.put("title", courName + "(" + courseTypeID_courseType.get(type5) + ")");
-//                map.put("context1","成绩:" + courScore + "  \t  " +
-//                        "重修:" + isReselect);
-//                map.put("context2",
-//                        termName);
-                map.put("context1", termName + "   \t   " +
-                        "重修?  " + isReselect + "    绩点： " + gPoint);
-                map.put("context2",
-                        courScore);
-                map.put("context3",
-                        "发布时间： " + dateScore);
-                map.put("context4",
-                        adviceCredit);
-                map.put("type", type5);
-
-                if (!chongxiu_select) {//排除所有重修
-                    if (isReselect.equals("否") ) {//排除所有重修
-
-//                    if (type5.equals("4161") || type5.equals("4162") || type5.equals("4164") ) {//体育/限选/选修（除校选修）
-                        if (xuanxiu_select && type5.equals("4161") ){//选修
-                            required_custom_ScoreSum += scoreNum * adviceCredit;
-                            required_custom_GPASum += Double.parseDouble(gPoint) * adviceCredit;
-                            required_custom_CreditSum += adviceCredit;
-                        }
-                        if (xianxuan_select && type5.equals("4162") ) {//限选
-                            required_custom_ScoreSum += scoreNum * adviceCredit;
-                            required_custom_GPASum += Double.parseDouble(gPoint) * adviceCredit;
-                            required_custom_CreditSum += adviceCredit;
-                        }
-                        if (xiaoxuanxiu_select && type5.equals("4163") ) {//校选修
-                            required_custom_ScoreSum += scoreNum * adviceCredit;
-                            required_custom_GPASum += Double.parseDouble(gPoint) * adviceCredit;
-                            required_custom_CreditSum += adviceCredit;
-                        }
-                        if (PE_select && type5.equals("4164") ) {//体育
-                            required_custom_ScoreSum += scoreNum * adviceCredit;
-                            required_custom_GPASum += Double.parseDouble(gPoint) * adviceCredit;
-                            required_custom_CreditSum += adviceCredit;
-                        }
-                        if (type5.equals("4160") ) {//仅必修
-                            if(bixiu_select) {
-                                required_custom_ScoreSum += scoreNum * adviceCredit;
-                                required_custom_GPASum += Double.parseDouble(gPoint) * adviceCredit;
-                                required_custom_CreditSum += adviceCredit;
-                            }
-                            requiredScoreSum += scoreNum * adviceCredit;
-                            requiredGPASum += Double.parseDouble(gPoint) * adviceCredit;
-                            requiredCreditSum += adviceCredit;
-                        }
-
-                    }
-                }
-                else{
-                    if (type5.equals("4160") ) {//仅必修
-                        if(bixiu_select) {
-                            required_custom_ScoreSum += scoreNum * adviceCredit;
-                            required_custom_GPASum += Double.parseDouble(gPoint) * adviceCredit;
-                            required_custom_CreditSum += adviceCredit;
-                        }
-                        if (isReselect.equals("否") ) {//排除重修
-                            requiredScoreSum += scoreNum * adviceCredit;
-                            requiredGPASum += Double.parseDouble(gPoint) * adviceCredit;
-                            requiredCreditSum += adviceCredit;
-                        }
-                    }
-                    if (xuanxiu_select && type5.equals("4161") ){//选修
-                        required_custom_ScoreSum += scoreNum * adviceCredit;
-                        required_custom_GPASum += Double.parseDouble(gPoint) * adviceCredit;
-                        required_custom_CreditSum += adviceCredit;
-                    }
-                    if (xianxuan_select && type5.equals("4162") ) {//限选
-                        required_custom_ScoreSum += scoreNum * adviceCredit;
-                        required_custom_GPASum += Double.parseDouble(gPoint) * adviceCredit;
-                        required_custom_CreditSum += adviceCredit;
-                    }
-                    if (xiaoxuanxiu_select && type5.equals("4163") ) {//校选修
-                        required_custom_ScoreSum += scoreNum * adviceCredit;
-                        required_custom_GPASum += Double.parseDouble(gPoint) * adviceCredit;
-                        required_custom_CreditSum += adviceCredit;
-                    }
-                    if (PE_select && type5.equals("4164") ) {//体育
-                        required_custom_ScoreSum += scoreNum * adviceCredit;
-                        required_custom_GPASum += Double.parseDouble(gPoint) * adviceCredit;
-                        required_custom_CreditSum += adviceCredit;
-                    }
-                }
-
-                dataList.add(map);
-
+            JSONObject value;
+            try {
+                value = teachingTermJSON.getJSONArray("value").getJSONObject(0);
+            } catch (JSONException e) {
+                value = teachingTermJSON;
             }
-
-            HashMap<String, org.json.JSONObject> id_JSON = CJCX.getId_JSON();
-            if(!cjcx_enable || id_JSON == null) {
-                Log.i("GetScoreList", "Ignored CJCX!");
-                Log.i("GetScoreList", "Finished! Size:\t" + dataList.size());
-                return;
-            }
-            else{
-                loadCJCXScore();
-                id_JSON = CJCX.getId_JSON();
-                if(id_JSON == null) {
-                    Log.i("GetScoreList", "Ignored CJCX!  Load Failed! No date!");
-                    return;
-                }
-            }
-            org.json.JSONObject object;
-            for(String id : id_JSON.keySet()){
-                if(!index_id.containsValue(id)) {
-                    try {
-                        object = id_JSON.get(id);
-                        map = new HashMap<>();
-                        map.put("asId", object.getString("lsrId"));
-                        map.put("title", object.getString("kcmc"));
-                        try {
-                            map.put("context1", UIMS.getTermId_termName().get(object.getString("termId")) + "   \t   " +
-                                    "重修?  " + ((object.getString("isReselect").toUpperCase().equals("N")) ? "否" : "是") + "    绩点： " + object.getString("gpoint"));
-                        }
-                        catch (Exception e){
-                            map.put("context1", UIMS.getTermId_termName().get(object.getString("termId")) + "   \t   " +
-                                    "重修?  " + "否" + "    绩点： " + object.getString("gpoint"));
-                        }
-                        map.put("context2",
-                                object.getString("cj"));
-                        map.put("context3",
-                                "发布时间： " + "--");
-                        map.put("context4",
-                                object.getDouble("credit"));
-                        map.put("type", "");
-                        dataList.add(0, map);
-                    }catch (Exception e){
-                        Log.w("ErrJSON", id_JSON.get(id).toString());
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-            int index = 0;
-            for(Map<String,Object> temp : dataList){
-                index_id.put(index++, (String) temp.get("asId"));
-            }
-
-            Log.i("GetScoreList", "Finished! Size:\t" + dataList.size());
-
+            weeks = value.getInt("weeks");
+            loadTime();
+//                    getCourseSuccess();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-    }
-
-    private Map<String,Object> getScoreStatistics() {
-
-        JSONObject scoreStatistics = UIMS.getScoreStatisticsJSON();
-
-        double avgScoreBest = scoreStatistics.getJSONArray("value").getJSONObject(0).getDouble("avgScoreBest");
-        double avgScoreFirst = scoreStatistics.getJSONArray("value").getJSONObject(0).getDouble("avgScoreFirst");
-        double gpaFirst = scoreStatistics.getJSONArray("value").getJSONObject(0).getDouble("gpaFirst");
-        double gpaBest = scoreStatistics.getJSONArray("value").getJSONObject(0).getDouble("gpaBest");
-
-        Map<String, Object> map = new HashMap<>();
-//        map.put("title","绩点统计");
-//        map.put("context","【首次成绩】：平均成绩:" + avgScoreFirst + "  " + "平均绩点:" + gpaFirst + "  \n" +
-//                "【最好成绩】：平均成绩:" + avgScoreBest + "  " + "平均绩点:" + gpaBest);
-
-//        String title = "绩点统计";
-//        String title = "学分成绩";
-//        String value = "【首次成绩】 \t平均成绩:" + String.format("%.2f", avgScoreFirst) + "  " + "平均绩点:" + String.format("%.2f", gpaFirst) + "\n" +
-//                "【最好成绩】 \t平均成绩:" + String.format("%.2f", avgScoreBest) + "  " + "平均绩点:" + String.format("%.2f", gpaBest) + "\n" +
-//                "必修平均成绩:" + String.format("%.2f", requiredScoreSum / requiredCreditSum) + " \t 必修平均绩点:" + String.format("%.2f", requiredGPASum / requiredCreditSum);
-        first_score.setText(String.format("%.2f", avgScoreFirst));
-        first_gpa.setText(String.format("%.2f", gpaFirst));
-        best_score.setText(String.format("%.2f", avgScoreBest));
-        best_gpa.setText(String.format("%.2f", gpaBest));
-        first_bixiu_score.setText(String.format("%.2f", requiredScoreSum / requiredCreditSum));
-        first_bixiu_gpa.setText(String.format("%.2f", requiredGPASum / requiredCreditSum));
-        first_bixiu_with_addition_score.setText(String.format("%.2f", required_custom_ScoreSum / required_custom_CreditSum));
-        first_bixiu_with_addition_gpa.setText(String.format("%.2f", required_custom_GPASum / required_custom_CreditSum));
-//        scoreStatisticsTitleTextView.setText(title);
-        return map;
-
-    }
-
-    public void showPercent(final String asID, boolean isReSelect){
-        final JSONObject percent = UIMS.getScorePercentJSON(asID);
-
-        if(percent == null){
-            showAlert("成绩分布走丢了(っ °Д °;)っ\n\n" +
-                    "校外成绩查询(CJCX)无成绩分布哦;\n" +
-                    "如在校内，请连接校园网后点击“刷新信息”再试一下吧.");
-            return;
-        }
-
-        JSONArray items = percent.getJSONArray("items");
-
-        StringBuilder stringBuilder = new StringBuilder();
-        JSONObject temp;
-        String label;
-        double perc;
-        int i = 0;
-        try{
-            while(true) {
-                temp = items.getJSONObject(i);
-                label = temp.getString("label");
-                perc = temp.getDouble("percent");
-
-                if(i != 0) stringBuilder.append('\n');
-                stringBuilder.append(label);
-                if(label.length() == 8) stringBuilder.append(":\t");
-                else if(label.length() < 8) stringBuilder.append(":\t\t\t");
-                else if(label.length() > 8) stringBuilder.append(":\t\t");
-                stringBuilder.append(getScorePercentString(perc));
-                stringBuilder.append(String.format("%.1f", perc) + " %");
-                if(UIMS.getCourseTypeId(asID).equals("4160") && ! isReSelect) stringBuilder.append("\t(约 " + String.format("%.0f",UIMS.getStudCnt() * perc * 0.01) + " 人)");
-                i++;
-            }
-
-        }catch (Exception e) {
-//            e.printStackTrace();
-            if(UIMS.getCourseTypeId(asID).equals("4160") && ! isReSelect) stringBuilder.append("\n\n人数仅供必修课参考，其他课程无意义哦╥﹏╥...");
-        }
-        final String str = stringBuilder.toString();
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Alerter.create(MainActivity.this)
-                        .setTitle(percent.getString("courName"))
-                        .setText(str)
-                        .enableSwipeToDismiss()
-                        .setDuration(4000)
-                        .hideIcon()
-//                        .enableProgress(true)
-                        .setBackgroundColorInt(ColorManager.getTopAlertBackgroundColor())
-                        .show();
+                try {
+                    if (show) {
+//                                long startTime = System.currentTimeMillis();
+                        Bundle bundle = new Bundle();
+//                                bundle.putLong("startTime", startTime);
+                        Intent intent = new Intent(MainActivity.this, ScoreActivity.class);
+//                                intent.putExtra("bundle", bundle);
+                        startActivity(intent);
+//                            overridePendingTransition(R.anim.up_in, R.anim.up_out);
+                    }
+                } catch (Exception e) {
+                    showWarningAlert(e.getMessage());
+                    e.printStackTrace();
+                }
             }
         });
+
+        loadLocalInformationSuccess(null);
+
     }
 
-    private String getScorePercentString(double percent){
-        StringBuilder stringBuilder = new StringBuilder();
-        for(int i=0; i<(int)percent/3; i++){
-            stringBuilder.append("|");
+    private void loadLocalInformationSuccess(final String get_save_button_text){
+        isLocalValueLoaded = true;
+        if(isCourseNeedReload){
+            showWarningAlertWithCancel_OKButton("需要刷新课程信息", "当前学期已经改变，请刷新本地课程信息。");
         }
-        stringBuilder.append("\t\t");
-        return stringBuilder.toString();
+        if(get_save_button_text != null) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Alerter.hide();
+                    get_save_button.setText(get_save_button_text);
+                }
+            });
+        }
+        else {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Alerter.hide();
+                }
+            });
+        }
     }
 
-    public void showResponse(final String string){
+    private void getCourseSuccess(){
+        try {
+            if(!reLoadTodayCourse) return;
+            final List<Map<String, Object>> datalist = getCourseList();
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Log.i("Login", "CourseListSize:\t" + datalist.size());
+                    courseList.setAdapter(new noCourseBetterAdapter(context, datalist, R.layout.today_course_list_item, new String[]{"index", "title", "context1"}, new int[]{R.id.get_none_score_course_title_index, R.id.get_none_score_course_title, R.id.get_none_score_course_context1}));
+                    if(!listHaveHeadFoot) {
+                        courseList.addHeaderView(new ViewStub(context));
+                        courseList.addFooterView(new ViewStub(context));
+                        listHaveHeadFoot = true;
+                    }
+                }
+            });
+            reLoadTodayCourse = false;
+        } catch (Exception e){
+            e.printStackTrace();
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    courseList.setAdapter(new noCourseBetterAdapter(context, getCourseListNotice("暂无课程信息\n请点击\"更新信息\"登录并刷新本地数据."), R.layout.today_course_list_item, new String[]{"index", "title", "context1"}, new int[]{R.id.get_none_score_course_title_index, R.id.get_none_score_course_title, R.id.get_none_score_course_context1}));
+                    if(!listHaveHeadFoot) {
+                        courseList.addHeaderView(new ViewStub(context));
+                        courseList.addFooterView(new ViewStub(context));
+                        listHaveHeadFoot = true;
+                    }
+                    Log.i("GetCourse", "设置提示信息");
+                }
+            });
+        }
+    }
+
+    private void loadTime(){
+        try {
+            JSONObject teachingTermJSON = UIMS.getTeachingTermJSON();
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+            JSONObject value;
+            try{
+                value = teachingTermJSON.getJSONArray("value").getJSONObject(0);
+            }catch (JSONException e){
+                value = teachingTermJSON;
+            }
+            final String now_time = df.format(new Date());
+            final String termName = value.getString("termName");
+            long startDate = df.parse(value.getString("startDate").split("T")[0]).getTime();
+//            long vacationDate = df.parse(value.getString("vacationDate").split("T")[0]).getTime();
+            long now = df.parse(now_time).getTime();
+
+            Locale.setDefault(Locale.CHINA);
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(new Date());
+            final String[] dayOfWeekName = new String[]{"","星期一","星期二","星期三","星期四","星期五","星期六","星期日"};
+            day_of_week = cal.get(Calendar.DAY_OF_WEEK) - 1;
+            if (day_of_week <= 0)
+                day_of_week = 7;
+
+            Log.i("loadTime", "day_of_week:\t" + day_of_week);
+
+            now_week = (now - startDate) / (1000 * 3600 * 24 * 7) + 1;
+//            weeks = (int) (vacationDate - startDate / (1000 * 3600 * 24 * 7));
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    timeInformation.setTextColor(Color.BLACK);
+                    termInformation.setTextColor(Color.BLACK);
+                    timeInformation.setText(now_time + " " + dayOfWeekName[day_of_week]);
+                    if(now_week < 0 || now_week > MAX_VOCATION_WEEK_NUMBER + weeks){
+                        termInformation.setText(termName + "\n 当前学期可能有误");
+                        termInformation.setTextColor(Color.RED);
+                    }
+                    else {
+                        if (now_week <= weeks)
+                            termInformation.setText(termName + "\n 第 " + now_week + " 周(共 " + weeks + " 周)");
+                        else termInformation.setText(termName + "\n本学期已结束,假期快乐!");
+                    }
+                }
+            });
+
+        } catch (Exception e){
+            e.printStackTrace();
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    timeInformation.setText("");
+                }
+            });
+        }
+    }
+
+    private void loadInformation() {
+        //开启线程发起网络请求
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+
+                    showLoading("查询中...");
+//                    showLoading("查询成绩统计...");
+                    if (uims.getScoreStatistics()) {
+//                        showResponse("查询成绩统计成功！");
+//                        showLoading("查询成绩...");
+                        if (uims.getRecentScore()) {
+//                            showResponse("查询成绩成功！");
+//                            showAlert("", "查询成绩成功！");
+                            Log.i("Login", "getRecentScoreSucceed!");
+//                            loadSuccess();
+                        }
+                        else{
+                            showResponse("Login failed!");
+                            reLogin();
+                            return;
+                        }
+//                        showLoading("查询课程中...");
+                        if(uims.getCourseSchedule()){
+//                            showResponse("查询课程成功！");
+//                            showAlert("", "查询课程成功！");
+                            Log.i("Login", "getCourseScheduleSucceed!");
+                            loadSuccess();
+                        }
+                        else{
+                            showResponse("Login failed!");
+                            reLogin();
+                            return;
+                        }
+                    }
+                    else{
+                        showResponse("Login failed!");
+                        reLogin();
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    showResponse("Login failed!");
+                    reLogin();
+                }finally {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            load_internet_inf_button.setText("更新信息");
+                            load_internet_inf_button.setEnabled(true);
+                            load_internet_inf_button.setBackground(getResources().getDrawable(R.drawable.button_internet_background));
+                        }
+                    });
+                }
+            }
+        }).start();
+    }
+
+    private boolean isLocalInformationAvailable(){
+        return (sp.contains("CurrentUserInfoJSON") && sp.contains("ScoreJSON") && sp.contains("CourseJSON") && sp.contains("ScoreStatisticsJSON") && sp.contains("StudentJSON") && sp.contains("CourseTypeJSON") && sp.contains("CourseSelectTypeJSON") && sp.contains("TermJSON")  && sp.contains("TeachingTermJSON"));
+    }
+
+    private List<Map<String, Object>> getCourseListNotice(String str){
+        List<Map<String,Object>> dataList = new ArrayList<>();
+        Map<String,Object> map = new HashMap<>();
+        map.put("index", "");
+        map.put("title", str);
+        map.put("context1", "");
+        dataList.add(map);
+        return dataList;
+    }
+
+    private List<Map<String, Object>> getCourseList() throws Exception{
+
+        Log.i("GetCourse", "教学周:\t" + now_week);
+        Log.i("GetCourse", "星期:\t" + day_of_week);
+
+        if(day_of_week == 0 || now_week == 0) throw new IllegalAccessException("教学周或星期为0（未初始化）！");
+
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        final String now_time = df.format(new Date());
+
+        if(CourseScheduleChange.containsDate(this, now_time)){
+            return getCourseList(CourseScheduleChange.getDate(this, now_time));
+        }
+
+        ClassSetConvert classSetConvert = new ClassSetConvert();
+        List<Map<String,Object>> dataList = new ArrayList<>();
+        Map<String,Object> map;
+
+        JSONObject allCourseJSON = UIMS.getCourseJSON();
+
+        JSONArray json_courses = allCourseJSON.getJSONArray("value");
+
+        Log.i("GetCourse", "课程数量:\t" + json_courses.size());
+
+        JSONObject teachClassMaster;
+
+        JSONArray lessonSchedules;
+        JSONArray lessonTeachers;
+        JSONObject teacher;
+        String teacherName;
+        JSONObject lessonSegment;
+        String courName;
+
+        JSONObject timeBlock;
+        int classSet;
+        int dayOfWeek;
+        int beginWeek;
+        int endWeek;
+        int[] start_end;
+        String weekOddEven = "";
+        JSONObject classroom;
+        String classroomName;
+
+        try {
+
+            for(int i=0; i<json_courses.size(); i++){
+
+                teachClassMaster = json_courses.getJSONObject(i).getJSONObject("teachClassMaster");
+
+                lessonSegment = teachClassMaster.getJSONObject("lessonSegment");
+                lessonSchedules = teachClassMaster.getJSONArray("lessonSchedules");
+                lessonTeachers = teachClassMaster.getJSONArray("lessonTeachers");
+
+                courName = lessonSegment.getString("fullName");
+
+                teacherName = lessonTeachers.getJSONObject(0).getJSONObject("teacher").getString("name");
+
+                for (int j = 0; j < lessonSchedules.size(); j++) {
+
+                    map = new HashMap<>();
+
+                    timeBlock = lessonSchedules.getJSONObject(j).getJSONObject("timeBlock");
+                    classroom = lessonSchedules.getJSONObject(j).getJSONObject("classroom");
+                    classroomName = classroom.getString("fullName");
+
+                    classSet = timeBlock.getInt("classSet");
+                    dayOfWeek = timeBlock.getInt("dayOfWeek");
+                    beginWeek = timeBlock.getInt("beginWeek");
+                    endWeek = timeBlock.getInt("endWeek");
+
+                    if(!(beginWeek <= now_week && now_week <= endWeek)) continue;
+                    if(dayOfWeek != day_of_week) continue;
+
+                    try {
+                        weekOddEven = timeBlock.getString("weekOddEven");
+                    } catch (Exception e) {
+//                    e.printStackTrace();
+                    }
+
+                    switch (weekOddEven.toUpperCase()){
+                        case "":{
+                            break;
+                        }
+                        case "E":{
+                            //双周
+                            if(now_week % 2 != 0) continue;
+                            break;
+                        }
+                        case "O":{
+                            //单周
+                            if(now_week % 2 == 0) continue;
+                            break;
+                        }
+                    }
+
+                    start_end = classSetConvert.mathStartEnd(classSet);
+
+                    map.put("index", start_end[0] + " - " + start_end[1] + "节");
+                    map.put("title", courName);
+                    map.put("context1", classroomName);
+//                    map.put("type", selectType);
+
+                    dataList.add(map);
+
+                    weekOddEven = "";
+
+                }
+            }
+
+            Log.i("GetCourse", "今日课程数量:\t" + dataList.size());
+
+            if(dataList.size() == 0){
+                map = new HashMap<>();
+
+                map.put("index", "");
+                map.put("title", "今天没课呀~");
+                map.put("context1", "");
+//                map.put("type", "");
+
+                dataList.add(map);
+            }
+            else{
+                Collections.sort(dataList, new Comparator<Map<String, Object>>() {
+                    @Override
+                    public int compare(Map<String, Object> o1, Map<String, Object> o2) {
+                        return ((String)o1.get("index")).compareTo((String)o2.get("index"));
+                    }
+                });
+            }
+
+            return dataList;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private List<Map<String, Object>> getCourseList(final String date) throws Exception{
+
+        if(date.equals("0000-00-00")) {
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+            final String now_time = df.format(new Date());
+            final String[] dayOfWeekName = new String[]{"","星期一","星期二","星期三","星期四","星期五","星期六","星期日"};
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    timeInformation.setTextColor(getResources().getColor(R.color.app_red));
+                    timeInformation.setText(now_time.substring(2) + " " + dayOfWeekName[day_of_week] + " (第 " + now_week + " 周)\n" +
+                            "今天放假啦");
+                }
+            });
+
+            List<Map<String, Object>> dataList = new ArrayList<>();
+            Map<String, Object> map = new HashMap<>();
+            map.put("index", "");
+            map.put("title", "今天放假啦o(*￣▽￣*)o");
+            map.put("context1", "");
+//            map.put("type", "");
+            dataList.add(map);
+            return dataList;
+        }
+
+        //递归调用【！会引起逻辑错误】
+//        if(CourseScheduleChange.containsDate(this, date)){
+//            return getCourseList(CourseScheduleChange.getDate(this, date));
+//        }
+
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        long time = df.parse(date).getTime();
+
+        Locale.setDefault(Locale.CHINA);
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+
+        JSONObject teachingTermJSON = UIMS.getTeachingTermJSON();
+        JSONObject value;
+        try {
+            value = teachingTermJSON.getJSONArray("value").getJSONObject(0);
+        }catch (Exception e){
+            e.printStackTrace();
+            value = teachingTermJSON;
+        }
+        long startTime = df.parse(value.getString("startDate").split("T")[0]).getTime();
+        final long temp_week = (time - startTime) / (1000 * 3600 * 24 * 7) + 1;
+
+        cal = Calendar.getInstance();
+        cal.setTime(df.parse(date));
+        int temp_day_of_week = cal.get(Calendar.DAY_OF_WEEK) - 1;
+        if (temp_day_of_week <= 0)
+            temp_day_of_week = 7;
+        final int temp_day_of_week_1 = temp_day_of_week;
+
+        final String now_time = df.format(new Date());
+        final String[] dayOfWeekName = new String[]{"","星期一","星期二","星期三","星期四","星期五","星期六","星期日"};
+
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(MainActivity.this, string, Toast.LENGTH_SHORT).show();
-//                showAlert(string);
+                timeInformation.setTextColor(getResources().getColor(R.color.app_red));
+                timeInformation.setText(now_time.substring(2) + " " + dayOfWeekName[day_of_week] + " (第 " + now_week + " 周)\n" +
+                        "课程临时调整：\n" +
+                        date.substring(2) + " " + dayOfWeekName[temp_day_of_week_1] + " (第 " + temp_week + " 周)");
             }
         });
-    }
 
-    public class NestedListView extends ListView  {
-
-        public NestedListView(Context context, AttributeSet attrs) {
-            super(context, attrs);
-        }
-
-        @Override
-        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-            //测量的大小由一个32位的数字表示，前两位表示测量模式，后30位表示大小，这里需要右移两位才能拿到测量的大小
-            int heightSpec = MeasureSpec.makeMeasureSpec(Integer.MAX_VALUE >> 2, MeasureSpec.AT_MOST);
-            super.onMeasure(widthMeasureSpec, heightSpec);
-        }
+        return getCourseList(temp_day_of_week_1, (int) temp_week);
 
     }
 
-    private ColorStateList getColorStateListTest() {
-        int[][] states = new int[][]{
-                new int[]{android.R.attr.state_enabled}, // enabled
-                new int[]{-android.R.attr.state_enabled}, // disabled
-                new int[]{-android.R.attr.state_checked}, // unchecked
-                new int[]{android.R.attr.state_pressed}  // pressed
-        };
-        int color = ColorManager.getTopAlertBackgroundColor();
-        int[] colors = new int[]{color, color, color, ColorManager.getTopAlertBackgroundColor()};
-        return new ColorStateList(states, colors);
+    private List<Map<String, Object>> getCourseList(int day_of_week, int now_week) throws Exception{
+
+        Log.i("GetCourse", "教学周:\t" + now_week);
+        Log.i("GetCourse", "星期:\t" + day_of_week);
+
+        if(day_of_week == 0 || now_week == 0) throw new IllegalAccessException("教学周或星期为0！");
+
+        ClassSetConvert classSetConvert = new ClassSetConvert();
+        List<Map<String,Object>> dataList = new ArrayList<>();
+        Map<String,Object> map;
+
+        JSONObject allCourseJSON = UIMS.getCourseJSON();
+
+        JSONArray json_courses = allCourseJSON.getJSONArray("value");
+
+        Log.i("GetCourse", "课程数量:\t" + json_courses.size());
+
+        JSONObject teachClassMaster;
+
+        JSONArray lessonSchedules;
+        JSONArray lessonTeachers;
+        JSONObject teacher;
+        String teacherName;
+        JSONObject lessonSegment;
+        String courName;
+
+        JSONObject timeBlock;
+        int classSet;
+        int dayOfWeek;
+        int beginWeek;
+        int endWeek;
+        int[] start_end;
+        String weekOddEven = "";
+        JSONObject classroom;
+        String classroomName;
+
+        try {
+
+            for(int i=0; i<json_courses.size(); i++){
+
+                teachClassMaster = json_courses.getJSONObject(i).getJSONObject("teachClassMaster");
+
+                lessonSegment = teachClassMaster.getJSONObject("lessonSegment");
+                lessonSchedules = teachClassMaster.getJSONArray("lessonSchedules");
+                lessonTeachers = teachClassMaster.getJSONArray("lessonTeachers");
+
+                courName = lessonSegment.getString("fullName");
+
+                teacherName = lessonTeachers.getJSONObject(0).getJSONObject("teacher").getString("name");
+
+                for (int j = 0; j < lessonSchedules.size(); j++) {
+
+                    map = new HashMap<>();
+
+                    timeBlock = lessonSchedules.getJSONObject(j).getJSONObject("timeBlock");
+                    classroom = lessonSchedules.getJSONObject(j).getJSONObject("classroom");
+                    classroomName = classroom.getString("fullName");
+
+                    classSet = timeBlock.getInt("classSet");
+                    dayOfWeek = timeBlock.getInt("dayOfWeek");
+                    beginWeek = timeBlock.getInt("beginWeek");
+                    endWeek = timeBlock.getInt("endWeek");
+
+                    if(!(beginWeek <= now_week && now_week <= endWeek)) continue;
+                    if(dayOfWeek != day_of_week) continue;
+
+                    try {
+                        weekOddEven = timeBlock.getString("weekOddEven");
+                    } catch (Exception e) {
+//                    e.printStackTrace();
+                    }
+
+                    switch (weekOddEven.toUpperCase()){
+                        case "":{
+                            break;
+                        }
+                        case "E":{
+                            //双周
+                            if(now_week % 2 != 0) continue;
+                            break;
+                        }
+                        case "O":{
+                            //单周
+                            if(now_week % 2 == 0) continue;
+                            break;
+                        }
+                    }
+
+                    start_end = classSetConvert.mathStartEnd(classSet);
+
+                    map.put("index", start_end[0] + " - " + start_end[1] + "节");
+                    map.put("title", courName);
+                    map.put("context1", classroomName);
+//                    map.put("type", selectType);
+
+                    dataList.add(map);
+
+                    weekOddEven = "";
+
+                }
+            }
+
+            Log.i("GetCourse", "今日课程数量:\t" + dataList.size());
+
+            if(dataList.size() == 0){
+                map = new HashMap<>();
+
+                map.put("index", "");
+                map.put("title", "今天没课呀o(*￣▽￣*)o");
+                map.put("context1", "");
+//                map.put("type", "");
+
+                dataList.add(map);
+            }
+            else{
+                Collections.sort(dataList, new Comparator<Map<String, Object>>() {
+                    @Override
+                    public int compare(Map<String, Object> o1, Map<String, Object> o2) {
+                        return ((String)o1.get("index")).compareTo((String)o2.get("index"));
+                    }
+                });
+            }
+
+            return dataList;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public void getInternetInformation(){
+        Log.i("GetInternetInformation", "GetInternetInformation");
+        final GetInternetInformation getInf = new GetInternetInformation();
+        try {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    final JSONObject object = getInf.getVersionInformation();
+
+                    if (object == null) {
+                        Log.i("GetInternetInformation", "Object is NULL.");
+                        return;
+                    }
+
+                    try {
+                        int internetVersion = object.getInt("VersionCode");
+                        Log.i("Version", "" + internetVersion);
+                        // TODO Version Control
+                        if(internetVersion <= Version.getVersionCode()){
+                            return;
+                        }
+                    } catch (Exception e){
+                        e.printStackTrace();
+                    }
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            InternetInformationPopupWindow informationPopWindow = new InternetInformationPopupWindow(MainActivity.this, object, findViewById(R.id.activity_login).getHeight(), findViewById(R.id.activity_login).getWidth());
+                            informationPopWindow.showAtLocation(MainActivity.this.findViewById(R.id.activity_login), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0); //设置layout在PopupWindow中显示的位置
+                        }
+                    });
+                }
+            }).start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            isInternetInformationShowed = true;
+//            sp.edit().putBoolean("isInternetInformationShowed", true).apply();
+        }
     }
 
     private void changeTheme(){
+        Log.i("Theme", "Change theme.");
         Window window = getWindow();
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
                 | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.setStatusBarColor(ColorManager.getPrimaryColor());
 
-        findViewById(R.id.activity_scrolling_layout).setBackground(ColorManager.getMainBackground_full());
-        fab.setBackgroundTintList(getColorStateListTest());
-//        fab.setColorFilter(ColorManager.getPrimaryColor());
-//        fab.setRippleColor(ColorManager.getPrimaryColor());
-//        fab.setBackgroundColor(ColorManager.getPrimaryColor());
+        activity_login.setBackground(ColorManager.getMainBackground_full());
+        getNewsButton.setBackground(ColorManager.getLocalInformationButtonBackground());
+        get_save_button.setBackground(ColorManager.getLocalInformationButtonBackground());
+        getNoneScoreCourseButton.setBackground(ColorManager.getLocalInformationButtonBackground());
+        load_internet_inf_button.setBackground(ColorManager.getInternetInformationButtonBackground_full());
     }
 
-    public void dismissGetScorePopWindow(){
+    public static void loadColorConfig(){
+        ColorManager.loadColorConfig(context.getApplicationContext());
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                ColorManager.loacColorCofig(context.getApplicationContext());
+//            }
+//        }).start();
+    }
+
+    private void changeStatusBarTextColor(boolean isBlack) {
+        if (isBlack) {
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);//设置状态栏黑色字体
+        } else {
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);//恢复状态栏白色字体
+        }
+    }
+
+    public static void setReLoadTodayCourse(boolean reLoadTodayCourse) {
+        MainActivity.reLoadTodayCourse = reLoadTodayCourse;
+    }
+
+    public static void setIsCourseNeedReload(boolean isCourseNeedReload) {
+        MainActivity.isCourseNeedReload = isCourseNeedReload;
+        sp.edit().putBoolean("isCourseNeedReload", isCourseNeedReload).apply();
+    }
+
+    public static void saveTeachingTerm(){
+        sp.edit().putString("TeachingTermJSON", UIMS.getTeachingTermJSON().toString()).apply();
+        MainActivity.setIsCourseNeedReload(true);
+    }
+
+    public static void saveCourseJSON(){
+        sp.edit().putString("CourseJSON", UIMS.getCourseJSON().toString()).apply();
+    }
+
+    public static void saveScoreJSON(){
+        sp.edit().putString("ScoreJSON", UIMS.getScoreJSON().toString()).apply();
+        sp.edit().putString("ScoreStatisticsJSON", UIMS.getScoreStatisticsJSON().toString()).apply();
+    }
+
+    public static boolean isAcceptTestFun() {
+        return acceptTestFun;
+    }
+
+    public static void setAcceptTestFun(boolean acceptTestFun) {
+        MainActivity.acceptTestFun = acceptTestFun;
+        sp.edit().putBoolean("acceptTestFun", MainActivity.acceptTestFun).apply();
+    }
+
+    private void myTestFunction(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    user = "54160907";
+                    pass = "225577";
+
+                    uims = new UIMS(user, pass);
+                    showLoading("正在连接到UIMS教务系统...");
+                    if (uims.connectToUIMS()) {
+                        showLoading("正在登录...");
+                        if (uims.login()) {
+                            showLoading("正在加载用户信息...");
+                            if (uims.getCurrentUserInfo()) {
+                                showAlert("", "欢迎您, " + uims.getNickName() + " ." + "\n" +
+                                        "您是UIMS系统第 " + uims.getLoginCounter() + " 位访问者.");
+                                if(uims.getUserInformation()) loginSuccess();
+                                else{
+                                    showResponse("Login failed!");
+                                    return;
+                                }
+                                if(!uims.getTermArray()){
+                                    showResponse("Login failed!");
+                                    return;
+                                }
+                                if (uims.getScoreStatistics()) {
+//                                    showResponse("查询成绩统计成功！");
+                                    showLoading("查询成绩中，请稍侯...");
+                                    if (uims.getRecentScore()) {
+//                                        showResponse("查询成绩成功！");
+                                        Log.i("Login", "getRecentScoreSucceed!");
+                                    }
+                                    else{
+                                        showResponse("Login failed!");
+                                        reLogin();
+                                        return;
+                                    }
+                                    if(uims.getTermArray()){
+//                                        showResponse("查询学期列表成功！");
+//                                        loadSuccess();
+                                        Log.i("Login", "getTermArraySucceed!");
+                                    }
+                                    else{
+                                        showResponse("Login failed!");
+                                        reLogin();
+                                        return;
+                                    }
+                                    if(uims.getCourseHistory("135")){
+                                        showResponse("查询历史选课成功！(term: 135)");
+                                        Log.i("Login", "getCourseHistorySucceed!");
+                                    }
+                                    else{
+                                        showResponse("Login failed!");
+                                        reLogin();
+                                        return;
+                                    }
+                                    if(uims.getCourseHistory("134")){
+                                        showResponse("查询历史选课成功！(term: 134)");
+                                        Log.i("Login", "getCourseHistorySucceed!");
+                                    }
+                                    else{
+                                        showResponse("Login failed!");
+                                        reLogin();
+                                        return;
+                                    }
+                                    if(uims.getCourseHistory("133")){
+                                        showResponse("查询历史选课成功！(term: 133)");
+                                        Log.i("Login", "getCourseHistorySucceed!");
+                                    }
+                                    else{
+                                        showResponse("Login failed!");
+                                        reLogin();
+                                        return;
+                                    }
+                                }
+                                else{
+                                    showResponse("Login failed!");
+                                    reLogin();
+                                }
+                            }
+                            else{
+//                                showResponse("Login failed!");
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Alerter.hide();
+                                        showWarningAlert("", "登录失败，请检查用户名和密码是否正确.\n\n" +
+                                                "教务账号：\t您的教学号\n" +
+                                                "教务密码：\t默认密码为身份证号后六位");
+//                                        button_login.setText("重新登录");
+//                                        button_login.setEnabled(true);
+//                                        button_login.setBackground(getResources().getDrawable(R.drawable.button_internet_background));
+                                        return;
+                                    }
+                                });
+                            }
+                        }
+                        else{
+//                            showResponse("Login failed!");
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Alerter.hide();
+                                    showWarningAlert("", "登录失败，请检查是否连接校园网！");
+//                                    button_login.setText("重新登录");
+//                                    button_login.setEnabled(true);
+//                                    button_login.setBackground(getResources().getDrawable(R.drawable.button_internet_background));
+                                    return;
+                                }
+                            });
+                        }
+                    }
+                    else{
+                        showResponse("Login failed!");
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    public void dismissPopWindow(){
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                getScorePopupWindow.dismiss();
+                popWindow.dismiss();
+            }
+        });
+    }
+
+    public void dismissCourseSchedulePopWindow(){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                courseSchedulePopupWindow.dismiss();
+            }
+        });
+    }
+
+    public void showResponse(final String string) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Alerter.hide();
+                if (string.toLowerCase().contains("failed")) {
+                    showWarningAlert("", "获取数据失败，请稍后重试.");
+//                    button_login.setText("重新登录");
+//                    button_login.setEnabled(true);
+//                    button_login.setBackground(getResources().getDrawable(R.drawable.button_internet_background));
+                    return;
+                }
+                Toast.makeText(MainActivity.this, string, Toast.LENGTH_SHORT).show();
+//        showAlert(string);
             }
         });
     }
@@ -735,243 +1443,65 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
-    protected MainAdapter createAdapter() {
-        return new ScoreListAdapter(this);
+    public void showWarningAlertWithCancel_OKButton(final String title, final String message){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Alerter.create(MainActivity.this)
+                        .setTitle(title)
+                        .setText(message)
+                        .addButton("取消", R.style.AlertButton, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Alerter.hide();
+                            }
+                        })
+                        .addButton("更新", R.style.AlertButton, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                LoginGetCourseSchedulePopupWindow window = new LoginGetCourseSchedulePopupWindow(MainActivity.this, UIMS.getTermName(), findViewById(R.id.activity_login).getHeight(), findViewById(R.id.activity_login).getWidth());
+                                window.setFocusable(true);
+                                window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+                                window.showAtLocation(MainActivity.this.findViewById(R.id.activity_login), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0); //设置layout在PopupWindow中显示的位置
+                                courseSchedulePopupWindow = window;
+                                Alerter.hide();
+                            }
+                        })
+                        .setBackgroundColorInt(getResources().getColor(R.color.color_alerter_warning_background))
+                        .enableSwipeToDismiss()
+                        .setDuration(Integer.MAX_VALUE)
+                        .show();
+            }
+        });
     }
 
-    class ScoreListAdapter extends MainAdapter{
-
-        private List<Map<String,Object>> mDataList;
-
-        public ScoreListAdapter(Context context){
-            super(context);
-        }
-
-        public void notifyDataSetChanged(List dataList) {
-            this.mDataList = (List<Map<String,Object>>)dataList;
-            super.notifyDataSetChanged(mDataList);
-        }
-
-        @Override
-        public int getItemCount() {
-            return mDataList == null ? 0 : mDataList.size();
-        }
-
-        @NonNull
-        @Override
-        public MainAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            return new ScoreListAdapter.ViewHolder(getInflater().inflate(R.layout.list_item, parent, false));
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull MainAdapter.ViewHolder holder, int position) {
-            holder.setData((String) mDataList.get(position).get("title"), (String) mDataList.get(position).get("context1"), (String) mDataList.get(position).get("context2"), (String) mDataList.get(position).get("context3"), (Double) mDataList.get(position).get("context4"), (String) mDataList.get(position).get("type"));
-        }
-
-        class ViewHolder extends MainAdapter.ViewHolder {
-
-            TextView tvTitle;
-            TextView tvContext1;
-            TextView tvContext2;
-            TextView tvContext3;
-            TextView tvContext4;
-
-            public ViewHolder(View itemView) {
-                super(itemView);
-                tvTitle = itemView.findViewById(R.id.list_item_title);
-                tvContext1 = itemView.findViewById(R.id.list_item_context1);
-                tvContext2 = itemView.findViewById(R.id.list_item_context2);
-                tvContext3 = itemView.findViewById(R.id.list_item_context3);
-                tvContext4 = itemView.findViewById(R.id.list_item_context4);
-            }
-
-            public void setData(String title, String context1, String context2, String context3, Double context4, String type) {
-                tvTitle.setText(title);
-                tvContext1.setText(context1);
-                tvContext2.setText(context2);
-                tvContext3.setText(context3);
-                tvContext4.setText(context4 + "");
-
-                switch (type){
-                    case "4160" :{
-                        tvTitle.setTextColor(getResources().getColor(R.color.course_bixiu));
-                        break;
-                    }
-                    case "4161" :{
-                        tvTitle.setTextColor(getResources().getColor(R.color.course_xuanxiu));
-                        break;
-                    }
-                    case "4162" :{
-                        tvTitle.setTextColor(getResources().getColor(R.color.course_xianxuan));
-                        break;
-                    }
-                    case "4163" :{
-                        tvTitle.setTextColor(getResources().getColor(R.color.course_xiaoxuanxiu));
-                        break;
-                    }
-                    case "4164" :{
-                        tvTitle.setTextColor(getResources().getColor(R.color.course_tiyu));
-                        break;
-                    }
-                }
-            }
-        }
-
-    }
-
-    class colorAdapter extends SimpleAdapter {
+    class noCourseBetterAdapter extends SimpleAdapter {
         List<? extends Map<String, ?>> mdata;
 
-        public colorAdapter(Context context, List<? extends Map<String, ?>> data, int resource, String[] from,
-                               int[] to) {
+        public noCourseBetterAdapter(Context context, List<? extends Map<String, ?>> data, int resource, String[] from,
+                            int[] to) {
             super(context, data, resource, from, to);
             this.mdata = data;
         }
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             if (convertView == null) {
-                convertView = LinearLayout.inflate(getBaseContext(), R.layout.list_item, null);
+                convertView = LinearLayout.inflate(getBaseContext(), R.layout.today_course_list_item, null);
             }//这个TextView是R.layout.list_item里面的，修改这个字体的颜色
-            TextView textView = (TextView) convertView.findViewById(R.id.list_item_title);
+            TextView textView = (TextView) convertView.findViewById(R.id.get_none_score_course_title_index);
             //获取每次进来时 mData里面存的值  若果相同则变颜色
             //根据Key值取出装入的数据，然后进行比较
-            String ss=(String)mdata.get(position).get("type");
-            if(ss.equals("4160")){
-                textView.setTextColor(getResources().getColor(R.color.course_bixiu));
-            }else if(ss.equals("4161")){
-                textView.setTextColor(getResources().getColor(R.color.course_xuanxiu));
-            }else if(ss.equals("4162")){
-                textView.setTextColor(getResources().getColor(R.color.course_xianxuan));
-            }else if(ss.equals("4163")){
-                textView.setTextColor(getResources().getColor(R.color.course_xiaoxuanxiu));
-            }else if(ss.equals("4164")){
-                textView.setTextColor(getResources().getColor(R.color.course_tiyu));
+            String ss=(String)mdata.get(position).get("index");
+
+            if(ss == null || !(ss.length() > 0)) {
+                textView.getLayoutParams().width = 0;
+                textView.setWidth(0);
             }
+
             //Log.i("TAG", Integer.toString(position));
             //Log.i("TAG", (String) mData.get(position).get("text"));
             return super.getView(position, convertView, parent);
         }
     }
 
-    public static void loadScoreSelect(){
-        if(sp == null) sp = LoginActivity.context.getApplicationContext().getSharedPreferences("ScoreSelectInfo", Context.MODE_PRIVATE);;
-        bixiu_select = sp.getBoolean("bixiu_select", true);
-        xuanxiu_select = sp.getBoolean("xuanxiu_select", true);
-        xianxuan_select = sp.getBoolean("xianxuan_select", true);
-        xiaoxuanxiu_select = sp.getBoolean("xiaoxuanxiu_select", false);
-        PE_select = sp.getBoolean("PE_select", false);
-        chongxiu_select = sp.getBoolean("chongxiu_select", false);
-    }
-
-    public static boolean isBixiu_select() {
-        return bixiu_select;
-    }
-
-    public static void setBixiu_select(boolean bixiu_select) {
-        MainActivity.bixiu_select = bixiu_select;
-        if(sp == null) sp = LoginActivity.context.getApplicationContext().getSharedPreferences("ScoreSelectInfo", Context.MODE_PRIVATE);;
-        sp.edit().putBoolean("bixiu_select", MainActivity.bixiu_select).apply();
-        Log.i("ScoreCustom", "setBixiu_select:\t" + bixiu_select);
-    }
-
-    public static boolean isXuanxiu_select() {
-        return xuanxiu_select;
-    }
-
-    public static void setXuanxiu_select(boolean xuanxiu_select) {
-        MainActivity.xuanxiu_select = xuanxiu_select;
-        if(sp == null) sp = LoginActivity.context.getApplicationContext().getSharedPreferences("ScoreSelectInfo", Context.MODE_PRIVATE);;
-        sp.edit().putBoolean("xuanxiu_select", MainActivity.xuanxiu_select).apply();
-        Log.i("ScoreCustom", "setXuanxiu_select:\t" + xuanxiu_select);
-    }
-
-    public static boolean isXianxuan_select() {
-        return xianxuan_select;
-    }
-
-    public static void setXianxuan_select(boolean xianxuan_select) {
-        MainActivity.xianxuan_select = xianxuan_select;
-        if(sp == null) sp = LoginActivity.context.getApplicationContext().getSharedPreferences("ScoreSelectInfo", Context.MODE_PRIVATE);;
-        sp.edit().putBoolean("xianxuan_select", MainActivity.xianxuan_select).apply();
-        Log.i("ScoreCustom", "setXianxuan_select:\t" + xianxuan_select);
-    }
-
-    public static boolean isXiaoxuanxiu_select() {
-        return xiaoxuanxiu_select;
-    }
-
-    public static void setXiaoxuanxiu_select(boolean xiaoxuanxiu_select) {
-        MainActivity.xiaoxuanxiu_select = xiaoxuanxiu_select;
-        if(sp == null) sp = LoginActivity.context.getApplicationContext().getSharedPreferences("ScoreSelectInfo", Context.MODE_PRIVATE);;
-        sp.edit().putBoolean("xiaoxuanxiu_select", MainActivity.xiaoxuanxiu_select).apply();
-        Log.i("ScoreCustom", "setXiaoxuanxiu_select:\t" + xiaoxuanxiu_select);
-    }
-
-    public static boolean isPE_select() {
-        return PE_select;
-    }
-
-    public static void setPE_select(boolean PE_select) {
-        MainActivity.PE_select = PE_select;
-        if(sp == null) sp = LoginActivity.context.getApplicationContext().getSharedPreferences("ScoreSelectInfo", Context.MODE_PRIVATE);;
-        sp.edit().putBoolean("PE_select", MainActivity.PE_select).apply();
-        Log.i("ScoreCustom", "setPE_select:\t" + PE_select);
-    }
-
-    public static boolean isChongxiu_select() {
-        return chongxiu_select;
-    }
-
-    public static void setChongxiu_select(boolean chongxiu_select) {
-        MainActivity.chongxiu_select = chongxiu_select;
-        if(sp == null) sp = LoginActivity.context.getApplicationContext().getSharedPreferences("ScoreSelectInfo", Context.MODE_PRIVATE);;
-        sp.edit().putBoolean("chongxiu_select", MainActivity.chongxiu_select).apply();
-        Log.i("ScoreCustom", "isChongxiu_select:\t" + chongxiu_select);
-    }
-
-    public static boolean isReLoadSocreList() {
-        return reLoadSocreList;
-    }
-
-    public static void setReLoadSocreList(boolean reLoadScoreList) {
-        MainActivity.reLoadSocreList = reLoadScoreList;
-        getScoreList();
-    }
-
-    public static void saveCJCXScore(){
-        if(context != null){
-            CJCX.saveCJCXJSON(context);
-        }
-        else{
-            Log.e("CJCXScore", "MainActivity.context is NULL! Can't save!");
-        }
-    }
-
-    public static void loadCJCXScore(){
-        if(context != null){
-            if(sp != null && sp.contains("CJCXScore")){
-                try {
-                    CJCX.saveCJCXJSON(context, new org.json.JSONObject(sp.getString("CJCXScore", "")));
-                    sp.edit().remove("CJCXScore").apply();
-                    Log.i("CJCXScore", "Save pri.");
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
-            }
-            CJCX.loadCJCXJSON(context);
-        }
-        else{
-            Log.e("CJCXScore", "MainActivity.context is NULL! Can't load!");
-        }
-    }
-
-    public static boolean isCJCX_enable() {
-        return cjcx_enable;
-    }
-
-    public static void setCJCX_enable(boolean cjcx_enable) {
-        MainActivity.cjcx_enable = cjcx_enable;
-        sp.edit().putBoolean("cjcx_enable", cjcx_enable).apply();
-        Log.i("ScoreCustom", "cjcx_enable:\t" + cjcx_enable);
-    }
 }

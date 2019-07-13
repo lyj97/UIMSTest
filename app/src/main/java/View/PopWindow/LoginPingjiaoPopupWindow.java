@@ -14,7 +14,6 @@ import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.lu.mydemo.LoginActivity;
 import com.lu.mydemo.MainActivity;
 import com.lu.mydemo.PingjiaoActivity;
 import com.lu.mydemo.R;
@@ -48,7 +47,7 @@ public class LoginPingjiaoPopupWindow extends PopupWindow {
     public LoginPingjiaoPopupWindow(final PingjiaoActivity context, int height, int width, final View.OnClickListener listener, String title, String commit_text) {
         super(context);
         this.context = context;
-        sp = LoginActivity.context.getSharedPreferences("userInfo", Context.MODE_PRIVATE);//共用LoginActivity账户
+        sp = MainActivity.context.getSharedPreferences("userInfo", Context.MODE_PRIVATE);//共用LoginActivity账户
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mMenuView = inflater.inflate(R.layout.pop_window_login, null);
@@ -99,7 +98,7 @@ public class LoginPingjiaoPopupWindow extends PopupWindow {
                                 context.showLoading("正在登录...");
                                 if (uims.login()) {
                                     if (uims.getCurrentUserInfo(false)) {
-                                        LoginActivity.saveScoreJSON();
+                                        MainActivity.saveScoreJSON();
                                         context.showAlert("登录成功！");
                                         context.setLogin(true);
                                         context.setUims(uims);

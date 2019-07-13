@@ -7,7 +7,6 @@ import android.icu.util.Calendar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -34,7 +33,6 @@ import com.yanzhenjie.recyclerview.SwipeMenuBridge;
 import com.yanzhenjie.recyclerview.SwipeMenuCreator;
 import com.yanzhenjie.recyclerview.SwipeMenuItem;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
-import com.yanzhenjie.recyclerview.touch.OnItemMoveListener;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -219,7 +217,7 @@ public class CourseScheduleChangeActivity extends AppCompatActivity {
                 if(term != null){
                     if(term.equals(UIMS.getTermName())){
                         Log.i("SetTerm", "Ignored! Term not change.");
-                        LoginActivity.setIsCourseNeedReload(false);
+                        MainActivity.setIsCourseNeedReload(false);
                         return;
                     }
                     JSONObject termJSON = UIMS.getTermJSON(term);
@@ -229,7 +227,7 @@ public class CourseScheduleChangeActivity extends AppCompatActivity {
                     }
                     Log.i("TermJSON", termJSON.toString());
                     UIMS.setTeachingTerm(termJSON);
-                    LoginActivity.saveTeachingTerm();
+                    MainActivity.saveTeachingTerm();
                     Toast.makeText(CourseScheduleChangeActivity.this, "当前学期已设为：\t" + UIMS.getTermName(), Toast.LENGTH_SHORT).show();
                 }
                 else{
@@ -272,7 +270,7 @@ public class CourseScheduleChangeActivity extends AppCompatActivity {
                         return;
                     }
                     JSONArray array = object.getJSONArray("value");
-                    if(array.size() == 0 || CourseScheduleChange.containsDate(LoginActivity.context, array)) {
+                    if(array.size() == 0 || CourseScheduleChange.containsDate(MainActivity.context, array)) {
                         Log.i("GetRecommendCourseScheduleChange", "Contains all in array.");
                         return;
                     }
@@ -314,7 +312,7 @@ public class CourseScheduleChangeActivity extends AppCompatActivity {
 
     private List<Map<String, Object>> getChangeList(){
 
-        HashMap<String, JSONObject> changeList = CourseScheduleChange.getPreviousTime_changeTime(LoginActivity.context);
+        HashMap<String, JSONObject> changeList = CourseScheduleChange.getPreviousTime_changeTime(MainActivity.context);
 
         List<Map<String,Object>> dataList = new ArrayList<>();
         Map<String,Object> map;
@@ -374,7 +372,7 @@ public class CourseScheduleChangeActivity extends AppCompatActivity {
     }
 
     private void setSpinnerItems(){
-        if(LoginActivity.isLocalValueLoaded){
+        if(MainActivity.isLocalValueLoaded){
             termList = getTermArray();
             spinner.setAdapter(new ArrayAdapter(this, R.layout.select_item, R.id.select_text_item, termList));
             spinner.setSelection(termList.indexOf(UIMS.getTermName()));

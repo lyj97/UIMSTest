@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import com.lu.mydemo.LoginActivity;
+import com.lu.mydemo.MainActivity;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -18,7 +18,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 public class ExamSchedule {
 
@@ -202,7 +201,7 @@ public class ExamSchedule {
 
                     sp.edit().putString("ExamSchedule", examScheduleJSON.toString()).apply();
 
-                    LoginActivity.setReLoadTodayCourse(true);
+                    MainActivity.setReLoadTodayCourse(true);
                     reLoad();
 
                     Log.i("ExamSchedule", "SaveSucceed!");
@@ -231,7 +230,7 @@ public class ExamSchedule {
 
                     sp.edit().putString("ExamSchedule", examScheduleJSON.toString()).apply();
 
-                    LoginActivity.setReLoadTodayCourse(true);
+                    MainActivity.setReLoadTodayCourse(true);
                     reLoad();
 
                     Log.i("ExamSchedule", "SaveSucceed!");

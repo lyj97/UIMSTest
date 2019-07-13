@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 import android.icu.text.SimpleDateFormat;
 import android.util.Log;
 
-import com.lu.mydemo.LoginActivity;
+import com.lu.mydemo.MainActivity;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -130,7 +130,7 @@ public class CourseScheduleChange {
 
                     sp.edit().putString("CourseScheduleChange", courseScheduleChangeJSON.toString()).apply();
 
-                    LoginActivity.setReLoadTodayCourse(true);
+                    MainActivity.setReLoadTodayCourse(true);
                     reLoad();
 
                     Log.i("CourseScheduleChange", "SaveSucceed!");
@@ -159,7 +159,7 @@ public class CourseScheduleChange {
 
                     sp.edit().putString("CourseScheduleChange", courseScheduleChangeJSON.toString()).apply();
 
-                    LoginActivity.setReLoadTodayCourse(true);
+                    MainActivity.setReLoadTodayCourse(true);
                     reLoad();
 
                     Log.i("CourseScheduleChange", "SaveSucceed!");

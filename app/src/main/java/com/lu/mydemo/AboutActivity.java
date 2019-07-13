@@ -28,7 +28,7 @@ public class AboutActivity extends AppCompatActivity {
     private TextView application_icon_text_view;
     private TextView application_version_name;
     private TextView link_to_uimstest;
-    private TextView link_to_qq;
+//    private TextView link_to_qq;
     private TextView link_to_group;
 
     private TextView navigation_back;
@@ -44,7 +44,7 @@ public class AboutActivity extends AppCompatActivity {
         application_icon_text_view = findViewById(R.id.activity_about_application_icon);
         application_version_name = findViewById(R.id.activity_about_application_version_name);
         link_to_uimstest = findViewById(R.id.activity_about_link_to_uimstest);
-        link_to_qq = findViewById(R.id.activity_about_link_to_qq);
+//        link_to_qq = findViewById(R.id.activity_about_link_to_qq);
         link_to_group = findViewById(R.id.activity_about_link_to_group);
 
         navigation_back = findViewById(R.id.activity_about_navigation_back_text);
@@ -86,20 +86,20 @@ public class AboutActivity extends AppCompatActivity {
         link_to_uimstest.setAutoLinkMask(0);
         link_to_uimstest.setLinksClickable(true);
 
-        CharSequence charSequence_link_to_qq = Html.fromHtml("<a href=\'mqqwpa://im/chat?chat_type=wpa&uin=1159386449\'>意见反馈请点此处</a>");
-        link_to_qq.setText(charSequence_link_to_qq);
-        link_to_qq.setMovementMethod(LinkMovementMethod.getInstance());
-        link_to_qq.setAutoLinkMask(0);
-        link_to_qq.setLinksClickable(true);
+//        CharSequence charSequence_link_to_qq = Html.fromHtml("<a href=\'mqqwpa://im/chat?chat_type=wpa&uin=1159386449\'>意见反馈请点此处</a>");
+//        link_to_qq.setText(charSequence_link_to_qq);
+//        link_to_qq.setMovementMethod(LinkMovementMethod.getInstance());
+//        link_to_qq.setAutoLinkMask(0);
+//        link_to_qq.setLinksClickable(true);
 
-        CharSequence charSequence_link_to_group = Html.fromHtml("<a href=\'http://qm.qq.com/cgi-bin/qm/qr?k=SN-JdqTXpVKfvRJm4LgXkSM6yARpXhKY#\'>参与内测请点此处</a>");
+        CharSequence charSequence_link_to_group = Html.fromHtml("<a href=\'http://qm.qq.com/cgi-bin/qm/qr?k=SN-JdqTXpVKfvRJm4LgXkSM6yARpXhKY#\'>意见反馈、参与开发/内测、Bug反馈请点此处</a>");
         link_to_group.setText(charSequence_link_to_group);
         link_to_group.setMovementMethod(LinkMovementMethod.getInstance());
         link_to_group.setAutoLinkMask(0);
         link_to_group.setLinksClickable(true);
 
         setLinkStyle(link_to_uimstest);
-        setLinkStyle(link_to_qq);
+//        setLinkStyle(link_to_qq);
         setLinkStyle(link_to_group);
 
         navigation_back.setOnClickListener(new View.OnClickListener() {

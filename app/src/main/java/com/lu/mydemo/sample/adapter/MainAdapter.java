@@ -90,7 +90,7 @@ public class MainAdapter extends BaseAdapter<MainAdapter.ViewHolder> {
 
         public void setData(String title, String department, String time, boolean flagTop, String place){}
 
-        public void setData(String title, String context1, String context2, String context3, Double context4, String type){}
+        public void setData(String title, String context1, String context2, String context3, Double context4, String type, int position){}
     }
 
 }

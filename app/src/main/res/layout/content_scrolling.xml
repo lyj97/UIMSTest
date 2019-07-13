@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_toEndOf="@+id/activity_scrolling_layout_my_toolbar"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".MainActivity"
+    tools:context=".ScoreActivity"
     tools:showIn="@layout/activity_scrolling">
 
     <LinearLayout

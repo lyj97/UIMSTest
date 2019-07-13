@@ -193,7 +193,7 @@ public class AddCourseExamPopupWindow extends PopupWindow {
 
             public boolean onTouch(View v, MotionEvent event) {
 
-                int height = mMenuView.findViewById(R.id.course_schedule_change_pop_layout).getTop();
+                int height = mMenuView.findViewById(R.id.add_exam_pop_layout).getTop();
                 int y=(int) event.getY();
                 if(event.getAction()==MotionEvent.ACTION_UP){
                     if(y<height){

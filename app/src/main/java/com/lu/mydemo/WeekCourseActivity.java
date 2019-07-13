@@ -111,7 +111,7 @@ public class WeekCourseActivity extends AppCompatActivity implements View.OnClic
         mTimetableView = findViewById(R.id.id_timetableView);
 
         //设置周次选择属性
-        mWeekView.curWeek((int)LoginActivity.now_week)
+        mWeekView.curWeek((int) MainActivity.now_week)
                 .itemCount(weeks)
                 .callback(new IWeekView.OnWeekItemClickedListener() {
                     @Override
@@ -132,7 +132,7 @@ public class WeekCourseActivity extends AppCompatActivity implements View.OnClic
                 .isShow(false)//设置隐藏，默认显示
                 .showView();
 
-        mTimetableView.curWeek((int)LoginActivity.now_week)
+        mTimetableView.curWeek((int) MainActivity.now_week)
                 /**
                  * 最大课程数
                  */

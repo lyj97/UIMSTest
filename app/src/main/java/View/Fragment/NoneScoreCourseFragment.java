@@ -7,8 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.Gravity;
@@ -16,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.animation.Animation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -24,18 +21,16 @@ import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.PopupWindow;
-import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.lu.mydemo.LoginActivity;
+import com.lu.mydemo.MainActivity;
 import com.lu.mydemo.NoneScoreCourseActivity;
 import com.lu.mydemo.R;
 import com.lu.mydemo.sample.adapter.BaseAdapter;
 import com.lu.mydemo.sample.adapter.MainAdapter;
 import com.tapadoo.alerter.Alerter;
-import com.yanzhenjie.recyclerview.OnItemClickListener;
 import com.yanzhenjie.recyclerview.OnItemMenuClickListener;
 import com.yanzhenjie.recyclerview.SwipeMenu;
 import com.yanzhenjie.recyclerview.SwipeMenuBridge;
@@ -286,7 +281,7 @@ public class NoneScoreCourseFragment extends Fragment {
     }
 
     private void setSpinnerItems(){
-        if(LoginActivity.isLocalValueLoaded){
+        if(MainActivity.isLocalValueLoaded){
             termList = getTermArray();
             spinner.setAdapter(new ArrayAdapter(context, R.layout.select_item, R.id.select_text_item, termList));
             spinner.setSelection(termList.indexOf(UIMS.getTermName()));
@@ -350,7 +345,7 @@ public class NoneScoreCourseFragment extends Fragment {
             }
         });
 
-        final UIMS uims = (myUims == null ? LoginActivity.uims : myUims);
+        final UIMS uims = (myUims == null ? MainActivity.uims : myUims);
         if(uims == null){
             showAlert("本地暂无【" + termId_termName.get(termID) + "】数据，且您还未登录，请登录后重试。");
             getNoneScoreCourseFailed();
@@ -532,7 +527,7 @@ public class NoneScoreCourseFragment extends Fragment {
     }
 
     private void loadSuccess(){
-        SharedPreferences sp = LoginActivity.context.getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+        SharedPreferences sp = MainActivity.context.getSharedPreferences("userInfo", Context.MODE_PRIVATE);
 
         sp.edit().putString("ScoreJSON", UIMS.getScoreJSON().toString()).apply();
         sp.edit().putString("StudentJSON", UIMS.getStudentJSON().toString()).apply();

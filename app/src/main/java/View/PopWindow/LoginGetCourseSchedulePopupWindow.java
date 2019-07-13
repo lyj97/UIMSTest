@@ -2,7 +2,6 @@ package View.PopWindow;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.GradientDrawable;
 import android.util.Log;
@@ -15,7 +14,7 @@ import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.lu.mydemo.LoginActivity;
+import com.lu.mydemo.MainActivity;
 import com.lu.mydemo.R;
 import com.tapadoo.alerter.Alerter;
 
@@ -43,10 +42,10 @@ public class LoginGetCourseSchedulePopupWindow extends PopupWindow {
 
     public static boolean loginSuccess = false;
 
-    public LoginGetCourseSchedulePopupWindow(final LoginActivity context, final String termName, int height, int width) {
+    public LoginGetCourseSchedulePopupWindow(final MainActivity context, final String termName, int height, int width) {
         super(context);
         this.context = context;
-        sp = LoginActivity.context.getSharedPreferences("userInfo", Context.MODE_PRIVATE);//共用LoginActivity账户
+        sp = MainActivity.context.getSharedPreferences("userInfo", Context.MODE_PRIVATE);//共用LoginActivity账户
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mMenuView = inflater.inflate(R.layout.pop_window_login, null);
@@ -96,10 +95,10 @@ public class LoginGetCourseSchedulePopupWindow extends PopupWindow {
                                 if (uims.login()) {
                                     if (uims.getCurrentUserInfo(false)) {
                                         uims.getCourseSchedule();
-                                        LoginActivity.saveCourseJSON();
-                                        LoginActivity.saveTeachingTerm();
-                                        LoginActivity.setReLoadTodayCourse(true);
-                                        LoginActivity.setIsCourseNeedReload(false);
+                                        MainActivity.saveCourseJSON();
+                                        MainActivity.saveTeachingTerm();
+                                        MainActivity.setReLoadTodayCourse(true);
+                                        MainActivity.setIsCourseNeedReload(false);
                                         context.showAlert("课程信息刷新成功！");
                                         context.loadCourseInformation();
                                         context.dismissCourseSchedulePopWindow();

@@ -14,7 +14,7 @@ import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.lu.mydemo.LoginActivity;
+import com.lu.mydemo.MainActivity;
 import com.lu.mydemo.NoneScoreCourseActivity;
 import com.lu.mydemo.R;
 import com.tapadoo.alerter.Alerter;
@@ -46,7 +46,7 @@ public class LoginGetSelectCoursePopWindow extends PopupWindow {
     public LoginGetSelectCoursePopWindow(final NoneScoreCourseActivity context, final String termName, int height, int width) {
         super(context);
         this.context = context;
-        sp = LoginActivity.context.getSharedPreferences("userInfo", Context.MODE_PRIVATE);//共用LoginActivity账户
+        sp = MainActivity.context.getSharedPreferences("userInfo", Context.MODE_PRIVATE);//共用LoginActivity账户
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mMenuView = inflater.inflate(R.layout.pop_window_login, null);

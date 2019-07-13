@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background_login"
-    tools:context="com.lu.mydemo.LoginActivity"
+    tools:context="com.lu.mydemo.MainActivity"
     android:orientation="vertical">
 
     <LinearLayout
@@ -40,7 +40,8 @@
             <TextView
                 android:id="@+id/time_information"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:gravity="center"/>
 
             <TextView
                 android:layout_width="0dp"
@@ -57,7 +58,8 @@
             <TextView
                 android:id="@+id/term_information"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:gravity="center"/>
 
         </LinearLayout>
 
@@ -148,6 +150,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/button_local_background"
+                        android:transitionName="NewsActivity"
                         android:text="校内通知"
                         android:textSize="18dp"
                         android:textColor="@color/colorlogin_text"/>
