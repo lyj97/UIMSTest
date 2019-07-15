@@ -19,6 +19,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -601,6 +602,7 @@ public class MainActivity extends Activity {
 
     private void getCourseSuccess(){
         try {
+            courseList.setOnItemClickListener(null);
             if(!reLoadTodayCourse) return;
             final List<Map<String, Object>> datalist = getCourseList();
             runOnUiThread(new Runnable() {
@@ -622,6 +624,14 @@ public class MainActivity extends Activity {
                 @Override
                 public void run() {
                     courseList.setAdapter(new noCourseBetterAdapter(context, getCourseListNotice("暂无课程信息\n请点击\"更新信息\"登录并刷新本地数据."), R.layout.today_course_list_item, new String[]{"index", "title", "context1"}, new int[]{R.id.get_none_score_course_title_index, R.id.get_none_score_course_title, R.id.get_none_score_course_context1}));
+                    courseList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            showAlert("如在校内，请连接校园网后点击\"更新信息\"按钮登录教务系统，获取所需信息.\n\n" +
+                                    "如不在校内，本应用暂时无法提供完整功能，仅可在校外使用\"校内通知\"、\"成绩查询\"部分功能，请谅解.\n" +
+                                    "（在校内登录成功后，应用将自动保存数据，此时即可离线查看.）");
+                        }
+                    });
                     if(!listHaveHeadFoot) {
                         courseList.addHeaderView(new ViewStub(context));
                         courseList.addFooterView(new ViewStub(context));
@@ -1122,10 +1132,8 @@ public class MainActivity extends Activity {
                     try {
                         int internetVersion = object.getInt("VersionCode");
                         Log.i("Version", "" + internetVersion);
-                        // TODO Version Control
-                        if(internetVersion <= Version.getVersionCode()){
-                            return;
-                        }
+//                        Log.e("MainActivity", "Ignored internet information version check for TEST!");
+                        if(internetVersion <= Version.getVersionCode()) return;
                     } catch (Exception e){
                         e.printStackTrace();
                     }

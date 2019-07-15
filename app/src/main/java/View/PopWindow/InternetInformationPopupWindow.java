@@ -64,7 +64,9 @@ public class InternetInformationPopupWindow extends PopupWindow {
 
         changeTheme();
 
+        title = title.replace("\\n", "\n");
         information_title.setText(title);
+        information = information.replace("\\n", "\n");
         information_main.setText(information);
 
         if(link.length() > 0 && link_text.length() > 0) {
