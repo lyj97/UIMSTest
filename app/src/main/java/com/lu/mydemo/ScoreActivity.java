@@ -984,7 +984,7 @@ public class ScoreActivity extends AppCompatActivity
                 chart.getDescription().setText("");
             }
 
-            public void setData(String title, String context1, String context2, String context3, Double context4, String type, int position) {
+            public void setData(String title, String context1, final String context2, String context3, Double context4, String type, int position) {
                 tvTitle.setText(title);
                 tvContext1.setText(context1);
                 tvContext2.setText(context2);
@@ -1024,10 +1024,82 @@ public class ScoreActivity extends AppCompatActivity
 
                     final PieData data = pieDatas[position];
                     if(data != null) data.setValueFormatter(new PercentFormatter(chart){
+                        int index = -1;
+                        int part_index;
                         @Override
                         public String getFormattedValue(float value) {
+                            try{
+                                part_index = (int) Double.parseDouble(context2) / 10;
+                            }catch (Exception e){
+                                switch (context2){
+                                    case "优秀" :{
+                                        part_index = 9;
+                                        break;
+                                    }
+                                    case "良好" :{
+                                        part_index = 8;
+                                        break;
+                                    }
+                                    case "中等" :{
+                                        part_index = 7;
+                                        break;
+                                    }
+                                    case "及格" :{
+                                        part_index = 6;
+                                        break;
+                                    }
+                                    case "不及格" :{
+                                        part_index = 5;
+                                        break;
+                                    }
+                                }
+                            }
+                            index ++;
+                            if(index > 5) index %= 5;
+//                            Log.e("ScorePercent", "index:" + index + "\tpart_index:" +part_index + "\tvalue:" + value);
                             if(value > 0){
-                                return super.getFormattedValue(value);
+                                switch (part_index){
+                                    case 9:{
+                                        if(index == 0){
+                                            return "👉" + super.getFormattedValue(value);
+                                        }
+                                        else {
+                                            return super.getFormattedValue(value);
+                                        }
+                                    }
+                                    case 8:{
+                                        if(index == 1){
+                                            return "👉" + super.getFormattedValue(value);
+                                        }
+                                        else {
+                                            return super.getFormattedValue(value);
+                                        }
+                                    }
+                                    case 7:{
+                                        if(index == 2){
+                                            return "👉" + super.getFormattedValue(value);
+                                        }
+                                        else {
+                                            return super.getFormattedValue(value);
+                                        }
+                                    }
+                                    case 6:{
+                                        if(index == 3){
+                                            return "👉" + super.getFormattedValue(value);
+                                        }
+                                        else {
+                                            return super.getFormattedValue(value);
+                                        }
+                                    }
+                                    default:{
+                                        if(index == 4){
+                                            return "👉" + super.getFormattedValue(value);
+                                        }
+                                        else {
+                                            return super.getFormattedValue(value);
+                                        }
+                                    }
+                                }
                             }
                             else return "";
                         }
