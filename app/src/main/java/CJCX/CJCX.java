@@ -14,12 +14,13 @@ import java.util.HashMap;
 import Net.HTTP;
 import UIMS.Address;
 import UIMS.GetMD5;
+import Utils.Score.ScoreConfig;
+import Utils.Score.ScoreInf;
 import okhttp3.FormBody;
 
 public class CJCX {
 
     static SharedPreferences sp;
-    static boolean isCJCXEnable = true;
 
     String user;
     String pass;
@@ -169,25 +170,18 @@ public class CJCX {
         dealJSON();
     }
 
-    public static boolean isIsCJCXEnable() {
-        return isCJCXEnable;
-    }
-
-    public static void setCJCXEnable(boolean enable){
-        setCJCXEnable(null, enable);
-    }
-
     public static void setCJCXEnable(Context context, boolean enable){
         if(sp == null){
             sp = context.getSharedPreferences("CJCXScore", Context.MODE_PRIVATE);
         }
         try {
-            CJCX.isCJCXEnable = enable;
-            sp.edit().putBoolean("CJCXEnable", CJCX.isCJCXEnable).apply();
+            ScoreConfig.setCJCXEnable(context.getApplicationContext(), enable);
+            sp.edit().putBoolean("CJCXEnable", ScoreConfig.isIsCJCXEnable()).apply();
             new Thread(new Runnable() {
                 @Override
                 public void run() {
                     ScoreActivity.setReLoadSocreList(true);
+                    ScoreInf.loadScoreList();
                     ScoreActivity.getScoreList();
                 }
             }).start();
@@ -225,8 +219,8 @@ public class CJCX {
             sp = context.getSharedPreferences("CJCXScore", Context.MODE_PRIVATE);
         }
         try{
-            CJCX.isCJCXEnable = sp.getBoolean("CJCXEnable", true);
-            if(!CJCX.isCJCXEnable) return;
+            ScoreConfig.setCJCXEnable(context.getApplicationContext(), sp.getBoolean("CJCXEnable", true));
+            if(!ScoreConfig.isIsCJCXEnable()) return;
             // TODO TEST 忽略本地CJCX SCORE存储
 //            Log.e("TEST", "Local CJCX Score ignored for TEST!");
             setCJCXScoreJSON(new JSONObject(sp.getString("CJCXScore", "")));
@@ -265,7 +259,7 @@ public class CJCX {
         }
         try{
             CJCX.CJCXTermJSON = new JSONObject(sp.getString("CJCXTermJSON", ""));
-            if(!CJCX.isCJCXEnable) return;
+            if(!ScoreConfig.isIsCJCXEnable()) return;
             // TODO TEST 忽略本地CJCX SCORE存储
 //            Log.e("TEST", "Local CJCX Score ignored for TEST!");
             dealTermArray();
@@ -283,7 +277,7 @@ public class CJCX {
     }
 
     public static HashMap<String, JSONObject> getId_JSON() {
-        if(!CJCX.isCJCXEnable) return new HashMap<>();
+        if(!ScoreConfig.isIsCJCXEnable()) return new HashMap<>();
         return id_JSON;
     }
 

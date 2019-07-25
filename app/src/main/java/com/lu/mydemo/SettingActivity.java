@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import CJCX.CJCX;
 import Config.ColorManager;
 import UIMS.UIMS;
+import Utils.Score.ScoreConfig;
 
 public class SettingActivity extends AppCompatActivity {
 
@@ -299,6 +300,12 @@ public class SettingActivity extends AppCompatActivity {
 //        opening = false;
     }
 
+    @Override
+    protected void onStop() {
+        showLoading("加载中...");
+        super.onStop();
+    }
+
     private void setSpinnerItems(){
         if(MainActivity.isLocalValueLoaded){
             termList = CourseScheduleChangeActivity.getTermArray();
@@ -328,7 +335,7 @@ public class SettingActivity extends AppCompatActivity {
         check_box_xianxuan.setChecked(ScoreActivity.isXianxuan_select());
         check_box_xiaoxuanxiu.setChecked(ScoreActivity.isXiaoxuanxiu_select());
         check_box_PE.setChecked(ScoreActivity.isPE_select());
-        check_box_cjcx_enable.setChecked(CJCX.isIsCJCXEnable());
+        check_box_cjcx_enable.setChecked(ScoreConfig.isIsCJCXEnable());
     }
 
     private void loadTestSelect(){

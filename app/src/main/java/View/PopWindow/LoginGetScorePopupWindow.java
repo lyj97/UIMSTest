@@ -10,6 +10,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -22,6 +24,7 @@ import com.tapadoo.alerter.Alerter;
 import CJCX.CJCX;
 import Config.ColorManager;
 import UIMS.UIMS;
+import Utils.Score.ScoreConfig;
 
 public class LoginGetScorePopupWindow extends PopupWindow {
 
@@ -29,6 +32,9 @@ public class LoginGetScorePopupWindow extends PopupWindow {
 
     private EditText user;
     private EditText password;
+
+    private CheckBox checkBox_UIMS;
+    private CheckBox checkBox_CJCX;
 
     private Button commitButton;
     private Button cancelButton;
@@ -50,19 +56,45 @@ public class LoginGetScorePopupWindow extends PopupWindow {
         sp = MainActivity.context.getSharedPreferences("userInfo", Context.MODE_PRIVATE);//共用LoginActivity账户
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mMenuView = inflater.inflate(R.layout.pop_window_login, null);
+        mMenuView = inflater.inflate(R.layout.pop_window_login_get_score, null);
 
-        user = mMenuView.findViewById(R.id.pop_window_login_id);
-        password = mMenuView.findViewById(R.id.pop_window_login_password);
+        user = mMenuView.findViewById(R.id.pop_window_login_get_score_id);
+        password = mMenuView.findViewById(R.id.pop_window_login_get_score_password);
 
-        commitButton = mMenuView.findViewById(R.id.pop_window_login_commit_button);
-        cancelButton = mMenuView.findViewById(R.id.pop_window_login_cancel_button);
-        deleteSavedText = mMenuView.findViewById(R.id.pop_window_login_delete_saved_text);
+        checkBox_UIMS = mMenuView.findViewById(R.id.pop_window_login_get_score_UIMS_check_box);
+        checkBox_CJCX = mMenuView.findViewById(R.id.pop_window_login_get_score_CJCX_check_box);
+
+        commitButton = mMenuView.findViewById(R.id.pop_window_login_get_score_commit_button);
+        cancelButton = mMenuView.findViewById(R.id.pop_window_login_get_score_cancel_button);
+        deleteSavedText = mMenuView.findViewById(R.id.pop_window_login_get_score_delete_saved_text);
 
         changeTheme();
 
         user.setText(sp.getString("USER",""));
         password.setText(sp.getString("PASSWORD",""));
+
+        checkBox_UIMS.setChecked(ScoreConfig.isIsUIMSEnable());
+        checkBox_CJCX.setChecked(ScoreConfig.isIsCJCXEnable());
+
+        CompoundButton.OnCheckedChangeListener onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener(){
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                switch (buttonView.getId()){
+                    case R.id.pop_window_login_get_score_CJCX_check_box : {
+                        //需要通知CJCX, CJCX允许了
+                        CJCX.setCJCXEnable(context.getApplicationContext(), buttonView.isChecked());
+                        break;
+                    }
+                    case R.id.pop_window_login_get_score_UIMS_check_box : {
+                        ScoreConfig.setUIMSEnable(context.getApplicationContext(), buttonView.isChecked());
+                        break;
+                    }
+                }
+            }
+        };
+
+        checkBox_UIMS.setOnCheckedChangeListener(onCheckedChangeListener);
+        checkBox_CJCX.setOnCheckedChangeListener(onCheckedChangeListener);
 
         commitButton.setText("更新成绩");
 
@@ -91,86 +123,186 @@ public class LoginGetScorePopupWindow extends PopupWindow {
                             Log.i("LoginPop", "PASS:\t" + passwordStr);
 
                             uims = new UIMS(userStr, passwordStr);
-                            context.showLoading("正在连接到UIMS教务系统...");
-                            if (uims.connectToUIMS()) {
-                                context.showLoading("正在登录...");
-                                if (uims.login()) {
-                                    if (uims.getCurrentUserInfo(false)) {
-                                        uims.getScoreStatistics();
-                                        uims.getRecentScore();
-                                        if(CJCX.isIsCJCXEnable()) {
-                                            CJCX cjcx = new CJCX(uims.getUser(), uims.getPass());
-                                            if (cjcx.login()) {
-                                                if (cjcx.getScore()) {
-                                                    context.showAlert("CJCX查询成功！");
-                                                    ScoreActivity.saveCJCXScore();
+                            if(ScoreConfig.isIsUIMSEnable()){
+                                context.showLoading("正在连接到UIMS教务系统...");
+                                if (uims.connectToUIMS()) {
+                                    context.showLoading("正在登录...");
+                                    if (uims.login()) {
+                                        if (uims.getCurrentUserInfo(false)) {
+                                            uims.getScoreStatistics();
+                                            uims.getRecentScore();
+                                            MainActivity.saveScoreJSON();
+                                            context.showAlert("成绩刷新成功！");
+                                            context.reloadScoreList();
+                                            context.dismissGetScorePopWindow();
+                                        }
+                                        else{
+                                            context.showWarningAlert("获取信息失败！");
+                                            dealFinish("重新登录");
+                                            return;
+                                        }
+
+                                    } else {
+                                        context.runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                Alerter.hide();
+                                                context.showWarningAlert("", "登录失败，请检查用户名和密码是否正确.\n\n" +
+                                                        "教务账号：\t您的教学号\n" +
+                                                        "教务密码：\t默认密码为身份证号后六位");
+
+                                                dealFinish("重新登录");
+                                                return;
+                                            }
+                                        });
+                                    }
+                                } else {
+                                    if(ScoreConfig.isIsCJCXEnable()) {
+                                        if(ScoreConfig.isIsUIMSEnable())
+                                            context.showLoading("连接UIMS失败！\n\n" +
+                                                    "正在尝试校外(CJCX)查询，请稍候...");
+                                        CJCX cjcx = new CJCX(uims.getUser(), uims.getPass());
+                                        if (cjcx.login()) {
+                                            if(UIMS.getTermId_termName() == null || ! (UIMS.getTermId_termName().size() > 0)){
+                                                if(cjcx.getTeachingTerm()){
+                                                    ScoreActivity.saveCJCXTerm();
                                                 }
                                             }
+                                            if (cjcx.getScore()) {
+                                                context.showAlert("CJCX查询成功！\n" +
+                                                        "本次查询更新了 " + cjcx.getUpdate_count() + " 条成绩信息.");
+                                                ScoreActivity.saveCJCXScore();
+                                                context.reloadScoreList();
+                                                context.dismissGetScorePopWindow();
+                                                return;
+                                            }
                                         }
+                                    }
+                                    try {
                                         MainActivity.saveScoreJSON();
-                                        context.showAlert("成绩刷新成功！");
-                                        context.reloadScoreList();
-                                        context.dismissGetScorePopWindow();
+                                    }catch (Exception e){
+                                        e.printStackTrace();
                                     }
-                                    else{
-                                        context.showWarningAlert("获取信息失败！");
-                                        dealFinish("重新登录");
-                                        return;
-                                    }
-
-                                } else {
-//                                showResponse("Login failed!");
                                     context.runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
                                             Alerter.hide();
-                                            context.showWarningAlert("", "登录失败，请检查用户名和密码是否正确.\n\n" +
-                                                    "教务账号：\t您的教学号\n" +
-                                                    "教务密码：\t默认密码为身份证号后六位");
-
+                                            context.showErrorAlert("", "登录失败，请检查是否连接校园网！\n\n" +
+                                                    "您可以连接JLU.NET或JLU.TEST;\n" +
+                                                    "若您未开通校园网，可以考虑连接JLU.PC，此时无需登录到网络，完成“信息更新”后即可断开，切回流量.\n\n" +
+                                                    "若您在校外，请在设置中勾选\"启用校外查询(CJCX)\"\n" +
+                                                    "如有问题，请在\"关于\"页反馈.");
                                             dealFinish("重新登录");
-
                                             return;
                                         }
                                     });
                                 }
-                            } else {
-//                            showResponse("Login failed!");
-                                if(CJCX.isIsCJCXEnable()) {
-                                    context.showLoading("连接UIMS失败！\n\n" +
-                                            "正在尝试校外(CJCX)查询，请稍候...");
-                                    CJCX cjcx = new CJCX(uims.getUser(), uims.getPass());
-                                    if (cjcx.login()) {
-                                        if(UIMS.getTermId_termName() == null || ! (UIMS.getTermId_termName().size() > 0)){
-                                            if(cjcx.getTeachingTerm()){
-                                                ScoreActivity.saveCJCXTerm();
-                                            }
-                                        }
-                                        if (cjcx.getScore()) {
-                                            context.showAlert("CJCX查询成功！\n" +
-                                                    "本次查询更新了 " + cjcx.getUpdate_count() + " 条成绩信息.");
-                                            ScoreActivity.saveCJCXScore();
-                                            context.reloadScoreList();
-                                            context.dismissGetScorePopWindow();
-                                            return;
+                            }
+                            else if(ScoreConfig.isIsCJCXEnable()){
+                                CJCX cjcx = new CJCX(uims.getUser(), uims.getPass());
+                                if (cjcx.login()) {
+                                    if(UIMS.getTermId_termName() == null || ! (UIMS.getTermId_termName().size() > 0)){
+                                        if(cjcx.getTeachingTerm()){
+                                            ScoreActivity.saveCJCXTerm();
                                         }
                                     }
-                                }
-                                MainActivity.saveScoreJSON();
-                                context.runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Alerter.hide();
-                                        context.showErrorAlert("", "登录失败，请检查是否连接校园网！\n\n" +
-                                                "您可以连接JLU.NET或JLU.TEST;\n" +
-                                                "若您未开通校园网，可以考虑连接JLU.PC，此时无需登录到网络，完成“信息更新”后即可断开，切回流量.\n\n" +
-                                                "若您在校外，请在设置中勾选\"启用校外查询(CJCX)\"\n" +
-                                                "如有问题，请在\"关于\"页反馈.");
-                                        dealFinish("重新登录");
+                                    if (cjcx.getScore()) {
+                                        context.showAlert("CJCX查询成功！\n" +
+                                                "本次查询更新了 " + cjcx.getUpdate_count() + " 条成绩信息.");
+                                        ScoreActivity.saveCJCXScore();
+                                        context.reloadScoreList();
+                                        context.dismissGetScorePopWindow();
                                         return;
                                     }
-                                });
+                                }
                             }
+                            else {
+                                context.showErrorAlert("", "哼！\n" +
+                                        "都不选，能查到才怪哦\n" +
+                                        "  ￣へ￣  ");
+                                dealFinish("更新成绩");
+                            }
+//                            context.showLoading("正在连接到UIMS教务系统...");
+//                            if (uims.connectToUIMS()) {
+//                                context.showLoading("正在登录...");
+//                                if (uims.login()) {
+//                                    if (uims.getCurrentUserInfo(false)) {
+//                                        uims.getScoreStatistics();
+//                                        uims.getRecentScore();
+//                                        if(ScoreConfig.isIsCJCXEnable()) {
+//                                            CJCX cjcx = new CJCX(uims.getUser(), uims.getPass());
+//                                            if (cjcx.login()) {
+//                                                if (cjcx.getScore()) {
+//                                                    context.showAlert("CJCX查询成功！");
+//                                                    ScoreActivity.saveCJCXScore();
+//                                                }
+//                                            }
+//                                        }
+//                                        MainActivity.saveScoreJSON();
+//                                        context.showAlert("成绩刷新成功！");
+//                                        context.reloadScoreList();
+//                                        context.dismissGetScorePopWindow();
+//                                    }
+//                                    else{
+//                                        context.showWarningAlert("获取信息失败！");
+//                                        dealFinish("重新登录");
+//                                        return;
+//                                    }
+//
+//                                } else {
+////                                showResponse("Login failed!");
+//                                    context.runOnUiThread(new Runnable() {
+//                                        @Override
+//                                        public void run() {
+//                                            Alerter.hide();
+//                                            context.showWarningAlert("", "登录失败，请检查用户名和密码是否正确.\n\n" +
+//                                                    "教务账号：\t您的教学号\n" +
+//                                                    "教务密码：\t默认密码为身份证号后六位");
+//
+//                                            dealFinish("重新登录");
+//
+//                                            return;
+//                                        }
+//                                    });
+//                                }
+//                            } else {
+////                            showResponse("Login failed!");
+//                                if(ScoreConfig.isIsCJCXEnable()) {
+//                                    if(ScoreConfig.isIsUIMSEnable())
+//                                        context.showLoading("连接UIMS失败！\n\n" +
+//                                            "正在尝试校外(CJCX)查询，请稍候...");
+//                                    CJCX cjcx = new CJCX(uims.getUser(), uims.getPass());
+//                                    if (cjcx.login()) {
+//                                        if(UIMS.getTermId_termName() == null || ! (UIMS.getTermId_termName().size() > 0)){
+//                                            if(cjcx.getTeachingTerm()){
+//                                                ScoreActivity.saveCJCXTerm();
+//                                            }
+//                                        }
+//                                        if (cjcx.getScore()) {
+//                                            context.showAlert("CJCX查询成功！\n" +
+//                                                    "本次查询更新了 " + cjcx.getUpdate_count() + " 条成绩信息.");
+//                                            ScoreActivity.saveCJCXScore();
+//                                            context.reloadScoreList();
+//                                            context.dismissGetScorePopWindow();
+//                                            return;
+//                                        }
+//                                    }
+//                                }
+//                                MainActivity.saveScoreJSON();
+//                                context.runOnUiThread(new Runnable() {
+//                                    @Override
+//                                    public void run() {
+//                                        Alerter.hide();
+//                                        context.showErrorAlert("", "登录失败，请检查是否连接校园网！\n\n" +
+//                                                "您可以连接JLU.NET或JLU.TEST;\n" +
+//                                                "若您未开通校园网，可以考虑连接JLU.PC，此时无需登录到网络，完成“信息更新”后即可断开，切回流量.\n\n" +
+//                                                "若您在校外，请在设置中勾选\"启用校外查询(CJCX)\"\n" +
+//                                                "如有问题，请在\"关于\"页反馈.");
+//                                        dealFinish("重新登录");
+//                                        return;
+//                                    }
+//                                });
+//                            }
                         } catch (Exception e) {
                             e.printStackTrace();
                             context.showWarningAlert("Error", e.getMessage());
@@ -223,7 +355,7 @@ public class LoginGetScorePopupWindow extends PopupWindow {
 
             public boolean onTouch(View v, MotionEvent event) {
 
-                int height = mMenuView.findViewById(R.id.pop_window_login_pop_layout).getTop();
+                int height = mMenuView.findViewById(R.id.pop_window_login_get_score_pop_layout).getTop();
                 int y=(int) event.getY();
                 if(event.getAction()==MotionEvent.ACTION_UP){
                     if(y<height){
@@ -270,8 +402,8 @@ public class LoginGetScorePopupWindow extends PopupWindow {
 
     private void changeTheme(){
         Log.i("Theme", "Change theme.");
-        mMenuView.findViewById(R.id.pop_window_login_pop_layout_title).setBackgroundColor(ColorManager.getPrimaryColor());
-        mMenuView.findViewById(R.id.pop_window_login_pop_layout__main_information).setBackground(ColorManager.getMainBackground());
+        mMenuView.findViewById(R.id.pop_window_login_get_score_pop_layout_title).setBackgroundColor(ColorManager.getPrimaryColor());
+        mMenuView.findViewById(R.id.pop_window_login_get_score_pop_layout_main_information).setBackground(ColorManager.getMainBackground());
         commitButton.setBackground(ColorManager.getInternetInformationButtonBackground_full());
         user.setBackground(ColorManager.getSpinnerBackground_full());
         password.setBackground(ColorManager.getSpinnerBackground_full());

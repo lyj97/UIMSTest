@@ -64,16 +64,30 @@
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/activity_news_my_collection"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="right"
-        android:paddingStart="10dp"
-        android:paddingEnd="10dp"
-        android:textSize="14sp"
-        android:textColor="#FFFFFF"
-        android:text="我的收藏" />
+        android:padding="10dp"
+        android:gravity="end"
+        android:orientation="horizontal">
+
+        <!--<SearchView-->
+            <!--android:id="@+id/activity_news_search_view"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="23dp"-->
+            <!--android:layout_weight="1">-->
+        <!--</SearchView>-->
+
+        <TextView
+            android:id="@+id/activity_news_my_collection"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="14sp"
+            android:textColor="#FFFFFF"
+            android:text="我的收藏" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

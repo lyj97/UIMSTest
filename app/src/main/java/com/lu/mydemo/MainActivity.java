@@ -51,6 +51,7 @@ import UIMS.UIMS;
 import UIMSTool.ClassSetConvert;
 import UIMSTool.CourseJSONTransfer;
 import Utils.Course.CourseScheduleChange;
+import Utils.Score.ScoreConfig;
 import Utils.Score.ScoreInf;
 import View.PopWindow.*;
 
@@ -361,6 +362,7 @@ public class MainActivity extends Activity {
                 if (!isLocalValueLoaded && isLocalInformationAvailable())
                     loadLocalInformation(false);
                 else loadCourseInformation();
+                ScoreConfig.loadScoreConfig(getApplicationContext());
                 CJCX.loadCJCXJSON(getApplicationContext());
                 CJCX.loadCJCXTermJSON(getApplicationContext());
                 ScoreActivity.context = getApplicationContext();
@@ -388,9 +390,28 @@ public class MainActivity extends Activity {
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         if(!hasFocus) {
-            get_save_button.setText("成绩查询");
-            get_save_button.setEnabled(true);
+            setButtonText(get_save_button, 500, "成绩查询", true);
         }
+    }
+
+    protected void setButtonText(final Button button, final long sleepTime, final String text, final boolean enable){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    Thread.sleep(sleepTime);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        button.setText(text);
+                        button.setEnabled(enable);
+                    }
+                });
+            }
+        }).start();
     }
 
     protected void hideTestFun(){

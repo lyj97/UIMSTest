@@ -212,7 +212,8 @@ public class ScoreInf {
                 termId_termName = UIMS.getTermId_termName();
                 if(! (termId_termName != null && termId_termName.size() > 0))
                     termId_termName = CJCX.getTermId_termName();
-                if (!CJCX.isIsCJCXEnable() || id_JSON == null) {
+                if (!ScoreConfig.isIsCJCXEnable() || id_JSON == null) {
+                    Log.i("GetScoreList", "IsCJCXEnable:" + ScoreConfig.isIsCJCXEnable() + "\tid_JSON:" + id_JSON);
                     Log.i("GetScoreList", "Ignored CJCX!");
                     Log.i("GetScoreList", "Finished! Size:\t" + dataList.size());
                     return;

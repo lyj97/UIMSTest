@@ -56,6 +56,7 @@ import net.sf.json.JSONObject;
 import CJCX.CJCX;
 import Config.ColorManager;
 import UIMS.UIMS;
+import Utils.Score.ScoreConfig;
 import Utils.Score.ScoreInf;
 import View.PopWindow.LoginGetScorePopupWindow;
 
@@ -77,7 +78,7 @@ public class ScoreActivity extends AppCompatActivity
     TextView first_bixiu_with_addition_gpa;
 
     TextView backTextView;
-    TextView settingText;
+//    TextView settingText;
 
     FloatingActionButton fab;
 
@@ -137,7 +138,7 @@ public class ScoreActivity extends AppCompatActivity
 //        scoreStatisticsTextViewControl = findViewById(R.id.activity_main_textView_ScoreStatisticsControl);
 //        scoreStatisticsTitleTextView = findViewById(R.id.textView_ScoreStatisticsTitle);
         backTextView = findViewById(R.id.activity_scrolling_layout_back_text);
-        settingText = findViewById(R.id.activity_scrolling_layout_setting_text);
+//        settingText = findViewById(R.id.activity_scrolling_layout_setting_text);
 
         fab = findViewById(R.id.activity_scrolling_fab);
 
@@ -213,12 +214,12 @@ public class ScoreActivity extends AppCompatActivity
             }
         });
 
-        settingText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(ScoreActivity.this, SettingActivity.class));
-            }
-        });
+//        settingText.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                startActivity(new Intent(ScoreActivity.this, SettingActivity.class));
+//            }
+//        });
 
         backTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -274,7 +275,7 @@ public class ScoreActivity extends AppCompatActivity
         new Thread(new Runnable() {
             @Override
             public void run() {
-                if(CJCX.isIsCJCXEnable()){
+                if(ScoreConfig.isIsCJCXEnable()){
                     loadCJCXScore();
                 }
                 getScoreList();
@@ -486,7 +487,7 @@ public class ScoreActivity extends AppCompatActivity
             }
 
             HashMap<String, org.json.JSONObject> id_JSON = CJCX.getId_JSON();
-            if(!CJCX.isIsCJCXEnable() || id_JSON == null) {
+            if(!ScoreConfig.isIsCJCXEnable() || id_JSON == null) {
                 Log.i("GetScoreList", "Ignored CJCX!");
                 Log.i("GetScoreList", "Finished! Size:\t" + dataList.size());
                 return;
@@ -797,6 +798,11 @@ public class ScoreActivity extends AppCompatActivity
     }
 
     public void dismissGetScorePopWindow(){
+        try{
+            Thread.sleep(500);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -1031,6 +1037,7 @@ public class ScoreActivity extends AppCompatActivity
                             try{
                                 part_index = (int) Double.parseDouble(context2) / 10;
                             }catch (Exception e){
+//                                e.printStackTrace();
                                 switch (context2){
                                     case "优秀" :{
                                         part_index = 9;
@@ -1059,6 +1066,7 @@ public class ScoreActivity extends AppCompatActivity
 //                            Log.e("ScorePercent", "index:" + index + "\tpart_index:" +part_index + "\tvalue:" + value);
                             if(value > 0){
                                 switch (part_index){
+                                    case 10:
                                     case 9:{
                                         if(index == 0){
                                             return "👉" + super.getFormattedValue(value);

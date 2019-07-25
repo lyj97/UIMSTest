@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.lu.mydemo.sample.adapter.BaseAdapter;
@@ -45,6 +46,8 @@ public class NewsActivity extends AppCompatActivity {
     private BaseAdapter myAdapter;
     private List<Map<String, Object>> dataList;
 
+//    private SearchView searchView;
+
     private TextView navigation_back;
 
     private GetInternetInformation loadClient = new GetInternetInformation();
@@ -65,6 +68,8 @@ public class NewsActivity extends AppCompatActivity {
         myCollectionTextView = findViewById(R.id.activity_news_my_collection);
         swipeRecyclerView = findViewById(R.id.activity_news_SwipeRecyclerView);
         myAdapter = createAdapter();
+
+//        searchView = findViewById(R.id.activity_news_search_view);
 
         navigation_back = findViewById(R.id.activity_news_navigation_back_text);
 
@@ -163,6 +168,22 @@ public class NewsActivity extends AppCompatActivity {
             }
         });
 
+//        searchView.setQueryHint("搜索...");
+//
+//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String query) {
+//                showAlert(query);
+//                searchNews(query);
+//                return true;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String newText) {
+//                return false;
+//            }
+//        });
+
         navigation_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -185,6 +206,16 @@ public class NewsActivity extends AppCompatActivity {
             myAdapter.notifyDataSetChanged();
             needFlush = false;
         }
+    }
+
+    private void searchNews(final String queryStr){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                JSONObject object = loadClient.searchNews(queryStr);
+                showAlert("Response", object.toString());
+            }
+        }).start();
     }
 
     private void loadFailed(final boolean isFirst) {
