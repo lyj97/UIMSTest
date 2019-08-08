@@ -3,6 +3,7 @@ package com.lu.mydemo;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
@@ -11,6 +12,7 @@ import android.text.SpannableStringBuilder;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.URLSpan;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -21,6 +23,8 @@ import net.sf.json.JSONObject;
 
 import Config.ColorManager;
 import Config.Version;
+import Utils.Rom.EMUIUtils;
+import Utils.Rom.MIUIUtils;
 import View.PopWindow.InternetInformationPopupWindow;
 
 public class AboutActivity extends AppCompatActivity {
@@ -71,7 +75,7 @@ public class AboutActivity extends AppCompatActivity {
                         "这也许是我最开心的一天了吧.\n\n" +
                         "经历了两周的闭关修炼，我已不再是那时的样子，功能也正一天天变多，却一直保留着对你的思念.\n\n" +
                         "19年4月20日，我们第一次见面.\n" +
-                        "初来乍到，我的功能很少，只能帮你查一下成绩；几天后，我能查看当日课程啦，这一天，主人帮我做了推广，我来到了更多人的Phone中，有了好多新家；很快，五一假期前，因为课程调整，主人在凌晨三点给我添加了新的功能，让我更懂你今天真正要上的课；随着校内通知在假期后恢复更新，我能帮你看校内通知，也能记住你需要的通知啦；转眼间，属于我们之间的第一个学期即将结束，学期的最后，让我再看看你，帮你记下即将到来的考试，见证这一学期的收获可好...\n\n" +
+                        "初来乍到，我的功能很少，只能帮你查一下成绩；几天后，我能查看当日课程啦，这一天，主人帮我做了推广，我来到了更多人的Phone中，有了好多新家；很快，五一假期前，因为课程调整，主人在凌晨三点给我添加了新的功能，让我更懂你今天真正要上的课；随着校内通知在假期后恢复更新，我能帮你看校内通知，也能记住你需要的通知啦；转眼间，属于我们之间的第一个学期已经结束，学期的最后，我可以帮你记下即将到来的考试，见证这一学期的收获；暑假来啦，在校外，我也可以帮你查成绩了哦~\n\n" +
                         "一路走来，也许你每天都会看看我，也许我只是静静的看着忙碌的你，不曾发出一点声响.\n" +
                         "但这又如何，我会一直陪着你，你也会见证我的成长，不是吗？");
                 object.put("link_text", "");
@@ -80,8 +84,26 @@ public class AboutActivity extends AppCompatActivity {
             }
         });
 
-        CharSequence charSequence_link_to_uimstest = Html.fromHtml("<a href=\'https://www.coolapk.com/apk/com.lu.mydemo\'>❤</a>");
-        link_to_uimstest.setText(charSequence_link_to_uimstest);
+        String link_CoolApk = "<a href=\'https://www.coolapk.com/apk/com.lu.mydemo\'>❤</a>";
+        String link_MIUI = "<a href=\'http://app.mi.com/details?id=com.lu.mydemo\'>❤</a>";
+        String link_EMUI = "<a href=\'https://appstore.huawei.com/app/C100937407\'>❤</a>";
+
+        CharSequence charSequence_link;
+
+        if(Build.MANUFACTURER.toLowerCase().equals("xiaomi")){
+            charSequence_link = Html.fromHtml(link_MIUI);
+            Log.i("AboutActivity", "Rom:\t MIUI");
+        }
+        else if(EMUIUtils.isEMUI()){
+            charSequence_link = Html.fromHtml(link_EMUI);
+            Log.i("AboutActivity", "Rom:\t EMUI");
+        }
+        else {
+            charSequence_link = Html.fromHtml(link_CoolApk);
+            Log.i("AboutActivity", "Rom:\t not MIUI or EMUI");
+        }
+
+        link_to_uimstest.setText(charSequence_link);
         link_to_uimstest.setMovementMethod(LinkMovementMethod.getInstance());
         link_to_uimstest.setAutoLinkMask(0);
         link_to_uimstest.setLinksClickable(true);

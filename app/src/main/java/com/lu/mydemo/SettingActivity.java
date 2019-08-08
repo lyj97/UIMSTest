@@ -15,6 +15,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.lu.mydemo.Notification.AlertCenter;
 import com.tapadoo.alerter.Alerter;
 
 import net.sf.json.JSONObject;
@@ -110,7 +111,7 @@ public class SettingActivity extends AppCompatActivity {
                         }
                         JSONObject termJSON = UIMS.getTermJSON(term);
                         if(termJSON == null){
-                            showWarningAlert("ERROR", "TermJSON is null.");
+                            AlertCenter.showWarningAlert(SettingActivity.this, "ERROR", "TermJSON is null.");
                             return;
                         }
                         Log.i("TermJSON", termJSON.toString());
@@ -302,7 +303,7 @@ public class SettingActivity extends AppCompatActivity {
 
     @Override
     protected void onStop() {
-        showLoading("加载中...");
+        AlertCenter.showLoading(this, "加载中...");
         super.onStop();
     }
 
@@ -312,11 +313,11 @@ public class SettingActivity extends AppCompatActivity {
             if(!(termList.size() > 0)){
                 termList = new ArrayList<>();
                 termList.add("暂无学期数据\n请在首页点击“刷新信息”按钮");
-                spinner.setAdapter(new ArrayAdapter(this, R.layout.select_item, R.id.select_text_item, termList));
+                spinner.setAdapter(new ArrayAdapter(this, R.layout.list_item_spinner, R.id.select_text_item, termList));
                 hasTerm = false;
             }
             else{
-                spinner.setAdapter(new ArrayAdapter(this, R.layout.select_item, R.id.select_text_item, termList));
+                spinner.setAdapter(new ArrayAdapter(this, R.layout.list_item_spinner, R.id.select_text_item, termList));
                 spinner.setSelection(termList.indexOf(UIMS.getTermName()));
                 hasTerm = true;
             }
@@ -325,7 +326,7 @@ public class SettingActivity extends AppCompatActivity {
             hasTerm = false;
             termList = new ArrayList<>();
             termList.add("暂无学期数据\n请在首页点击“刷新信息”按钮");
-            spinner.setAdapter(new ArrayAdapter(this, R.layout.select_item, R.id.select_text_item, termList));
+            spinner.setAdapter(new ArrayAdapter(this, R.layout.list_item_spinner, R.id.select_text_item, termList));
 //            finish();
         }
     }
@@ -376,78 +377,6 @@ public class SettingActivity extends AppCompatActivity {
             public void run() {
                 Toast.makeText(SettingActivity.this, string, Toast.LENGTH_SHORT).show();
 //                showAlert(string);
-            }
-        });
-    }
-
-    public void showLoading(final String message) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Alerter.create(SettingActivity.this)
-                        .setText(message)
-                        .enableProgress(true)
-                        .setDismissable(false)
-                        .setProgressColorRes(R.color.color_alerter_progress_bar)
-                        .setDuration(Integer.MAX_VALUE)
-                        .setBackgroundColorInt(ColorManager.getTopAlertBackgroundColor())
-                        .show();
-            }
-        });
-    }
-
-    public void showAlert(final String message) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Alerter.create(SettingActivity.this)
-                        .setTitle("提示")
-                        .setText(message)
-                        .enableSwipeToDismiss()
-                        .setBackgroundColorInt(ColorManager.getTopAlertBackgroundColor())
-                        .show();
-            }
-        });
-    }
-
-    public void showAlert(final String title, final String message) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Alerter.create(SettingActivity.this)
-                        .setTitle(title)
-                        .setText(message)
-                        .enableSwipeToDismiss()
-                        .setBackgroundColorInt(ColorManager.getTopAlertBackgroundColor())
-                        .show();
-            }
-        });
-    }
-
-    public void showWarningAlert(final String message) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Alerter.create(SettingActivity.this)
-                        .setTitle("提示")
-                        .setText(message)
-                        .enableSwipeToDismiss()
-                        .setBackgroundColorInt(getResources().getColor(R.color.color_alerter_warning_background))
-                        .show();
-            }
-        });
-    }
-
-    public void showWarningAlert(final String title, final String message) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Alerter.create(SettingActivity.this)
-                        .setTitle(title)
-                        .setText(message)
-                        .enableSwipeToDismiss()
-                        .setBackgroundColorInt(getResources().getColor(R.color.color_alerter_warning_background))
-                        .show();
             }
         });
     }

@@ -3,6 +3,7 @@
     package="com.lu.mydemo">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
         android:allowBackup="true"
@@ -12,7 +13,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SettingActivity"></activity>
+        <activity android:name=".TestFunctionActivity"/>
+        <activity android:name=".WebViewActivity" />
+        <activity android:name=".SettingActivity" />
         <activity android:name=".PingjiaoActivity" />
         <activity android:name=".ColorConfigActivity" />
         <activity android:name=".AboutActivity" />
@@ -34,7 +37,7 @@
 
         <meta-data
             android:name="android.max_aspect"
-            android:value="2.1" />
+            android:value="2.5" />
     </application>
 
 </manifest>

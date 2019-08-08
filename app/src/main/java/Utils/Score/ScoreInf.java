@@ -117,13 +117,15 @@ public class ScoreInf {
 //                map.put("context2",
 //                        termName);
                         map.put("context1", termName + "   \t   " +
-                                "重修?  " + isReselect + "    绩点： " + gPoint);
+                                "重修?  " + isReselect);
                         map.put("context2",
                                 courScore);
                         map.put("context3",
                                 "发布时间： " + dateScore);
                         map.put("context4",
                                 adviceCredit);
+                        map.put("context5",
+                                gPoint);
                         map.put("type", type5);
 
                         if (!chongxiu_select) {//排除所有重修
@@ -239,12 +241,12 @@ public class ScoreInf {
                                 temp_term = termId_termName.get(object.getString("termId"));
                                 if(temp_term == null) temp_term = "--";
                                 map.put("context1", temp_term + "   \t   " +
-                                        "重修?  " + ((object.getString("isReselect").toUpperCase().equals("N")) ? "否" : "是") + "    绩点： " + object.getString("gpoint"));
+                                        "重修?  " + ((object.getString("isReselect").toUpperCase().equals("N")) ? "否" : "是"));
                             } catch (Exception e) {
                                 temp_term = termId_termName.get(object.getString("termId"));
                                 if(temp_term == null) temp_term = "--";
                                 map.put("context1", temp_term + "   \t   " +
-                                        "重修?  " + "否" + "    绩点： " + object.getString("gpoint"));
+                                        "重修?  " + "否");
                             }
                             map.put("context2",
                                     object.getString("cj"));
@@ -252,6 +254,8 @@ public class ScoreInf {
                                     "发布时间： " + "--");
                             map.put("context4",
                                     object.getDouble("credit"));
+                            map.put("context5",
+                                    object.getString("gpoint"));
                             map.put("type", "");
                             dataList.add(0, map);
                         } catch (Exception e) {

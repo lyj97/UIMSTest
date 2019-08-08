@@ -1,15 +1,12 @@
 package View.Fragment;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.icu.text.SimpleDateFormat;
 import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.Gravity;
@@ -23,9 +20,8 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.lu.mydemo.NewsActivity;
-import com.lu.mydemo.NewsSavedActivity;
 import com.lu.mydemo.NoneScoreCourseActivity;
+import com.lu.mydemo.Notification.AlertCenter;
 import com.lu.mydemo.R;
 import com.lu.mydemo.sample.adapter.BaseAdapter;
 import com.lu.mydemo.sample.adapter.MainAdapter;
@@ -39,10 +35,7 @@ import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 
 import net.sf.json.JSONObject;
 
-import java.time.LocalDate;
-import java.time.Period;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -51,11 +44,8 @@ import java.util.Locale;
 import java.util.Map;
 
 import Config.ColorManager;
-import Utils.Course.CourseScheduleChange;
 import Utils.Exam.ExamSchedule;
-import Utils.News.News;
 import View.PopWindow.AddCourseExamPopupWindow;
-import View.PopWindow.AddCourseScheduleChangePopupWindow;
 
 public class ExamFragment extends Fragment {
 
@@ -153,7 +143,7 @@ public class ExamFragment extends Fragment {
                             public void onClick(View v) {
                                 ExamSchedule.add(tempJsonObject);
                                 flushList();
-                                Alerter.hide();
+                                AlertCenter.hideAlert(context);
                                 NoneScoreCourseFragment.setFlush();
                             }
                         })
@@ -179,7 +169,6 @@ public class ExamFragment extends Fragment {
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        Alerter.hide();
         Log.i("ExamFragment", "isVisibleToUser " + isVisibleToUser);
         if (isVisibleToUser) {
             // 相当于onResume()方法
@@ -290,7 +279,7 @@ public class ExamFragment extends Fragment {
         @NonNull
         @Override
         public MainAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            return new CourseExamAdapter.ViewHolder(getInflater().inflate(R.layout.news_list_item, parent, false));
+            return new CourseExamAdapter.ViewHolder(getInflater().inflate(R.layout.list_item_news, parent, false));
         }
 
         @Override

@@ -22,6 +22,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.TextView;
 
+import com.lu.mydemo.Notification.AlertCenter;
 import com.tapadoo.alerter.Alerter;
 
 import net.sf.json.JSONObject;
@@ -123,7 +124,7 @@ public class NewsDetailActivity extends AppCompatActivity {
                 getSucceed(newsDetail);
             }
         }).start();
-        showLoading("加载中...");
+        AlertCenter.showLoading(this, "加载中...");
     }
 
     public void getSucceed(final String detail){
@@ -202,22 +203,6 @@ public class NewsDetailActivity extends AppCompatActivity {
         window.setStatusBarColor(ColorManager.getPrimaryColor());
 
         findViewById(R.id.activity_news_detail).setBackground(ColorManager.getMainBackground_full());
-    }
-
-    public void showLoading(final String message) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Alerter.create(NewsDetailActivity.this)
-                        .setText(message)
-                        .enableProgress(true)
-                        .setDismissable(false)
-                        .setProgressColorRes(R.color.color_alerter_progress_bar)
-                        .setDuration(Integer.MAX_VALUE)
-                        .setBackgroundColorInt(ColorManager.getTopAlertBackgroundColor())
-                        .show();
-            }
-        });
     }
 
 }

@@ -2,12 +2,10 @@ package com.lu.mydemo;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -16,6 +14,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.lu.mydemo.Notification.AlertCenter;
 import com.lu.mydemo.sample.adapter.BaseAdapter;
 import com.lu.mydemo.sample.adapter.MainAdapter;
 import com.tapadoo.alerter.Alerter;
@@ -26,12 +25,9 @@ import com.yanzhenjie.recyclerview.SwipeMenuBridge;
 import com.yanzhenjie.recyclerview.SwipeMenuCreator;
 import com.yanzhenjie.recyclerview.SwipeMenuItem;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
-import com.yanzhenjie.recyclerview.touch.OnItemMoveListener;
 
-import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -67,7 +63,7 @@ public class NewsSavedActivity extends AppCompatActivity {
             public void onItemClick(View view, int adapterPosition) {
 
                 if(((String) dataList.get(adapterPosition).get("department")).length() == 0 && ((String) dataList.get(adapterPosition).get("time")).length() == 0){
-                    showAlert((String) dataList.get(adapterPosition).get("title"));
+                    AlertCenter.showAlert(NewsSavedActivity.this, (String) dataList.get(adapterPosition).get("title"));
                     return;
                 }
 
@@ -165,26 +161,21 @@ public class NewsSavedActivity extends AppCompatActivity {
         super.onStart();
         flushList();
         if(dataList.size() == 0){
-            showAlert("暂无收藏", "在“校内通知”页面收藏重要的通知吧.\n\n" +
+            AlertCenter.showAlert(this, "暂无收藏", "在“校内通知”页面收藏重要的通知吧.\n\n" +
                     "Tips:\t 校内通知界面，左滑收藏.");
         }
     }
 
     private void loadFailed() {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                showAlert("加载失败，请稍后重试.");
-                Map<String, Object> map = new HashMap<>();
-                map.put("title", "加载失败，请稍后重试...");
-                map.put("department", "");
-                map.put("time", "");
-                map.put("link", "");
-                map.put("abs_link", "");
-                map.put("flagTop", false);
-                dataList.add(map);
-            }
-        });
+        AlertCenter.showAlert(this, "加载失败，请稍后重试.");
+        Map<String, Object> map = new HashMap<>();
+        map.put("title", "加载失败，请稍后重试...");
+        map.put("department", "");
+        map.put("time", "");
+        map.put("link", "");
+        map.put("abs_link", "");
+        map.put("flagTop", false);
+        dataList.add(map);
     }
 
     private void loadSucceed(){
@@ -207,7 +198,7 @@ public class NewsSavedActivity extends AppCompatActivity {
     }
 
     private void getNewsList(){
-        showLoading("加载中，请稍候...");
+        AlertCenter.showLoading(this, "加载中，请稍候...");
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -244,7 +235,7 @@ public class NewsSavedActivity extends AppCompatActivity {
         @NonNull
         @Override
         public MainAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            return new NewsSavedActivity.NewsSavedListAdapter.ViewHolder(getInflater().inflate(R.layout.news_list_item, parent, false));
+            return new NewsSavedActivity.NewsSavedListAdapter.ViewHolder(getInflater().inflate(R.layout.list_item_news, parent, false));
         }
 
         @Override
@@ -298,50 +289,6 @@ public class NewsSavedActivity extends AppCompatActivity {
         window.setStatusBarColor(ColorManager.getPrimaryColor());
 
         findViewById(R.id.activity_news_saved).setBackground(ColorManager.getMainBackground_full());
-    }
-
-    public void showAlert(final String message) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Alerter.create(NewsSavedActivity.this)
-                        .setTitle("提示")
-                        .setText(message)
-                        .enableSwipeToDismiss()
-                        .setBackgroundColorInt(ColorManager.getTopAlertBackgroundColor())
-                        .show();
-            }
-        });
-    }
-
-    public void showLoading(final String message) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Alerter.create(NewsSavedActivity.this)
-                        .setText(message)
-                        .enableProgress(true)
-                        .setDismissable(false)
-                        .setProgressColorRes(R.color.color_alerter_progress_bar)
-                        .setDuration(Integer.MAX_VALUE)
-                        .setBackgroundColorInt(ColorManager.getTopAlertBackgroundColor())
-                        .show();
-            }
-        });
-    }
-
-    public void showAlert(final String title, final String message) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Alerter.create(NewsSavedActivity.this)
-                        .setTitle(title)
-                        .setText(message)
-                        .enableSwipeToDismiss()
-                        .setBackgroundColorInt(ColorManager.getTopAlertBackgroundColor())
-                        .show();
-            }
-        });
     }
 
 }

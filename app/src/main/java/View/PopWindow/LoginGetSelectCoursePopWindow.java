@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.lu.mydemo.MainActivity;
 import com.lu.mydemo.NoneScoreCourseActivity;
+import com.lu.mydemo.Notification.AlertCenter;
 import com.lu.mydemo.R;
 import com.tapadoo.alerter.Alerter;
 
@@ -69,12 +70,12 @@ public class LoginGetSelectCoursePopWindow extends PopupWindow {
             @Override
             public void onClick(View v) {
                 if (user.getText().length() != 8 || !(password.getText().length() > 0)) {
-                    context.showWarningAlert("用户名或密码不符合规则", "请输入正确的用户名和密码！");
+                    AlertCenter.showWarningAlert(context, "用户名或密码不符合规则", "请输入正确的用户名和密码！");
                     if (user.getText().length() != 8) user.setError("请输入8位教学号");
                     if (!(password.getText().length() > 0)) password.setError("请输入密码");
                     return;
                 }
-                context.showLoading("登录中，请稍候...");
+                AlertCenter.showLoading(context, "登录中，请稍候...");
                 dealing("登录中，请稍候...");
                 new Thread(new Runnable() {
                     @Override
@@ -90,16 +91,16 @@ public class LoginGetSelectCoursePopWindow extends PopupWindow {
                             Log.i("LoginPop", "PASS:\t" + passwordStr);
 
                             uims = new UIMS(userStr, passwordStr);
-                            context.showLoading("正在连接到UIMS教务系统...");
+                            AlertCenter.showLoading(context, "正在连接到UIMS教务系统...");
                             if (uims.connectToUIMS()) {
-                                context.showLoading("正在登录...");
+                                AlertCenter.showLoading(context, "正在登录...");
                                 if (uims.login()) {
                                     if (uims.getCurrentUserInfo(false)) {
                                         context.noneScoreFragment.getNoneScoreCourse(context.noneScoreFragment.termName_TermId.get(termName), uims);
                                         context.noneScoreFragment.dismissPopWindow();
                                     }
                                     else{
-                                        context.showWarningAlert("获取信息失败！");
+                                        AlertCenter.showWarningAlert(context, "获取信息失败！");
                                         dealFinish("重新登录");
                                         return;
                                     }
@@ -110,7 +111,7 @@ public class LoginGetSelectCoursePopWindow extends PopupWindow {
                                         @Override
                                         public void run() {
                                             Alerter.hide();
-                                            context.showWarningAlert("", "登录失败，请检查用户名和密码是否正确.\n\n" +
+                                            AlertCenter.showWarningAlert(context, "", "登录失败，请检查用户名和密码是否正确.\n\n" +
                                                     "教务账号：\t您的教学号\n" +
                                                     "教务密码：\t默认密码为身份证号后六位");
 
@@ -126,7 +127,7 @@ public class LoginGetSelectCoursePopWindow extends PopupWindow {
                                     @Override
                                     public void run() {
                                         Alerter.hide();
-                                        context.showWarningAlert("", "登录失败，请检查是否连接校园网！\n\n" +
+                                        AlertCenter.showWarningAlert(context, "", "登录失败，请检查是否连接校园网！\n\n" +
                                                 "您可以连接JLU.NET或JLU.TEST;\n" +
                                                 "若您未开通校园网，可以考虑连接JLU.PC，此时无需登录到网络，完成“信息更新”后即可断开，切回流量。");
                                         dealFinish("重新登录");
@@ -136,7 +137,7 @@ public class LoginGetSelectCoursePopWindow extends PopupWindow {
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
-                            context.showWarningAlert("Error", e.getMessage());
+                            AlertCenter.showWarningAlert(context, "Error", e.getMessage());
                         }
                     }
                 }).start();
@@ -157,7 +158,7 @@ public class LoginGetSelectCoursePopWindow extends PopupWindow {
             public void onClick(View v) {
                 sp.edit().remove("USER").apply();
                 sp.edit().remove("PASSWORD").apply();
-                context.showAlert("已删除账号信息.");
+                AlertCenter.showAlert(context, "已删除账号信息.");
                 dismiss();
             }
         });
@@ -234,7 +235,7 @@ public class LoginGetSelectCoursePopWindow extends PopupWindow {
     private void changeTheme(){
         Log.i("Theme", "Change theme.");
         mMenuView.findViewById(R.id.pop_window_login_pop_layout_title).setBackgroundColor(ColorManager.getPrimaryColor());
-        mMenuView.findViewById(R.id.pop_window_login_pop_layout__main_information).setBackground(ColorManager.getMainBackground());
+        mMenuView.findViewById(R.id.pop_window_login_pop_layout_main_information).setBackground(ColorManager.getMainBackground());
         commitButton.setBackground(ColorManager.getInternetInformationButtonBackground_full());
         user.setBackground(ColorManager.getSpinnerBackground_full());
         password.setBackground(ColorManager.getSpinnerBackground_full());

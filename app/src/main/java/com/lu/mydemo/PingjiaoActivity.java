@@ -55,7 +55,7 @@ public class PingjiaoActivity extends AppCompatActivity {
 
         changeTheme();
 
-        showWarningAlertWithCancel_OKButton("评教", "需要评教吗？\n" +
+        showWarningAlertWithCancel_OKButton("教评", "需要进行教学质量评价吗？\n" +
                 "评价方式：全部好评，没有建议。");
 
         addText("评教测试版本：" + Ver);
@@ -111,78 +111,6 @@ public class PingjiaoActivity extends AppCompatActivity {
             public void run() {
                 Alerter.hide();
                 Toast.makeText(PingjiaoActivity.this, string, Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    public void showLoading(final String message) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Alerter.create(PingjiaoActivity.this)
-                        .setText(message)
-                        .enableProgress(true)
-                        .setDismissable(false)
-                        .setProgressColorRes(R.color.color_alerter_progress_bar)
-                        .setDuration(Integer.MAX_VALUE)
-                        .setBackgroundColorInt(ColorManager.getTopAlertBackgroundColor())
-                        .show();
-            }
-        });
-    }
-
-    public void showAlert(final String message) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Alerter.create(PingjiaoActivity.this)
-                        .setTitle("提示")
-                        .setText(message)
-                        .enableSwipeToDismiss()
-                        .setBackgroundColorInt(ColorManager.getTopAlertBackgroundColor())
-                        .show();
-            }
-        });
-    }
-
-    public void showAlert(final String title, final String message) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Alerter.create(PingjiaoActivity.this)
-                        .setTitle(title)
-                        .setText(message)
-                        .enableSwipeToDismiss()
-                        .setBackgroundColorInt(ColorManager.getTopAlertBackgroundColor())
-                        .show();
-            }
-        });
-    }
-
-    public void showWarningAlert(final String message) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Alerter.create(PingjiaoActivity.this)
-                        .setTitle("提示")
-                        .setText(message)
-                        .enableSwipeToDismiss()
-                        .setBackgroundColorInt(getResources().getColor(R.color.color_alerter_warning_background))
-                        .show();
-            }
-        });
-    }
-
-    public void showWarningAlert(final String title, final String message) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Alerter.create(PingjiaoActivity.this)
-                        .setTitle(title)
-                        .setText(message)
-                        .enableSwipeToDismiss()
-                        .setBackgroundColorInt(getResources().getColor(R.color.color_alerter_warning_background))
-                        .show();
             }
         });
     }

@@ -16,6 +16,8 @@ public class ColorManager {
      * 获取网络信息按钮（渐变）颜色(disable)
      * 首页（Login）课程列表文字颜色
      * 顶部悬浮通知背景
+     * 顶部悬浮通知背景（警告）
+     * 顶部悬浮通知背景（错误）
      * 下拉列表背景颜色
      * 通知——置顶文字颜色
      * 通知——收藏文字颜色
@@ -29,6 +31,8 @@ public class ColorManager {
     private static int primaryColor;
     private static int primaryDarkColor;
     private static int topAlertBackgroundColor;
+    private static int topAlertBackgroundColor_warning;
+    private static int topAlertBackgroundColor_error;
     private static int news_notice_text_color;
     private static int news_collected_text_color;
     private static int news_normal_text_color;
@@ -67,6 +71,8 @@ public class ColorManager {
                 primaryColor = context.getColor(R.color.colorPrimary);
                 primaryDarkColor = context.getColor(R.color.colorPrimaryDark);
                 topAlertBackgroundColor = context.getColor(R.color.color_alerter_background);
+                topAlertBackgroundColor_warning = context.getColor(R.color.color_alerter_warning_background);
+                topAlertBackgroundColor_error = context.getColor(R.color.color_alerter_error_background);
 
                 news_normal_text_color = context.getColor(R.color.colorPrimary);
                 news_notice_text_color = context.getColor(R.color.color_notice_text);
@@ -90,6 +96,8 @@ public class ColorManager {
                 primaryColor = context.getColor(R.color.colorPrimary_Pink);
                 primaryDarkColor = context.getColor(R.color.colorPrimaryDark_Pink);
                 topAlertBackgroundColor = context.getColor(R.color.color_alerter_background_pink);
+                topAlertBackgroundColor_warning = context.getColor(R.color.color_alerter_warning_background);
+                topAlertBackgroundColor_error = context.getColor(R.color.color_alerter_error_background);
 
                 news_normal_text_color = context.getColor(R.color.colorPrimary_Pink);
                 news_notice_text_color = context.getColor(R.color.color_notice_text_pink);
@@ -113,6 +121,8 @@ public class ColorManager {
                 primaryColor = context.getColor(R.color.colorPrimary_Green);
                 primaryDarkColor = context.getColor(R.color.colorPrimaryDark_Green);
                 topAlertBackgroundColor = context.getColor(R.color.color_alerter_background_Green);
+                topAlertBackgroundColor_warning = context.getColor(R.color.color_alerter_warning_background);
+                topAlertBackgroundColor_error = context.getColor(R.color.color_alerter_error_background);
 
                 news_normal_text_color = context.getColor(R.color.colorPrimary_Green);
                 news_notice_text_color = context.getColor(R.color.color_notice_text_Green);
@@ -136,6 +146,8 @@ public class ColorManager {
                 primaryColor = context.getColor(R.color.colorPrimary);
                 primaryDarkColor = context.getColor(R.color.colorPrimaryDark);
                 topAlertBackgroundColor = context.getColor(R.color.color_alerter_background);
+                topAlertBackgroundColor_warning = context.getColor(R.color.color_alerter_warning_background);
+                topAlertBackgroundColor_error = context.getColor(R.color.color_alerter_error_background);
 
                 news_normal_text_color = context.getColor(R.color.colorPrimary);
                 news_notice_text_color = context.getColor(R.color.color_notice_text);
@@ -194,6 +206,14 @@ public class ColorManager {
 
     public static int getTopAlertBackgroundColor() {
         return topAlertBackgroundColor;
+    }
+
+    public static int getTopAlertBackgroundColor_warning() {
+        return topAlertBackgroundColor_warning;
+    }
+
+    public static int getTopAlertBackgroundColor_error() {
+        return topAlertBackgroundColor_error;
     }
 
     public static int getNews_notice_text_color() {

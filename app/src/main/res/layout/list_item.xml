@@ -37,7 +37,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="5dp"
-                android:layout_weight="30"
+                android:layout_weight="40"
                 android:orientation="vertical">
 
                 <TextView
@@ -80,6 +80,32 @@
                     android:gravity="center"
                     android:textStyle="bold"
                     android:text="score\n(context2)"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="65"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="绩点"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/list_item_context5"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textStyle="bold"
+                    android:text="point\n(context5)"
                     android:textSize="15sp" />
 
             </LinearLayout>

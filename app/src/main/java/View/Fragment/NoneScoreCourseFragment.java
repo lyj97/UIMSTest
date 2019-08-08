@@ -27,6 +27,7 @@ import android.widget.Toast;
 
 import com.lu.mydemo.MainActivity;
 import com.lu.mydemo.NoneScoreCourseActivity;
+import com.lu.mydemo.Notification.AlertCenter;
 import com.lu.mydemo.R;
 import com.lu.mydemo.sample.adapter.BaseAdapter;
 import com.lu.mydemo.sample.adapter.MainAdapter;
@@ -136,7 +137,7 @@ public class NoneScoreCourseFragment extends Fragment {
                     termId = termName_TermId.get(termName);
 
                     if(termName == null || termId == null || !(termName.length() > 0) || !(termId.length() > 0)){
-                        showWarningAlert("数据出错");
+                        AlertCenter.showWarningAlert(context, "数据出错");
                         return;
                     }
 
@@ -145,14 +146,14 @@ public class NoneScoreCourseFragment extends Fragment {
                      */
 
                     if(sharedPreferences.contains("CourseHistory_" + termId)){
-                        showLoading("由本地加载【" + termName + "】数据中，请稍候...");
+                        AlertCenter.showLoading(context, "由本地加载【" + termName + "】数据中，请稍候...");
                         UIMS.setCourseHistoryJSON(JSONObject.fromObject(sharedPreferences.getString("CourseHistory_" + termId, "")));
                         UIMS.dealNoScoreCourseWithCJCXScore(CJCX.getId_JSON().keySet());
                         getNoneScoreCourseSuccess();
                         return;
                     }
 
-                    showAlert("本地暂未缓存【" + termName + "】数据，请连接校园网获取数据.");
+                    AlertCenter.showAlert(context,"本地暂未缓存【" + termName + "】数据，请连接校园网获取数据.");
                     LoginGetSelectCoursePopWindow window = new LoginGetSelectCoursePopWindow(context, termName, myFragmentLayout.findViewById(R.id.none_score_course_layout).getHeight(), myFragmentLayout.findViewById(R.id.none_score_course_layout).getWidth());
                     window.setFocusable(true);
                     window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
@@ -221,7 +222,7 @@ public class NoneScoreCourseFragment extends Fragment {
                 sharedPreferences.edit().remove("CourseHistory_" + termName_TermId.get(spinner.getSelectedItem().toString())).apply();
                 showResponse("已删除【" + spinner.getSelectedItem().toString() + "】数据.");
 //                dataList = new ArrayList<>();
-//                listView.setAdapter(new SimpleAdapter(context, datalist, R.layout.course_list_ietm, new String[]{"title", "context1"}, new int[]{R.id.get_none_score_course_title, R.id.get_none_score_course_context1}));
+//                listView.setAdapter(new SimpleAdapter(context, datalist, R.layout.list_item_course, new String[]{"title", "context1"}, new int[]{R.id.get_none_score_course_title, R.id.get_none_score_course_context1}));
                 flushList(new ArrayList());
                 deleteSavedCourseInformationButton.getLayoutParams().height = 0;
                 deleteSavedCourseInformationButton.setVisibility(View.INVISIBLE);
@@ -234,7 +235,7 @@ public class NoneScoreCourseFragment extends Fragment {
         deleteSavedCourseInformationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showAlert("您只需刷新【选课发生变化】学期的数据",
+                AlertCenter.showAlert(context, "您只需刷新【选课发生变化】学期的数据",
                         "一般情况下，您只需要点击首页“更新信息”按钮，即可查看最新的“成绩未发布课程”.\n" +
                                 "只有在进行了“选课”/“退补选”后，才需要刷新本学期选课数据.\n" +
                                 "如需刷新当前学期数据，请长按“删除本学期缓存数据”.\n");
@@ -261,7 +262,6 @@ public class NoneScoreCourseFragment extends Fragment {
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        Alerter.hide();
         Log.i("NoneScoreCourseFragment", "isVisibleToUser " + isVisibleToUser);
         Log.i("NoneScoreCourseFragment", "flush " + flush);
         if (isVisibleToUser) {
@@ -283,7 +283,7 @@ public class NoneScoreCourseFragment extends Fragment {
     private void setSpinnerItems(){
         if(MainActivity.isLocalValueLoaded){
             termList = getTermArray();
-            spinner.setAdapter(new ArrayAdapter(context, R.layout.select_item, R.id.select_text_item, termList));
+            spinner.setAdapter(new ArrayAdapter(context, R.layout.list_item_spinner, R.id.select_text_item, termList));
             spinner.setSelection(termList.indexOf(UIMS.getTermName()));
         }
         else{
@@ -347,11 +347,11 @@ public class NoneScoreCourseFragment extends Fragment {
 
         final UIMS uims = (myUims == null ? MainActivity.uims : myUims);
         if(uims == null){
-            showAlert("本地暂无【" + termId_termName.get(termID) + "】数据，且您还未登录，请登录后重试。");
+            AlertCenter.showAlert(context, "本地暂无【" + termId_termName.get(termID) + "】数据，且您还未登录，请登录后重试。");
             getNoneScoreCourseFailed();
             return;
         }
-        showLoading("加载【" + termId_termName.get(termID) + "】数据中，请稍候...");
+        AlertCenter.showLoading(context, "加载【" + termId_termName.get(termID) + "】数据中，请稍候...");
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -376,7 +376,7 @@ public class NoneScoreCourseFragment extends Fragment {
         context.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Alerter.hide();
+                AlertCenter.hideAlert(context);
                 deleteSavedCourseInformationButton.getLayoutParams().height = delete_local_course_information_button_layout_hight;
                 deleteSavedCourseInformationButton.setVisibility(View.VISIBLE);
                 flushList(getCourseList());
@@ -394,7 +394,7 @@ public class NoneScoreCourseFragment extends Fragment {
         isCourseListShowing = false;
 //        showResponse("Get Information failed!");
         showResponse("获取信息失败！请尝试点击\"更新信息\"按钮.");
-        Alerter.hide();
+        AlertCenter.hideAlert(context);
 
         flushList(new ArrayList());
 //        finish();
@@ -444,7 +444,7 @@ public class NoneScoreCourseFragment extends Fragment {
                     }catch (Exception e1){
                         e1.printStackTrace();
                         credit = "--";
-                        showWarningAlert("Error", e1.getMessage());
+                        AlertCenter.showWarningAlert(context, "Error", e1.getMessage());
                     }
 //                    e.printStackTrace();
                 }
@@ -586,7 +586,7 @@ public class NoneScoreCourseFragment extends Fragment {
         @NonNull
         @Override
         public MainAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            return new NoneScoreCourseAdapter.ViewHolder(getInflater().inflate(R.layout.course_list_ietm, parent, false));
+            return new NoneScoreCourseAdapter.ViewHolder(getInflater().inflate(R.layout.list_item_course, parent, false));
         }
 
         @Override
@@ -681,78 +681,6 @@ public class NoneScoreCourseFragment extends Fragment {
             public void run() {
                 Toast.makeText(context, string, Toast.LENGTH_SHORT).show();
 //                showAlert(string);
-            }
-        });
-    }
-
-    public void showAlert(final String message){
-        context.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Alerter.create(context)
-                        .setTitle("提示")
-                        .setText(message)
-                        .enableSwipeToDismiss()
-                        .setBackgroundColorInt(ColorManager.getTopAlertBackgroundColor())
-                        .show();
-            }
-        });
-    }
-
-    public void showAlert(final String title, final String message){
-        context.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Alerter.create(context)
-                        .setTitle(title)
-                        .setText(message)
-                        .enableSwipeToDismiss()
-                        .setBackgroundColorInt(ColorManager.getTopAlertBackgroundColor())
-                        .show();
-            }
-        });
-    }
-
-    public void showWarningAlert(final String message) {
-        context.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Alerter.create(context)
-                        .setTitle("提示")
-                        .setText(message)
-                        .enableSwipeToDismiss()
-                        .setBackgroundColorInt(getResources().getColor(R.color.color_alerter_warning_background))
-                        .show();
-            }
-        });
-    }
-
-    public void showWarningAlert(final String title, final String message) {
-        context.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Alerter.create(context)
-                        .setTitle(title)
-                        .setText(message)
-                        .enableSwipeToDismiss()
-                        .setBackgroundColorInt(getResources().getColor(R.color.color_alerter_warning_background))
-                        .show();
-            }
-        });
-    }
-
-    public void showLoading(final String message){
-        context.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Alerter.create(context)
-                        .setText(message)
-                        .enableProgress(true)
-                        .setDismissable(false)
-                        .setProgressColorRes(R.color.color_alerter_progress_bar)
-                        .setDuration(Integer.MAX_VALUE)
-                        .setBackgroundColorInt(ColorManager.getTopAlertBackgroundColor())
-                        .show();
             }
         });
     }

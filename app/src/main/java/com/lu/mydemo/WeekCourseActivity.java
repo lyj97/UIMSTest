@@ -266,50 +266,6 @@ public class WeekCourseActivity extends AppCompatActivity implements View.OnClic
         findViewById(R.id.weekCourseLayout).setBackground(ColorManager.getMainBackground_full());
     }
 
-    public void showAlert(final String message){
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Alerter.create(WeekCourseActivity.this)
-                        .setTitle("提示")
-                        .setText(message)
-                        .enableSwipeToDismiss()
-                        .setBackgroundColorInt(ColorManager.getTopAlertBackgroundColor())
-                        .show();
-            }
-        });
-    }
-
-    public void showLoading(final String message){
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Alerter.create(WeekCourseActivity.this)
-                        .setText(message)
-                        .enableProgress(true)
-                        .setDismissable(false)
-                        .setProgressColorRes(R.color.color_alerter_progress_bar)
-                        .setDuration(Integer.MAX_VALUE)
-                        .setBackgroundColorInt(ColorManager.getTopAlertBackgroundColor())
-                        .show();
-            }
-        });
-    }
-
-    public void showAlert(final String title, final String message){
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Alerter.create(WeekCourseActivity.this)
-                        .setTitle(title)
-                        .setText(message)
-                        .enableSwipeToDismiss()
-                        .setBackgroundColorInt(ColorManager.getTopAlertBackgroundColor())
-                        .show();
-            }
-        });
-    }
-
 //    @Override
 //    public void finish() {
 //        super.finish();

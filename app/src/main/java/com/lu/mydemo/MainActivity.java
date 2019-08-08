@@ -28,6 +28,7 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.lu.mydemo.Notification.AlertCenter;
 import com.tapadoo.alerter.Alerter;
 
 import net.sf.json.JSONArray;
@@ -117,7 +118,7 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //找到相应的布局及控件
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_main);
 
         sp = this.getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         context = this;
@@ -144,10 +145,10 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 if(isLocalValueLoaded){
-                    startActivity(new Intent(MainActivity.this, PingjiaoActivity.class));
+                    startActivity(new Intent(MainActivity.this, TestFunctionActivity.class));
                 }
                 else{
-                    showAlert("还没有已经保存的信息哦，点击\"更新信息\"再试试吧(*^_^*).");
+                    AlertCenter.showAlert(MainActivity.this, "还没有已经保存的信息哦，点击\"更新信息\"再试试吧(*^_^*).");
                 }
             }
         });
@@ -194,7 +195,7 @@ public class MainActivity extends Activity {
         }
 
 //        if(!isLoginIn) {
-//            activity_login.requestLayout();
+//            activity_main.requestLayout();
 //        }
 //        else{
 //            loginSuccess();
@@ -207,7 +208,7 @@ public class MainActivity extends Activity {
                 public void onClick(View v) {
                     clickCount++;
                     if(clickCount == 7 && sp.getBoolean("showEgg", true)){
-                        showAlert("", "I LOVE YOU. (❤ ω ❤)");
+                        AlertCenter.showAlert(MainActivity.this, "", "I LOVE YOU. (❤ ω ❤)");
                         sp.edit().putBoolean("showEgg", false).apply();
                     }
                 }
@@ -266,7 +267,7 @@ public class MainActivity extends Activity {
 //                    overridePendingTransition(R.anim.up_in, R.anim.up_out);
                 }
                 else{
-                    showAlert("还没有已经保存的信息哦，点击\"更新信息\"再试试吧(*^_^*).");
+                    AlertCenter.showAlert(MainActivity.this, "还没有已经保存的信息哦，点击\"更新信息\"再试试吧(*^_^*).");
                 }
 //                overridePendingTransition(R.anim.up_in, R.anim.up_out);
             }
@@ -295,7 +296,7 @@ public class MainActivity extends Activity {
 //                    overridePendingTransition(R.anim.up_in, R.anim.up_out);
                 }
                 else{
-                    showAlert("还没有已经保存的信息哦，点击\"更新信息\"再试试吧(*^_^*).");
+                    AlertCenter.showAlert(MainActivity.this, "还没有已经保存的信息哦，点击\"更新信息\"再试试吧(*^_^*).");
                 }
             }
         });
@@ -480,7 +481,7 @@ public class MainActivity extends Activity {
             @Override
             public void run() {
                 Alerter.hide();
-                if(showNotice) showAlert("如需登录其他账号，请删除本应用数据，以避免出现数据错误.\n\n" +
+                if(showNotice) AlertCenter.showAlert(MainActivity.this, "如需登录其他账号，请删除本应用数据，以避免出现数据错误.\n\n" +
                         "删除方法：设置->应用->UIMSTest->存储->清除数据." );
 //                isLoginIn = false;
 
@@ -491,7 +492,7 @@ public class MainActivity extends Activity {
         });
     }
 
-    public void loadSuccess(){
+    public void loadSuccess() {
         sp.edit().putString("ScoreJSON", UIMS.getScoreJSON().toString()).apply();
         sp.edit().putString("CourseJSON", UIMS.getCourseJSON().toString()).apply();
         sp.edit().putString("StudentJSON", UIMS.getStudentJSON().toString()).apply();
@@ -499,13 +500,8 @@ public class MainActivity extends Activity {
         sp.edit().putString("CourseSelectTypeJSON", UIMS.getCourseSelectTypeJSON().toString()).apply();
         sp.edit().putString("ScoreStatisticsJSON", UIMS.getScoreStatisticsJSON().toString()).apply();
 
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                showAlert("信息刷新成功", "以后大部分功能就不需要校园网啦!\n" +
-                        "祝使用愉快呀！");
-            }
-        });
+        AlertCenter.showAlert(MainActivity.this, "信息刷新成功", "以后大部分功能就不需要校园网啦!\n" +
+                "祝使用愉快呀！");
 
         loadLocalInformationSuccess(null);
         getCourseSuccess();
@@ -516,16 +512,10 @@ public class MainActivity extends Activity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-
                 loadTime();
                 getCourseSuccess();
 
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        CourseJSONTransfer.transferCourseList(UIMS.getCourseJSON(), true);
-                    }
-                }).start();
+                CourseJSONTransfer.transferCourseList(UIMS.getCourseJSON(), true);
             }
         }).start();
 
@@ -534,7 +524,7 @@ public class MainActivity extends Activity {
     private void loadLocalInformation(final boolean show) {
 
         if (!isLocalValueLoaded) {
-            showLoading("正在加载本地数据...");
+            AlertCenter.showLoading(MainActivity.this, "正在加载本地数据...");
 
             UIMS.setCurrentUserInfoJSON(JSONObject.fromObject(sp.getString("CurrentUserInfoJSON", "")));
             UIMS.setScoreJSON(JSONObject.fromObject(sp.getString("ScoreJSON", "")));
@@ -587,7 +577,7 @@ public class MainActivity extends Activity {
 //                            overridePendingTransition(R.anim.up_in, R.anim.up_out);
                     }
                 } catch (Exception e) {
-                    showWarningAlert(e.getMessage());
+                    AlertCenter.showWarningAlert(MainActivity.this, e.getMessage());
                     e.printStackTrace();
                 }
             }
@@ -630,7 +620,7 @@ public class MainActivity extends Activity {
                 @Override
                 public void run() {
                     Log.i("Login", "CourseListSize:\t" + datalist.size());
-                    courseList.setAdapter(new noCourseBetterAdapter(context, datalist, R.layout.today_course_list_item, new String[]{"index", "title", "context1"}, new int[]{R.id.get_none_score_course_title_index, R.id.get_none_score_course_title, R.id.get_none_score_course_context1}));
+                    courseList.setAdapter(new noCourseBetterAdapter(context, datalist, R.layout.list_item_today_course, new String[]{"index", "title", "context1"}, new int[]{R.id.get_none_score_course_title_index, R.id.get_none_score_course_title, R.id.get_none_score_course_context1}));
                     if(!listHaveHeadFoot) {
                         courseList.addHeaderView(new ViewStub(context));
                         courseList.addFooterView(new ViewStub(context));
@@ -644,11 +634,11 @@ public class MainActivity extends Activity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    courseList.setAdapter(new noCourseBetterAdapter(context, getCourseListNotice("暂无课程信息\n请点击\"更新信息\"登录并刷新本地数据."), R.layout.today_course_list_item, new String[]{"index", "title", "context1"}, new int[]{R.id.get_none_score_course_title_index, R.id.get_none_score_course_title, R.id.get_none_score_course_context1}));
+                    courseList.setAdapter(new noCourseBetterAdapter(context, getCourseListNotice("暂无课程信息\n请点击\"更新信息\"登录并刷新本地数据."), R.layout.list_item_today_course, new String[]{"index", "title", "context1"}, new int[]{R.id.get_none_score_course_title_index, R.id.get_none_score_course_title, R.id.get_none_score_course_context1}));
                     courseList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            showAlert("如在校内，请连接校园网后点击\"更新信息\"按钮登录教务系统，获取所需信息.\n\n" +
+                            AlertCenter.showAlert(MainActivity.this, "如在校内，请连接校园网后点击\"更新信息\"按钮登录教务系统，获取所需信息.\n\n" +
                                     "如不在校内，本应用暂时无法提供完整功能，仅可在校外使用\"校内通知\"、\"成绩查询\"部分功能，请谅解.\n" +
                                     "（在校内登录成功后，应用将自动保存数据，此时即可离线查看.）");
                         }
@@ -729,7 +719,7 @@ public class MainActivity extends Activity {
             public void run() {
                 try {
 
-                    showLoading("查询中...");
+                    AlertCenter.showLoading(MainActivity.this, "查询中...");
 //                    showLoading("查询成绩统计...");
                     if (uims.getScoreStatistics()) {
 //                        showResponse("查询成绩统计成功！");
@@ -1250,13 +1240,13 @@ public class MainActivity extends Activity {
                     pass = "225577";
 
                     uims = new UIMS(user, pass);
-                    showLoading("正在连接到UIMS教务系统...");
+                    AlertCenter.showLoading(MainActivity.this, "正在连接到UIMS教务系统...");
                     if (uims.connectToUIMS()) {
-                        showLoading("正在登录...");
+                        AlertCenter.showLoading(MainActivity.this, "正在登录...");
                         if (uims.login()) {
-                            showLoading("正在加载用户信息...");
+                            AlertCenter.showLoading(MainActivity.this, "正在加载用户信息...");
                             if (uims.getCurrentUserInfo()) {
-                                showAlert("", "欢迎您, " + uims.getNickName() + " ." + "\n" +
+                                AlertCenter.showAlert(MainActivity.this, "", "欢迎您, " + uims.getNickName() + " ." + "\n" +
                                         "您是UIMS系统第 " + uims.getLoginCounter() + " 位访问者.");
                                 if(uims.getUserInformation()) loginSuccess();
                                 else{
@@ -1269,7 +1259,7 @@ public class MainActivity extends Activity {
                                 }
                                 if (uims.getScoreStatistics()) {
 //                                    showResponse("查询成绩统计成功！");
-                                    showLoading("查询成绩中，请稍侯...");
+                                    AlertCenter.showLoading(MainActivity.this, "查询成绩中，请稍侯...");
                                     if (uims.getRecentScore()) {
 //                                        showResponse("查询成绩成功！");
                                         Log.i("Login", "getRecentScoreSucceed!");
@@ -1324,13 +1314,12 @@ public class MainActivity extends Activity {
                             }
                             else{
 //                                showResponse("Login failed!");
+                                AlertCenter.showWarningAlert(MainActivity.this, "", "登录失败，请检查用户名和密码是否正确.\n\n" +
+                                        "教务账号：\t您的教学号\n" +
+                                        "教务密码：\t默认密码为身份证号后六位");
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        Alerter.hide();
-                                        showWarningAlert("", "登录失败，请检查用户名和密码是否正确.\n\n" +
-                                                "教务账号：\t您的教学号\n" +
-                                                "教务密码：\t默认密码为身份证号后六位");
 //                                        button_login.setText("重新登录");
 //                                        button_login.setEnabled(true);
 //                                        button_login.setBackground(getResources().getDrawable(R.drawable.button_internet_background));
@@ -1341,11 +1330,10 @@ public class MainActivity extends Activity {
                         }
                         else{
 //                            showResponse("Login failed!");
+                            AlertCenter.showWarningAlert(MainActivity.this, "", "登录失败，请检查是否连接校园网！");
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Alerter.hide();
-                                    showWarningAlert("", "登录失败，请检查是否连接校园网！");
 //                                    button_login.setText("重新登录");
 //                                    button_login.setEnabled(true);
 //                                    button_login.setBackground(getResources().getDrawable(R.drawable.button_internet_background));
@@ -1383,93 +1371,16 @@ public class MainActivity extends Activity {
     }
 
     public void showResponse(final String string) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Alerter.hide();
-                if (string.toLowerCase().contains("failed")) {
-                    showWarningAlert("", "获取数据失败，请稍后重试.");
+        AlertCenter.hideAlert(this);
+        if (string.toLowerCase().contains("failed")) {
+            AlertCenter.showWarningAlert(this, "", "获取数据失败，请稍后重试.");
 //                    button_login.setText("重新登录");
 //                    button_login.setEnabled(true);
 //                    button_login.setBackground(getResources().getDrawable(R.drawable.button_internet_background));
-                    return;
-                }
-                Toast.makeText(MainActivity.this, string, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Toast.makeText(MainActivity.this, string, Toast.LENGTH_SHORT).show();
 //        showAlert(string);
-            }
-        });
-    }
-
-    public void showLoading(final String message) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Alerter.create(MainActivity.this)
-                        .setText(message)
-                        .enableProgress(true)
-                        .setDismissable(false)
-                        .setProgressColorRes(R.color.color_alerter_progress_bar)
-                        .setDuration(Integer.MAX_VALUE)
-                        .setBackgroundColorInt(ColorManager.getTopAlertBackgroundColor())
-                        .show();
-            }
-        });
-    }
-
-    public void showAlert(final String message) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Alerter.create(MainActivity.this)
-                        .setTitle("提示")
-                        .setText(message)
-                        .enableSwipeToDismiss()
-                        .setBackgroundColorInt(ColorManager.getTopAlertBackgroundColor())
-                        .show();
-            }
-        });
-    }
-
-    public void showAlert(final String title, final String message) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Alerter.create(MainActivity.this)
-                        .setTitle(title)
-                        .setText(message)
-                        .enableSwipeToDismiss()
-                        .setBackgroundColorInt(ColorManager.getTopAlertBackgroundColor())
-                        .show();
-            }
-        });
-    }
-
-    public void showWarningAlert(final String message) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Alerter.create(MainActivity.this)
-                        .setTitle("提示")
-                        .setText(message)
-                        .enableSwipeToDismiss()
-                        .setBackgroundColorInt(getResources().getColor(R.color.color_alerter_warning_background))
-                        .show();
-            }
-        });
-    }
-
-    public void showWarningAlert(final String title, final String message) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Alerter.create(MainActivity.this)
-                        .setTitle(title)
-                        .setText(message)
-                        .enableSwipeToDismiss()
-                        .setBackgroundColorInt(getResources().getColor(R.color.color_alerter_warning_background))
-                        .show();
-            }
-        });
     }
 
     public void showWarningAlertWithCancel_OKButton(final String title, final String message){
@@ -1515,7 +1426,7 @@ public class MainActivity extends Activity {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             if (convertView == null) {
-                convertView = LinearLayout.inflate(getBaseContext(), R.layout.today_course_list_item, null);
+                convertView = LinearLayout.inflate(getBaseContext(), R.layout.list_item_today_course, null);
             }//这个TextView是R.layout.list_item里面的，修改这个字体的颜色
             TextView textView = (TextView) convertView.findViewById(R.id.get_none_score_course_title_index);
             //获取每次进来时 mData里面存的值  若果相同则变颜色

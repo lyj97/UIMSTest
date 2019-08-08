@@ -2,20 +2,18 @@ package com.lu.mydemo;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.SearchView;
 import android.widget.TextView;
 
+import com.lu.mydemo.Notification.AlertCenter;
 import com.lu.mydemo.sample.adapter.BaseAdapter;
 import com.lu.mydemo.sample.adapter.MainAdapter;
 import com.tapadoo.alerter.Alerter;
@@ -81,7 +79,7 @@ public class NewsActivity extends AppCompatActivity {
             public void onItemClick(View view, int adapterPosition) {
 
                 if(((String) dataList.get(adapterPosition).get("department")).length() == 0 && ((String) dataList.get(adapterPosition).get("time")).length() == 0){
-                    showAlert((String) dataList.get(adapterPosition).get("title"));
+                    AlertCenter.showAlert(NewsActivity.this, (String) dataList.get(adapterPosition).get("title"));
                     return;
                 }
 
@@ -149,7 +147,7 @@ public class NewsActivity extends AppCompatActivity {
                 }
                 else{
                     if(!News.delete((String) dataList.get(adapterPosition).get("title"))){
-                        showWarningAlert("删除收藏失败！");
+                        AlertCenter.showWarningAlert(NewsActivity.this, "删除收藏失败！");
                     }
                     else{
                         //只刷新数据变化的条目
@@ -213,7 +211,7 @@ public class NewsActivity extends AppCompatActivity {
             @Override
             public void run() {
                 JSONObject object = loadClient.searchNews(queryStr);
-                showAlert("Response", object.toString());
+                AlertCenter.showAlert(NewsActivity.this, "Response", object.toString());
             }
         }).start();
     }
@@ -222,7 +220,7 @@ public class NewsActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                showAlert("加载失败，请稍后重试.");
+                AlertCenter.showAlert(NewsActivity.this, "加载失败，请稍后重试.");
                 Map<String, Object> map = new HashMap<>();
                 map.put("title", "加载失败，请稍后重试...");
                 map.put("department", "");
@@ -230,6 +228,7 @@ public class NewsActivity extends AppCompatActivity {
                 map.put("link", "");
                 map.put("abs_link", "");
                 map.put("flagTop", false);
+                map.put("is_new", false);
                 dataList.add(map);
                 swipeRecyclerView.loadMoreError(0, "加载失败，请稍后重试...");
                 if (isFirst) {
@@ -267,7 +266,7 @@ public class NewsActivity extends AppCompatActivity {
     }
 
     private void getNewsList(){
-        showLoading("加载中，请稍候...");
+        AlertCenter.showLoading(this, "加载中，请稍候...");
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -293,6 +292,7 @@ public class NewsActivity extends AppCompatActivity {
                         map.put("link", item.getString("link"));
                         map.put("abs_link", item.getString("abs_link"));
                         map.put("flagTop", item.getBoolean("flagTop"));
+                        map.put("is_new", item.getBoolean("is_new"));
                         dataList.add(map);
                     }
 
@@ -337,7 +337,7 @@ public class NewsActivity extends AppCompatActivity {
         @NonNull
         @Override
         public MainAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            return new NewsListAdapter.ViewHolder(getInflater().inflate(R.layout.news_list_item, parent, false));
+            return new NewsListAdapter.ViewHolder(getInflater().inflate(R.layout.list_item_news, parent, false));
         }
 
         @Override
@@ -393,78 +393,6 @@ public class NewsActivity extends AppCompatActivity {
         window.setStatusBarColor(ColorManager.getPrimaryColor());
 
         findViewById(R.id.activity_news).setBackground(ColorManager.getMainBackground_full());
-    }
-
-    public void showAlert(final String message) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Alerter.create(NewsActivity.this)
-                        .setTitle("提示")
-                        .setText(message)
-                        .enableSwipeToDismiss()
-                        .setBackgroundColorInt(ColorManager.getTopAlertBackgroundColor())
-                        .show();
-            }
-        });
-    }
-
-    public void showLoading(final String message) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Alerter.create(NewsActivity.this)
-                        .setText(message)
-                        .enableProgress(true)
-                        .setDismissable(false)
-                        .setProgressColorRes(R.color.color_alerter_progress_bar)
-                        .setDuration(Integer.MAX_VALUE)
-                        .setBackgroundColorInt(ColorManager.getTopAlertBackgroundColor())
-                        .show();
-            }
-        });
-    }
-
-    public void showAlert(final String title, final String message) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Alerter.create(NewsActivity.this)
-                        .setTitle(title)
-                        .setText(message)
-                        .enableSwipeToDismiss()
-                        .setBackgroundColorInt(ColorManager.getTopAlertBackgroundColor())
-                        .show();
-            }
-        });
-    }
-
-    public void showWarningAlert(final String message) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Alerter.create(NewsActivity.this)
-                        .setTitle("提示")
-                        .setText(message)
-                        .enableSwipeToDismiss()
-                        .setBackgroundColorInt(getResources().getColor(R.color.color_alerter_warning_background))
-                        .show();
-            }
-        });
-    }
-
-    public void showWarningAlert(final String title, final String message) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Alerter.create(NewsActivity.this)
-                        .setTitle(title)
-                        .setText(message)
-                        .enableSwipeToDismiss()
-                        .setBackgroundColorInt(getResources().getColor(R.color.color_alerter_warning_background))
-                        .show();
-            }
-        });
     }
 
 }

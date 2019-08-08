@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    >
+
+    <LinearLayout
+        android:id="@+id/pop_window_download_file_pop_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true"
+        android:background="#00000000"
+        >
+
+        <TextView
+            android:id="@+id/pop_window_download_file_pop_layout_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="下载文件"
+            android:textSize="17dp"
+            android:paddingTop="20dp"
+            android:paddingBottom="10dp"
+            android:textColor="@color/app_white"
+            android:background="@drawable/shape_rectangle_with_top_radius"
+            />
+
+        <LinearLayout
+            android:id="@+id/pop_window_download_file_pop_layout_main_information"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="8dp"
+            android:background="@drawable/background_login"
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center">
+
+                <EditText
+                    android:id="@+id/pop_window_download_file_filename"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="4"
+                    android:layout_gravity="center_horizontal"
+                    android:gravity="center"
+                    android:background="@drawable/login_edit_text_background"
+                    android:windowSoftInputMode="stateHidden"
+                    android:hint="文件名"/>
+
+                <EditText
+                    android:id="@+id/pop_window_download_file_extension"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:hint="扩展名"
+                    />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:text="下载任务将由系统下载接管，下载内容可在系统下载中查看。"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center"
+            android:padding="5dp"
+            android:background="@drawable/shape_rectangle_bottom_no_radius"
+            >
+
+            <Button
+                android:id="@+id/pop_window_download_file_cancel_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/shape_with_white_background"
+                android:layout_margin="10dp"
+                android:text="取消"
+                />
+
+            <Button
+                android:id="@+id/pop_window_download_file_commit_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/button_internet_background"
+                android:layout_margin="10dp"
+                android:text="下载"
+                />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

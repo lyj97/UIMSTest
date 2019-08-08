@@ -37,7 +37,7 @@ public class MainAdapter extends BaseAdapter<MainAdapter.ViewHolder> {
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(getInflater().inflate(R.layout.course_schedule_change_list_item, parent, false));
+        return new ViewHolder(getInflater().inflate(R.layout.list_item_course_schedule_change, parent, false));
     }
 
     @Override
@@ -86,11 +86,13 @@ public class MainAdapter extends BaseAdapter<MainAdapter.ViewHolder> {
             }
         }
 
+        public void setData(String title, String description){}
+
         public void setData(String title, String department, String time, boolean flagTop){}
 
         public void setData(String title, String department, String time, boolean flagTop, String place){}
 
-        public void setData(String title, String context1, String context2, String context3, Double context4, String type, int position){}
+        public void setData(String title, String context1, String context2, String context3, Double context4, String context5, String type, int position){}
     }
 
 }

@@ -31,7 +31,7 @@
             />
 
         <LinearLayout
-            android:id="@+id/pop_window_login_pop_layout__main_information"
+            android:id="@+id/pop_window_login_pop_layout_main_information"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"

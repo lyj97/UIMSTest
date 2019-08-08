@@ -124,7 +124,7 @@ public class RecommendCourseScheduleChangePopWindow extends PopupWindow {
     }
 
     public void prepareData(final View.OnClickListener onClickListener){
-        course_list.setAdapter(new CourseListAdapter(context, getCourseList(), R.layout.course_schedule_change_list_item, new String[]{"title","context1","context2"}, new int[]{R.id.course_schedule_change_list_item_title, R.id.course_schedule_change_list_item_context1, R.id.course_schedule_change_list_item_context2,}));
+        course_list.setAdapter(new CourseListAdapter(context, getCourseList(), R.layout.list_item_course_schedule_change, new String[]{"title","context1","context2"}, new int[]{R.id.course_schedule_change_list_item_title, R.id.course_schedule_change_list_item_context1, R.id.course_schedule_change_list_item_context2,}));
         recommendInformation.setText(courseScheduleChangeJSON.getString("information"));
         onClickListener.onClick(mMenuView);
     }
@@ -223,7 +223,7 @@ public class RecommendCourseScheduleChangePopWindow extends PopupWindow {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             if (convertView == null) {
-                convertView = LinearLayout.inflate(mMenuView.getContext(), R.layout.course_schedule_change_list_item, null);
+                convertView = LinearLayout.inflate(mMenuView.getContext(), R.layout.list_item_course_schedule_change, null);
             }//这个TextView是R.layout.list_item里面的，修改这个字体的颜色
             TextView context1 = convertView.findViewById(R.id.course_schedule_change_list_item_context1);
             TextView split1 = convertView.findViewById(R.id.course_schedule_change_list_item_split1);
@@ -254,7 +254,7 @@ public class RecommendCourseScheduleChangePopWindow extends PopupWindow {
 
     private void changeTheme(){
         Log.i("Theme", "Change theme.");
-        mMenuView.findViewById(R.id.recommend_course_schedule_change_pop_layout_title).setBackgroundColor(ColorManager.getPrimaryColor());
+        mMenuView.findViewById(R.id.recommend_course_schedule_change_information).setBackgroundColor(ColorManager.getPrimaryColor());
         course_list.setBackground(ColorManager.getMainBackground());
         commit_button.setBackground(ColorManager.getInternetInformationButtonBackground_full());
     }

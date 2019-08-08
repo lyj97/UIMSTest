@@ -23,6 +23,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.lu.mydemo.Notification.AlertCenter;
 import com.lu.mydemo.sample.adapter.BaseAdapter;
 import com.lu.mydemo.sample.adapter.MainAdapter;
 import com.tapadoo.alerter.Alerter;
@@ -157,9 +158,9 @@ public class CourseScheduleChangeActivity extends AppCompatActivity {
             @Override
             public void onItemClick(View view, int adapterPosition) {
                 if (dataList.get(adapterPosition).get("context2") == null || ((String) dataList.get(adapterPosition).get("context2")).length() == 0)
-                    showAlert("", dataList.get(adapterPosition).get("context1") + "放假.\n请横向滑动来删除条目.");
+                    AlertCenter.showAlert(CourseScheduleChangeActivity.this, "", dataList.get(adapterPosition).get("context1") + "放假.\n请横向滑动来删除条目.");
                 else
-                    showAlert("", dataList.get(adapterPosition).get("context1") + " 上 " + dataList.get(adapterPosition).get("context2") + "的课.\n请横向滑动来删除条目.");
+                    AlertCenter.showAlert(CourseScheduleChangeActivity.this, "", dataList.get(adapterPosition).get("context1") + " 上 " + dataList.get(adapterPosition).get("context2") + "的课.\n请横向滑动来删除条目.");
             }
         });
         swipeRecyclerView.setAdapter(myAdapter);
@@ -191,7 +192,7 @@ public class CourseScheduleChangeActivity extends AppCompatActivity {
         doubt_text_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showAlert("关于\"推荐\"", "课程调整推荐由本软件作者手动维护，为你提供便捷的课程调整添加方式.\n\n" +
+                AlertCenter.showAlert(CourseScheduleChangeActivity.this, "关于\"推荐\"", "课程调整推荐由本软件作者手动维护，为你提供便捷的课程调整添加方式.\n\n" +
                         "本功能需要联网，但在网络请求中不会向外发送任何数据，你的数据安全不受影响.\n\n" +
                         "若不同意以上说明，请不要开启本功能.(本功能默认关闭)");
             }
@@ -222,7 +223,7 @@ public class CourseScheduleChangeActivity extends AppCompatActivity {
                     }
                     JSONObject termJSON = UIMS.getTermJSON(term);
                     if(termJSON == null){
-                        showWarningAlert("ERROR", "TermJSON is null.");
+                        AlertCenter.showWarningAlert(CourseScheduleChangeActivity.this, "ERROR", "TermJSON is null.");
                         return;
                     }
                     Log.i("TermJSON", termJSON.toString());
@@ -374,7 +375,7 @@ public class CourseScheduleChangeActivity extends AppCompatActivity {
     private void setSpinnerItems(){
         if(MainActivity.isLocalValueLoaded){
             termList = getTermArray();
-            spinner.setAdapter(new ArrayAdapter(this, R.layout.select_item, R.id.select_text_item, termList));
+            spinner.setAdapter(new ArrayAdapter(this, R.layout.list_item_spinner, R.id.select_text_item, termList));
             spinner.setSelection(termList.indexOf(UIMS.getTermName()));
         }
         else{
@@ -424,78 +425,6 @@ public class CourseScheduleChangeActivity extends AppCompatActivity {
             public void run() {
                 Toast.makeText(CourseScheduleChangeActivity.this, string, Toast.LENGTH_SHORT).show();
 //                showAlert(string);
-            }
-        });
-    }
-
-    public void showLoading(final String message) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Alerter.create(CourseScheduleChangeActivity.this)
-                        .setText(message)
-                        .enableProgress(true)
-                        .setDismissable(false)
-                        .setProgressColorRes(R.color.color_alerter_progress_bar)
-                        .setDuration(Integer.MAX_VALUE)
-                        .setBackgroundColorInt(ColorManager.getTopAlertBackgroundColor())
-                        .show();
-            }
-        });
-    }
-
-    public void showAlert(final String message) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Alerter.create(CourseScheduleChangeActivity.this)
-                        .setTitle("提示")
-                        .setText(message)
-                        .enableSwipeToDismiss()
-                        .setBackgroundColorInt(ColorManager.getTopAlertBackgroundColor())
-                        .show();
-            }
-        });
-    }
-
-    public void showAlert(final String title, final String message) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Alerter.create(CourseScheduleChangeActivity.this)
-                        .setTitle(title)
-                        .setText(message)
-                        .enableSwipeToDismiss()
-                        .setBackgroundColorInt(ColorManager.getTopAlertBackgroundColor())
-                        .show();
-            }
-        });
-    }
-
-    public void showWarningAlert(final String message) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Alerter.create(CourseScheduleChangeActivity.this)
-                        .setTitle("提示")
-                        .setText(message)
-                        .enableSwipeToDismiss()
-                        .setBackgroundColorInt(getResources().getColor(R.color.color_alerter_warning_background))
-                        .show();
-            }
-        });
-    }
-
-    public void showWarningAlert(final String title, final String message) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Alerter.create(CourseScheduleChangeActivity.this)
-                        .setTitle(title)
-                        .setText(message)
-                        .enableSwipeToDismiss()
-                        .setBackgroundColorInt(getResources().getColor(R.color.color_alerter_warning_background))
-                        .show();
             }
         });
     }

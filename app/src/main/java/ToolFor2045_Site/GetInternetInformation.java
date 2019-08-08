@@ -103,6 +103,37 @@ public class GetInternetInformation {
         }
     }
 
+    public JSONObject getTestItems() {
+        try {
+            builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
+            Request request = new Request.Builder()
+                    .url(Address.myHostAddress + "/UIMSTest/GetTestFunctionItems")
+                    .build();
+//                    Log.i("okhttp_request", request.toString());
+            Log.i("OKHttp_Request", String.format("Sending request %s %n%s",
+                    request.url(), request.headers()));
+            Response response = httpClient.newCall(request).execute();
+            Log.i("OKHttp_Request", String.format("Received response for %s %n%s",
+                    response.request().url(), response.networkResponse().headers()));
+            BufferedReader bufferedReader = new BufferedReader(
+                    new InputStreamReader(response.body().byteStream(), "UTF-8"), 8 * 1024);
+            StringBuilder entityStringBuilder = new StringBuilder();
+            String line = null;
+            while ((line = bufferedReader.readLine()) != null) {
+                entityStringBuilder.append(line + "\n");
+            }
+            // 利用从HttpEntity中得到的String生成JsonObject
+            Log.i("2045_getTestFunctionItems[entity]", "entity:\t" + entityStringBuilder.toString());
+//                    showResponse("Login[entity]:\t" + entityStringBuilder.toString());
+
+            return JSONObject.fromObject(entityStringBuilder.toString());
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public JSONObject getNewsList(int page) {
         try {
             builder = new MultipartBody.Builder().setType(MultipartBody.FORM);

@@ -45,6 +45,7 @@ import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.lu.mydemo.Notification.AlertCenter;
 import com.lu.mydemo.sample.adapter.BaseAdapter;
 import com.lu.mydemo.sample.adapter.MainAdapter;
 import com.tapadoo.alerter.Alerter;
@@ -179,7 +180,7 @@ public class ScoreActivity extends AppCompatActivity
         scoreStatisticsLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showAlert("关于\"平均成绩(绩点)\"", "数据由本地计算得出.计算方法：课程首次成绩(绩点)的加权平均数;(权值为科目学分.)\n本数据仅供参考，不代表教务成绩统计结果，请知悉.\n\n" +
+                AlertCenter.showAlert(ScoreActivity.this, "关于\"平均成绩(绩点)\"", "数据由本地计算得出.计算方法：课程首次成绩(绩点)的加权平均数;(权值为科目学分.)\n本数据仅供参考，不代表教务成绩统计结果，请知悉.\n\n" +
                         "仅必修：只包含必修课程首次成绩统计；\n" +
                         "首次成绩：自定义统计项.");
             }
@@ -401,13 +402,15 @@ public class ScoreActivity extends AppCompatActivity
 //                map.put("context2",
 //                        termName);
                 map.put("context1", termName + "   \t   " +
-                        "重修?  " + isReselect + "    绩点： " + gPoint);
+                        "重修?  " + isReselect);
                 map.put("context2",
                         courScore);
                 map.put("context3",
                         "发布时间： " + dateScore);
                 map.put("context4",
                         adviceCredit);
+                map.put("context5",
+                        gPoint);
                 map.put("type", type5);
 
                 if (!chongxiu_select) {//排除所有重修
@@ -510,11 +513,11 @@ public class ScoreActivity extends AppCompatActivity
                         map.put("title", object.getString("kcmc"));
                         try {
                             map.put("context1", UIMS.getTermId_termName().get(object.getString("termId")) + "   \t   " +
-                                    "重修?  " + ((object.getString("isReselect").toUpperCase().equals("N")) ? "否" : "是") + "    绩点： " + object.getString("gpoint"));
+                                    "重修?  " + ((object.getString("isReselect").toUpperCase().equals("N")) ? "否" : "是"));
                         }
                         catch (Exception e){
                             map.put("context1", UIMS.getTermId_termName().get(object.getString("termId")) + "   \t   " +
-                                    "重修?  " + "否" + "    绩点： " + object.getString("gpoint"));
+                                    "重修?  " + "否");
                         }
                         map.put("context2",
                                 object.getString("cj"));
@@ -522,6 +525,8 @@ public class ScoreActivity extends AppCompatActivity
                                 "发布时间： " + "--");
                         map.put("context4",
                                 object.getDouble("credit"));
+                        map.put("context5",
+                                object.getString("gpoint"));
                         map.put("type", "");
                         dataList.add(0, map);
                     }catch (Exception e){
@@ -597,7 +602,7 @@ public class ScoreActivity extends AppCompatActivity
         final JSONObject percent = UIMS.getScorePercentJSON(asID);
 
         if(percent == null){
-            showAlert("成绩分布走丢了(っ °Д °;)っ\n\n" +
+            AlertCenter.showAlert(this, "成绩分布走丢了(っ °Д °;)っ\n\n" +
                     "校外成绩查询(CJCX)无成绩分布哦;\n" +
                     "如在校内，请连接校园网后点击“刷新信息”再试一下吧.");
             return;
@@ -812,108 +817,6 @@ public class ScoreActivity extends AppCompatActivity
         });
     }
 
-    public void showLoading(final String message) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Alerter.create(ScoreActivity.this)
-                        .setText(message)
-                        .enableProgress(true)
-                        .setDismissable(false)
-                        .setProgressColorRes(R.color.color_alerter_progress_bar)
-                        .setDuration(Integer.MAX_VALUE)
-                        .setBackgroundColorInt(ColorManager.getTopAlertBackgroundColor())
-                        .show();
-            }
-        });
-    }
-
-    public void showAlert(final String message) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Alerter.create(ScoreActivity.this)
-                        .setTitle("提示")
-                        .setText(message)
-                        .enableSwipeToDismiss()
-                        .setBackgroundColorInt(ColorManager.getTopAlertBackgroundColor())
-                        .show();
-            }
-        });
-    }
-
-    public void showAlert(final String title, final String message) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Alerter.create(ScoreActivity.this)
-                        .setTitle(title)
-                        .setText(message)
-                        .enableSwipeToDismiss()
-                        .setBackgroundColorInt(ColorManager.getTopAlertBackgroundColor())
-                        .show();
-            }
-        });
-    }
-
-    public void showWarningAlert(final String message) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Alerter.create(ScoreActivity.this)
-                        .setTitle("提示")
-                        .setText(message)
-                        .enableSwipeToDismiss()
-                        .setBackgroundColorInt(getResources().getColor(R.color.color_alerter_warning_background))
-                        .show();
-            }
-        });
-    }
-
-    public void showWarningAlert(final String title, final String message) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Alerter.create(ScoreActivity.this)
-                        .setTitle(title)
-                        .setText(message)
-                        .enableSwipeToDismiss()
-                        .setBackgroundColorInt(getResources().getColor(R.color.color_alerter_warning_background))
-                        .show();
-            }
-        });
-    }
-
-    public void showErrorAlert(final String message) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Alerter.create(ScoreActivity.this)
-                        .setIcon(R.drawable.ic_error_outline_white_24dp)
-                        .setTitle("提示")
-                        .setText(message)
-                        .enableSwipeToDismiss()
-                        .setBackgroundColorInt(getResources().getColor(R.color.color_alerter_error_background))
-                        .show();
-            }
-        });
-    }
-
-    public void showErrorAlert(final String title, final String message) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Alerter.create(ScoreActivity.this)
-                        .setIcon(R.drawable.ic_error_outline_white_24dp)
-                        .setTitle(title)
-                        .setText(message)
-                        .enableSwipeToDismiss()
-                        .setBackgroundColorInt(getResources().getColor(R.color.color_alerter_error_background))
-                        .show();
-            }
-        });
-    }
-
     protected MainAdapter createAdapter() {
         return new ScoreListAdapter(this);
     }
@@ -944,7 +847,7 @@ public class ScoreActivity extends AppCompatActivity
 
         @Override
         public void onBindViewHolder(@NonNull MainAdapter.ViewHolder holder, int position) {
-            holder.setData((String) mDataList.get(position).get("title"), (String) mDataList.get(position).get("context1"), (String) mDataList.get(position).get("context2"), (String) mDataList.get(position).get("context3"), (Double) mDataList.get(position).get("context4"), (String) mDataList.get(position).get("type"), position);
+            holder.setData((String) mDataList.get(position).get("title"), (String) mDataList.get(position).get("context1"), (String) mDataList.get(position).get("context2"), (String) mDataList.get(position).get("context3"), (Double) mDataList.get(position).get("context4"), (String) mDataList.get(position).get("context5"), (String) mDataList.get(position).get("type"), position);
         }
 
         class ViewHolder extends MainAdapter.ViewHolder {
@@ -954,6 +857,7 @@ public class ScoreActivity extends AppCompatActivity
             TextView tvContext2;
             TextView tvContext3;
             TextView tvContext4;
+            TextView tvContext5;
 
             PieChart chart;
 
@@ -964,6 +868,7 @@ public class ScoreActivity extends AppCompatActivity
                 tvContext2 = itemView.findViewById(R.id.list_item_context2);
                 tvContext3 = itemView.findViewById(R.id.list_item_context3);
                 tvContext4 = itemView.findViewById(R.id.list_item_context4);
+                tvContext5 = itemView.findViewById(R.id.list_item_context5);
 
                 chart = itemView.findViewById(R.id.list_item_chart1);
                 chart.setUsePercentValues(true);
@@ -990,12 +895,13 @@ public class ScoreActivity extends AppCompatActivity
                 chart.getDescription().setText("");
             }
 
-            public void setData(String title, String context1, final String context2, String context3, Double context4, String type, int position) {
+            public void setData(String title, String context1, final String context2, String context3, Double context4, String context5, String type, int position) {
                 tvTitle.setText(title);
                 tvContext1.setText(context1);
                 tvContext2.setText(context2);
                 tvContext3.setText(context3);
                 tvContext4.setText(context4 + "");
+                tvContext5.setText(context5);
 
                 switch (type){
                     case "4160" :{
