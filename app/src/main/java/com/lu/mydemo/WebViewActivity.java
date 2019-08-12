@@ -26,6 +26,7 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.PopupWindow;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.lu.mydemo.Notification.AlertCenter;
@@ -42,7 +43,9 @@ public class WebViewActivity extends AppCompatActivity {
 
     private TextView titleTextView;
     private TextView backTextView;
+    private TextView closeTextView;
 
+    private ProgressBar loadingProgressBar;
     private WebView webView;
 
     private Bundle bundle;
@@ -67,10 +70,14 @@ public class WebViewActivity extends AppCompatActivity {
 
         titleTextView = findViewById(R.id.activity_web_view_title);
         backTextView = findViewById(R.id.activity_web_view_navigation_back_text);
+        closeTextView = findViewById(R.id.activity_web_view_navigation_close_text);
 
+        loadingProgressBar = findViewById(R.id.activity_web_view_loading_progress_bar);
         webView = findViewById(R.id.activity_web_view_web_view);
 
         changeTheme();
+
+        closeTextView.setVisibility(View.GONE);
 
         Intent intent = getIntent();
         bundle = intent.getBundleExtra("bundle");
@@ -136,6 +143,7 @@ public class WebViewActivity extends AppCompatActivity {
                         AlertCenter.showWarningAlert(WebViewActivity.this, "So Sorry", "抱歉，文件名可能乱码，请手动更改文件名后确认.");
                     }
 
+                    loadingProgressBar.setVisibility(View.GONE);
                     //下载确认对话框
                     DownloadFilePopupWindow window = new DownloadFilePopupWindow(WebViewActivity.this, fileName.substring(0, fileName.lastIndexOf(".")), fileName.substring(fileName.lastIndexOf(".")), findViewById(R.id.activity_web_view).getHeight(), findViewById(R.id.activity_web_view).getWidth());
                     window.setFocusable(true);
@@ -277,6 +285,7 @@ public class WebViewActivity extends AppCompatActivity {
             //表示在当前的WebView继续打开网页
             if(request.getUrl().toString().contains("oa.jlu.edu.cn")) view.loadUrl(request.getUrl().toString(), myHeaders);
             else view.loadUrl(request.getUrl().toString());
+            loadingProgressBar.setVisibility(View.VISIBLE);
             return true;
         }
 
@@ -284,7 +293,7 @@ public class WebViewActivity extends AppCompatActivity {
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             super.onPageStarted(view, url, favicon);
 //            Log.d("WebView","开始访问网页");
-            AlertCenter.showLoading(WebViewActivity.this, "加载中...");
+//            AlertCenter.showLoading(WebViewActivity.this, "加载中...");
         }
 
         @Override
@@ -292,6 +301,7 @@ public class WebViewActivity extends AppCompatActivity {
             super.onPageFinished(view, url);
 //            Log.d("WebView","访问网页结束");
             AlertCenter.hideAlert(WebViewActivity.this);
+            loadingProgressBar.setVisibility(View.GONE);
         }
     }
 
@@ -299,6 +309,7 @@ public class WebViewActivity extends AppCompatActivity {
         @Override //监听加载进度
         public void onProgressChanged(WebView view, int newProgress) {
             super.onProgressChanged(view, newProgress);
+            loadingProgressBar.setProgress(newProgress);
         }
         @Override//接受网页标题
         public void onReceivedTitle(WebView view, String title) {

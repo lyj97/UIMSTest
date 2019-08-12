@@ -2,9 +2,9 @@ package com.lu.mydemo;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +15,6 @@ import android.widget.TextView;
 import com.lu.mydemo.Notification.AlertCenter;
 import com.lu.mydemo.sample.adapter.BaseAdapter;
 import com.lu.mydemo.sample.adapter.MainAdapter;
-import com.tapadoo.alerter.Alerter;
 import com.yanzhenjie.recyclerview.OnItemClickListener;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 
@@ -58,9 +57,39 @@ public class TestFunctionActivity extends AppCompatActivity {
             public void onItemClick(View view, int adapterPosition) {
                 switch (adapterPosition){
                     case 0:{
-                        startActivity(new Intent(TestFunctionActivity.this, PingjiaoActivity.class));
+                        if(MainActivity.isLocalValueLoaded)
+                            startActivity(new Intent(TestFunctionActivity.this, PingjiaoActivity.class));
+                        else
+                            AlertCenter.showErrorAlert(TestFunctionActivity.this, "还没有已经保存的信息，缺少必要信息无法教评哦，点击首页\"更新信息\"再试试吧(*^_^*).");
                         break;
                     }
+//                    case 1:{
+//                        try{
+//                            if(Build.VERSION.SDK_INT > 26) {
+//                                ShortcutManager shortcutManager = getSystemService(ShortcutManager.class);
+//
+//                                ShortcutInfo shortcut = new ShortcutInfo.Builder(TestFunctionActivity.this, "id1")
+//                                        .setShortLabel("News Activity.")
+//                                        .setLongLabel("News Activity.")
+////                                        .setIcon(Icon.createWithResource(, R.drawable.icon_website))
+//                                        .setIntent(new Intent(Intent.ACTION_VIEW, null, TestFunctionActivity.this, NewsActivity.class))
+////                                        .setIntent(intent)
+////                                        .setActivity(new ComponentName(getPackageName(), TestFunctionActivity.class.getName()))
+//                                        .build();
+//
+//                                shortcutManager.removeAllDynamicShortcuts();
+//                                shortcutManager.setDynamicShortcuts(Arrays.asList(shortcut));
+//                            }
+//                            else {
+//                                AlertCenter.showErrorAlert(TestFunctionActivity.this, "Current API:\t" + Build.VERSION.SDK_INT + "\n" +
+//                                        "Needed API:\t26 or higher.");
+//                            }
+//                        } catch (Exception e){
+//                            e.printStackTrace();
+//                            AlertCenter.showErrorAlert(TestFunctionActivity.this, e.getMessage());
+//                        }
+//                        break;
+//                    }
                     default:{
                         String link = (String) dataList.get(adapterPosition).get("link");
                         if(link == null || !link.startsWith("http")){
@@ -101,6 +130,12 @@ public class TestFunctionActivity extends AppCompatActivity {
                     map.put("title","教评");
                     map.put("description", "教学质量评价");
                     dataList.add(map);
+
+//                    //TODO ShortCutTest
+//                    map = new HashMap<>();
+//                    map.put("title","ShortCutTest");
+//                    map.put("description", "ShortCutTest");
+//                    dataList.add(map);
 
                     runOnUiThread(new Runnable() {
                         @Override

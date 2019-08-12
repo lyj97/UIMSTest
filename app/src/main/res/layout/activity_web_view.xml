@@ -28,6 +28,14 @@
                 android:background="@drawable/ic_arrow_back_white_24dp"
                 />
 
+            <TextView
+                android:id="@+id/activity_web_view_navigation_close_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/ic_close_white_24dp"
+                />
+
         </LinearLayout>
 
         <LinearLayout
@@ -72,6 +80,14 @@
         android:layout_height="match_parent"
         android:background="#00000000"
         android:orientation="vertical">
+
+        <ProgressBar
+            android:id="@+id/activity_web_view_loading_progress_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:max="100"/>
 
         <WebView
             android:id="@+id/activity_web_view_web_view"

@@ -4,9 +4,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ShortcutInfo;
+import android.content.pm.ShortcutManager;
 import android.graphics.Color;
 import android.icu.text.SimpleDateFormat;
 import android.icu.util.Calendar;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -36,6 +40,7 @@ import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -144,12 +149,7 @@ public class MainActivity extends Activity {
         test.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isLocalValueLoaded){
-                    startActivity(new Intent(MainActivity.this, TestFunctionActivity.class));
-                }
-                else{
-                    AlertCenter.showAlert(MainActivity.this, "还没有已经保存的信息哦，点击\"更新信息\"再试试吧(*^_^*).");
-                }
+                startActivity(new Intent(MainActivity.this, TestFunctionActivity.class));
             }
         });
 
@@ -1229,6 +1229,41 @@ public class MainActivity extends Activity {
     public static void setAcceptTestFun(boolean acceptTestFun) {
         MainActivity.acceptTestFun = acceptTestFun;
         sp.edit().putBoolean("acceptTestFun", MainActivity.acceptTestFun).apply();
+    }
+
+    public void shortCutTest(){
+        try{
+            if(Build.VERSION.SDK_INT > 26) {
+                ShortcutManager shortcutManager = getSystemService(ShortcutManager.class);
+
+                ShortcutInfo shortcut = new ShortcutInfo.Builder(MainActivity.this, "id1")
+                        .setShortLabel("Test fun.")
+                        .setLongLabel("Test function activity.")
+//                                        .setIcon(Icon.createWithResource(, R.drawable.icon_website))
+//                                        .setIntent(intent)
+                        .setIntents(
+                                // this dynamic shortcut set up a back stack using Intents, when pressing back, will go to MainActivity
+                                // the last Intent is what the shortcut really opened
+                                new Intent[]{
+                                        new Intent(Intent.ACTION_MAIN, Uri.EMPTY, MainActivity.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK),
+                                        new Intent(TestFunctionActivity.ACCESSIBILITY_SERVICE)
+                                        // intent's action must be set
+                                }
+                        )
+//                        .setActivity(new ComponentName(getPackageName(), TestFunctionActivity.class.getName()))
+                        .build();
+
+                shortcutManager.removeAllDynamicShortcuts();
+                shortcutManager.setDynamicShortcuts(Arrays.asList(shortcut));
+            }
+            else {
+                AlertCenter.showErrorAlert(MainActivity.this, "Current API:\t" + Build.VERSION.SDK_INT + "\n" +
+                        "Needed API:\t26 or higher.");
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+            AlertCenter.showErrorAlert(MainActivity.this, e.getMessage());
+        }
     }
 
     private void myTestFunction(){
