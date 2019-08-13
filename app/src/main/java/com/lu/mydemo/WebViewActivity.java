@@ -30,7 +30,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.lu.mydemo.Notification.AlertCenter;
-import com.tapadoo.alerter.Alerter;
 
 import java.util.HashMap;
 
@@ -139,7 +138,7 @@ public class WebViewActivity extends AppCompatActivity {
                     fileName = URLUtil.guessFileName(url, contentDisposition, mimeType);
                     Log.d("fileName:", fileName);
 
-                    if(fileName.contains("�")){
+                    if(fileName.contains("�")) {
                         AlertCenter.showWarningAlert(WebViewActivity.this, "So Sorry", "抱歉，文件名可能乱码，请手动更改文件名后确认.");
                     }
 
