@@ -89,8 +89,19 @@ public class NewsDetailActivity extends AppCompatActivity {
         detailTitle.setText(bundle.getString("title"));
         detailDepartment.setText(bundle.getString("department"));
         detailTime.setText(bundle.getString("time"));
-        detailLink.setText(Html.fromHtml("<a href=\'" + bundle.getString("abs_link") + "\'>浏览器打开</a>"));
-        detailLink.setMovementMethod(LinkMovementMethod.getInstance());
+//        detailLink.setText(Html.fromHtml("<a href=\'" + bundle.getString("abs_link") + "\'>浏览器打开</a>"));
+//        detailLink.setMovementMethod(LinkMovementMethod.getInstance());
+        detailLink.setText("浏览器打开");
+        detailLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent1 = new Intent(NewsDetailActivity.this, WebViewActivity.class);
+                Bundle web_bundle = new Bundle();
+                web_bundle.putString("link", bundle.getString("abs_link"));
+                intent1.putExtra("bundle", web_bundle);
+                startActivity(intent1);
+            }
+        });
 
         CharSequence text  =  detailLink.getText();
         if (text instanceof Spannable){

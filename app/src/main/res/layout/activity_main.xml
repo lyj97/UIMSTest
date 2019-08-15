@@ -186,20 +186,36 @@
                         android:textSize="18dp"
                         android:textColor="@color/colorlogin_text"/>
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/login_web_pages"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="8dp"
+                            android:text="网址导航"/>
+
+                        <TextView
+                            android:id="@+id/login_test"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="8dp"
+                            android:text="测试功能"/>
+
+                    </LinearLayout>
+
                     <TextView
                         android:id="@+id/login_goto_about_text_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingTop="15dp"
+                        android:padding="10dp"
                         android:text="ⓘ关于UIMSTest"
                         />
-
-                    <TextView
-                        android:id="@+id/login_test"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="8dp"
-                        android:text="Test Function!"/>
 
                 </LinearLayout>
 

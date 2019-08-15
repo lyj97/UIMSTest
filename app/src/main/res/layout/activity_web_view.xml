@@ -87,27 +87,28 @@
         android:textColor="#FFFFFF"
         android:text="Title" />
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#00000000"
         android:orientation="vertical">
 
-        <ProgressBar
-            android:id="@+id/activity_web_view_loading_progress_bar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:indeterminate="true"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:max="100"/>
-
         <WebView
             android:id="@+id/activity_web_view_web_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
+            android:layout_height="match_parent"
+            android:background="#00000000">
         </WebView>
 
-    </LinearLayout>
+        <ProgressBar
+            android:id="@+id/activity_web_view_loading_progress_bar"
+            android:layout_width="match_parent"
+            android:layout_height="11dp"
+            android:layout_alignParentTop="true"
+            android:indeterminate="true"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:max="100" />
+
+    </RelativeLayout>
 
 </LinearLayout>

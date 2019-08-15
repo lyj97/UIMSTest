@@ -2,9 +2,9 @@ package com.lu.mydemo;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,14 +29,13 @@ import java.util.Map;
 import Config.ColorManager;
 import ToolFor2045_Site.GetInternetInformation;
 
-public class TestFunctionActivity extends AppCompatActivity {
+public class WebPagesActivity extends AppCompatActivity {
 
     private SwipeRecyclerView swipeRecyclerView;
     private BaseAdapter myAdapter;
     private List<Map<String, Object>> dataList;
 
     private TextView navigation_back;
-    private TextView page_title;
 
     private GetInternetInformation loadClient = new GetInternetInformation();
 
@@ -49,24 +48,25 @@ public class TestFunctionActivity extends AppCompatActivity {
         myAdapter = createAdapter();
 
         navigation_back = findViewById(R.id.activity_test_function_navigation_back_text);
-        page_title = findViewById(R.id.activity_test_function_title_text);
 
         changeTheme();
 
-        page_title.setText("测试功能");
         swipeRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         swipeRecyclerView.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int adapterPosition) {
-                switch (adapterPosition){
-                    case 0:{
-                        if(MainActivity.isLocalValueLoaded)
-                            startActivity(new Intent(TestFunctionActivity.this, PingjiaoActivity.class));
-                        else
-                            AlertCenter.showErrorAlert(TestFunctionActivity.this, "还没有已经保存的信息，缺少必要信息无法教评哦，点击首页\"更新信息\"再试试吧(*^_^*).");
-                        break;
-                    }
+                String link = (String) dataList.get(adapterPosition).get("link");
+                if (link == null || !link.startsWith("http")) {
+                    AlertCenter.showWarningAlert(WebPagesActivity.this, "ERROR", "link:\t" + link);
+                    return;
                 }
+                Intent intent = new Intent(WebPagesActivity.this, WebViewActivity.class);
+
+                Bundle bundle = new Bundle();
+                bundle.putString("link", link);
+
+                intent.putExtra("bundle", bundle);
+                startActivity(intent);
             }
         });
 
@@ -77,28 +77,25 @@ public class TestFunctionActivity extends AppCompatActivity {
             }
         });
 
-        getTestFunctionList();
+        getRemoteItems();
 
     }
 
-    private void getTestFunctionList(){
+    private void getRemoteItems(){
         new Thread(new Runnable() {
             @Override
             public void run() {
-                try {
+                try{
                     dataList = new ArrayList<>();
-
-                    Map<String, Object> map = new HashMap<>();
-                    map.put("title","教评");
-                    map.put("description", "教学质量评价");
-                    dataList.add(map);
-
-//                    //TODO ShortCutTest
-//                    map = new HashMap<>();
-//                    map.put("title","ShortCutTest");
-//                    map.put("description", "ShortCutTest");
-//                    dataList.add(map);
-
+                    JSONObject object = loadClient.getTestItems();
+                    JSONArray array = object.getJSONArray("value");
+                    for(Object item : array){
+                        Map<String, Object> map = new HashMap<>();
+                        map.put("title", ((JSONObject) item).getString("title"));
+                        map.put("description", ((JSONObject) item).getString("description"));
+                        map.put("link", ((JSONObject) item).getString("link"));
+                        dataList.add(map);
+                    }
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -106,8 +103,7 @@ public class TestFunctionActivity extends AppCompatActivity {
                             myAdapter.notifyDataSetChanged(dataList);
                         }
                     });
-
-                } catch (Exception e){
+                }catch (Exception e){
                     e.printStackTrace();
                 }
             }
@@ -180,4 +176,5 @@ public class TestFunctionActivity extends AppCompatActivity {
         }
 
     }
+
 }

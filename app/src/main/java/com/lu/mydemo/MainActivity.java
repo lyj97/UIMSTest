@@ -80,6 +80,7 @@ public class MainActivity extends Activity {
 
     private TextView about_text_view;
 
+    private TextView web_pages_text_view;
     private TextView test;
 
     private ScrollView login_main_view;
@@ -144,6 +145,13 @@ public class MainActivity extends Activity {
         login_main_view = findViewById(R.id.login_main_view);
         linearLayoutView_down_text = findViewById(R.id.LinearLayoutView_down_text);
 
+        web_pages_text_view = findViewById(R.id.login_web_pages);
+        web_pages_text_view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, WebPagesActivity.class));
+            }
+        });
         //TODO TEST
         test = findViewById(R.id.login_test);
         test.setOnClickListener(new View.OnClickListener() {
@@ -1246,11 +1254,11 @@ public class MainActivity extends Activity {
                                 // the last Intent is what the shortcut really opened
                                 new Intent[]{
                                         new Intent(Intent.ACTION_MAIN, Uri.EMPTY, MainActivity.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK),
-                                        new Intent(TestFunctionActivity.ACCESSIBILITY_SERVICE)
+                                        new Intent(WebPagesActivity.ACCESSIBILITY_SERVICE)
                                         // intent's action must be set
                                 }
                         )
-//                        .setActivity(new ComponentName(getPackageName(), TestFunctionActivity.class.getName()))
+//                        .setActivity(new ComponentName(getPackageName(), WebPagesActivity.class.getName()))
                         .build();
 
                 shortcutManager.removeAllDynamicShortcuts();

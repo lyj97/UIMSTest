@@ -23,6 +23,7 @@ import android.webkit.DownloadListener;
 import android.webkit.URLUtil;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.PopupWindow;
@@ -77,6 +78,12 @@ public class WebViewActivity extends AppCompatActivity {
         changeTheme();
 
         closeTextView.setVisibility(View.GONE);
+        closeTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         Intent intent = getIntent();
         bundle = intent.getBundleExtra("bundle");
@@ -88,9 +95,17 @@ public class WebViewActivity extends AppCompatActivity {
             }
         });
 
-        webView.getSettings().setJavaScriptEnabled(true);
+        WebSettings settings = webView.getSettings();
+
+        settings.setUseWideViewPort(true);
+        settings.setLoadWithOverviewMode(true);
+        settings.setSupportZoom(true);
+        settings.setBuiltInZoomControls(true);
+        settings.setDisplayZoomControls(false);
+        settings.setJavaScriptEnabled(true);
 
         String link = bundle.getString("link");
+        Log.i("WebView", "link:\t" + link);
         if(link == null){
             AlertCenter.showErrorAlert(WebViewActivity.this, "ERROR!", "Link is NULL!");
         }
@@ -284,7 +299,6 @@ public class WebViewActivity extends AppCompatActivity {
             //表示在当前的WebView继续打开网页
             if(request.getUrl().toString().contains("oa.jlu.edu.cn")) view.loadUrl(request.getUrl().toString(), myHeaders);
             else view.loadUrl(request.getUrl().toString());
-            loadingProgressBar.setVisibility(View.VISIBLE);
             return true;
         }
 
@@ -293,6 +307,8 @@ public class WebViewActivity extends AppCompatActivity {
             super.onPageStarted(view, url, favicon);
 //            Log.d("WebView","开始访问网页");
 //            AlertCenter.showLoading(WebViewActivity.this, "加载中...");
+            loadingProgressBar.setVisibility(View.VISIBLE);
+            if(webView.canGoBack()) closeTextView.setVisibility(View.VISIBLE);
         }
 
         @Override
