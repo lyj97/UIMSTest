@@ -213,7 +213,7 @@
                         android:id="@+id/login_goto_about_text_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="10dp"
+                        android:padding="5dp"
                         android:text="ⓘ关于UIMSTest"
                         />
 

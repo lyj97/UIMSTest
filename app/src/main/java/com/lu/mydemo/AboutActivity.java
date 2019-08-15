@@ -32,7 +32,7 @@ public class AboutActivity extends AppCompatActivity {
     private TextView application_icon_text_view;
     private TextView application_version_name;
     private TextView link_to_uimstest;
-//    private TextView link_to_qq;
+    private TextView link_to_github;
     private TextView link_to_group;
 
     private TextView navigation_back;
@@ -48,7 +48,7 @@ public class AboutActivity extends AppCompatActivity {
         application_icon_text_view = findViewById(R.id.activity_about_application_icon);
         application_version_name = findViewById(R.id.activity_about_application_version_name);
         link_to_uimstest = findViewById(R.id.activity_about_link_to_uimstest);
-//        link_to_qq = findViewById(R.id.activity_about_link_to_qq);
+        link_to_github = findViewById(R.id.activity_about_link_to_github);
         link_to_group = findViewById(R.id.activity_about_link_to_group);
 
         navigation_back = findViewById(R.id.activity_about_navigation_back_text);
@@ -75,7 +75,7 @@ public class AboutActivity extends AppCompatActivity {
                         "这也许是我最开心的一天了吧.\n\n" +
                         "经历了两周的闭关修炼，我已不再是那时的样子，功能也正一天天变多，却一直保留着对你的思念.\n\n" +
                         "19年4月20日，我们第一次见面.\n" +
-                        "初来乍到，我的功能很少，只能帮你查一下成绩；几天后，我能查看当日课程啦，这一天，主人帮我做了推广，我来到了更多人的Phone中，有了好多新家；很快，五一假期前，因为课程调整，主人在凌晨三点给我添加了新的功能，让我更懂你今天真正要上的课；随着校内通知在假期后恢复更新，我能帮你看校内通知，也能记住你需要的通知啦；转眼间，属于我们之间的第一个学期已经结束，学期的最后，我可以帮你记下即将到来的考试，见证这一学期的收获；暑假来啦，在校外，我也可以帮你查成绩了哦~\n\n" +
+                        "初来乍到，我的功能很少，只能帮你查一下成绩；几天后，我能查看当日课程啦，这一天，主人帮我做了推广，我来到了更多人的Phone中，有了好多新家；很快，五一假期前，因为课程调整，主人在凌晨三点给我添加了新的功能，让我更懂你今天真正要上的课；随着校内通知在假期后恢复更新，我能帮你看校内通知，也能记住你需要的通知啦；转眼间，属于我们之间的第一个学期已经结束，学期的最后，我可以帮你记下即将到来的考试，见证这一学期的收获；暑假来啦，在校外，我可以帮你查成绩，也可以帮你记下常用的网站了哦~\n\n" +
                         "一路走来，也许你每天都会看看我，也许我只是静静的看着忙碌的你，不曾发出一点声响.\n" +
                         "但这又如何，我会一直陪着你，你也会见证我的成长，不是吗？");
                 object.put("link_text", "");
@@ -108,11 +108,11 @@ public class AboutActivity extends AppCompatActivity {
         link_to_uimstest.setAutoLinkMask(0);
         link_to_uimstest.setLinksClickable(true);
 
-//        CharSequence charSequence_link_to_qq = Html.fromHtml("<a href=\'mqqwpa://im/chat?chat_type=wpa&uin=1159386449\'>意见反馈请点此处</a>");
-//        link_to_qq.setText(charSequence_link_to_qq);
-//        link_to_qq.setMovementMethod(LinkMovementMethod.getInstance());
-//        link_to_qq.setAutoLinkMask(0);
-//        link_to_qq.setLinksClickable(true);
+        CharSequence charSequence_link_to_github = Html.fromHtml("<a href=\'https://github.com/lyj97/UIMSTest\'>开源项目(Github)</a>");
+        link_to_github.setText(charSequence_link_to_github);
+        link_to_github.setMovementMethod(LinkMovementMethod.getInstance());
+        link_to_github.setAutoLinkMask(0);
+        link_to_github.setLinksClickable(true);
 
         CharSequence charSequence_link_to_group = Html.fromHtml("<a href=\'http://qm.qq.com/cgi-bin/qm/qr?k=SN-JdqTXpVKfvRJm4LgXkSM6yARpXhKY#\'>意见反馈、参与开发/内测、Bug反馈请点此处</a>");
         link_to_group.setText(charSequence_link_to_group);
@@ -121,7 +121,7 @@ public class AboutActivity extends AppCompatActivity {
         link_to_group.setLinksClickable(true);
 
         setLinkStyle(link_to_uimstest);
-//        setLinkStyle(link_to_qq);
+        setLinkStyle(link_to_github);
         setLinkStyle(link_to_group);
 
         navigation_back.setOnClickListener(new View.OnClickListener() {

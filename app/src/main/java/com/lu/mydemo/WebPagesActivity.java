@@ -82,6 +82,7 @@ public class WebPagesActivity extends AppCompatActivity {
     }
 
     private void getRemoteItems(){
+        AlertCenter.showLoading(WebPagesActivity.this, "加载中...");
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -101,6 +102,7 @@ public class WebPagesActivity extends AppCompatActivity {
                         public void run() {
                             swipeRecyclerView.setAdapter(myAdapter);
                             myAdapter.notifyDataSetChanged(dataList);
+                            AlertCenter.hideAlert(WebPagesActivity.this);
                         }
                     });
                 }catch (Exception e){
