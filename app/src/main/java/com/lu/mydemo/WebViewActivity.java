@@ -2,6 +2,7 @@ package com.lu.mydemo;
 
 import android.Manifest;
 import android.app.DownloadManager;
+import android.app.Instrumentation;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -91,7 +92,18 @@ public class WebViewActivity extends AppCompatActivity {
         backTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+//                finish();
+                new Thread(){
+                    public void run() {
+                        try{
+                            Instrumentation inst = new Instrumentation();
+                            inst.sendKeyDownUpSync(KeyEvent.KEYCODE_BACK);
+                        }
+                        catch (Exception e) {
+                            Log.e("Exception when goBack", e.toString());
+                        }
+                    }
+                }.start();
             }
         });
 
