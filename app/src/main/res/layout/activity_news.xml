@@ -24,7 +24,7 @@
                 android:id="@+id/activity_news_navigation_back_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
                 android:background="@drawable/ic_arrow_back_white_24dp"
                 />
 
@@ -57,19 +57,29 @@
 
         </LinearLayout>
 
-        <TextView
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"/>
+            android:gravity="end"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/activity_news_my_collection"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/ic_star_white_24dp"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:gravity="end"
-        android:orientation="horizontal">
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:padding="10dp"-->
+        <!--android:gravity="end"-->
+        <!--android:orientation="horizontal">-->
 
         <!--<SearchView-->
             <!--android:id="@+id/activity_news_search_view"-->
@@ -78,16 +88,16 @@
             <!--android:layout_weight="1">-->
         <!--</SearchView>-->
 
-        <TextView
-            android:id="@+id/activity_news_my_collection"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:textSize="14sp"
-            android:textColor="#FFFFFF"
-            android:text="我的收藏" />
+        <!--<TextView-->
+            <!--android:id="@+id/activity_news_my_collection"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:gravity="center"-->
+            <!--android:textSize="14sp"-->
+            <!--android:textColor="#FFFFFF"-->
+            <!--android:text="我的收藏" />-->
 
-    </LinearLayout>
+    <!--</LinearLayout>-->
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -1,6 +1,7 @@
 package com.lu.mydemo;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +21,7 @@ import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lu.mydemo.Notification.AlertCenter;
@@ -62,7 +64,14 @@ public class NewsDetailActivity extends AppCompatActivity {
     private TextView detailTime;
     private TextView detailLink;
 
+    private LinearLayout textSizeChangeLayout;
+    private TextView hideText;
+    private TextView textSizeEditText;
+    private TextView confirmText;
+
     private TextView navigation_back;
+
+    private String textSize;
 
     private WebView webView;
 
@@ -70,9 +79,12 @@ public class NewsDetailActivity extends AppCompatActivity {
 
     private String newsDetail;
 
+    private SharedPreferences sp;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sp = getSharedPreferences("NewsConfig", MODE_PRIVATE);
         setContentView(R.layout.activity_news_detail);
 
         detailTitle = findViewById(R.id.activity_news_detail_title);
@@ -80,10 +92,39 @@ public class NewsDetailActivity extends AppCompatActivity {
         detailTime = findViewById(R.id.activity_news_detail_time);
         detailLink = findViewById(R.id.activity_news_detail_link);
 
+        textSizeChangeLayout = findViewById(R.id.activity_news_detail_text_size_change_layout);
+        hideText = findViewById(R.id.activity_news_detail_hide_text);
+        textSizeEditText = findViewById(R.id.activity_news_detail_text_size_edit_text);
+        confirmText = findViewById(R.id.activity_news_detail_text_size_confirm_text);
+
         navigation_back = findViewById(R.id.activity_news_detail_navigation_back_text);
 
         changeTheme();
 
+        textSizeChangeLayout.setVisibility(View.GONE);
+        textSize = sp.getString("TextSize", "33");
+        textSizeEditText.setText(textSize);
+        confirmText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                textSize = textSizeEditText.getText().toString();
+                getSucceed(newsDetail);
+                sp.edit().putString("TextSize", textSize).apply();
+            }
+        });
+        hideText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(textSizeChangeLayout.getVisibility() == View.VISIBLE){
+                    textSizeChangeLayout.setVisibility(View.GONE);
+                    hideText.setBackground(getDrawable(R.drawable.ic_keyboard_arrow_down_white_24dp));
+                }
+                else{
+                    textSizeChangeLayout.setVisibility(View.VISIBLE);
+                    hideText.setBackground(getDrawable(R.drawable.ic_keyboard_arrow_up_white_24dp));
+                }
+            }
+        });
         Intent intent = getIntent();
         bundle = intent.getBundleExtra("bundle");
         detailTitle.setText(bundle.getString("title"));
@@ -132,6 +173,7 @@ public class NewsDetailActivity extends AppCompatActivity {
             @Override
             public void run() {
                 newsDetail = getNewsDetail();
+//                Log.i("NewsDetail", newsDetail);
                 getSucceed(newsDetail);
             }
         }).start();
@@ -145,10 +187,12 @@ public class NewsDetailActivity extends AppCompatActivity {
                 String mimeType = "text/html";
                 String enCoding = "utf-8";
                 WebSettings settings = webView.getSettings();
+                settings.setUseWideViewPort(true);
+                settings.setLoadWithOverviewMode(true);
                 settings.setSupportZoom(true);
                 settings.setBuiltInZoomControls(true);
                 settings.setDisplayZoomControls(false);
-                webView.loadDataWithBaseURL(null, detail, mimeType, enCoding, null);
+                webView.loadDataWithBaseURL(null, "<div style=\"font-size:" + textSize + "\"" + detail + "</div>", mimeType, enCoding, null);
                 Alerter.hide();
             }
         });
@@ -181,20 +225,22 @@ public class NewsDetailActivity extends AppCompatActivity {
                     .post(formBody)
                     .build();
 //                    Log.i("okhttp_request", request.toString());
-            Log.i("OKHttp_Request", String.format("Sending request %s %n%s",
-                    request.url(), request.headers()));
+//            Log.i("OKHttp_Request", String.format("Sending request %s %n%s", request.url(), request.headers()));
             Response response = httpClient.newCall(request).execute();
-            Log.i("OKHttp_Request", String.format("Received response for %s %n%s",
-                    response.request().url(), response.networkResponse().headers()));
+//            Log.i("OKHttp_Request", String.format("Received response for %s %n%s", response.request().url(), response.networkResponse().headers()));
             BufferedReader bufferedReader = new BufferedReader(
                     new InputStreamReader(response.body().byteStream(), "UTF-8"), 8 * 1024);
             StringBuilder entityStringBuilder = new StringBuilder();
             String line = null;
             while ((line = bufferedReader.readLine()) != null) {
+                if(line.contains("height:auto!important;width:640px;")) {
+//                    Log.e("detail", line);
+                    line = line.replace("height:auto!important;width:640px;", "");
+                }
                 entityStringBuilder.append(line + "\n");
             }
             // 利用从HttpEntity中得到的String生成JsonObject
-            Log.i("GetNewsDetail[entity]", "entity:\t" + entityStringBuilder.toString());
+//            Log.i("GetNewsDetail[entity]", "entity:\t" + entityStringBuilder.toString());
 //                    showResponse("Login[entity]:\t" + entityStringBuilder.toString());
 
             JSONObject object = JSONObject.fromObject(entityStringBuilder.toString());

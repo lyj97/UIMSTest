@@ -1152,18 +1152,18 @@ public class MainActivity extends Activity {
                         int internetVersion = object.getInt("VersionCode");
                         Log.i("Version", "" + internetVersion);
 //                        Log.e("MainActivity", "Ignored internet information version check for TEST!");
-                        if(internetVersion <= Version.getVersionCode()) return;
+                        if(!Version.isIsBeta() && internetVersion <= Version.getVersionCode()) return;//不是测试版 不提示同版本更新
+                        else if(internetVersion < Version.getVersionCode()) return;//测试版 提示同版本正式版更新
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                InternetInformationPopupWindow informationPopWindow = new InternetInformationPopupWindow(MainActivity.this, object, findViewById(R.id.activity_login).getHeight(), findViewById(R.id.activity_login).getWidth());
+                                informationPopWindow.showAtLocation(MainActivity.this.findViewById(R.id.activity_login), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0); //设置layout在PopupWindow中显示的位置
+                            }
+                        });
                     } catch (Exception e){
                         e.printStackTrace();
                     }
-
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            InternetInformationPopupWindow informationPopWindow = new InternetInformationPopupWindow(MainActivity.this, object, findViewById(R.id.activity_login).getHeight(), findViewById(R.id.activity_login).getWidth());
-                            informationPopWindow.showAtLocation(MainActivity.this.findViewById(R.id.activity_login), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0); //设置layout在PopupWindow中显示的位置
-                        }
-                    });
                 }
             }).start();
         } catch (Exception e) {

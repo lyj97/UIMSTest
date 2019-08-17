@@ -170,6 +170,7 @@ public class WebPagesActivity extends AppCompatActivity {
 
             public void setData(String title, String description){
 
+                tvTitle.setTextColor(ColorManager.getNews_normal_text_color());
                 tvTitle.setText(title);
                 tvDepartment.setText(description);
                 tvTime.setText("");
