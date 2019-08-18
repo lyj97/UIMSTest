@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
+import android.icu.text.SimpleDateFormat;
 import android.icu.util.Calendar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -132,6 +133,8 @@ public class AddCourseExamPopupWindow extends PopupWindow {
         Locale.setDefault(Locale.CHINA);
         final Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
+        final SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        final String[] dayOfWeekName = new String[]{"","星期一","星期二","星期三","星期四","星期五","星期六","星期日"};
 
 //        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -141,7 +144,17 @@ public class AddCourseExamPopupWindow extends PopupWindow {
                 new DatePickerDialog(context, ColorManager.getDatePickerDialogTheme(), new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        exam_date_text.setText(year + "-" + (month + 1) + "-" + dayOfMonth);
+                        try {
+                            Calendar cal = Calendar.getInstance();
+                            cal.setTime(df.parse(getDataString(year, month, dayOfMonth)));
+                            int day_of_week = cal.get(Calendar.DAY_OF_WEEK) - 1;
+                            if (day_of_week <= 0)
+                                day_of_week = 7;
+                            exam_date_text.setText(getDataString(year, month, dayOfMonth) + "(" + dayOfWeekName[day_of_week] + ")");
+                        }catch (Exception e){
+                            e.printStackTrace();
+                            exam_date_text.setText(getDataString(year, month, dayOfMonth));
+                        }
                         exam_date = getDataString(year, month, dayOfMonth);
                         ispreTimeSet = true;
                         commit_button.setText("确定");
@@ -211,6 +224,22 @@ public class AddCourseExamPopupWindow extends PopupWindow {
 
         title_text.setText(courseName);
         title_text.setEnabled(false);
+
+    }
+
+    public AddCourseExamPopupWindow(final Activity context, final OnClickListener commitButtonOnClickListener, int height, int width, String courseName, String date, String time, String place){
+        this(context, commitButtonOnClickListener, height, width, courseName);
+
+        exam_date_text.setText(date);
+        exam_time_text.setText(time);
+        exam_place_text.setText(place);
+
+        exam_date = date.split("（")[0];
+        exam_time = time;
+        exam_place = place;
+
+        ispreTimeSet = true;
+        ischangeTimeSet = true;
 
     }
 

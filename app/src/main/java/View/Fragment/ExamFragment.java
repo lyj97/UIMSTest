@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -84,29 +85,8 @@ public class ExamFragment extends Fragment {
 
         swipeRecyclerView = myFragmentLayout.findViewById(R.id.course_exam_fragment_SwipeRecyclerView);
 
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//实例化SelectPicPopupWindow
-                popupWindow = new AddCourseExamPopupWindow(context, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Toast.makeText(context, "已添加:" + popupWindow.getTitle(), Toast.LENGTH_SHORT).show();
-                        ExamSchedule.add(popupWindow.getTitle(), popupWindow.getExam_date() + " " + popupWindow.getExam_time(), popupWindow.getExam_place());
-                        NoneScoreCourseFragment.setFlush();
-                        flushList();
-                    }
-                }, context.findViewById(R.id.course_and_exam_layout).getHeight(), context.findViewById(R.id.course_and_exam_layout).getWidth());
-                popupWindow.setFocusable(true);
-                popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-                popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-                //添加pop窗口关闭事件
-                popupWindow.setOnDismissListener(new poponDismissListener());
-//                popupWindow.setAnimationStyle(R.style.popwin_anim_style);
-                //显示窗口
-                popupWindow.showAtLocation(context.findViewById(R.id.course_and_exam_layout), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0); //设置layout在PopupWindow中显示的位置
-            }
-        });
+        MyAddExamListener addExamListener = new MyAddExamListener();
+        addButton.setOnClickListener(addExamListener);
 
         myAdapter = createAdapter();
 
@@ -160,6 +140,7 @@ public class ExamFragment extends Fragment {
                 NoneScoreCourseFragment.setFlush();
             }
         });
+        swipeRecyclerView.setOnItemClickListener(addExamListener);
 
         swipeRecyclerView.setAdapter(myAdapter);
 
@@ -226,7 +207,7 @@ public class ExamFragment extends Fragment {
                     day_of_week = 7;
 
                 map.put("title", temp.getString("title"));
-                map.put("time", temp.getString("time").split(" ")[0] + "(" + dayOfWeekName[day_of_week] + ") " + temp.getString("time").split(" ")[1]);
+                map.put("time", temp.getString("time").split(" ")[0] + "（" + dayOfWeekName[day_of_week] + "） " + temp.getString("time").split(" ")[1]);
                 map.put("flagTop", temp.getBoolean("flagTop"));
                 try{
                     map.put("place", temp.getString("place"));
@@ -321,7 +302,7 @@ public class ExamFragment extends Fragment {
                 }
 
                 if(place != null && place.length() > 0){
-                    this.tvDepartment.setText(time + ", " + place);
+                    this.tvDepartment.setText(time + ", \t" + place);
                 }
                 else {
                     this.tvDepartment.setText(time);
@@ -335,6 +316,53 @@ public class ExamFragment extends Fragment {
             }
         }
 
+    }
+
+    class MyAddExamListener implements android.view.View.OnClickListener, com.yanzhenjie.recyclerview.OnItemClickListener {
+
+        @Override
+        public void onClick(View v) {
+            openPopWindow(-1, false);
+        }
+
+        @Override
+        public void onItemClick(View view, int adapterPosition) {
+            openPopWindow(adapterPosition, true);
+        }
+
+        public void openPopWindow(int adapterPosition, boolean setExamTitle){
+            if(setExamTitle) popupWindow = new AddCourseExamPopupWindow(context, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(context, "已添加【" + popupWindow.getTitle() + "】考试", Toast.LENGTH_SHORT).show();
+                    ExamSchedule.add(popupWindow.getTitle(), popupWindow.getExam_date() + " " + popupWindow.getExam_time(), popupWindow.getExam_place());
+                    flushList();
+                    ExamFragment.setFlush();
+                }
+            }, context.findViewById(R.id.course_and_exam_layout).getHeight(), context.findViewById(R.id.course_and_exam_layout).getWidth(),
+                    ((String) dataList.get(adapterPosition).get("title")).split("（")[0],
+                    ((String) dataList.get(adapterPosition).get("time")).split(" ")[0],
+                    ((String) dataList.get(adapterPosition).get("time")).split(" ")[1],
+                    (String) dataList.get(adapterPosition).get("place")
+            );
+            else popupWindow = new AddCourseExamPopupWindow(context, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(context, "已添加:" + popupWindow.getTitle(), Toast.LENGTH_SHORT).show();
+                    ExamSchedule.add(popupWindow.getTitle(), popupWindow.getExam_date() + " " + popupWindow.getExam_time(), popupWindow.getExam_place());
+                    NoneScoreCourseFragment.setFlush();
+                    flushList();
+                }
+            }, context.findViewById(R.id.course_and_exam_layout).getHeight(), context.findViewById(R.id.course_and_exam_layout).getWidth());
+            popupWindow.setFocusable(true);
+            popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+            popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+            //添加pop窗口关闭事件
+            popupWindow.setOnDismissListener(new poponDismissListener());
+//                popupWindow.setAnimationStyle(R.style.popwin_anim_style);
+            //显示窗口
+            popupWindow.showAtLocation(context.findViewById(R.id.course_and_exam_layout), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0); //设置layout在PopupWindow中显示的位置
+        }
     }
 
     /**

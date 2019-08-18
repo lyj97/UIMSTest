@@ -32,6 +32,7 @@ import com.lu.mydemo.R;
 import com.lu.mydemo.sample.adapter.BaseAdapter;
 import com.lu.mydemo.sample.adapter.MainAdapter;
 import com.tapadoo.alerter.Alerter;
+import com.yanzhenjie.recyclerview.OnItemClickListener;
 import com.yanzhenjie.recyclerview.OnItemMenuClickListener;
 import com.yanzhenjie.recyclerview.SwipeMenu;
 import com.yanzhenjie.recyclerview.SwipeMenuBridge;
@@ -187,32 +188,9 @@ public class NoneScoreCourseFragment extends Fragment {
             }
         });
 
-        recyclerView.setOnItemMenuClickListener(new OnItemMenuClickListener() {
-            @Override
-            public void onItemClick(SwipeMenuBridge menuBridge, int adapterPosition) {
-                menuBridge.closeMenu();
-
-                Log.i("NewsSavedActivity", "menuBridge.getPosition:\t" + menuBridge.getPosition());
-
-                popupWindow = new AddCourseExamPopupWindow(context, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Toast.makeText(context, "已添加【" + popupWindow.getTitle() + "】考试", Toast.LENGTH_SHORT).show();
-                        ExamSchedule.add(popupWindow.getTitle(), popupWindow.getExam_date() + " " + popupWindow.getExam_time(), popupWindow.getExam_place());
-                        flushList();
-                        ExamFragment.setFlush();
-                    }
-                }, context.findViewById(R.id.course_and_exam_layout).getHeight(), context.findViewById(R.id.course_and_exam_layout).getWidth(), ((String) dataList.get(adapterPosition).get("title")).split("（")[0]);
-                popupWindow.setFocusable(true);
-                popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-                popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-                //添加pop窗口关闭事件
-                popupWindow.setOnDismissListener(new poponDismissListener());
-//                popupWindow.setAnimationStyle(R.style.popwin_anim_style);
-                //显示窗口
-                popupWindow.showAtLocation(context.findViewById(R.id.course_and_exam_layout), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0); //设置layout在PopupWindow中显示的位置
-            }
-        });
+        MyAddExamListener addExamListener = new MyAddExamListener();
+        recyclerView.setOnItemMenuClickListener(addExamListener);
+        recyclerView.setOnItemClickListener(addExamListener);
 
         recyclerView.setAdapter(myAdapter);
 
@@ -635,6 +613,42 @@ public class NoneScoreCourseFragment extends Fragment {
             }
         }
 
+    }
+
+    class MyAddExamListener implements OnItemMenuClickListener, OnItemClickListener {
+        @Override
+        public void onItemClick(SwipeMenuBridge menuBridge, int adapterPosition) {
+            menuBridge.closeMenu();
+
+//            Log.i("NewsSavedActivity", "menuBridge.getPosition:\t" + menuBridge.getPosition());
+
+            openPopWindow(adapterPosition);
+        }
+
+        @Override
+        public void onItemClick(View view, int adapterPosition) {
+            openPopWindow(adapterPosition);
+        }
+
+        public void openPopWindow(int adapterPosition){
+            popupWindow = new AddCourseExamPopupWindow(context, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(context, "已添加【" + popupWindow.getTitle() + "】考试", Toast.LENGTH_SHORT).show();
+                    ExamSchedule.add(popupWindow.getTitle(), popupWindow.getExam_date() + " " + popupWindow.getExam_time(), popupWindow.getExam_place());
+                    flushList();
+                    ExamFragment.setFlush();
+                }
+            }, context.findViewById(R.id.course_and_exam_layout).getHeight(), context.findViewById(R.id.course_and_exam_layout).getWidth(), ((String) dataList.get(adapterPosition).get("title")).split("（")[0]);
+            popupWindow.setFocusable(true);
+            popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+            popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+            //添加pop窗口关闭事件
+            popupWindow.setOnDismissListener(new poponDismissListener());
+//                popupWindow.setAnimationStyle(R.style.popwin_anim_style);
+            //显示窗口
+            popupWindow.showAtLocation(context.findViewById(R.id.course_and_exam_layout), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0); //设置layout在PopupWindow中显示的位置
+        }
     }
 
     private void changeTheme(){
