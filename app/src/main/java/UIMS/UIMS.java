@@ -78,7 +78,7 @@ public class UIMS {
 //            .addInterceptor(new LoggingInterceptor())
             .followRedirects(false)
             .followSslRedirects(false)
-            .connectTimeout(10, TimeUnit.SECONDS)
+            .connectTimeout(6, TimeUnit.SECONDS)
             .build();
 //    MultipartBody.Builder builder;
     MediaType JSON = MediaType.parse("application/json; charset=utf-8");

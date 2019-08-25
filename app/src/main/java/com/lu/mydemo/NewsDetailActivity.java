@@ -241,7 +241,7 @@ public class NewsDetailActivity extends AppCompatActivity {
             }
             // 利用从HttpEntity中得到的String生成JsonObject
 //            Log.i("GetNewsDetail[entity]", "entity:\t" + entityStringBuilder.toString());
-//                    showResponse("Login[entity]:\t" + entityStringBuilder.toString());
+//            showResponse("Login[entity]:\t" + entityStringBuilder.toString());
 
             JSONObject object = JSONObject.fromObject(entityStringBuilder.toString());
             return object.getJSONObject("resultValue").getString("content");
