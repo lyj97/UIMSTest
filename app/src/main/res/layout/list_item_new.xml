@@ -1,109 +1,128 @@
 <?xml version="1.0" encoding="utf-8"?>
-<GridLayout
+<TableLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    android:gravity="center"
     android:layout_marginTop="5dp"
     android:padding="6dp"
     android:background="@drawable/listitem_selector"
-    android:orientation="horizontal"
-    android:rowCount="4"
+    android:stretchColumns="0"
+    android:rowCount="3"
     android:columnCount="4">
 
     <TextView
         android:id="@+id/list_item_title"
-        android:layout_columnSpan="4"
-        android:layout_rowWeight="1"
-        android:layout_columnWeight="4"
         android:text="title"
         android:textColor="#03A9F4"
         android:layout_marginTop="4dp"
         android:textSize="16sp"
         android:gravity="center"/>
 
-    <LinearLayout
-        android:layout_rowSpan="2"
-        android:layout_rowWeight="2"
-        android:layout_columnWeight="1"
-        android:layout_gravity="center"
-        android:layout_margin="5dp"
-        android:layout_weight="40"
-        android:orientation="vertical">
+    <TableRow>
 
-        <TextView
-            android:id="@+id/list_item_context1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="context1"
-            android:textSize="12sp" />
+        <LinearLayout
+            android:layout_gravity="center"
+            android:padding="5dp"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/list_item_context3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="context3"
-            android:textSize="12sp" />
+            <TextView
+                android:id="@+id/list_item_context1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="context1"
+                android:textSize="12sp" />
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/list_item_context3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="context3"
+                android:textSize="12sp" />
 
-    <TextView
-        android:layout_rowWeight="1"
-        android:layout_columnWeight="1"
-        android:gravity="center"
-        android:text="成绩"
-        android:textSize="12sp" />
+        </LinearLayout>
 
-    <TextView
-        android:layout_rowWeight="1"
-        android:layout_columnWeight="1"
-        android:gravity="center"
-        android:text="绩点"
-        android:textSize="12sp" />
+        <LinearLayout
+            android:layout_gravity="center"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
+            android:padding="5dp"
+            android:orientation="vertical">
 
-    <TextView
-        android:layout_rowWeight="1"
-        android:layout_columnWeight="1"
-        android:gravity="center"
-        android:text="学分"
-        android:textSize="12sp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="成绩"
+                android:textSize="12sp" />
 
-    <TextView
-        android:id="@+id/list_item_context2"
-        android:layout_rowWeight="1"
-        android:layout_columnWeight="1"
-        android:gravity="center"
-        android:textStyle="bold"
-        android:text="score\n(context2)"
-        android:textSize="15sp" />
+            <TextView
+                android:id="@+id/list_item_context2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:text="score\n(context2)"
+                android:textSize="15sp" />
 
-    <TextView
-        android:id="@+id/list_item_context5"
-        android:layout_rowWeight="1"
-        android:layout_columnWeight="1"
-        android:gravity="center"
-        android:textStyle="bold"
-        android:text="point\n(context5)"
-        android:textSize="15sp" />
+        </LinearLayout>
 
-    <TextView
-        android:id="@+id/list_item_context4"
-        android:layout_rowWeight="1"
-        android:layout_columnWeight="1"
-        android:gravity="center"
-        android:textStyle="bold"
-        android:text="g_score\n(context4)"
-        android:textSize="15sp" />
+        <LinearLayout
+            android:layout_gravity="center"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
+            android:padding="5dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="绩点"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/list_item_context5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:text="point\n(context5)"
+                android:textSize="15sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_gravity="center"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
+            android:padding="5dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="学分"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/list_item_context4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:text="g_score\n(context4)"
+                android:textSize="15sp" />
+
+        </LinearLayout>
+
+    </TableRow>
 
     <com.github.mikephil.charting.charts.PieChart
         android:id="@+id/list_item_chart1"
         android:minHeight="170dp"
-        android:layout_columnSpan="4"
-        android:layout_rowWeight="1"
-        android:layout_columnWeight="1"
         />
 
-</GridLayout>
+</TableLayout>

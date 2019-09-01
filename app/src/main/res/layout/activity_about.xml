@@ -165,7 +165,7 @@
             android:id="@+id/activity_about_link_to_group"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="意见反馈、参与开发/内测、Bug反馈请点此处"/>
+            android:text="😎意见反馈、参与开发/内测、Bug反馈请点此处"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -176,12 +176,23 @@
             android:id="@+id/activity_about_link_to_github"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="开源项目"/>
+            android:text="👀开源项目"/>
 
-        <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="联系方式"/>-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""/>
+
+        <TextView
+            android:id="@+id/activity_about_link_to_qq"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🐧和开发者聊聊"/>
+
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="联系方式"/>-->
 
         <!--<TextView-->
             <!--android:layout_width="wrap_content"-->

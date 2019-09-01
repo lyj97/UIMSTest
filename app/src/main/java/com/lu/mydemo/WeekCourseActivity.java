@@ -13,6 +13,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -32,6 +34,7 @@ import java.util.List;
 import Config.ColorManager;
 import Utils.Course.MySubject;
 import Utils.Course.SubjectRepertory;
+import View.PopWindow.CourseDetailPopupWindow;
 
 public class WeekCourseActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -82,10 +85,23 @@ public class WeekCourseActivity extends AppCompatActivity implements View.OnClic
         requestData();
     }
 
+    @Override
+    protected void onStop() {
+        mySubjects = null;
+        super.onStop();
+    }
+
+    @Override
+    protected void onRestart() {
+        requestData();
+        super.onRestart();
+    }
+
     /**
      * 2秒后刷新界面，模拟网络请求
      */
     private void requestData() {
+        mySubjects = SubjectRepertory.loadDefaultSubjects();
 //        showLoading("加载中，请稍候...");
         handler.sendEmptyMessage(0x123);
     }
@@ -95,7 +111,6 @@ public class WeekCourseActivity extends AppCompatActivity implements View.OnClic
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if(alertDialog!=null) alertDialog.hide();
-            mySubjects = SubjectRepertory.loadDefaultSubjects();
 
             mWeekView.source(mySubjects).showView();
             mTimetableView.source(mySubjects).showView();
@@ -146,12 +161,15 @@ public class WeekCourseActivity extends AppCompatActivity implements View.OnClic
                 //透明度范围为0->1，0为全透明，1为不透明
                 .alpha(0.2f, 0.1f, 0.6f)
 //                .curTerm("大三下学期")
-//                .callback(new ISchedule.OnItemClickListener() {
-//                    @Override
-//                    public void onItemClick(View v, List<Schedule> scheduleList) {
-//                        display(scheduleList);
-//                    }
-//                })
+                .callback(new ISchedule.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View v, List<Schedule> scheduleList) {
+                        //TODO DEBUG
+//                        Log.i("ClickCourse", scheduleList.toString());
+//                        Log.i("MySubjects", mySubjects.toString());
+                        display(scheduleList);
+                    }
+                })
 //                .callback(new ISchedule.OnItemLongClickListener() {
 //                    @Override
 //                    public void onLongClick(View v, int day, int start) {
@@ -224,6 +242,10 @@ public class WeekCourseActivity extends AppCompatActivity implements View.OnClic
             str += bean.getName() + ","+bean.getWeekList().toString()+","+bean.getStart()+","+bean.getStep()+"\n";
         }
         Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
+
+        //TODO TEST course_detail.
+        CourseDetailPopupWindow informationPopWindow = new CourseDetailPopupWindow(WeekCourseActivity.this, beans, findViewById(R.id.weekCourseLayout).getHeight(), findViewById(R.id.weekCourseLayout).getWidth());
+        informationPopWindow.showAtLocation(WeekCourseActivity.this.findViewById(R.id.weekCourseLayout), Gravity.CENTER | Gravity.CENTER_HORIZONTAL, 0, 0); //设置layout在PopupWindow中显示的位置
     }
 
     @Override

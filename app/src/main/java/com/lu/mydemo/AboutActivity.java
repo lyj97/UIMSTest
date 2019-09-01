@@ -3,6 +3,7 @@ package com.lu.mydemo;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -34,6 +35,7 @@ public class AboutActivity extends AppCompatActivity {
     private TextView link_to_uimstest;
     private TextView link_to_github;
     private TextView link_to_group;
+    private TextView link_to_qq;
 
     private TextView navigation_back;
     private TextView settingText;
@@ -50,6 +52,7 @@ public class AboutActivity extends AppCompatActivity {
         link_to_uimstest = findViewById(R.id.activity_about_link_to_uimstest);
         link_to_github = findViewById(R.id.activity_about_link_to_github);
         link_to_group = findViewById(R.id.activity_about_link_to_group);
+        link_to_qq = findViewById(R.id.activity_about_link_to_qq);
 
         navigation_back = findViewById(R.id.activity_about_navigation_back_text);
         settingText = findViewById(R.id.activity_about_navigation_setting_text);
@@ -108,21 +111,36 @@ public class AboutActivity extends AppCompatActivity {
         link_to_uimstest.setAutoLinkMask(0);
         link_to_uimstest.setLinksClickable(true);
 
-        CharSequence charSequence_link_to_github = Html.fromHtml("<a href=\'https://github.com/lyj97/UIMSTest\'>开源项目(Github)</a>");
+        CharSequence charSequence_link_to_github = Html.fromHtml("<a href=\'https://github.com/lyj97/UIMSTest\'>\uD83D\uDC40开源项目(Github)</a>");
         link_to_github.setText(charSequence_link_to_github);
         link_to_github.setMovementMethod(LinkMovementMethod.getInstance());
         link_to_github.setAutoLinkMask(0);
         link_to_github.setLinksClickable(true);
 
-        CharSequence charSequence_link_to_group = Html.fromHtml("<a href=\'http://qm.qq.com/cgi-bin/qm/qr?k=SN-JdqTXpVKfvRJm4LgXkSM6yARpXhKY#\'>意见反馈、参与开发/内测、Bug反馈请点此处</a>");
+        CharSequence charSequence_link_to_group = Html.fromHtml("<a href=\'http://qm.qq.com/cgi-bin/qm/qr?k=SN-JdqTXpVKfvRJm4LgXkSM6yARpXhKY#\'>\uD83D\uDE0E意见反馈、参与开发/内测、Bug反馈请点此处</a>");
         link_to_group.setText(charSequence_link_to_group);
         link_to_group.setMovementMethod(LinkMovementMethod.getInstance());
         link_to_group.setAutoLinkMask(0);
         link_to_group.setLinksClickable(true);
 
+//        CharSequence charSequence_link_to_qq = Html.fromHtml("<a href=\'http://wpa.qq.com/msgrd?v=3&uin=1159386449&site=qq&menu=yes\'>\uD83D\uDC27和开发者聊聊</a>");
+//        link_to_qq.setText(charSequence_link_to_qq);
+//        link_to_qq.setMovementMethod(LinkMovementMethod.getInstance());
+//        link_to_qq.setAutoLinkMask(0);
+//        link_to_qq.setLinksClickable(true);
+
+        link_to_qq.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String url="mqqwpa://im/chat?chat_type=wpa&uin=1159386449";
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+            }
+        });
+
         setLinkStyle(link_to_uimstest);
         setLinkStyle(link_to_github);
         setLinkStyle(link_to_group);
+        setLinkStyle(link_to_qq);
 
         navigation_back.setOnClickListener(new View.OnClickListener() {
             @Override

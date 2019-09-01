@@ -10,7 +10,7 @@ import java.util.List;
  *
  * @see ScheduleEnable#getSchedule()
  */
-public class MySubject implements ScheduleEnable {
+public class MySubject extends Schedule implements ScheduleEnable {
 
     private int id=0;
 
@@ -187,5 +187,23 @@ public class MySubject implements ScheduleEnable {
 
     public int getId() {
         return id;
+    }
+
+    @Override
+    public String toString() {
+        return "MySubject{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", time='" + time + '\'' +
+                ", room='" + room + '\'' +
+                ", teacher='" + teacher + '\'' +
+                ", weekList=" + weekList +
+                ", start=" + start +
+                ", step=" + step +
+                ", day=" + day +
+                ", term='" + term + '\'' +
+                ", colorRandom=" + colorRandom +
+                ", url='" + url + '\'' +
+                '}';
     }
 }

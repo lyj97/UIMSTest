@@ -121,11 +121,11 @@ public class CourseJSONTransfer {
         }
     }
 
-    public static boolean transferCourseList(JSONObject courseJSON){
+    public synchronized static boolean transferCourseList(JSONObject courseJSON){
         return transferCourseList(courseJSON, false);
     }
 
-    public static boolean transferCourseList(JSONObject courseJSON, boolean forceFlush){
+    public synchronized static boolean transferCourseList(JSONObject courseJSON, boolean forceFlush){
 
         if(!forceFlush && courseList != null && courseList.size() > 0) return true;
 

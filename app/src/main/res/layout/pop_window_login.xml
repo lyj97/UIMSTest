@@ -1,110 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/pop_window_login_pop_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
     android:orientation="vertical"
     >
 
-    <LinearLayout
-        android:id="@+id/pop_window_login_pop_layout"
+    <TextView
+        android:id="@+id/pop_window_login_pop_layout_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
+        android:layout_alignParentTop="true"
+        android:gravity="center"
+        android:text="更新信息"
+        android:textSize="17sp"
+        android:paddingTop="20dp"
+        android:paddingBottom="10dp"
+        android:textColor="@color/app_white"
+        android:background="@drawable/shape_rectangle_with_top_radius"
+        />
+
+    <LinearLayout
+        android:id="@+id/pop_window_login_pop_layout_main_information"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/pop_window_login_pop_layout_title"
         android:orientation="vertical"
-        android:layout_alignParentBottom="true"
-        android:background="#00000000"
+        android:background="@drawable/background_login"
         >
 
+        <EditText
+            android:id="@+id/pop_window_login_id"
+            android:inputType="number"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:layout_marginTop="15dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:background="@drawable/login_edit_text_background"
+            android:windowSoftInputMode="stateHidden"
+            android:hint="@string/textlogin_id"/>
+        <EditText
+            android:id="@+id/pop_window_login_password"
+            android:inputType="textPassword"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:layout_marginTop="15dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:background="@drawable/login_edit_text_background"
+            android:windowSoftInputMode="stateHidden"
+            android:hint="@string/textlogin_password"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/pop_window_login_pop_layout_main_information"
+        android:orientation="vertical"
+        android:padding="5dp"
+        android:background="@drawable/shape_rectangle_bottom_no_radius"
+        >
+
+        <Button
+            android:id="@+id/pop_window_login_commit_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_internet_background"
+            android:layout_margin="10dp"
+            android:text="登录并更新信息"
+            />
+
+        <Button
+            android:id="@+id/pop_window_login_cancel_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_with_white_background"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:text="取消"
+            />
+
         <TextView
-            android:id="@+id/pop_window_login_pop_layout_title"
+            android:id="@+id/pop_window_login_delete_saved_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="更新信息"
-            android:textSize="17dp"
-            android:paddingTop="20dp"
-            android:paddingBottom="10dp"
-            android:textColor="@color/app_white"
-            android:background="@drawable/shape_rectangle_with_top_radius"
+            android:padding="8dp"
+            android:text="删除账号信息"
             />
-
-        <LinearLayout
-            android:id="@+id/pop_window_login_pop_layout_main_information"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="@drawable/background_login"
-            >
-
-            <EditText
-                android:id="@+id/pop_window_login_id"
-                android:inputType="number"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_gravity="center_horizontal"
-                android:gravity="center"
-                android:layout_marginTop="15dp"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                android:background="@drawable/login_edit_text_background"
-                android:windowSoftInputMode="stateHidden"
-                android:hint="@string/textlogin_id"/>
-            <EditText
-                android:id="@+id/pop_window_login_password"
-                android:inputType="textPassword"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_gravity="center_horizontal"
-                android:gravity="center"
-                android:layout_marginTop="15dp"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                android:background="@drawable/login_edit_text_background"
-                android:windowSoftInputMode="stateHidden"
-                android:hint="@string/textlogin_password"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="5dp"
-            android:background="@drawable/shape_rectangle_bottom_no_radius"
-            >
-
-            <Button
-                android:id="@+id/pop_window_login_commit_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/button_internet_background"
-                android:layout_margin="10dp"
-                android:text="登录并更新信息"
-                />
-
-            <Button
-                android:id="@+id/pop_window_login_cancel_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/shape_with_white_background"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginBottom="10dp"
-                android:text="取消"
-                />
-
-            <TextView
-                android:id="@+id/pop_window_login_delete_saved_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:padding="8dp"
-                android:text="删除账号信息"
-                />
-
-        </LinearLayout>
 
     </LinearLayout>
 

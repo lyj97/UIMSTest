@@ -842,7 +842,7 @@ public class ScoreActivity extends AppCompatActivity
         @NonNull
         @Override
         public MainAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            return new ScoreListAdapter.ViewHolder(getInflater().inflate(R.layout.list_item, parent, false));
+            return new ScoreListAdapter.ViewHolder(getInflater().inflate(R.layout.list_item_new, parent, false));
         }
 
         @Override
@@ -972,7 +972,12 @@ public class ScoreActivity extends AppCompatActivity
 //                            Log.e("ScorePercent", "index:" + index + "\tpart_index:" +part_index + "\tvalue:" + value);
                             if(value > 0){
                                 switch (part_index){
-                                    case 10:
+                                    case 10:{
+                                        if(index == 0){
+                                            return "👉" + super.getFormattedValue(value);
+                                        }
+                                        return super.getFormattedValue(value);
+                                    }
                                     case 9:{
                                         if(index == 0){
                                             return "👉" + super.getFormattedValue(value);
@@ -1058,7 +1063,7 @@ public class ScoreActivity extends AppCompatActivity
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             if (convertView == null) {
-                convertView = LinearLayout.inflate(getBaseContext(), R.layout.list_item, null);
+                convertView = LinearLayout.inflate(getBaseContext(), R.layout.list_item_new, null);
             }//这个TextView是R.layout.list_item里面的，修改这个字体的颜色
             TextView textView = (TextView) convertView.findViewById(R.id.list_item_title);
             //获取每次进来时 mData里面存的值  若果相同则变颜色

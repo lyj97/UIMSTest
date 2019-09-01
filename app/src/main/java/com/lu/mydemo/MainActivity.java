@@ -806,128 +806,127 @@ public class MainActivity extends Activity {
         if(CourseScheduleChange.containsDate(this, now_time)){
             return getCourseList(CourseScheduleChange.getDate(this, now_time));
         }
+        else {
+            ClassSetConvert classSetConvert = new ClassSetConvert();
+            List<Map<String, Object>> dataList = new ArrayList<>();
+            Map<String, Object> map;
 
-        ClassSetConvert classSetConvert = new ClassSetConvert();
-        List<Map<String,Object>> dataList = new ArrayList<>();
-        Map<String,Object> map;
+            JSONObject allCourseJSON = UIMS.getCourseJSON();
 
-        JSONObject allCourseJSON = UIMS.getCourseJSON();
+            JSONArray json_courses = allCourseJSON.getJSONArray("value");
 
-        JSONArray json_courses = allCourseJSON.getJSONArray("value");
+            Log.i("GetCourse", "课程数量:\t" + json_courses.size());
 
-        Log.i("GetCourse", "课程数量:\t" + json_courses.size());
+            JSONObject teachClassMaster;
 
-        JSONObject teachClassMaster;
+            JSONArray lessonSchedules;
+            JSONArray lessonTeachers;
+            JSONObject teacher;
+            String teacherName;
+            JSONObject lessonSegment;
+            String courName;
 
-        JSONArray lessonSchedules;
-        JSONArray lessonTeachers;
-        JSONObject teacher;
-        String teacherName;
-        JSONObject lessonSegment;
-        String courName;
+            JSONObject timeBlock;
+            int classSet;
+            int dayOfWeek;
+            int beginWeek;
+            int endWeek;
+            int[] start_end;
+            String weekOddEven = "";
+            JSONObject classroom;
+            String classroomName;
 
-        JSONObject timeBlock;
-        int classSet;
-        int dayOfWeek;
-        int beginWeek;
-        int endWeek;
-        int[] start_end;
-        String weekOddEven = "";
-        JSONObject classroom;
-        String classroomName;
+            try {
 
-        try {
+                for (int i = 0; i < json_courses.size(); i++) {
 
-            for(int i=0; i<json_courses.size(); i++){
+                    teachClassMaster = json_courses.getJSONObject(i).getJSONObject("teachClassMaster");
 
-                teachClassMaster = json_courses.getJSONObject(i).getJSONObject("teachClassMaster");
+                    lessonSegment = teachClassMaster.getJSONObject("lessonSegment");
+                    lessonSchedules = teachClassMaster.getJSONArray("lessonSchedules");
+                    lessonTeachers = teachClassMaster.getJSONArray("lessonTeachers");
 
-                lessonSegment = teachClassMaster.getJSONObject("lessonSegment");
-                lessonSchedules = teachClassMaster.getJSONArray("lessonSchedules");
-                lessonTeachers = teachClassMaster.getJSONArray("lessonTeachers");
+                    courName = lessonSegment.getString("fullName");
 
-                courName = lessonSegment.getString("fullName");
+                    teacherName = lessonTeachers.getJSONObject(0).getJSONObject("teacher").getString("name");
 
-                teacherName = lessonTeachers.getJSONObject(0).getJSONObject("teacher").getString("name");
+                    for (int j = 0; j < lessonSchedules.size(); j++) {
 
-                for (int j = 0; j < lessonSchedules.size(); j++) {
+                        map = new HashMap<>();
 
-                    map = new HashMap<>();
+                        timeBlock = lessonSchedules.getJSONObject(j).getJSONObject("timeBlock");
+                        classroom = lessonSchedules.getJSONObject(j).getJSONObject("classroom");
+                        classroomName = classroom.getString("fullName");
 
-                    timeBlock = lessonSchedules.getJSONObject(j).getJSONObject("timeBlock");
-                    classroom = lessonSchedules.getJSONObject(j).getJSONObject("classroom");
-                    classroomName = classroom.getString("fullName");
+                        classSet = timeBlock.getInt("classSet");
+                        dayOfWeek = timeBlock.getInt("dayOfWeek");
+                        beginWeek = timeBlock.getInt("beginWeek");
+                        endWeek = timeBlock.getInt("endWeek");
 
-                    classSet = timeBlock.getInt("classSet");
-                    dayOfWeek = timeBlock.getInt("dayOfWeek");
-                    beginWeek = timeBlock.getInt("beginWeek");
-                    endWeek = timeBlock.getInt("endWeek");
+                        if (!(beginWeek <= now_week && now_week <= endWeek)) continue;
+                        if (dayOfWeek != day_of_week) continue;
 
-                    if(!(beginWeek <= now_week && now_week <= endWeek)) continue;
-                    if(dayOfWeek != day_of_week) continue;
-
-                    try {
-                        weekOddEven = timeBlock.getString("weekOddEven");
-                    } catch (Exception e) {
+                        try {
+                            weekOddEven = timeBlock.getString("weekOddEven");
+                        } catch (Exception e) {
 //                    e.printStackTrace();
-                    }
-
-                    switch (weekOddEven.toUpperCase()){
-                        case "":{
-                            break;
                         }
-                        case "E":{
-                            //双周
-                            if(now_week % 2 != 0) continue;
-                            break;
-                        }
-                        case "O":{
-                            //单周
-                            if(now_week % 2 == 0) continue;
-                            break;
-                        }
-                    }
 
-                    start_end = classSetConvert.mathStartEnd(classSet);
+                        switch (weekOddEven.toUpperCase()) {
+                            case "": {
+                                break;
+                            }
+                            case "E": {
+                                //双周
+                                if (now_week % 2 != 0) continue;
+                                break;
+                            }
+                            case "O": {
+                                //单周
+                                if (now_week % 2 == 0) continue;
+                                break;
+                            }
+                        }
 
-                    map.put("index", start_end[0] + " - " + start_end[1] + "节");
-                    map.put("title", courName);
-                    map.put("context1", classroomName);
+                        start_end = classSetConvert.mathStartEnd(classSet);
+
+                        map.put("index", start_end[0] + " - " + start_end[1] + "节");
+                        map.put("title", courName);
+                        map.put("context1", classroomName);
 //                    map.put("type", selectType);
 
-                    dataList.add(map);
+                        dataList.add(map);
 
-                    weekOddEven = "";
+                        weekOddEven = "";
 
+                    }
                 }
-            }
 
-            Log.i("GetCourse", "今日课程数量:\t" + dataList.size());
+                Log.i("GetCourse", "今日课程数量:\t" + dataList.size());
 
-            if(dataList.size() == 0){
-                map = new HashMap<>();
+                if (dataList.size() == 0) {
+                    map = new HashMap<>();
 
-                map.put("index", "");
-                map.put("title", "今天没课呀~");
-                map.put("context1", "");
+                    map.put("index", "");
+                    map.put("title", "今天没课呀~");
+                    map.put("context1", "");
 //                map.put("type", "");
 
-                dataList.add(map);
-            }
-            else{
-                Collections.sort(dataList, new Comparator<Map<String, Object>>() {
-                    @Override
-                    public int compare(Map<String, Object> o1, Map<String, Object> o2) {
-                        return ((String)o1.get("index")).compareTo((String)o2.get("index"));
-                    }
-                });
-            }
+                    dataList.add(map);
+                } else {
+                    Collections.sort(dataList, new Comparator<Map<String, Object>>() {
+                        @Override
+                        public int compare(Map<String, Object> o1, Map<String, Object> o2) {
+                            return ((String) o1.get("index")).compareTo((String) o2.get("index"));
+                        }
+                    });
+                }
 
-            return dataList;
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+                return dataList;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
         }
     }
 
