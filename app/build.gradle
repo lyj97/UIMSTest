@@ -45,6 +45,8 @@ dependencies {
     implementation ('net.sf.json-lib:json-lib:2.4:jdk15'){
         exclude group: 'commons-beanutils'
     }
+    // https://mvnrepository.com/artifact/commons-beanutils/commons-beanutils
+    implementation group: 'commons-beanutils', name: 'commons-beanutils', version: '1.9.4'
     //implementation 'net.sf.json-lib:json-lib:2.4:jdk15'
     //把commons-beanutils-1.8.0.jar中的org/apache/commons/collections目录和目录下的class直接删掉
     implementation 'com.android.support:design:28.0.0'

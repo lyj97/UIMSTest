@@ -372,8 +372,12 @@ public class MainActivity extends Activity {
                     loadLocalInformation(false);
                 else loadCourseInformation();
                 ScoreConfig.loadScoreConfig(getApplicationContext());
-                CJCX.loadCJCXJSON(getApplicationContext());
-                CJCX.loadCJCXTermJSON(getApplicationContext());
+                try {
+                    CJCX.loadCJCXJSON(getApplicationContext());
+                    CJCX.loadCJCXTermJSON(getApplicationContext());
+                }catch (Exception e){
+                    Log.e("MainActivity", "CJCX Error:" + e.getMessage());
+                }
                 ScoreActivity.context = getApplicationContext();
                 ScoreInf.loadScoreList();
 //                Log.i("TEST:ScoreInf", ScoreInf.getDataList().toString());

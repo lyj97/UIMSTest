@@ -21,7 +21,7 @@
     <!--渐变-->
     <gradient
         android:startColor="#BE4C94"
-        android:centerColor="#C32ECE"
+        android:centerColor="#CE1DB5"
         android:endColor="#BE4C94">
 
     </gradient>

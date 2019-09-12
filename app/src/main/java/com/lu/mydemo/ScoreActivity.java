@@ -80,6 +80,7 @@ public class ScoreActivity extends AppCompatActivity
 
     TextView backTextView;
 //    TextView settingText;
+    TextView hideText;
 
     FloatingActionButton fab;
 
@@ -140,6 +141,7 @@ public class ScoreActivity extends AppCompatActivity
 //        scoreStatisticsTitleTextView = findViewById(R.id.textView_ScoreStatisticsTitle);
         backTextView = findViewById(R.id.activity_scrolling_layout_back_text);
 //        settingText = findViewById(R.id.activity_scrolling_layout_setting_text);
+        hideText = findViewById(R.id.activity_scrolling_layout_hide_text);
 
         fab = findViewById(R.id.activity_scrolling_fab);
 
@@ -185,6 +187,7 @@ public class ScoreActivity extends AppCompatActivity
                         "首次成绩：自定义统计项.");
             }
         });
+        scoreStatisticsLayout.setVisibility(View.GONE);
 
 //        navigation_back.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -226,6 +229,19 @@ public class ScoreActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+        hideText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(scoreStatisticsLayout.getVisibility() == View.VISIBLE){
+                    scoreStatisticsLayout.setVisibility(View.GONE);
+                    hideText.setBackground(getDrawable(R.drawable.ic_keyboard_arrow_down_white_24dp));
+                }
+                else{
+                    scoreStatisticsLayout.setVisibility(View.VISIBLE);
+                    hideText.setBackground(getDrawable(R.drawable.ic_keyboard_arrow_up_white_24dp));
+                }
             }
         });
 
@@ -280,6 +296,11 @@ public class ScoreActivity extends AppCompatActivity
                     loadCJCXScore();
                 }
                 getScoreList();
+                if(dataList == null){
+                    Log.e("ScoreActivity", "No score data available!");
+                    AlertCenter.showErrorAlert(ScoreActivity.this, "错误", "获取成绩数据失败!");
+                    return;
+                }
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -362,190 +383,190 @@ public class ScoreActivity extends AppCompatActivity
             Log.e("ScoreList", "Not loaded!");
         }
 
-        reloadData = false;
-
-        courseTypeID_courseType = UIMS.getCourseTypeId_courseType();
-        dataList = new ArrayList<>();
-        Map<String,Object> map;
-
-        try {
-
-            JSONObject scoreJSON = UIMS.getScoreJSON();
-
-            JSONArray scores = scoreJSON.getJSONArray("value");
-
-            double adviceCredit;
-
-            for (int i = 0; i < scores.size(); i++) {
-                map = new HashMap<>();
-
-                JSONObject temp = scores.getJSONObject(i);
-                JSONObject teachingTerm = temp.getJSONObject("teachingTerm");
-                JSONObject course = temp.getJSONObject("course");
-                String asId = temp.getString("asId");
-                String courName = course.getString("courName");
-                String termName = teachingTerm.getString("termName");
-                String courScore = temp.getString("score");
-                int scoreNum = temp.getInt("scoreNum");
-                String isReselect = (temp.getString("isReselect").contains("Y")) ? "是" : "否";
-                String gPoint = temp.getString("gpoint");
-                String dateScore = temp.getString("dateScore");
-                String type5 = temp.getString("type5");
-                adviceCredit = course.getDouble("adviceCredit");
-                dateScore = dateScore.replaceAll("T", "  ");
-
-                map.put("asId", asId);
-                index_id.put(i, asId);
-                map.put("title", courName + "(" + courseTypeID_courseType.get(type5) + ")");
-//                map.put("context1","成绩:" + courScore + "  \t  " +
-//                        "重修:" + isReselect);
+//        reloadData = false;
+//
+//        courseTypeID_courseType = UIMS.getCourseTypeId_courseType();
+//        dataList = new ArrayList<>();
+//        Map<String,Object> map;
+//
+//        try {
+//
+//            JSONObject scoreJSON = UIMS.getScoreJSON();
+//
+//            JSONArray scores = scoreJSON.getJSONArray("value");
+//
+//            double adviceCredit;
+//
+//            for (int i = 0; i < scores.size(); i++) {
+//                map = new HashMap<>();
+//
+//                JSONObject temp = scores.getJSONObject(i);
+//                JSONObject teachingTerm = temp.getJSONObject("teachingTerm");
+//                JSONObject course = temp.getJSONObject("course");
+//                String asId = temp.getString("asId");
+//                String courName = course.getString("courName");
+//                String termName = teachingTerm.getString("termName");
+//                String courScore = temp.getString("score");
+//                int scoreNum = temp.getInt("scoreNum");
+//                String isReselect = (temp.getString("isReselect").contains("Y")) ? "是" : "否";
+//                String gPoint = temp.getString("gpoint");
+//                String dateScore = temp.getString("dateScore");
+//                String type5 = temp.getString("type5");
+//                adviceCredit = course.getDouble("adviceCredit");
+//                dateScore = dateScore.replaceAll("T", "  ");
+//
+//                map.put("asId", asId);
+//                index_id.put(i, asId);
+//                map.put("title", courName + "(" + courseTypeID_courseType.get(type5) + ")");
+////                map.put("context1","成绩:" + courScore + "  \t  " +
+////                        "重修:" + isReselect);
+////                map.put("context2",
+////                        termName);
+//                map.put("context1", termName + "   \t   " +
+//                        "重修?  " + isReselect);
 //                map.put("context2",
-//                        termName);
-                map.put("context1", termName + "   \t   " +
-                        "重修?  " + isReselect);
-                map.put("context2",
-                        courScore);
-                map.put("context3",
-                        "发布时间： " + dateScore);
-                map.put("context4",
-                        adviceCredit);
-                map.put("context5",
-                        gPoint);
-                map.put("type", type5);
-
-                if (!chongxiu_select) {//排除所有重修
-                    if (isReselect.equals("否") ) {//排除所有重修
-
-//                    if (type5.equals("4161") || type5.equals("4162") || type5.equals("4164") ) {//体育/限选/选修（除校选修）
-                        if (xuanxiu_select && type5.equals("4161") ){//选修
-                            required_custom_ScoreSum += scoreNum * adviceCredit;
-                            required_custom_GPASum += Double.parseDouble(gPoint) * adviceCredit;
-                            required_custom_CreditSum += adviceCredit;
-                        }
-                        if (xianxuan_select && type5.equals("4162") ) {//限选
-                            required_custom_ScoreSum += scoreNum * adviceCredit;
-                            required_custom_GPASum += Double.parseDouble(gPoint) * adviceCredit;
-                            required_custom_CreditSum += adviceCredit;
-                        }
-                        if (xiaoxuanxiu_select && type5.equals("4163") ) {//校选修
-                            required_custom_ScoreSum += scoreNum * adviceCredit;
-                            required_custom_GPASum += Double.parseDouble(gPoint) * adviceCredit;
-                            required_custom_CreditSum += adviceCredit;
-                        }
-                        if (PE_select && type5.equals("4164") ) {//体育
-                            required_custom_ScoreSum += scoreNum * adviceCredit;
-                            required_custom_GPASum += Double.parseDouble(gPoint) * adviceCredit;
-                            required_custom_CreditSum += adviceCredit;
-                        }
-                        if (type5.equals("4160") ) {//仅必修
-                            if(bixiu_select) {
-                                required_custom_ScoreSum += scoreNum * adviceCredit;
-                                required_custom_GPASum += Double.parseDouble(gPoint) * adviceCredit;
-                                required_custom_CreditSum += adviceCredit;
-                            }
-                            requiredScoreSum += scoreNum * adviceCredit;
-                            requiredGPASum += Double.parseDouble(gPoint) * adviceCredit;
-                            requiredCreditSum += adviceCredit;
-                        }
-
-                    }
-                }
-                else{
-                    if (type5.equals("4160") ) {//仅必修
-                        if(bixiu_select) {
-                            required_custom_ScoreSum += scoreNum * adviceCredit;
-                            required_custom_GPASum += Double.parseDouble(gPoint) * adviceCredit;
-                            required_custom_CreditSum += adviceCredit;
-                        }
-                        if (isReselect.equals("否") ) {//排除重修
-                            requiredScoreSum += scoreNum * adviceCredit;
-                            requiredGPASum += Double.parseDouble(gPoint) * adviceCredit;
-                            requiredCreditSum += adviceCredit;
-                        }
-                    }
-                    if (xuanxiu_select && type5.equals("4161") ){//选修
-                        required_custom_ScoreSum += scoreNum * adviceCredit;
-                        required_custom_GPASum += Double.parseDouble(gPoint) * adviceCredit;
-                        required_custom_CreditSum += adviceCredit;
-                    }
-                    if (xianxuan_select && type5.equals("4162") ) {//限选
-                        required_custom_ScoreSum += scoreNum * adviceCredit;
-                        required_custom_GPASum += Double.parseDouble(gPoint) * adviceCredit;
-                        required_custom_CreditSum += adviceCredit;
-                    }
-                    if (xiaoxuanxiu_select && type5.equals("4163") ) {//校选修
-                        required_custom_ScoreSum += scoreNum * adviceCredit;
-                        required_custom_GPASum += Double.parseDouble(gPoint) * adviceCredit;
-                        required_custom_CreditSum += adviceCredit;
-                    }
-                    if (PE_select && type5.equals("4164") ) {//体育
-                        required_custom_ScoreSum += scoreNum * adviceCredit;
-                        required_custom_GPASum += Double.parseDouble(gPoint) * adviceCredit;
-                        required_custom_CreditSum += adviceCredit;
-                    }
-                }
-
-                dataList.add(map);
-
-            }
-
-            HashMap<String, org.json.JSONObject> id_JSON = CJCX.getId_JSON();
-            if(!ScoreConfig.isIsCJCXEnable() || id_JSON == null) {
-                Log.i("GetScoreList", "Ignored CJCX!");
-                Log.i("GetScoreList", "Finished! Size:\t" + dataList.size());
-                return;
-            }
-            else{
-                loadCJCXScore();
-                id_JSON = CJCX.getId_JSON();
-                if(id_JSON == null) {
-                    Log.i("GetScoreList", "Ignored CJCX!  Load Failed! No date!");
-                    return;
-                }
-            }
-            org.json.JSONObject object;
-            for(String id : id_JSON.keySet()){
-                if(!index_id.containsValue(id)) {
-                    try {
-                        object = id_JSON.get(id);
-                        map = new HashMap<>();
-                        map.put("asId", object.getString("lsrId"));
-                        map.put("title", object.getString("kcmc"));
-                        try {
-                            map.put("context1", UIMS.getTermId_termName().get(object.getString("termId")) + "   \t   " +
-                                    "重修?  " + ((object.getString("isReselect").toUpperCase().equals("N")) ? "否" : "是"));
-                        }
-                        catch (Exception e){
-                            map.put("context1", UIMS.getTermId_termName().get(object.getString("termId")) + "   \t   " +
-                                    "重修?  " + "否");
-                        }
-                        map.put("context2",
-                                object.getString("cj"));
-                        map.put("context3",
-                                "发布时间： " + "--");
-                        map.put("context4",
-                                object.getDouble("credit"));
-                        map.put("context5",
-                                object.getString("gpoint"));
-                        map.put("type", "");
-                        dataList.add(0, map);
-                    }catch (Exception e){
-                        Log.w("ErrJSON", id_JSON.get(id).toString());
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-            int index = 0;
-            for(Map<String,Object> temp : dataList){
-                index_id.put(index++, (String) temp.get("asId"));
-            }
-
-            Log.i("GetScoreList", "Finished! Size:\t" + dataList.size());
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//                        courScore);
+//                map.put("context3",
+//                        "发布时间： " + dateScore);
+//                map.put("context4",
+//                        adviceCredit);
+//                map.put("context5",
+//                        gPoint);
+//                map.put("type", type5);
+//
+//                if (!chongxiu_select) {//排除所有重修
+//                    if (isReselect.equals("否") ) {//排除所有重修
+//
+////                    if (type5.equals("4161") || type5.equals("4162") || type5.equals("4164") ) {//体育/限选/选修（除校选修）
+//                        if (xuanxiu_select && type5.equals("4161") ){//选修
+//                            required_custom_ScoreSum += scoreNum * adviceCredit;
+//                            required_custom_GPASum += Double.parseDouble(gPoint) * adviceCredit;
+//                            required_custom_CreditSum += adviceCredit;
+//                        }
+//                        if (xianxuan_select && type5.equals("4162") ) {//限选
+//                            required_custom_ScoreSum += scoreNum * adviceCredit;
+//                            required_custom_GPASum += Double.parseDouble(gPoint) * adviceCredit;
+//                            required_custom_CreditSum += adviceCredit;
+//                        }
+//                        if (xiaoxuanxiu_select && type5.equals("4163") ) {//校选修
+//                            required_custom_ScoreSum += scoreNum * adviceCredit;
+//                            required_custom_GPASum += Double.parseDouble(gPoint) * adviceCredit;
+//                            required_custom_CreditSum += adviceCredit;
+//                        }
+//                        if (PE_select && type5.equals("4164") ) {//体育
+//                            required_custom_ScoreSum += scoreNum * adviceCredit;
+//                            required_custom_GPASum += Double.parseDouble(gPoint) * adviceCredit;
+//                            required_custom_CreditSum += adviceCredit;
+//                        }
+//                        if (type5.equals("4160") ) {//仅必修
+//                            if(bixiu_select) {
+//                                required_custom_ScoreSum += scoreNum * adviceCredit;
+//                                required_custom_GPASum += Double.parseDouble(gPoint) * adviceCredit;
+//                                required_custom_CreditSum += adviceCredit;
+//                            }
+//                            requiredScoreSum += scoreNum * adviceCredit;
+//                            requiredGPASum += Double.parseDouble(gPoint) * adviceCredit;
+//                            requiredCreditSum += adviceCredit;
+//                        }
+//
+//                    }
+//                }
+//                else{
+//                    if (type5.equals("4160") ) {//仅必修
+//                        if(bixiu_select) {
+//                            required_custom_ScoreSum += scoreNum * adviceCredit;
+//                            required_custom_GPASum += Double.parseDouble(gPoint) * adviceCredit;
+//                            required_custom_CreditSum += adviceCredit;
+//                        }
+//                        if (isReselect.equals("否") ) {//排除重修
+//                            requiredScoreSum += scoreNum * adviceCredit;
+//                            requiredGPASum += Double.parseDouble(gPoint) * adviceCredit;
+//                            requiredCreditSum += adviceCredit;
+//                        }
+//                    }
+//                    if (xuanxiu_select && type5.equals("4161") ){//选修
+//                        required_custom_ScoreSum += scoreNum * adviceCredit;
+//                        required_custom_GPASum += Double.parseDouble(gPoint) * adviceCredit;
+//                        required_custom_CreditSum += adviceCredit;
+//                    }
+//                    if (xianxuan_select && type5.equals("4162") ) {//限选
+//                        required_custom_ScoreSum += scoreNum * adviceCredit;
+//                        required_custom_GPASum += Double.parseDouble(gPoint) * adviceCredit;
+//                        required_custom_CreditSum += adviceCredit;
+//                    }
+//                    if (xiaoxuanxiu_select && type5.equals("4163") ) {//校选修
+//                        required_custom_ScoreSum += scoreNum * adviceCredit;
+//                        required_custom_GPASum += Double.parseDouble(gPoint) * adviceCredit;
+//                        required_custom_CreditSum += adviceCredit;
+//                    }
+//                    if (PE_select && type5.equals("4164") ) {//体育
+//                        required_custom_ScoreSum += scoreNum * adviceCredit;
+//                        required_custom_GPASum += Double.parseDouble(gPoint) * adviceCredit;
+//                        required_custom_CreditSum += adviceCredit;
+//                    }
+//                }
+//
+//                dataList.add(map);
+//
+//            }
+//
+//            HashMap<String, org.json.JSONObject> id_JSON = CJCX.getId_JSON();
+//            if(!ScoreConfig.isIsCJCXEnable() || id_JSON == null) {
+//                Log.i("GetScoreList", "Ignored CJCX!");
+//                Log.i("GetScoreList", "Finished! Size:\t" + dataList.size());
+//                return;
+//            }
+//            else{
+//                loadCJCXScore();
+//                id_JSON = CJCX.getId_JSON();
+//                if(id_JSON == null) {
+//                    Log.i("GetScoreList", "Ignored CJCX!  Load Failed! No date!");
+//                    return;
+//                }
+//            }
+//            org.json.JSONObject object;
+//            for(String id : id_JSON.keySet()){
+//                if(!index_id.containsValue(id)) {
+//                    try {
+//                        object = id_JSON.get(id);
+//                        map = new HashMap<>();
+//                        map.put("asId", object.getString("lsrId"));
+//                        map.put("title", object.getString("kcmc"));
+//                        try {
+//                            map.put("context1", UIMS.getTermId_termName().get(object.getString("termId")) + "   \t   " +
+//                                    "重修?  " + ((object.getString("isReselect").toUpperCase().equals("N")) ? "否" : "是"));
+//                        }
+//                        catch (Exception e){
+//                            map.put("context1", UIMS.getTermId_termName().get(object.getString("termId")) + "   \t   " +
+//                                    "重修?  " + "否");
+//                        }
+//                        map.put("context2",
+//                                object.getString("cj"));
+//                        map.put("context3",
+//                                "发布时间： " + "--");
+//                        map.put("context4",
+//                                object.getDouble("credit"));
+//                        map.put("context5",
+//                                object.getString("gpoint"));
+//                        map.put("type", "");
+//                        dataList.add(0, map);
+//                    }catch (Exception e){
+//                        Log.w("ErrJSON", id_JSON.get(id).toString());
+//                        e.printStackTrace();
+//                    }
+//                }
+//            }
+//
+//            int index = 0;
+//            for(Map<String,Object> temp : dataList){
+//                index_id.put(index++, (String) temp.get("asId"));
+//            }
+//
+//            Log.i("GetScoreList", "Finished! Size:\t" + dataList.size());
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
 
     }
 
