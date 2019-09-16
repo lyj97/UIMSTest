@@ -43,7 +43,7 @@ public class CourseDetailPopupWindow extends PopupWindow {
         viewPager.setPageMargin(20);
         //设置缓存的页面数量
         viewPager.setOffscreenPageLimit(3);
-        viewPager.setAdapter(new MyViewPagerAdapter(context, list));
+        viewPager.setAdapter(new MyViewPagerAdapter(context, list, mMenuView));
 
         changeTheme();
 

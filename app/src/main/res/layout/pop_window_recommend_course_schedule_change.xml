@@ -1,91 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/recommend_course_schedule_change_pop_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
     android:orientation="vertical"
+    android:layout_alignParentBottom="true"
+    android:background="#00000000"
     >
 
     <LinearLayout
-        android:id="@+id/recommend_course_schedule_change_pop_layout"
+        android:id="@+id/recommend_course_schedule_change_pop_layout_title_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:layout_alignParentBottom="true"
-        android:background="#00000000"
+        android:background="@drawable/shape_rectangle_with_top_radius"
         >
 
-        <LinearLayout
+        <TextView
             android:id="@+id/recommend_course_schedule_change_pop_layout_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="@drawable/shape_rectangle_with_top_radius"
-            >
+            android:gravity="center"
+            android:text="推荐添加的课程调整"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:textColor="@color/app_white"
+            />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="推荐添加的课程调整"
-                android:textSize="17sp"
-                android:textStyle="bold"
-                android:textColor="@color/app_white"
-                />
-
-            <TextView
-                android:id="@+id/recommend_course_schedule_change_information"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textColor="@color/dark"
-                android:padding="5dp"
-                />
-
-        </LinearLayout>
-
-        <ListView
-            android:id="@+id/recommend_course_schedule_change_list"
+        <TextView
+            android:id="@+id/recommend_course_schedule_change_information"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@color/dark"
             android:padding="5dp"
-            android:divider="#00000000"
-            android:dividerHeight="5dp"
-            android:background="@drawable/background_login"
-            >
-
-        </ListView>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="@drawable/shape_rectangle_bottom_no_radius"
-            >
-
-            <Button
-                android:id="@+id/recommend_course_schedule_change_commit_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/button_internet_background"
-                android:layout_margin="10dp"
-                android:text="确定添加"
-                />
-
-            <Button
-                android:id="@+id/recommend_course_schedule_change_cancel_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/shape_with_white_background"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginBottom="10dp"
-                android:text="取消"
-                />
-
-        </LinearLayout>
+            />
 
     </LinearLayout>
+
+    <ListView
+        android:id="@+id/recommend_course_schedule_change_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="66dp"
+        android:layout_below="@+id/recommend_course_schedule_change_pop_layout_title_layout"
+        android:padding="5dp"
+        android:divider="#00000000"
+        android:dividerHeight="5dp"
+        android:background="@drawable/background_login"
+        >
+
+    </ListView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:background="@drawable/shape_rectangle_bottom_no_radius"
+        >
+
+        <Button
+            android:id="@+id/recommend_course_schedule_change_cancel_button"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:elevation="3dp"
+            android:layout_weight="1"
+            android:background="@drawable/shape_with_white_background"
+            android:layout_margin="10dp"
+            android:text="取消"
+            />
+        <Button
+            android:id="@+id/recommend_course_schedule_change_commit_button"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:elevation="3dp"
+            android:layout_weight="1"
+            android:background="@drawable/button_internet_background"
+            android:layout_margin="10dp"
+            android:text="确定添加"
+            />
+
+
+    </LinearLayout>
+
 </RelativeLayout>

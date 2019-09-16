@@ -60,8 +60,17 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:gravity="end"
+            android:gravity="center|end"
             android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/activity_news_hide_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/ic_keyboard_arrow_down_white_24dp"
+                />
 
             <TextView
                 android:id="@+id/activity_news_my_collection"
@@ -71,6 +80,38 @@
                 android:background="@drawable/ic_star_white_24dp"/>
 
         </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/activity_news_open_link_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:text="链接"/>
+
+        <EditText
+            android:id="@+id/activity_news_open_link_layout_url"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="请输入链接..."/>
+
+        <Button
+            android:id="@+id/activity_news_open_link_layout_commit_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#00000000"
+            android:text="打开"/>
 
     </LinearLayout>
 
@@ -99,20 +140,10 @@
 
     <!--</LinearLayout>-->
 
-    <LinearLayout
+    <com.yanzhenjie.recyclerview.SwipeRecyclerView
+        android:id="@+id/activity_news_SwipeRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#00000000"
-        android:orientation="vertical">
-
-        <com.yanzhenjie.recyclerview.SwipeRecyclerView
-            android:id="@+id/activity_news_SwipeRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:transitionName="NewsActivity">
-
-        </com.yanzhenjie.recyclerview.SwipeRecyclerView>
-
-    </LinearLayout>
+        android:transitionName="NewsActivity"/>
 
 </LinearLayout>

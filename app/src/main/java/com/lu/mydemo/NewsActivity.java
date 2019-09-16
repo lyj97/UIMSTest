@@ -6,11 +6,15 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lu.mydemo.Notification.AlertCenter;
@@ -29,6 +33,7 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,6 +50,11 @@ public class NewsActivity extends AppCompatActivity {
     private List<Map<String, Object>> dataList;
 
 //    private SearchView searchView;
+
+    private LinearLayout openLinkLayout;
+    private TextView hideText;
+    private EditText newsLinkText;
+    private Button openLinkButton;
 
     private TextView navigation_back;
 
@@ -68,6 +78,11 @@ public class NewsActivity extends AppCompatActivity {
         myAdapter = createAdapter();
 
 //        searchView = findViewById(R.id.activity_news_search_view);
+
+        openLinkLayout = findViewById(R.id.activity_news_open_link_layout);
+        hideText = findViewById(R.id.activity_news_hide_text);
+        newsLinkText = findViewById(R.id.activity_news_open_link_layout_url);
+        openLinkButton = findViewById(R.id.activity_news_open_link_layout_commit_button);
 
         navigation_back = findViewById(R.id.activity_news_navigation_back_text);
 
@@ -181,6 +196,57 @@ public class NewsActivity extends AppCompatActivity {
 //                return false;
 //            }
 //        });
+
+        openLinkLayout.setVisibility(View.GONE);
+        hideText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(openLinkLayout.getVisibility() == View.VISIBLE){
+                    openLinkLayout.setVisibility(View.GONE);
+                    hideText.setBackground(getDrawable(R.drawable.ic_keyboard_arrow_down_white_24dp));
+                }
+                else{
+                    openLinkLayout.setVisibility(View.VISIBLE);
+                    hideText.setBackground(getDrawable(R.drawable.ic_keyboard_arrow_up_white_24dp));
+                }
+            }
+        });
+
+        openLinkButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String news_url = newsLinkText.getText().toString();
+                if(news_url.contains("oa.jlu.edu.cn")) {
+
+                    String[] strings = news_url.split("oa.jlu.edu.cn");
+                    Log.i("NewsActivity", "URLArr:\t" + Arrays.asList(strings));
+
+                    if (strings.length != 2) {
+                        AlertCenter.showErrorAlert(NewsActivity.this, "错误：" + strings.length + "\n" +
+                                Arrays.asList(strings));
+                    }
+                    else {
+
+                        Intent intent = new Intent(NewsActivity.this, NewsDetailActivity.class);
+
+                        Bundle bundle = new Bundle();
+                        bundle.putString("title", "");
+                        bundle.putString("department", "");
+                        bundle.putString("time", "");
+                        bundle.putString("link", strings[1]);
+                        bundle.putString("abs_link", "");
+                        bundle.putBoolean("flagTop", false);
+
+                        intent.putExtra("bundle", bundle);
+                        startActivity(intent);
+
+                    }
+                }
+                else {
+                    AlertCenter.showErrorAlert(NewsActivity.this, "只能打开oa链接\n（如：http://oa.jlu.edu.cn/defaultroot/...）");
+                }
+            }
+        });
 
         navigation_back.setOnClickListener(new View.OnClickListener() {
             @Override

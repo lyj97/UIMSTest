@@ -20,6 +20,8 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.lu.mydemo.Notification.AlertCenter;
+
 import net.sf.json.JSONObject;
 
 import Config.ColorManager;
@@ -132,8 +134,12 @@ public class AboutActivity extends AppCompatActivity {
         link_to_qq.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String url="mqqwpa://im/chat?chat_type=wpa&uin=1159386449";
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+                try {
+                    String url = "mqqwpa://im/chat?chat_type=wpa&uin=1159386449";
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+                }catch (Exception e){
+                    AlertCenter.showAlert(AboutActivity.this, "可能未安装QQ,不能愉快的和开发者聊天了呢╯︿╰");
+                }
             }
         });
 

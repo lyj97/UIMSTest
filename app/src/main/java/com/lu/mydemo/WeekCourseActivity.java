@@ -111,7 +111,8 @@ public class WeekCourseActivity extends AppCompatActivity implements View.OnClic
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if(alertDialog!=null) alertDialog.hide();
-
+            //TODO DEBUG
+            Log.i("WeekCourse", mySubjects.toString());
             mWeekView.source(mySubjects).showView();
             mTimetableView.source(mySubjects).showView();
             Alerter.hide();

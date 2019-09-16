@@ -18,7 +18,7 @@ public class MyViewPagerAdapter extends PagerAdapter {
     private List<MySubject> list;
     private Context context;
 
-    public MyViewPagerAdapter(Context context, List list) {
+    public MyViewPagerAdapter(Context context, List list, View view) {
         this.context = context;
         this.list = list;
     }

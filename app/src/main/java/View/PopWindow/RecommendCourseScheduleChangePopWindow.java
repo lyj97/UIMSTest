@@ -230,8 +230,6 @@ public class RecommendCourseScheduleChangePopWindow extends PopupWindow {
             TextView context2 = convertView.findViewById(R.id.course_schedule_change_list_item_context2);
             TextView split2 = convertView.findViewById(R.id.course_schedule_change_list_item_split2);
 
-            ((TextView) mMenuView.findViewById(R.id.course_schedule_change_list_item_title)).setTextColor(ColorManager.getPrimaryColor());
-
             //根据Key值取出装入的数据，然后进行比较
             try {
                 String ss = ((String) mdata.get(position).get("context2"));

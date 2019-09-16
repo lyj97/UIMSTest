@@ -126,6 +126,9 @@ public class CourseScheduleChangeActivity extends AppCompatActivity {
         swipeRecyclerView.setOnItemMenuClickListener(new OnItemMenuClickListener() {
             @Override
             public void onItemClick(SwipeMenuBridge menuBridge, int adapterPosition) {
+
+                menuBridge.closeMenu();
+
                 int position = menuBridge.getPosition();
                 if (CourseScheduleChange.delete(((String) dataList.get(position).get("context1")).substring(0, 10))) {
                     Alerter.create(CourseScheduleChangeActivity.this)

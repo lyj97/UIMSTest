@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:padding="5dp"
+    android:columnCount="7"
+    android:orientation="horizontal"
+    android:rowCount="8"
+    android:background="#00000000">
+
+    <TextView
+        android:id="@+id/course_weekly_1_1"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_margin="1dp"
+        android:background="@drawable/background_course_weekly_item"/>
+
+    <TextView
+        android:id="@+id/course_weekly_1_2"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_margin="1dp"
+        android:background="@drawable/background_course_weekly_item"/>
+
+    <TextView
+        android:id="@+id/course_weekly_1_3"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_margin="1dp"
+        android:background="@drawable/background_course_weekly_item"/>
+
+    <TextView
+        android:id="@+id/course_weekly_1_4"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_margin="1dp"
+        android:background="@drawable/background_course_weekly_item"/>
+
+    <TextView
+        android:id="@+id/course_weekly_1_5"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_margin="1dp"
+        android:background="@drawable/background_course_weekly_item"/>
+
+    <TextView
+        android:id="@+id/course_weekly_1_6"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_margin="1dp"
+        android:background="@drawable/background_course_weekly_item"/>
+
+    <TextView
+        android:id="@+id/course_weekly_1_7"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_margin="1dp"
+        android:background="@drawable/background_course_weekly_item"/>
+
+    <TextView
+        android:id="@+id/course_weekly_2_1"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_margin="1dp"
+        android:background="@drawable/background_course_weekly_item"/>
+
+    <TextView
+        android:id="@+id/course_weekly_2_2"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_margin="1dp"
+        android:background="@drawable/background_course_weekly_item"/>
+
+    <TextView
+        android:id="@+id/course_weekly_2_3"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_margin="1dp"
+        android:background="@drawable/background_course_weekly_item"/>
+
+    <TextView
+        android:id="@+id/course_weekly_2_4"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_margin="1dp"
+        android:background="@drawable/background_course_weekly_item"/>
+
+    <TextView
+        android:id="@+id/course_weekly_2_5"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_margin="1dp"
+        android:background="@drawable/background_course_weekly_item"/>
+
+    <TextView
+        android:id="@+id/course_weekly_2_6"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_margin="1dp"
+        android:background="@drawable/background_course_weekly_item"/>
+
+    <TextView
+        android:id="@+id/course_weekly_2_7"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_margin="1dp"
+        android:background="@drawable/background_course_weekly_item"/>
+
+    <TextView
+        android:id="@+id/course_weekly_3_1"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_margin="1dp"
+        android:background="@drawable/background_course_weekly_item"/>
+
+    <TextView
+        android:id="@+id/course_weekly_3_2"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_margin="1dp"
+        android:background="@drawable/background_course_weekly_item"/>
+
+    <TextView
+        android:id="@+id/course_weekly_3_3"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_margin="1dp"
+        android:background="@drawable/background_course_weekly_item"/>
+
+    <TextView
+        android:id="@+id/course_weekly_3_4"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_margin="1dp"
+        android:background="@drawable/background_course_weekly_item"/>
+
+    <TextView
+        android:id="@+id/course_weekly_3_5"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_margin="1dp"
+        android:background="@drawable/background_course_weekly_item"/>
+
+    <TextView
+        android:id="@+id/course_weekly_3_6"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_margin="1dp"
+        android:background="@drawable/background_course_weekly_item"/>
+
+    <TextView
+        android:id="@+id/course_weekly_3_7"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_margin="1dp"
+        android:background="@drawable/background_course_weekly_item"/>
+
+    <TextView
+        android:id="@+id/course_weekly_4_1"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_margin="1dp"
+        android:background="@drawable/background_course_weekly_item"/>
+
+    <TextView
+        android:id="@+id/course_weekly_4_2"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_margin="1dp"
+        android:background="@drawable/background_course_weekly_item"/>
+
+    <TextView
+        android:id="@+id/course_weekly_4_3"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_margin="1dp"
+        android:background="@drawable/background_course_weekly_item"/>
+
+    <TextView
+        android:id="@+id/course_weekly_4_4"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_margin="1dp"
+        android:background="@drawable/background_course_weekly_item"/>
+
+    <TextView
+        android:id="@+id/course_weekly_4_5"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_margin="1dp"
+        android:background="@drawable/background_course_weekly_item"/>
+
+    <TextView
+        android:id="@+id/course_weekly_4_6"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_margin="1dp"
+        android:background="@drawable/background_course_weekly_item"/>
+
+    <TextView
+        android:id="@+id/course_weekly_4_7"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_margin="1dp"
+        android:background="@drawable/background_course_weekly_item"/>
+
+    <TextView
+        android:id="@+id/course_weekly_5_1"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_margin="1dp"
+        android:background="@drawable/background_course_weekly_item"/>
+
+    <TextView
+        android:id="@+id/course_weekly_5_2"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_margin="1dp"
+        android:background="@drawable/background_course_weekly_item"/>
+
+    <TextView
+        android:id="@+id/course_weekly_5_3"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_margin="1dp"
+        android:background="@drawable/background_course_weekly_item"/>
+
+    <TextView
+        android:id="@+id/course_weekly_5_4"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_margin="1dp"
+        android:background="@drawable/background_course_weekly_item"/>
+
+    <TextView
+        android:id="@+id/course_weekly_5_5"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_margin="1dp"
+        android:background="@drawable/background_course_weekly_item"/>
+
+    <TextView
+        android:id="@+id/course_weekly_5_6"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_margin="1dp"
+        android:background="@drawable/background_course_weekly_item"/>
+
+    <TextView
+        android:id="@+id/course_weekly_5_7"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_margin="1dp"
+        android:background="@drawable/background_course_weekly_item"/>
+
+    <TextView
+        android:id="@+id/course_weekly_6_1"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_margin="1dp"
+        android:background="@drawable/background_course_weekly_item"/>
+
+    <TextView
+        android:id="@+id/course_weekly_6_2"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_margin="1dp"
+        android:background="@drawable/background_course_weekly_item"/>
+
+    <TextView
+        android:id="@+id/course_weekly_6_3"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_margin="1dp"
+        android:background="@drawable/background_course_weekly_item"/>
+
+    <TextView
+        android:id="@+id/course_weekly_6_4"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_margin="1dp"
+        android:background="@drawable/background_course_weekly_item"/>
+
+    <TextView
+        android:id="@+id/course_weekly_6_5"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_margin="1dp"
+        android:background="@drawable/background_course_weekly_item"/>
+
+    <TextView
+        android:id="@+id/course_weekly_6_6"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_margin="1dp"
+        android:background="@drawable/background_course_weekly_item"/>
+
+    <TextView
+        android:id="@+id/course_weekly_6_7"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_margin="1dp"
+        android:background="@drawable/background_course_weekly_item"/>
+
+    <TextView
+        android:id="@+id/course_weekly_7_1"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_margin="1dp"
+        android:background="@drawable/background_course_weekly_item"/>
+
+    <TextView
+        android:id="@+id/course_weekly_7_2"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_margin="1dp"
+        android:background="@drawable/background_course_weekly_item"/>
+
+    <TextView
+        android:id="@+id/course_weekly_7_3"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_margin="1dp"
+        android:background="@drawable/background_course_weekly_item"/>
+
+    <TextView
+        android:id="@+id/course_weekly_7_4"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_margin="1dp"
+        android:background="@drawable/background_course_weekly_item"/>
+
+    <TextView
+        android:id="@+id/course_weekly_7_5"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_margin="1dp"
+        android:background="@drawable/background_course_weekly_item"/>
+
+    <TextView
+        android:id="@+id/course_weekly_7_6"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_margin="1dp"
+        android:background="@drawable/background_course_weekly_item"/>
+
+    <TextView
+        android:id="@+id/course_weekly_7_7"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_margin="1dp"
+        android:background="@drawable/background_course_weekly_item"/>
+
+</GridLayout>

@@ -10,22 +10,22 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import com.lu.mydemo.R;
 
 public class MyCourseDetailView extends View {
 
+    public View rootView;
+
     public int backColor;
     public int textColor;
 
-    //定义画笔
-    Paint p = new Paint();
+    public LinearLayout mtDetailView;
 
-    RectF back_view = new RectF(50, 300, 800, 600);// 设置个新的长方形
 
     public MyCourseDetailView(Context context) {
         super(context);
-
         textColor = Color.WHITE;
         backColor = Color.LTGRAY;
     }
@@ -43,65 +43,6 @@ public class MyCourseDetailView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        //画圆角矩形
-        p.setStyle(Paint.Style.FILL);//充满
-        p.setColor(backColor);
-        p.setAntiAlias(true);// 设置画笔的锯齿效果
-        canvas.drawRoundRect(back_view, 20, 15, p);//第二个参数是x半径，第三个参数是y半径
-
-        p.setColor(textColor);
-        p.setAntiAlias(false);// 设置画笔的锯齿效果
-        p.setTextSize(33);
-        canvas.drawText("课程", 80, 300, p);
-        canvas.drawText("教师", 80, 350, p);
-        canvas.drawText("地点", 80, 400, p);
-        canvas.drawText("时间", 80, 450, p);
-
-    }
-
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-
-        // get calculate mode of width and height
-        int modeWidth = MeasureSpec.getMode(widthMeasureSpec);
-        int modeHeight = MeasureSpec.getMode(heightMeasureSpec);
-
-        // get recommend width and height
-//        int sizeWidth = MeasureSpec.getSize(widthMeasureSpec);
-//        int sizeHeight = MeasureSpec.getSize(heightMeasureSpec);
-
-//        if (modeWidth == MeasureSpec.UNSPECIFIED) { // this view used in scrollView or listview or recyclerView
-//            int wrap_width = 100 + getPaddingLeft() + getPaddingRight();
-//            sizeWidth = wrap_width;
-//            modeWidth = MeasureSpec.EXACTLY;
-//        }
-//
-//        if (modeHeight == MeasureSpec.UNSPECIFIED) { // this view used in scrollView or listview or recyclerView
-//            int wrap_height = 100 + getPaddingTop() + getPaddingBottom();
-//            sizeHeight = wrap_height;
-//            modeHeight = MeasureSpec.EXACTLY;
-//        }
-//
-//        if (modeWidth == MeasureSpec.AT_MOST) { // wrap_content
-//            int wrap_width = 100 + getPaddingLeft() + getPaddingRight();
-//            sizeWidth = Math.min(wrap_width,sizeWidth);
-//            modeWidth = MeasureSpec.EXACTLY;
-//        }
-//
-//        if (modeHeight == MeasureSpec.AT_MOST) { // wrap_content
-//            int wrap_height = 100 + getPaddingTop() + getPaddingBottom();
-//            sizeHeight = Math.min(wrap_height,sizeHeight);
-//            modeHeight = MeasureSpec.EXACTLY;
-//        }
-
-//        widthMeasureSpec = MeasureSpec.makeMeasureSpec(sizeWidth, modeWidth);
-//        heightMeasureSpec = MeasureSpec.makeMeasureSpec(sizeHeight, modeHeight);
-
-        widthMeasureSpec = MeasureSpec.makeMeasureSpec(750, modeWidth);
-        heightMeasureSpec = MeasureSpec.makeMeasureSpec(300, modeHeight);
-
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-
     }
 
     public void setBackColor(int backColor) {

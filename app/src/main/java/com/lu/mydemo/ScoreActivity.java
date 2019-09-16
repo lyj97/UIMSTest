@@ -251,6 +251,7 @@ public class ScoreActivity extends AppCompatActivity
             }
         }
 
+        hideText.callOnClick();//打开时显示成绩统计
         loadScoreList();
 //        long finishTime = System.currentTimeMillis();
 //        Log.i("Time", (finishTime - (long) getIntent().getBundleExtra("bundle").get("startTime")) / 1000 + "");
