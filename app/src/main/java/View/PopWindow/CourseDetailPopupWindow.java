@@ -10,6 +10,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 
 import com.lu.mydemo.R;
 
@@ -17,13 +18,17 @@ import java.util.List;
 
 import Config.ColorManager;
 import Utils.Course.MySubject;
+import View.Control.CourseWeeklyControl;
 import View.ViewPager.MyViewPagerAdapter;
 
 public class CourseDetailPopupWindow extends PopupWindow {
 
     private View mMenuView;
 
-    private ViewPager viewPager;
+    private TextView courseName_tv;
+    private TextView teacher_tv;
+    private TextView week_tv;
+    private TextView time_tv;
 
     public Animation mExitAnim;//退出动画
     public Animation mEnterAnim;//进入动画
@@ -35,17 +40,19 @@ public class CourseDetailPopupWindow extends PopupWindow {
         this.context = context;
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mMenuView = inflater.inflate(R.layout.pop_window_course_list, null);
+        mMenuView = inflater.inflate(R.layout.view_course_detail, null);
 
-        viewPager = mMenuView.findViewById(R.id.pop_window_course_list_viewpager);
+        courseName_tv = mMenuView.findViewById(R.id.pop_window_course_detail_information_layout_course_name);
+        teacher_tv = mMenuView.findViewById(R.id.pop_window_course_detail_information_layout_teacher);
+        week_tv = mMenuView.findViewById(R.id.pop_window_course_detail_information_layout_week);
+        time_tv = mMenuView.findViewById(R.id.pop_window_course_detail_information_layout_time);
 
-        //设置Page间间距
-        viewPager.setPageMargin(20);
-        //设置缓存的页面数量
-        viewPager.setOffscreenPageLimit(3);
-        viewPager.setAdapter(new MyViewPagerAdapter(context, list, mMenuView));
+        CourseWeeklyControl weekly = new CourseWeeklyControl(mMenuView.findViewById(R.id.pop_window_course_detail_time), context);
+        weekly.init(list);
 
         changeTheme();
+
+        initView(list);
 
         //设置SelectPicPopupWindow的View
         this.setContentView(mMenuView);
@@ -66,7 +73,7 @@ public class CourseDetailPopupWindow extends PopupWindow {
 
             public boolean onTouch(View v, MotionEvent event) {
 
-                int height = mMenuView.findViewById(R.id.pop_window_course_list_layout).getTop();
+                int height = mMenuView.findViewById(R.id.pop_window_course_detail_layout).getTop();
                 int y=(int) event.getY();
                 if(event.getAction()==MotionEvent.ACTION_UP){
                     if(y<height){
@@ -79,9 +86,19 @@ public class CourseDetailPopupWindow extends PopupWindow {
 
     }
 
+    public void initView(List<MySubject> list){
+        if(list == null || list.size() < 1) return;
+        MySubject subject = list.get(0);
+        courseName_tv.setText(subject.getName());
+        teacher_tv.setText(subject.getTeacher());
+        week_tv.setText(subject.getWeekRange());
+        time_tv.setText(subject.getStepRange());
+    }
+
     private void changeTheme(){
         Log.i("Theme", "Change theme.");
-//        mMenuView.findViewById(R.id.pop_window_course_list_layout).setBackground(ColorManager.getMainBackground());
+        mMenuView.findViewById(R.id.pop_window_course_detail_layout_title).setBackground(ColorManager.getTopRadiusBackground());
+        mMenuView.findViewById(R.id.pop_window_course_detail_information_layout).setBackground(ColorManager.getMainBackground());
     }
 
 }

@@ -6,8 +6,11 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.graphics.drawable.PaintDrawable;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -21,13 +24,16 @@ public class MyCourseDetailView extends View {
     public int backColor;
     public int textColor;
 
-    public LinearLayout mtDetailView;
+    public LinearLayout myDetailView;
 
 
     public MyCourseDetailView(Context context) {
         super(context);
         textColor = Color.WHITE;
         backColor = Color.LTGRAY;
+        LayoutInflater inflater = (LayoutInflater) context
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        rootView = inflater.inflate(R.layout.view_course_detail, null);
     }
 
     public MyCourseDetailView(Context context, @Nullable AttributeSet attrs) {
@@ -38,6 +44,11 @@ public class MyCourseDetailView extends View {
         textColor = array.getColor(R.styleable.MyCourseDetailView_textColor, Color.WHITE);
         backColor = array.getColor(R.styleable.MyCourseDetailView_backColor, Color.LTGRAY);
         array.recycle();
+    }
+
+    public void initView(){
+        myDetailView = rootView.findViewById(R.id.pop_window_course_detail_layout);
+        myDetailView.setBackground(new PaintDrawable(Color.WHITE));
     }
 
     @Override

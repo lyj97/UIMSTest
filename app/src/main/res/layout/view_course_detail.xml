@@ -1,61 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/pop_window_course_detail_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="center"
-    android:orientation="horizontal"
-    android:baselineAligned="false"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
     >
 
     <LinearLayout
-        android:layout_width="0dp"
+        android:id="@+id/pop_window_course_detail_layout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true"
+        android:background="#00000000"
+        >
 
         <TextView
-            android:id="@+id/pop_window_course_detail_layout_course_name"
-            android:layout_width="wrap_content"
+            android:id="@+id/pop_window_course_detail_layout_title"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="CourseName"/>
+            android:gravity="center"
+            android:text="课程详情"
+            android:textSize="17sp"
+            android:paddingTop="20dp"
+            android:paddingBottom="10dp"
+            android:textColor="@color/app_white"
+            android:background="@drawable/shape_rectangle_with_top_radius"
+            />
 
-        <TextView
-            android:id="@+id/pop_window_course_detail_layout_teacher"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/pop_window_course_detail_information_layout"
+            android:layout_below="@+id/pop_window_course_list_layout_title"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Teacher"/>
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:baselineAligned="false"
+            android:background="@drawable/background_login"
+            >
 
-        <TextView
-            android:id="@+id/pop_window_course_detail_layout_week"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Week, DayOfWeek"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/pop_window_course_detail_layout_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Time"/>
+                <TextView
+                    android:id="@+id/pop_window_course_detail_information_layout_course_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="CourseName"/>
+
+                <TextView
+                    android:id="@+id/pop_window_course_detail_information_layout_teacher"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Teacher"/>
+
+                <TextView
+                    android:id="@+id/pop_window_course_detail_information_layout_week"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Week, DayOfWeek"/>
+
+                <TextView
+                    android:id="@+id/pop_window_course_detail_information_layout_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Time"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="18dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="上课时间"/>
+
+                <include
+                    layout="@layout/view_course_weekly"
+                    android:id="@+id/pop_window_course_detail_time"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:padding="15dp"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="上课时间"/>
-
-        <include layout="@layout/view_course_weekly"/>
-
-    </LinearLayout>
-
-</LinearLayout>
+</RelativeLayout>

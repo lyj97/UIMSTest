@@ -25,7 +25,7 @@ public class MyViewPagerAdapter extends PagerAdapter {
 
     @Override
     public int getCount() {
-        return list.size();
+        return 2;
     }
 
     @Override

@@ -10,6 +10,7 @@ public class ColorManager {
 
     /**
      * primaryColor
+     * 顶部圆角背景
      * 全局渐变背景
      * 获取本地顶信息按钮颜色
      * 获取网络信息按钮（渐变）颜色
@@ -38,6 +39,7 @@ public class ColorManager {
     private static int news_normal_text_color;
     private static int popwindow_background_color;
     private static int datePickerDialogTheme;
+    private static Drawable topRadiusBackground;
     private static Drawable mainBackground;
     private static Drawable mainBackground_full;
     private static Drawable localInformationButtonBackground;
@@ -81,6 +83,7 @@ public class ColorManager {
                 popwindow_background_color = context.getColor(R.color.color_popWindowBackground);
                 datePickerDialogTheme = R.style.MyDatePickerDialogTheme;
 
+                topRadiusBackground = context.getDrawable(R.drawable.shape_rectangle_with_top_radius);
                 mainBackground = context.getDrawable(R.drawable.background_login);
                 mainBackground_full = context.getDrawable(R.drawable.background_login_full);
                 localInformationButtonBackground = context.getDrawable(R.drawable.button_local_background);
@@ -106,6 +109,7 @@ public class ColorManager {
                 popwindow_background_color = context.getColor(R.color.color_popWindowBackground_pink);
                 datePickerDialogTheme = R.style.MyDatePickerDialogTheme_Pink;
 
+                topRadiusBackground = context.getDrawable(R.drawable.shape_rectangle_with_top_radius_pink);
                 mainBackground = context.getDrawable(R.drawable.background_login_pink);
                 mainBackground_full = context.getDrawable(R.drawable.background_login_pink_full);
                 localInformationButtonBackground = context.getDrawable(R.drawable.button_local_background_pink);
@@ -131,6 +135,7 @@ public class ColorManager {
                 popwindow_background_color = context.getColor(R.color.color_popWindowBackground_Green);
                 datePickerDialogTheme = R.style.MyDatePickerDialogTheme_Green;
 
+                topRadiusBackground = context.getDrawable(R.drawable.shape_rectangle_with_top_radius_green);
                 mainBackground = context.getDrawable(R.drawable.background_login_green);
                 mainBackground_full = context.getDrawable(R.drawable.background_login_green_full);
                 localInformationButtonBackground = context.getDrawable(R.drawable.button_local_background_green);
@@ -155,6 +160,7 @@ public class ColorManager {
 
                 popwindow_background_color = context.getColor(R.color.color_popWindowBackground);
 
+                topRadiusBackground = context.getDrawable(R.drawable.shape_rectangle_with_top_radius);
                 mainBackground = context.getDrawable(R.drawable.background_login);
                 mainBackground_full = context.getDrawable(R.drawable.background_login_full);
                 localInformationButtonBackground = context.getDrawable(R.drawable.button_local_background);
@@ -174,6 +180,10 @@ public class ColorManager {
 
     public static int getPrimaryDarkColor() {
         return primaryDarkColor;
+    }
+
+    public static Drawable getTopRadiusBackground() {
+        return topRadiusBackground;
     }
 
     public static Drawable getMainBackground() {

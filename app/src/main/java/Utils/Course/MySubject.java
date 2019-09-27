@@ -12,6 +12,8 @@ import java.util.List;
  */
 public class MySubject extends Schedule implements ScheduleEnable {
 
+    public static final String[] week = {"", "周一", "周二", "周三", "周四", "周五", "周六", "周日"};
+
     private int id=0;
 
     /**
@@ -38,9 +40,19 @@ public class MySubject extends Schedule implements ScheduleEnable {
     private List<Integer> weekList;
 
     /**
+     * 周-自然表示
+     */
+    private String weekRange;
+
+    /**
      * 开始上课的节次
      */
     private int start;
+
+    /**
+     * 节-自然表示
+     */
+    private String stepRange;
 
     /**
      * 上课节数
@@ -165,6 +177,40 @@ public class MySubject extends Schedule implements ScheduleEnable {
 
     public void setColorRandom(int colorRandom) {
         this.colorRandom = colorRandom;
+    }
+
+    public String getWeekRange() {
+        return weekRange;
+    }
+
+    public void setWeekRange(int beginWeek, int endWeek, String weekOddEven, int dayOfWeek){
+        if(beginWeek == endWeek) weekRange = "第" + beginWeek + "周";
+        else weekRange = "第" + beginWeek + "~" + endWeek + "周";
+        switch (weekOddEven.toUpperCase()){
+            case "":{
+                break;
+            }
+            case "E":{
+                //双周
+                weekRange += "[双周]";
+                break;
+            }
+            case "O":{
+                //单周
+                weekRange += "[单周]";
+                break;
+            }
+        }
+        weekRange += " " + week[dayOfWeek];
+    }
+
+    public String getStepRange() {
+        return stepRange;
+    }
+
+    public void setStepRange() {
+        if(step == 1) stepRange = "第" + start + "节";
+        else stepRange = "第" + start + "~" + (start + step - 1) + "节";
     }
 
     @Override

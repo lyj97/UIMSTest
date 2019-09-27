@@ -22,6 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.lu.mydemo.Notification.AlertCenter;
 import com.tapadoo.alerter.Alerter;
 import com.zhuangfei.timetable.TimetableView;
 import com.zhuangfei.timetable.listener.ISchedule;
@@ -29,6 +30,8 @@ import com.zhuangfei.timetable.listener.IWeekView;
 import com.zhuangfei.timetable.model.Schedule;
 import com.zhuangfei.timetable.view.WeekView;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import Config.ColorManager;
@@ -111,8 +114,6 @@ public class WeekCourseActivity extends AppCompatActivity implements View.OnClic
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if(alertDialog!=null) alertDialog.hide();
-            //TODO DEBUG
-            Log.i("WeekCourse", mySubjects.toString());
             mWeekView.source(mySubjects).showView();
             mTimetableView.source(mySubjects).showView();
             Alerter.hide();
@@ -238,15 +239,35 @@ public class WeekCourseActivity extends AppCompatActivity implements View.OnClic
      * @param beans
      */
     protected void display(List<Schedule> beans) {
+        final HashSet<String> courseNameSet = new HashSet<>();
         String str = "";
         for (Schedule bean : beans) {
             str += bean.getName() + ","+bean.getWeekList().toString()+","+bean.getStart()+","+bean.getStep()+"\n";
+            courseNameSet.add(bean.getName());
         }
-        Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
+        if(courseNameSet.size() > 1) {
+            AlertCenter.showErrorAlert(WeekCourseActivity.this, "课程数大于1！");
+            return;
+        }
 
-        //TODO TEST course_detail.
-        CourseDetailPopupWindow informationPopWindow = new CourseDetailPopupWindow(WeekCourseActivity.this, beans, findViewById(R.id.weekCourseLayout).getHeight(), findViewById(R.id.weekCourseLayout).getWidth());
-        informationPopWindow.showAtLocation(WeekCourseActivity.this.findViewById(R.id.weekCourseLayout), Gravity.CENTER | Gravity.CENTER_HORIZONTAL, 0, 0); //设置layout在PopupWindow中显示的位置
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final List<MySubject> temp_list = new ArrayList<>();
+                for(MySubject subject : mySubjects){
+                    if(courseNameSet.contains(subject.getName())) temp_list.add(subject);
+                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        //TODO TEST course_detail.
+                        CourseDetailPopupWindow informationPopWindow = new CourseDetailPopupWindow(WeekCourseActivity.this, temp_list, findViewById(R.id.weekCourseLayout).getHeight(), findViewById(R.id.weekCourseLayout).getWidth());
+                        informationPopWindow.showAtLocation(WeekCourseActivity.this.findViewById(R.id.weekCourseLayout), Gravity.CENTER | Gravity.CENTER_HORIZONTAL, 0, 0); //设置layout在PopupWindow中显示的位置
+                    }
+                });
+            }
+        }).start();
     }
 
     @Override

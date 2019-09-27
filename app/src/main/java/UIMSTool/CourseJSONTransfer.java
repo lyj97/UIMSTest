@@ -191,10 +191,12 @@ public class CourseJSONTransfer {
                     start_end = ClassSetConvert.mathStartEnd(classSet);
 
                     subject.setWeekList(getWeekList(beginWeek, endWeek, weekOddEven));
+                    subject.setWeekRange(beginWeek, endWeek, weekOddEven, dayOfWeek);
                     subject.setDay(dayOfWeek);
                     subject.setRoom(classroomName);
                     subject.setStart(start_end[0]);
                     subject.setStep(start_end[1] - start_end[0] + 1);
+                    subject.setStepRange();
 
                     courseList.add(subject);
                     weekOddEven = "";
