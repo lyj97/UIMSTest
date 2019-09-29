@@ -129,10 +129,10 @@ public class CourseScheduleChangeActivity extends AppCompatActivity {
 
                 menuBridge.closeMenu();
 
-                int position = menuBridge.getPosition();
-                if (CourseScheduleChange.delete(((String) dataList.get(position).get("context1")).substring(0, 10))) {
+                MainActivity.setReLoadTodayCourse(true);
+                if (CourseScheduleChange.delete(((String) dataList.get(adapterPosition).get("context1")).substring(0, 10))) {
                     Alerter.create(CourseScheduleChangeActivity.this)
-                            .setText("已删除【" + dataList.get(position).get("context1") + "】课程调整\n\n" +
+                            .setText("已删除【" + dataList.get(adapterPosition).get("context1") + "】课程调整\n\n" +
                                     "如需撤销，请点击此处.")
                             .enableSwipeToDismiss()
                             .setProgressColorRes(R.color.color_alerter_progress_bar)
@@ -148,11 +148,11 @@ public class CourseScheduleChangeActivity extends AppCompatActivity {
                             .setBackgroundColorInt(ColorManager.getTopAlertBackgroundColor())
                             .show();
                     tempJsonObject = new JSONObject();
-                    tempJsonObject.put("title", dataList.get(position).get("title"));
-                    tempJsonObject.put("previousTime", ((String) dataList.get(position).get("context1")).substring(0, 10));
-                    tempJsonObject.put("changeTime", ((String) dataList.get(position).get("context2")).length() > 0 ? ((String) dataList.get(position).get("context2")).substring(0, 10) : "0000-00-00");
-                    dataList.remove(position);
-                    myAdapter.notifyItemRemoved(position);
+                    tempJsonObject.put("title", dataList.get(adapterPosition).get("title"));
+                    tempJsonObject.put("previousTime", ((String) dataList.get(adapterPosition).get("context1")).substring(0, 10));
+                    tempJsonObject.put("changeTime", ((String) dataList.get(adapterPosition).get("context2")).length() > 0 ? ((String) dataList.get(adapterPosition).get("context2")).substring(0, 10) : "0000-00-00");
+                    dataList.remove(adapterPosition);
+                    myAdapter.notifyItemRemoved(adapterPosition);
                 }
             }
         });
@@ -309,9 +309,21 @@ public class CourseScheduleChangeActivity extends AppCompatActivity {
     }
 
     private void flushList(){
-        dataList = getChangeList();
-        swipeRecyclerView.setAdapter(myAdapter);
-        myAdapter.notifyDataSetChanged(dataList);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                dataList = getChangeList();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        myAdapter = createAdapter();
+                        swipeRecyclerView.setAdapter(myAdapter);
+                        myAdapter.notifyDataSetChanged(dataList);
+                    }
+                });
+            }
+        }).start();
+
     }
 
     private List<Map<String, Object>> getChangeList(){

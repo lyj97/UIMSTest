@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:gravity="center"
-    android:padding="5dp"
+    android:padding="3dp"
     android:columnCount="7"
     android:orientation="horizontal"
     android:rowCount="8"
@@ -208,6 +208,12 @@
         android:background="@drawable/background_course_weekly_item"/>
 
     <TextView
+        android:layout_width="50dp"
+        android:layout_height="1dp"
+        android:layout_columnSpan="7"
+        android:background="#1486FF"/>
+
+    <TextView
         android:id="@+id/course_weekly_1_5"
         android:layout_width="5dp"
         android:layout_height="5dp"
@@ -349,6 +355,110 @@
 
     <TextView
         android:id="@+id/course_weekly_7_7"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_margin="1dp"
+        android:background="@drawable/background_course_weekly_item"/>
+
+    <TextView
+        android:id="@+id/course_weekly_1_8"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_margin="1dp"
+        android:background="@drawable/background_course_weekly_item"/>
+
+    <TextView
+        android:id="@+id/course_weekly_2_8"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_margin="1dp"
+        android:background="@drawable/background_course_weekly_item"/>
+
+    <TextView
+        android:id="@+id/course_weekly_3_8"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_margin="1dp"
+        android:background="@drawable/background_course_weekly_item"/>
+
+    <TextView
+        android:id="@+id/course_weekly_4_8"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_margin="1dp"
+        android:background="@drawable/background_course_weekly_item"/>
+
+    <TextView
+        android:id="@+id/course_weekly_5_8"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_margin="1dp"
+        android:background="@drawable/background_course_weekly_item"/>
+
+    <TextView
+        android:id="@+id/course_weekly_6_8"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_margin="1dp"
+        android:background="@drawable/background_course_weekly_item"/>
+
+    <TextView
+        android:id="@+id/course_weekly_7_8"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_margin="1dp"
+        android:background="@drawable/background_course_weekly_item"/>
+
+    <TextView
+        android:layout_width="50dp"
+        android:layout_height="1dp"
+        android:layout_columnSpan="7"
+        android:background="#1486FF"/>
+
+    <TextView
+        android:id="@+id/course_weekly_1_9"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_margin="1dp"
+        android:background="@drawable/background_course_weekly_item"/>
+
+    <TextView
+        android:id="@+id/course_weekly_2_9"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_margin="1dp"
+        android:background="@drawable/background_course_weekly_item"/>
+
+    <TextView
+        android:id="@+id/course_weekly_3_9"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_margin="1dp"
+        android:background="@drawable/background_course_weekly_item"/>
+
+    <TextView
+        android:id="@+id/course_weekly_4_9"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_margin="1dp"
+        android:background="@drawable/background_course_weekly_item"/>
+
+    <TextView
+        android:id="@+id/course_weekly_5_9"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_margin="1dp"
+        android:background="@drawable/background_course_weekly_item"/>
+
+    <TextView
+        android:id="@+id/course_weekly_6_9"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_margin="1dp"
+        android:background="@drawable/background_course_weekly_item"/>
+
+    <TextView
+        android:id="@+id/course_weekly_7_9"
         android:layout_width="5dp"
         android:layout_height="5dp"
         android:layout_margin="1dp"

@@ -100,6 +100,8 @@ public class MainActivity extends Activity {
     private int day_of_week;//今天周几
     public static final int MAX_VOCATION_WEEK_NUMBER = 9;//设置学期最大教学周数，用于时间正确性判断
 
+    public static List<Map<String, Object>> todayCourseList = null;
+
     private int clickCount = 0;
     private TextView UIMSTest;
 
@@ -368,14 +370,14 @@ public class MainActivity extends Activity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                if (!isLocalValueLoaded && isLocalInformationAvailable())
-                    loadLocalInformation(false);
-                else loadCourseInformation();
+//                if (!isLocalValueLoaded && isLocalInformationAvailable())
+                loadLocalInformation(false);
+//                else loadCourseInformation();
                 ScoreConfig.loadScoreConfig(getApplicationContext());
                 try {
                     CJCX.loadCJCXJSON(getApplicationContext());
                     CJCX.loadCJCXTermJSON(getApplicationContext());
-                }catch (Exception e){
+                } catch (Exception e) {
                     Log.e("MainActivity", "CJCX Error:" + e.getMessage());
                 }
                 ScoreActivity.context = getApplicationContext();
@@ -570,7 +572,7 @@ public class MainActivity extends Activity {
             }
             weeks = value.getInt("weeks");
             loadTime();
-//                    getCourseSuccess();
+            getCourseSuccess();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -626,13 +628,12 @@ public class MainActivity extends Activity {
     private void getCourseSuccess(){
         try {
             courseList.setOnItemClickListener(null);
-            if(!reLoadTodayCourse) return;
-            final List<Map<String, Object>> datalist = getCourseList();
+            todayCourseList = getCourseList();
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Log.i("Login", "CourseListSize:\t" + datalist.size());
-                    courseList.setAdapter(new noCourseBetterAdapter(context, datalist, R.layout.list_item_today_course, new String[]{"index", "title", "context1"}, new int[]{R.id.get_none_score_course_title_index, R.id.get_none_score_course_title, R.id.get_none_score_course_context1}));
+                    Log.i("Login", "CourseListSize:\t" + todayCourseList.size());
+                    courseList.setAdapter(new noCourseBetterAdapter(context, todayCourseList, R.layout.list_item_today_course, new String[]{"index", "title", "context1"}, new int[]{R.id.get_none_score_course_title_index, R.id.get_none_score_course_title, R.id.get_none_score_course_context1}));
                     if(!listHaveHeadFoot) {
                         courseList.addHeaderView(new ViewStub(context));
                         courseList.addFooterView(new ViewStub(context));
@@ -640,7 +641,6 @@ public class MainActivity extends Activity {
                     }
                 }
             });
-            reLoadTodayCourse = false;
         } catch (Exception e){
             e.printStackTrace();
             runOnUiThread(new Runnable() {
@@ -811,6 +811,12 @@ public class MainActivity extends Activity {
             return getCourseList(CourseScheduleChange.getDate(this, now_time));
         }
         else {
+            if(!reLoadTodayCourse && todayCourseList != null) {
+                Log.w("MainActivity", "NOT RELOAD COURSE!");
+                return todayCourseList;
+            }
+            reLoadTodayCourse = false;
+
             ClassSetConvert classSetConvert = new ClassSetConvert();
             List<Map<String, Object>> dataList = new ArrayList<>();
             Map<String, Object> map;
@@ -976,7 +982,8 @@ public class MainActivity extends Activity {
         try {
             value = teachingTermJSON.getJSONArray("value").getJSONObject(0);
         }catch (Exception e){
-            e.printStackTrace();
+//            e.printStackTrace();
+            Log.w("MainActivity", "Using teaching term information from CJCX.");
             value = teachingTermJSON;
         }
         long startTime = df.parse(value.getString("startDate").split("T")[0]).getTime();
@@ -1012,6 +1019,12 @@ public class MainActivity extends Activity {
         Log.i("GetCourse", "星期:\t" + day_of_week);
 
         if(day_of_week == 0 || now_week == 0) throw new IllegalAccessException("教学周或星期为0！");
+
+        if(!reLoadTodayCourse && todayCourseList != null) {
+            Log.w("MainActivity", "NOT RELOAD COURSE!");
+            return todayCourseList;
+        }
+        reLoadTodayCourse = false;
 
         ClassSetConvert classSetConvert = new ClassSetConvert();
         List<Map<String,Object>> dataList = new ArrayList<>();

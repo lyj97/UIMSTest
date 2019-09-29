@@ -53,6 +53,14 @@ public class CourseWeeklyControl {
                             view.findViewById(R.id.course_weekly_1_7).setBackground(context.getDrawable(R.drawable.background_course_weekly_item_active));
                             if(7 == end_pos) break;
                         }
+                        case 8 :{
+                            view.findViewById(R.id.course_weekly_1_8).setBackground(context.getDrawable(R.drawable.background_course_weekly_item_active));
+                            if(8 == end_pos) break;
+                        }
+                        case 9 :{
+                            view.findViewById(R.id.course_weekly_1_9).setBackground(context.getDrawable(R.drawable.background_course_weekly_item_active));
+                            if(9 == end_pos) break;
+                        }
                     }
                     break;
                 }
@@ -85,6 +93,14 @@ public class CourseWeeklyControl {
                         case 7 :{
                             view.findViewById(R.id.course_weekly_2_7).setBackground(context.getDrawable(R.drawable.background_course_weekly_item_active));
                             if(7 == end_pos) break;
+                        }
+                        case 8 :{
+                            view.findViewById(R.id.course_weekly_2_8).setBackground(context.getDrawable(R.drawable.background_course_weekly_item_active));
+                            if(8 == end_pos) break;
+                        }
+                        case 9 :{
+                            view.findViewById(R.id.course_weekly_2_9).setBackground(context.getDrawable(R.drawable.background_course_weekly_item_active));
+                            if(9 == end_pos) break;
                         }
                     }
                     break;
@@ -119,6 +135,14 @@ public class CourseWeeklyControl {
                             view.findViewById(R.id.course_weekly_3_7).setBackground(context.getDrawable(R.drawable.background_course_weekly_item_active));
                             if(7 == end_pos) break;
                         }
+                        case 8 :{
+                            view.findViewById(R.id.course_weekly_3_8).setBackground(context.getDrawable(R.drawable.background_course_weekly_item_active));
+                            if(8 == end_pos) break;
+                        }
+                        case 9 :{
+                            view.findViewById(R.id.course_weekly_3_9).setBackground(context.getDrawable(R.drawable.background_course_weekly_item_active));
+                            if(9 == end_pos) break;
+                        }
                     }
                     break;
                 }
@@ -151,6 +175,14 @@ public class CourseWeeklyControl {
                         case 7 :{
                             view.findViewById(R.id.course_weekly_4_7).setBackground(context.getDrawable(R.drawable.background_course_weekly_item_active));
                             if(7 == end_pos) break;
+                        }
+                        case 8 :{
+                            view.findViewById(R.id.course_weekly_4_8).setBackground(context.getDrawable(R.drawable.background_course_weekly_item_active));
+                            if(8 == end_pos) break;
+                        }
+                        case 9 :{
+                            view.findViewById(R.id.course_weekly_4_9).setBackground(context.getDrawable(R.drawable.background_course_weekly_item_active));
+                            if(9 == end_pos) break;
                         }
                     }
                     break;
@@ -185,6 +217,14 @@ public class CourseWeeklyControl {
                             view.findViewById(R.id.course_weekly_5_7).setBackground(context.getDrawable(R.drawable.background_course_weekly_item_active));
                             if(7 == end_pos) break;
                         }
+                        case 8 :{
+                            view.findViewById(R.id.course_weekly_5_8).setBackground(context.getDrawable(R.drawable.background_course_weekly_item_active));
+                            if(8 == end_pos) break;
+                        }
+                        case 9 :{
+                            view.findViewById(R.id.course_weekly_5_9).setBackground(context.getDrawable(R.drawable.background_course_weekly_item_active));
+                            if(9 == end_pos) break;
+                        }
                     }
                     break;
                 }
@@ -218,6 +258,14 @@ public class CourseWeeklyControl {
                             view.findViewById(R.id.course_weekly_6_7).setBackground(context.getDrawable(R.drawable.background_course_weekly_item_active));
                             if(7 == end_pos) break;
                         }
+                        case 8 :{
+                            view.findViewById(R.id.course_weekly_6_8).setBackground(context.getDrawable(R.drawable.background_course_weekly_item_active));
+                            if(8 == end_pos) break;
+                        }
+                        case 9 :{
+                            view.findViewById(R.id.course_weekly_6_9).setBackground(context.getDrawable(R.drawable.background_course_weekly_item_active));
+                            if(9 == end_pos) break;
+                        }
                     }
                     break;
                 }
@@ -250,6 +298,14 @@ public class CourseWeeklyControl {
                         case 7 :{
                             view.findViewById(R.id.course_weekly_7_7).setBackground(context.getDrawable(R.drawable.background_course_weekly_item_active));
                             if(7 == end_pos) break;
+                        }
+                        case 8 :{
+                            view.findViewById(R.id.course_weekly_7_8).setBackground(context.getDrawable(R.drawable.background_course_weekly_item_active));
+                            if(8 == end_pos) break;
+                        }
+                        case 9 :{
+                            view.findViewById(R.id.course_weekly_7_9).setBackground(context.getDrawable(R.drawable.background_course_weekly_item_active));
+                            if(9 == end_pos) break;
                         }
                     }
                     break;

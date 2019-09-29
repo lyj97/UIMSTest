@@ -202,7 +202,7 @@ public class CourseScheduleChange {
         return (previousTime_changeTime.get(date).getString("changeTime"));
     }
 
-    private static void reLoad(){
+    synchronized private static void reLoad(){
         if(sp == null) return;
         if(sp.contains("CourseScheduleChange")){
             try{

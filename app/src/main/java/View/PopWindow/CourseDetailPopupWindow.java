@@ -3,7 +3,6 @@ package View.PopWindow;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
-import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -19,15 +18,15 @@ import java.util.List;
 import Config.ColorManager;
 import Utils.Course.MySubject;
 import View.Control.CourseWeeklyControl;
-import View.ViewPager.MyViewPagerAdapter;
 
 public class CourseDetailPopupWindow extends PopupWindow {
 
     private View mMenuView;
 
-    private TextView courseName_tv;
+    private TextView title_tv;
+    private TextView coursePlace_tv;
     private TextView teacher_tv;
-    private TextView week_tv;
+//    private TextView week_tv;
     private TextView time_tv;
 
     public Animation mExitAnim;//退出动画
@@ -42,10 +41,11 @@ public class CourseDetailPopupWindow extends PopupWindow {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mMenuView = inflater.inflate(R.layout.view_course_detail, null);
 
-        courseName_tv = mMenuView.findViewById(R.id.pop_window_course_detail_information_layout_course_name);
-        teacher_tv = mMenuView.findViewById(R.id.pop_window_course_detail_information_layout_teacher);
-        week_tv = mMenuView.findViewById(R.id.pop_window_course_detail_information_layout_week);
-        time_tv = mMenuView.findViewById(R.id.pop_window_course_detail_information_layout_time);
+        title_tv = mMenuView.findViewById(R.id.pop_window_course_detail_layout_title);
+        coursePlace_tv = mMenuView.findViewById(R.id.pop_window_course_detail_information_course_place);
+        teacher_tv = mMenuView.findViewById(R.id.pop_window_course_detail_information_teacher);
+//        week_tv = mMenuView.findViewById(R.id.pop_window_course_detail_information_week);
+        time_tv = mMenuView.findViewById(R.id.pop_window_course_detail_information_time);
 
         CourseWeeklyControl weekly = new CourseWeeklyControl(mMenuView.findViewById(R.id.pop_window_course_detail_time), context);
         weekly.init(list);
@@ -89,10 +89,17 @@ public class CourseDetailPopupWindow extends PopupWindow {
     public void initView(List<MySubject> list){
         if(list == null || list.size() < 1) return;
         MySubject subject = list.get(0);
-        courseName_tv.setText(subject.getName());
+        title_tv.setText(subject.getName());
+        coursePlace_tv.setText(subject.getRoom());
         teacher_tv.setText(subject.getTeacher());
-        week_tv.setText(subject.getWeekRange());
-        time_tv.setText(subject.getStepRange());
+//        week_tv.setText(subject.getWeekRange());
+        time_tv.setText(subject.getWeekRange() + " " + subject.getStepRange());
+
+        for(int i=1; i<list.size(); i++){
+//            week_tv.setText(week_tv.getText() + "\n" + list.get(i).getWeekRange());
+            time_tv.setText(time_tv.getText() + "\n" + list.get(i).getWeekRange() + " " + list.get(i).getStepRange());
+        }
+
     }
 
     private void changeTheme(){
