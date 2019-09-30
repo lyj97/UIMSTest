@@ -1,4 +1,4 @@
-package com.lu.mydemo;
+package com.lu.mydemo.News;
 
 import android.content.Context;
 import android.content.Intent;
@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lu.mydemo.Notification.AlertCenter;
+import com.lu.mydemo.R;
 import com.lu.mydemo.sample.adapter.BaseAdapter;
 import com.lu.mydemo.sample.adapter.MainAdapter;
 import com.tapadoo.alerter.Alerter;

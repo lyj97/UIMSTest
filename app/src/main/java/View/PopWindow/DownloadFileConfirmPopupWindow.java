@@ -2,10 +2,7 @@ package View.PopWindow;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.GradientDrawable;
-import android.text.Html;
-import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -14,16 +11,13 @@ import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.PopupWindow;
-import android.widget.TextView;
 
 import com.lu.mydemo.R;
 import com.lu.mydemo.WebViewActivity;
 
-import net.sf.json.JSONObject;
-
 import Config.ColorManager;
 
-public class DownloadFilePopupWindow extends PopupWindow {
+public class DownloadFileConfirmPopupWindow extends PopupWindow {
 
     private View mMenuView;
 
@@ -38,7 +32,7 @@ public class DownloadFilePopupWindow extends PopupWindow {
 
     private Activity context;
 
-    public DownloadFilePopupWindow(final WebViewActivity context, String filename, String extension, int height, int width) {
+    public DownloadFileConfirmPopupWindow(final WebViewActivity context, String filename, String extension, int height, int width) {
         super(context);
         this.context = context;
         LayoutInflater inflater = (LayoutInflater) context
@@ -59,7 +53,7 @@ public class DownloadFilePopupWindow extends PopupWindow {
         //确认按钮
         commit_button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                context.setFileName(DownloadFilePopupWindow.this.filename.getText().toString() + DownloadFilePopupWindow.this.extension.getText().toString());
+                context.setFileName(DownloadFileConfirmPopupWindow.this.filename.getText().toString() + DownloadFileConfirmPopupWindow.this.extension.getText().toString());
                 context.commitDownload();
                 //销毁弹出框
                 dismiss();

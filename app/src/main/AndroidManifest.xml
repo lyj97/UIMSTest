@@ -20,9 +20,9 @@
         <activity android:name=".PingjiaoActivity" />
         <activity android:name=".ColorConfigActivity" />
         <activity android:name=".AboutActivity" />
-        <activity android:name=".NewsSavedActivity" />
-        <activity android:name=".NewsDetailActivity" />
-        <activity android:name=".NewsActivity" />
+        <activity android:name=".News.NewsSavedActivity" />
+        <activity android:name=".News.NewsDetailActivity" />
+        <activity android:name=".News.NewsActivity" />
         <activity android:name=".CourseScheduleChangeActivity" />
         <activity android:name=".WeekCourseActivity" />
         <activity android:name=".NoneScoreCourseActivity" />

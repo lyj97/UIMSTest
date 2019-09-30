@@ -154,7 +154,7 @@
                         android:transitionName="NewsActivity"
                         android:text="校内通知"
                         android:textSize="18dp"
-                        android:textColor="@color/colorlogin_text"/>
+                        android:textColor="@color/color_white"/>
 
                     <Button
                         android:id="@+id/get_saved_button"
@@ -164,7 +164,7 @@
                         android:background="@drawable/button_local_background"
                         android:text="成绩查询"
                         android:textSize="18dp"
-                        android:textColor="@color/colorlogin_text"/>
+                        android:textColor="@color/color_white"/>
 
                     <Button
                         android:id="@+id/load_none_score_course_information_button"
@@ -174,7 +174,7 @@
                         android:background="@drawable/button_local_background"
                         android:text="课程与考试"
                         android:textSize="18dp"
-                        android:textColor="@color/colorlogin_text"/>
+                        android:textColor="@color/color_white"/>
 
                     <Button
                         android:id="@+id/load_internet_information_button"
@@ -184,7 +184,7 @@
                         android:background="@drawable/button_internet_background"
                         android:text="更新信息"
                         android:textSize="18dp"
-                        android:textColor="@color/colorlogin_text"/>
+                        android:textColor="@color/color_white"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"

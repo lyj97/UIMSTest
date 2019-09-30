@@ -18,6 +18,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,12 +33,14 @@ import com.zhuangfei.timetable.view.WeekView;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import Config.ColorManager;
 import Utils.Course.MySubject;
 import Utils.Course.SubjectRepertory;
 import View.PopWindow.CourseDetailPopupWindow;
+import View.PopWindow.CourseListPopupWindow;
 
 public class WeekCourseActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -233,23 +236,49 @@ public class WeekCourseActivity extends AppCompatActivity implements View.OnClic
         builder.create().show();
     }
 
+    static String selectedCourseName = null;
     /**
      * 显示内容
      *
      * @param beans
      */
     protected void display(List<Schedule> beans) {
-        final HashSet<String> courseNameSet = new HashSet<>();
+        final LinkedHashSet<String> courseNameSet = new LinkedHashSet<>();
         String str = "";
         for (Schedule bean : beans) {
             str += bean.getName() + ","+bean.getWeekList().toString()+","+bean.getStart()+","+bean.getStep()+"\n";
             courseNameSet.add(bean.getName());
         }
 //        Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
-        if(courseNameSet.size() > 1) {
-            AlertCenter.showErrorAlert(WeekCourseActivity.this, "课程数大于1！");
-            return;
-        }
+//        if(courseNameSet.size() > 1) {
+//            AlertCenter.showErrorAlert(WeekCourseActivity.this, "课程数大于1！");
+//            return;
+//        }
+
+        final AdapterView.OnItemClickListener listener = new AdapterView.OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if(selectedCourseName == null || selectedCourseName.length() < 1) return;
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        final List<MySubject> temp_list = new ArrayList<>();
+                        for(MySubject subject : mySubjects){
+                            if(subject.getName().equals(selectedCourseName)) temp_list.add(subject);
+                        }
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                //TODO TEST course_detail.
+                                CourseDetailPopupWindow informationPopWindow = new CourseDetailPopupWindow(WeekCourseActivity.this, temp_list, findViewById(R.id.weekCourseLayout).getHeight(), findViewById(R.id.weekCourseLayout).getWidth());
+                                informationPopWindow.showAtLocation(WeekCourseActivity.this.findViewById(R.id.weekCourseLayout), Gravity.CENTER | Gravity.CENTER_HORIZONTAL, 0, 0); //设置layout在PopupWindow中显示的位置
+                            }
+                        });
+                    }
+                }).start();
+            }
+        };
 
         new Thread(new Runnable() {
             @Override
@@ -258,14 +287,26 @@ public class WeekCourseActivity extends AppCompatActivity implements View.OnClic
                 for(MySubject subject : mySubjects){
                     if(courseNameSet.contains(subject.getName())) temp_list.add(subject);
                 }
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        //TODO TEST course_detail.
-                        CourseDetailPopupWindow informationPopWindow = new CourseDetailPopupWindow(WeekCourseActivity.this, temp_list, findViewById(R.id.weekCourseLayout).getHeight(), findViewById(R.id.weekCourseLayout).getWidth());
-                        informationPopWindow.showAtLocation(WeekCourseActivity.this.findViewById(R.id.weekCourseLayout), Gravity.CENTER | Gravity.CENTER_HORIZONTAL, 0, 0); //设置layout在PopupWindow中显示的位置
-                    }
-                });
+                if(courseNameSet.size() >= 1) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            //TODO 课程格子列表
+                            CourseListPopupWindow courseDetailPopupWindow = new CourseListPopupWindow(WeekCourseActivity.this, temp_list, listener, findViewById(R.id.weekCourseLayout).getHeight(), findViewById(R.id.weekCourseLayout).getWidth());
+                            courseDetailPopupWindow.showAtLocation(WeekCourseActivity.this.findViewById(R.id.weekCourseLayout), Gravity.CENTER | Gravity.CENTER_HORIZONTAL, 0, 0); //设置layout在PopupWindow中显示的位置
+                        }
+                    });
+                }
+                else {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            //TODO 课程详情
+                            CourseDetailPopupWindow informationPopWindow = new CourseDetailPopupWindow(WeekCourseActivity.this, temp_list, findViewById(R.id.weekCourseLayout).getHeight(), findViewById(R.id.weekCourseLayout).getWidth());
+                            informationPopWindow.showAtLocation(WeekCourseActivity.this.findViewById(R.id.weekCourseLayout), Gravity.CENTER | Gravity.CENTER_HORIZONTAL, 0, 0); //设置layout在PopupWindow中显示的位置
+                        }
+                    });
+                }
             }
         }).start();
     }
@@ -310,7 +351,15 @@ public class WeekCourseActivity extends AppCompatActivity implements View.OnClic
         findViewById(R.id.weekCourseLayout).setBackground(ColorManager.getMainBackground_full());
     }
 
-//    @Override
+    public static String getSelectedCourseName() {
+        return selectedCourseName;
+    }
+
+    public static void setSelectedCourseName(String selectedCourseName) {
+        WeekCourseActivity.selectedCourseName = selectedCourseName;
+    }
+
+    //    @Override
 //    public void finish() {
 //        super.finish();
 ////        overridePendingTransition(R.anim.down_in, R.anim.down_out);

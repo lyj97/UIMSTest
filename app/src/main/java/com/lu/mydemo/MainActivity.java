@@ -32,6 +32,7 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.lu.mydemo.News.NewsActivity;
 import com.lu.mydemo.Notification.AlertCenter;
 import com.tapadoo.alerter.Alerter;
 
@@ -286,7 +287,7 @@ public class MainActivity extends Activity {
         getNewsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this,NewsActivity.class);
+                Intent intent = new Intent(MainActivity.this, NewsActivity.class);
                 startActivity(intent);
             }
         });
@@ -1489,8 +1490,7 @@ public class MainActivity extends Activity {
     class noCourseBetterAdapter extends SimpleAdapter {
         List<? extends Map<String, ?>> mdata;
 
-        public noCourseBetterAdapter(Context context, List<? extends Map<String, ?>> data, int resource, String[] from,
-                            int[] to) {
+        public noCourseBetterAdapter(Context context, List<? extends Map<String, ?>> data, int resource, String[] from, int[] to) {
             super(context, data, resource, from, to);
             this.mdata = data;
         }

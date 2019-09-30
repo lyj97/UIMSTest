@@ -81,6 +81,38 @@
         android:layout_weight="3"/>
 
     <LinearLayout
+        android:id="@+id/color_config_custom_bg_text_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/color_config_delete_custom_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:text="删除自定义背景"
+            />
+
+        <TextView
+            android:id="@+id/color_config_choose_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:text="选择自定义背景图"
+            />
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <LinearLayout
         android:id="@+id/color_config_text_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

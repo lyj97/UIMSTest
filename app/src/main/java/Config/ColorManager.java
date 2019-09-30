@@ -2,8 +2,12 @@ package Config;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
+import com.lu.mydemo.Notification.AlertCenter;
 import com.lu.mydemo.R;
 
 public class ColorManager {
@@ -172,6 +176,17 @@ public class ColorManager {
                 spinnerBackground_full = context.getDrawable(R.drawable.spinner_background_full);
             }
         }
+
+        //使用自定义背景
+        if(sp.contains("CustomBg")){
+            try {
+                Bitmap bitmap = BitmapFactory.decodeFile(sp.getString("CustomBg", ""));
+                ColorManager.setMainBackground(new BitmapDrawable(context.getResources(), bitmap));
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+
     }
 
     public static int getPrimaryColor() {
@@ -254,8 +269,25 @@ public class ColorManager {
         return spinnerBackground_full;
     }
 
+    public static int[] getPopupWindowBackground() {
+        return new int[]{context.getResources().getColor(R.color.color_no_color), context.getResources().getColor(R.color.color_no_color), context.getResources().getColor(R.color.color_no_color), ColorManager.getPopwindow_background_color()};
+    }
+
     public static String getThemeName() {
         return themeName;
+    }
+
+    public static void setMainBackground(Drawable mainBackground) {
+//        ColorManager.mainBackground = mainBackground;
+        ColorManager.mainBackground_full = mainBackground;
+    }
+
+    public static void saveCustomBg(String path){
+        sp.edit().putString("CustomBg", path).apply();
+    }
+
+    public static void deleteCustomBg(){
+        sp.edit().remove("CustomBg").apply();
     }
 
     public static void saveTheme(String theme){

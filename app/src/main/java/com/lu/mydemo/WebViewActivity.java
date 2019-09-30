@@ -36,9 +36,7 @@ import com.lu.mydemo.Notification.AlertCenter;
 import java.util.HashMap;
 
 import Config.ColorManager;
-import Utils.String.ChangeCharset;
-import View.PopWindow.DownloadFilePopupWindow;
-import View.PopWindow.LoginPopWindow;
+import View.PopWindow.DownloadFileConfirmPopupWindow;
 
 public class WebViewActivity extends AppCompatActivity {
 
@@ -171,7 +169,7 @@ public class WebViewActivity extends AppCompatActivity {
 
                     loadingProgressBar.setVisibility(View.GONE);
                     //下载确认对话框
-                    DownloadFilePopupWindow window = new DownloadFilePopupWindow(WebViewActivity.this, fileName.substring(0, fileName.lastIndexOf(".")), fileName.substring(fileName.lastIndexOf(".")), findViewById(R.id.activity_web_view).getHeight(), findViewById(R.id.activity_web_view).getWidth());
+                    DownloadFileConfirmPopupWindow window = new DownloadFileConfirmPopupWindow(WebViewActivity.this, fileName.substring(0, fileName.lastIndexOf(".")), fileName.substring(fileName.lastIndexOf(".")), findViewById(R.id.activity_web_view).getHeight(), findViewById(R.id.activity_web_view).getWidth());
                     window.setFocusable(true);
                     window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
                     window.showAtLocation(WebViewActivity.this.findViewById(R.id.activity_web_view), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0); //设置layout在PopupWindow中显示的位置
@@ -260,6 +258,7 @@ public class WebViewActivity extends AppCompatActivity {
     }
 
     public void checkFilePermission() {
+        isGranted = true;
         if (WebViewActivity.this.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             //如果没有写sd卡权限
             isGranted = false;
