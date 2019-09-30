@@ -201,7 +201,7 @@ public class MainActivity extends Activity {
         if(!(timeInformation.getText().length() > 0)) timeInformation.setText("时间(首次查询后刷新)");
 
         if(!isMainShow){
-            hideMainView();
+            hideMainView(false);
         }
 
 //        if(!isLoginIn) {
@@ -434,21 +434,33 @@ public class MainActivity extends Activity {
     }
 
     public void hideMainView(){
-        login_main_view.startAnimation(mHiddenAction);
-        login_main_view.setVisibility(View.INVISIBLE);
-        linearLayoutView_down_text.setText("⇧显示下方区域");
-        isMainShow = false;
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(500);
-                    myViewHandler.sendEmptyMessage(0);//刷新页面
-                }catch (Exception e){
-                    e.printStackTrace();
+        hideMainView(true);
+    }
+
+    public void hideMainView(boolean showAnimation){
+        if(!showAnimation){
+            login_main_view.setVisibility(View.INVISIBLE);
+            linearLayoutView_down_text.setText("⇧显示下方区域");
+            isMainShow = false;
+            myViewHandler.sendEmptyMessage(0);//刷新页面
+        }
+        else {
+            login_main_view.startAnimation(mHiddenAction);
+            login_main_view.setVisibility(View.INVISIBLE);
+            linearLayoutView_down_text.setText("⇧显示下方区域");
+            isMainShow = false;
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Thread.sleep(500);
+                        myViewHandler.sendEmptyMessage(0);//刷新页面
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
-        }).start();
+            }).start();
+        }
         sp.edit().putBoolean("isMainShow", isMainShow).apply();
     }
 
