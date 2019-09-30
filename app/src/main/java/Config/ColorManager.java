@@ -33,6 +33,7 @@ public class ColorManager {
     private static SharedPreferences sp;
     private static Context context;
 
+    private static int noCloor;
     private static int primaryColor;
     private static int primaryDarkColor;
     private static int topAlertBackgroundColor;
@@ -70,6 +71,8 @@ public class ColorManager {
     }
 
     private static void loadConfig(){
+        noCloor = context.getColor(R.color.color_no_color);
+
         themeName = sp.getString("theme", "blue");
 
         switch (themeName){
@@ -187,6 +190,10 @@ public class ColorManager {
             }
         }
 
+    }
+
+    public static int getNoCloor() {
+        return noCloor;
     }
 
     public static int getPrimaryColor() {

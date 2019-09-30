@@ -369,7 +369,7 @@ public class WebViewActivity extends AppCompatActivity {
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
                 | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.setStatusBarColor(ColorManager.getPrimaryColor());
+        window.setStatusBarColor(ColorManager.getNoCloor());
 
         findViewById(R.id.activity_web_view).setBackground(ColorManager.getMainBackground_full());
     }

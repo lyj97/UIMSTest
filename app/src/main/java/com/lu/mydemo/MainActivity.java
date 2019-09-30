@@ -60,6 +60,7 @@ import UIMSTool.CourseJSONTransfer;
 import Utils.Course.CourseScheduleChange;
 import Utils.Score.ScoreConfig;
 import Utils.Score.ScoreInf;
+import View.Control.StausBarControl;
 import View.PopWindow.*;
 
 public class MainActivity extends Activity {
@@ -1205,11 +1206,12 @@ public class MainActivity extends Activity {
 
     private void changeTheme(){
         Log.i("Theme", "Change theme.");
+//        StausBarControl.setNavigationBarStatusBarTranslucent(MainActivity.this);
         Window window = getWindow();
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
                 | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.setStatusBarColor(ColorManager.getPrimaryColor());
+        window.setStatusBarColor(ColorManager.getNoCloor());
 
         activity_login.setBackground(ColorManager.getMainBackground_full());
         getNewsButton.setBackground(ColorManager.getLocalInformationButtonBackground());

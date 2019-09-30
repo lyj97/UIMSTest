@@ -346,7 +346,7 @@ public class WeekCourseActivity extends AppCompatActivity implements View.OnClic
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
                 | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.setStatusBarColor(ColorManager.getPrimaryColor());
+        window.setStatusBarColor(ColorManager.getNoCloor());
 
         findViewById(R.id.weekCourseLayout).setBackground(ColorManager.getMainBackground_full());
     }
