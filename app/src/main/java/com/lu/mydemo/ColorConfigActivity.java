@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -24,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lu.mydemo.Notification.AlertCenter;
+import com.tapadoo.alerter.Alerter;
 
 import Config.ColorManager;
 
@@ -44,6 +46,22 @@ public class ColorConfigActivity extends AppCompatActivity {
     boolean isGranted = false;
 
     private String theme = ColorManager.getThemeName();
+
+    private View.OnClickListener cancel_delete_listener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+//            deleteImage_tv.callOnClick();
+//            Alerter.hide();
+        }
+    };
+
+    private View.OnClickListener cancel_set_listener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            deleteImage_tv.callOnClick();
+            Alerter.hide();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +91,7 @@ public class ColorConfigActivity extends AppCompatActivity {
                             theme = "blue";
                             ColorManager.saveTheme(theme);
                             changeTheme();
+                            AlertCenter.showAlert(ColorConfigActivity.this, "主题色已切换为[蓝色]");
                         }
                         break;
                     }
@@ -81,6 +100,7 @@ public class ColorConfigActivity extends AppCompatActivity {
                             theme = "pink";
                             ColorManager.saveTheme(theme);
                             changeTheme();
+                            AlertCenter.showAlert(ColorConfigActivity.this, "主题色已切换为[红色]");
                         }
                         break;
                     }
@@ -89,6 +109,7 @@ public class ColorConfigActivity extends AppCompatActivity {
                             theme = "green";
                             ColorManager.saveTheme(theme);
                             changeTheme();
+                            AlertCenter.showAlert(ColorConfigActivity.this, "主题色已切换为[绿色]");
                         }
                         break;
                     }
@@ -102,11 +123,15 @@ public class ColorConfigActivity extends AppCompatActivity {
                             AlertCenter.showWarningAlert(ColorConfigActivity.this, "自定义背景需要您授予\"访问外部存储空间\"权限，请您授权后重试。");
                             checkFilePermission();
                         }
+                        break;
                     }
                     case R.id.color_config_delete_custom_img : {
                         ColorManager.deleteCustomBg();
                         ColorManager.loadColorConfig(getApplicationContext());
                         changeTheme();
+                        AlertCenter.showAlert(ColorConfigActivity.this, "已删除自定义背景");
+                        // TODO 允许撤销操作
+                        break;
                     }
                 }
             }
@@ -134,6 +159,11 @@ public class ColorConfigActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         Log.i("ColorConfigActivity", "ActivityResult:" + data);
 
+        if(!isGranted){
+            AlertCenter.showWarningAlert(ColorConfigActivity.this, "自定义背景需要您授予\"访问外部存储空间\"权限，请您授权后重试。");
+            return;
+        }
+
         if (requestCode == 1&& resultCode == Activity.RESULT_OK
                 && data != null) {
             Uri selectedImage = data.getData();//返回的是uri
@@ -151,6 +181,8 @@ public class ColorConfigActivity extends AppCompatActivity {
             ColorManager.setMainBackground(new BitmapDrawable(getResources(), bitmap));
             ColorManager.saveCustomBg(path);
             changeTheme();
+//            AlertCenter.showAlert(ColorConfigActivity.this, "自定义背景设置成功！");
+            showAlertWithCancelButton("提示", "自定义背景设置成功！", cancel_set_listener);
         }
 
     }
@@ -164,7 +196,7 @@ public class ColorConfigActivity extends AppCompatActivity {
         if (ColorConfigActivity.this.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             isGranted = false;
         }
-        Log.i("File","isGranted == "+isGranted);
+        Log.i("ColorConfigActivity","isGranted == "+isGranted);
         if (!isGranted) {
             ColorConfigActivity.this.requestPermissions(
                     new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission
@@ -177,11 +209,30 @@ public class ColorConfigActivity extends AppCompatActivity {
 
     private void changeTheme(){
         Window window = getWindow();
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
-                | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.setStatusBarColor(ColorManager.getNoCloor());
+//        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
+//                | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+//        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+//        window.setStatusBarColor(ColorManager.getNoCloor());
+        window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                |View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+        window.setStatusBarColor(Color.TRANSPARENT);
 
         activity_color_config_layout.setBackground(ColorManager.getMainBackground_full());
+    }
+
+    public void showAlertWithCancelButton(final String title, final String message, final View.OnClickListener listener){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Alerter.create(ColorConfigActivity.this)
+                        .setTitle(title)
+                        .setText(message)
+                        .addButton("撤销", R.style.AlertButton,listener)
+                        .setBackgroundColorInt(ColorManager.getTopAlertBackgroundColor())
+                        .enableSwipeToDismiss()
+                        .setDuration(5000)
+                        .show();
+            }
+        });
     }
 }

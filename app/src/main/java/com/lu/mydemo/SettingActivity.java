@@ -1,6 +1,7 @@
 package com.lu.mydemo;
 
 import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -250,6 +251,7 @@ public class SettingActivity extends AppCompatActivity {
                             theme = "blue";
                             ColorManager.saveTheme(theme);
                             changeTheme();
+                            AlertCenter.showAlert(SettingActivity.this, "主题色已切换为[蓝色]");
                         }
                         break;
                     }
@@ -258,6 +260,7 @@ public class SettingActivity extends AppCompatActivity {
                             theme = "pink";
                             ColorManager.saveTheme(theme);
                             changeTheme();
+                            AlertCenter.showAlert(SettingActivity.this, "主题色已切换为[红色]");
                         }
                         break;
                     }
@@ -266,6 +269,7 @@ public class SettingActivity extends AppCompatActivity {
                             theme = "green";
                             ColorManager.saveTheme(theme);
                             changeTheme();
+                            AlertCenter.showAlert(SettingActivity.this, "主题色已切换为[绿色]");
                         }
                         break;
                     }
@@ -358,10 +362,13 @@ public class SettingActivity extends AppCompatActivity {
 
     private void changeTheme(){
         Window window = getWindow();
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
-                | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.setStatusBarColor(ColorManager.getNoCloor());
+//        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
+//                | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+//        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+//        window.setStatusBarColor(ColorManager.getNoCloor());
+        window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                |View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+        window.setStatusBarColor(Color.TRANSPARENT);
 
         findViewById(R.id.activity_setting).setBackground(ColorManager.getMainBackground_full());
 

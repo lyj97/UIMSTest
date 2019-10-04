@@ -5,6 +5,8 @@
     <color name="color_grayBackground">#E0E0E0</color>
     <color name="color_whiteBackground">#FFFFFF</color>
 
+    <color name="color_whiteText">#FFFFFF</color>
+
     <color name="color_white">#FFFFFF</color>
     <color name="color_dark_text">#1F1F1F</color>
     <color name="color_warn_button">#BFD55D5D</color>
@@ -13,15 +15,15 @@
     <color name="color_alerter_error_background">#D5F13D58</color>
     <color name="color_no_color">#00000000</color>
 
-    <color name="colorPrimary">#448AFF</color>
-    <color name="colorPrimaryDark">#448AFF</color>
-    <color name="colorAccent">#1976D2</color>
-    <color name="color_alerter_background">#D554A4DA</color>
+    <color name="colorPrimary">#2196F3</color>
+    <color name="colorPrimaryDark">#1976D2</color>
+    <color name="colorAccent">#448AFF</color>
+    <color name="color_alerter_background">#2979FF</color>
     <color name="color_notice_text">#2962FF</color>
     <color name="color_collected_news_text">#2962FF</color>
-    <color name="color_spinner_background">#EE31AFE7</color>
-    <color name="color_getSaved_button_bg">#E66CDCE6</color>
-    <color name="color_getSaved_disable_button_bg">#8078D1D1</color>
+    <color name="color_spinner_background">#448AFF</color>
+    <color name="color_getSaved_button_bg">#448AFF</color>
+    <color name="color_getSaved_disable_button_bg">#80448AFF</color>
     <color name="color_popWindowBackground">#0D47A1</color>
 
     <color name="colorPrimary_Pink">#E6F378C1</color>

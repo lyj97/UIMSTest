@@ -45,7 +45,7 @@
                 android:text="UIMSTest"
                 android:textSize="20sp"
                 android:padding="3dp"
-                android:textColor="@color/color_whiteBackground"
+                android:textColor="@color/color_whiteText"
                 />
 
             <TextView

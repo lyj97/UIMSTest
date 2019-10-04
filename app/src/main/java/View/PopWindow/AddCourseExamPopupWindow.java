@@ -198,7 +198,7 @@ public class AddCourseExamPopupWindow extends PopupWindow {
 //        this.setBackgroundDrawable(dw);
         GradientDrawable drawable = new GradientDrawable();
         drawable.setGradientType(GradientDrawable.LINEAR_GRADIENT);
-        drawable.setColors(new int[]{context.getResources().getColor(R.color.color_no_color), context.getResources().getColor(R.color.color_no_color), ColorManager.getPopwindow_background_color(), context.getResources().getColor(R.color.color_grayBackground)});
+        drawable.setColors(ColorManager.getPopupWindowBackground());
         drawable.setOrientation(GradientDrawable.Orientation.TOP_BOTTOM);
         this.setBackgroundDrawable(drawable);
         //mMenuView添加OnTouchListener监听判断获取触屏位置如果在选择框外面则销毁弹出框

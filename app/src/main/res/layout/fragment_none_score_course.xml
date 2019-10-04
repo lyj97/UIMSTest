@@ -38,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:text="查询"
                 android:layout_weight="15"
-                android:textColor="@color/color_whiteBackground"
+                android:textColor="@color/color_whiteText"
                 android:background="@drawable/button_internet_background"/>
 
         </LinearLayout>
