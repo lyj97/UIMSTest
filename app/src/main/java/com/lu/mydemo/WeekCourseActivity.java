@@ -12,19 +12,16 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.lu.mydemo.Notification.AlertCenter;
 import com.tapadoo.alerter.Alerter;
 import com.zhuangfei.timetable.TimetableView;
 import com.zhuangfei.timetable.listener.ISchedule;
@@ -33,17 +30,17 @@ import com.zhuangfei.timetable.model.Schedule;
 import com.zhuangfei.timetable.view.WeekView;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 
+import App.BaseActivity;
 import Config.ColorManager;
 import Utils.Course.MySubject;
 import Utils.Course.SubjectRepertory;
 import View.PopWindow.CourseDetailPopupWindow;
 import View.PopWindow.CourseListPopupWindow;
 
-public class WeekCourseActivity extends AppCompatActivity implements View.OnClickListener {
+public class WeekCourseActivity extends BaseActivity implements View.OnClickListener {
 
     //控件
     TimetableView mTimetableView;

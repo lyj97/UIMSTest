@@ -32,7 +32,6 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.lu.mydemo.News.NewsActivity;
 import com.lu.mydemo.Notification.AlertCenter;
 import com.tapadoo.alerter.Alerter;
 
@@ -50,6 +49,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import App.BaseActivity;
 import CJCX.CJCX;
 import Config.ColorManager;
 import Config.Version;
@@ -60,10 +60,9 @@ import UIMSTool.CourseJSONTransfer;
 import Utils.Course.CourseScheduleChange;
 import Utils.Score.ScoreConfig;
 import Utils.Score.ScoreInf;
-import View.Control.StausBarControl;
 import View.PopWindow.*;
 
-public class MainActivity extends Activity {
+public class MainActivity extends BaseActivity {
 
     private LinearLayout activity_login;
 

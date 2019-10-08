@@ -66,20 +66,20 @@
 
     </LinearLayout>
 
-    <android.support.v4.view.ViewPager
+    <androidx.viewpager.widget.ViewPager
         android:id="@+id/course_and_exam_layout_viewpager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <android.support.v4.view.PagerTitleStrip
+        <androidx.viewpager.widget.PagerTitleStrip
             android:id="@+id/course_and_exam_layout_pager_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="top"
             android:textColor="@color/color_whiteText">
 
-        </android.support.v4.view.PagerTitleStrip>
+        </androidx.viewpager.widget.PagerTitleStrip>
 
-    </android.support.v4.view.ViewPager>
+    </androidx.viewpager.widget.ViewPager>
 
 </LinearLayout>

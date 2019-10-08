@@ -1,7 +1,7 @@
 package com.lu.mydemo;
 
 import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -13,20 +13,19 @@ import android.widget.Toast;
 
 import com.tapadoo.alerter.Alerter;
 
-import net.sf.json.JSON;
 import net.sf.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import App.BaseActivity;
 import Config.ColorManager;
 import UIMS.UIMS;
-import View.PopWindow.LoginGetCourseSchedulePopupWindow;
 import View.PopWindow.LoginPingjiaoPopupWindow;
 
 import static UIMS.UIMSTest.getAnswer;
 
-public class PingjiaoActivity extends AppCompatActivity {
+public class PingjiaoActivity extends BaseActivity {
 
     TextView backText;
     TextView mainText;

@@ -3,14 +3,13 @@ package com.lu.mydemo;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.lu.mydemo.Notification.AlertCenter;
@@ -19,18 +18,16 @@ import com.lu.mydemo.sample.adapter.MainAdapter;
 import com.yanzhenjie.recyclerview.OnItemClickListener;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import App.BaseActivity;
 import Config.ColorManager;
 import ToolFor2045_Site.GetInternetInformation;
 
-public class TestFunctionActivity extends AppCompatActivity {
+public class TestFunctionActivity extends BaseActivity {
 
     private SwipeRecyclerView swipeRecyclerView;
     private BaseAdapter myAdapter;

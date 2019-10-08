@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.Spannable;
@@ -17,20 +17,19 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.lu.mydemo.Notification.AlertCenter;
 
 import net.sf.json.JSONObject;
 
+import App.BaseActivity;
 import Config.ColorManager;
 import Config.Version;
 import Utils.Rom.EMUIUtils;
-import Utils.Rom.MIUIUtils;
 import View.PopWindow.InternetInformationPopupWindow;
 
-public class AboutActivity extends AppCompatActivity {
+public class AboutActivity extends BaseActivity {
 
     private TextView application_icon_text_view;
     private TextView application_version_name;

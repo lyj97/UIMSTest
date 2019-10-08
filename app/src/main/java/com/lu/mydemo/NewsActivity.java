@@ -1,25 +1,23 @@
-package com.lu.mydemo.News;
+package com.lu.mydemo;
 
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lu.mydemo.Notification.AlertCenter;
-import com.lu.mydemo.R;
 import com.lu.mydemo.sample.adapter.BaseAdapter;
 import com.lu.mydemo.sample.adapter.MainAdapter;
 import com.tapadoo.alerter.Alerter;
@@ -40,11 +38,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import App.BaseActivity;
 import Config.ColorManager;
 import ToolFor2045_Site.GetInternetInformation;
 import Utils.News.News;
 
-public class NewsActivity extends AppCompatActivity {
+public class NewsActivity extends BaseActivity {
 
     private TextView myCollectionTextView;
     private SwipeRecyclerView swipeRecyclerView;

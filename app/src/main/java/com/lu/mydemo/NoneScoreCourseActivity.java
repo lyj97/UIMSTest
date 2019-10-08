@@ -2,29 +2,27 @@ package com.lu.mydemo;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.tapadoo.alerter.Alerter;
 
 import java.util.Arrays;
 import java.util.List;
 
+import App.BaseActivity;
 import Config.ColorManager;
 import View.Fragment.ExamFragment;
 import View.Fragment.NoneScoreCourseFragment;
 
-public class NoneScoreCourseActivity extends AppCompatActivity {
+public class NoneScoreCourseActivity extends BaseActivity {
 
     private ViewPager courseExamLayout;
 

@@ -12,7 +12,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Environment;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -36,10 +36,11 @@ import com.lu.mydemo.Notification.AlertCenter;
 
 import java.util.HashMap;
 
+import App.BaseActivity;
 import Config.ColorManager;
 import View.PopWindow.DownloadFileConfirmPopupWindow;
 
-public class WebViewActivity extends AppCompatActivity {
+public class WebViewActivity extends BaseActivity {
 
     private TextView titleTextView;
     private TextView backTextView;

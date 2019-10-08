@@ -1,9 +1,9 @@
-package com.lu.mydemo.News;
+package com.lu.mydemo;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
@@ -11,15 +11,12 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.URLSpan;
 import android.view.View;
 import android.view.Window;
-import android.view.WindowManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lu.mydemo.Notification.AlertCenter;
-import com.lu.mydemo.R;
-import com.lu.mydemo.WebViewActivity;
 import com.tapadoo.alerter.Alerter;
 
 import net.sf.json.JSONObject;
@@ -30,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import App.BaseActivity;
 import Config.ColorManager;
 import okhttp3.Cookie;
 import okhttp3.CookieJar;
@@ -39,7 +37,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class NewsDetailActivity extends AppCompatActivity {
+public class NewsDetailActivity extends BaseActivity {
 
     private TextView detailTitle;
     private TextView detailDepartment;
