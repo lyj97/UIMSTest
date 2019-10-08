@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="center_horizontal"
+    android:gravity="bottom|center"
     android:orientation="vertical"
     >
 
@@ -11,10 +11,10 @@
         android:id="@+id/pop_window_course_detail_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
+        android:gravity="bottom|center"
         android:orientation="vertical"
         android:layout_alignParentBottom="true"
-        android:background="#00000000"
+        android:background="@drawable/background_login"
         >
 
         <TextView
@@ -27,7 +27,6 @@
             android:paddingTop="20dp"
             android:paddingBottom="10dp"
             android:textColor="@color/app_white"
-            android:background="@drawable/shape_rectangle_with_top_radius"
             />
 
         <LinearLayout
@@ -38,7 +37,6 @@
             android:gravity="center"
             android:orientation="horizontal"
             android:baselineAligned="false"
-            android:background="@drawable/background_login"
             >
 
             <GridLayout

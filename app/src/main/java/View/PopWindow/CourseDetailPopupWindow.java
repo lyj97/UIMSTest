@@ -109,8 +109,8 @@ public class CourseDetailPopupWindow extends PopupWindow {
 
     private void changeTheme(){
         Log.i("Theme", "Change theme.");
-        mMenuView.findViewById(R.id.pop_window_course_detail_layout_title).setBackground(ColorManager.getTopRadiusBackground());
-        mMenuView.findViewById(R.id.pop_window_course_detail_information_layout).setBackground(ColorManager.getMainBackground());
+//        mMenuView.findViewById(R.id.pop_window_course_detail_layout_title).setBackground(ColorManager.getTopRadiusBackground());
+        mMenuView.findViewById(R.id.pop_window_course_detail_layout).setBackground(ColorManager.getMainBackground());
     }
 
 }
