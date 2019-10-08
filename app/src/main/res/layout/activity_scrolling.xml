@@ -9,23 +9,24 @@
     android:fitsSystemWindows="true">
 
     <android.support.design.widget.AppBarLayout
-        android:id="@+id/app_bar"
+        android:id="@+id/activity_scrolling_app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#00000000"
         android:fitsSystemWindows="true"
+        app:elevation="0dp"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.design.widget.CollapsingToolbarLayout
-            android:id="@+id/toolbar_layout"
+            android:id="@+id/activity_scrolling_toolbar_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:fitsSystemWindows="true"
             android:layout_gravity="center"
             android:background="#00000000"
             app:contentScrim="#00000000"
             app:statusBarScrim="#00000000"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed|enterAlways"
+            app:layout_scrollFlags="scroll|enterAlways|snap"
             >
             <!--app:toolbarId="@+id/toolbar">-->
 
@@ -58,7 +59,7 @@
                             android:id="@+id/activity_scrolling_layout_back_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
+                            android:layout_marginStart="10dp"
                             android:background="@drawable/ic_arrow_back_white_24dp"
                             />
 
@@ -137,6 +138,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|center"
+                    android:padding="10dp"
                     android:gravity="center"
                     android:orientation="vertical">
 
@@ -377,7 +379,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
-        app:layout_anchor="@id/app_bar"
+        app:layout_anchor="@id/activity_scrolling_app_bar"
         app:layout_anchorGravity="bottom|end"
         app:srcCompat="@drawable/ic_autorenew_white_24dp" />
 

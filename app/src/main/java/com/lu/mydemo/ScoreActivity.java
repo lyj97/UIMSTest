@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -59,6 +60,7 @@ import Config.ColorManager;
 import UIMS.UIMS;
 import Utils.Score.ScoreConfig;
 import Utils.Score.ScoreInf;
+import View.Listener.AppBarStateChangeListener;
 import View.PopWindow.LoginGetScorePopupWindow;
 
 public class ScoreActivity extends AppCompatActivity
@@ -67,6 +69,8 @@ public class ScoreActivity extends AppCompatActivity
 //    TextView scoreStatisticsTextViewControl;
 //    TextView centerTitle;
     static SharedPreferences sp;
+
+    AppBarLayout appBarLayout;
 
     LinearLayout scoreStatisticsLayout;
     TextView first_score;
@@ -127,6 +131,8 @@ public class ScoreActivity extends AppCompatActivity
         sp = getApplicationContext().getSharedPreferences("ScoreSelectInfo", Context.MODE_PRIVATE);
         context = getApplicationContext();
 
+        appBarLayout = findViewById(R.id.activity_scrolling_app_bar);
+
         bixiu_select = sp.getBoolean("bixiu_select", true);
         xuanxiu_select = sp.getBoolean("xuanxiu_select", true);
         xianxuan_select = sp.getBoolean("xianxuan_select", true);
@@ -160,6 +166,23 @@ public class ScoreActivity extends AppCompatActivity
 //        navigation_back = findViewById(R.id.activity_main_navigation_back_text);
 
         changeTheme();
+
+        appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
+            @Override
+            public void onStateChanged(AppBarLayout appBarLayout, State state) {
+                Log.d("STATE", state.name());
+                if( state == State.EXPANDED ) {
+                    //展开状态
+                    scoreStatisticsLayout.setVisibility(View.VISIBLE);
+                }else if(state == State.COLLAPSED){
+                    //折叠状态
+                    scoreStatisticsLayout.setVisibility(View.INVISIBLE);
+                }else {
+                    //中间状态
+                    // Do nothing
+                }
+            }
+        });
 
         swipeRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         //考虑加载性能优化
