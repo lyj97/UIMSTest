@@ -2,11 +2,6 @@ package com.lu.mydemo;
 
 import android.content.Context;
 import android.graphics.Color;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentStatePagerAdapter;
-import androidx.viewpager.widget.ViewPager;
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,10 +9,15 @@ import android.view.Window;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
 import java.util.Arrays;
 import java.util.List;
 
-import App.BaseActivity;
 import Config.ColorManager;
 import View.Fragment.ExamFragment;
 import View.Fragment.NoneScoreCourseFragment;

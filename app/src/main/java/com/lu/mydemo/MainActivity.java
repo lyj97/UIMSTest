@@ -371,8 +371,8 @@ public class MainActivity extends BaseActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-//                if (!isLocalValueLoaded && isLocalInformationAvailable())
-                loadLocalInformation(false);
+                if (!isLocalValueLoaded && isLocalInformationAvailable())
+                    loadLocalInformation(false);
 //                else loadCourseInformation();
                 ScoreConfig.loadScoreConfig(getApplicationContext());
                 try {

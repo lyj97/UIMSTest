@@ -4,7 +4,9 @@ import android.content.Context;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 
-public class ScrollingTextView extends androidx.appcompat.widget.AppCompatTextView {
+import androidx.appcompat.widget.AppCompatTextView;
+
+public class ScrollingTextView extends AppCompatTextView {
 
     public ScrollingTextView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);

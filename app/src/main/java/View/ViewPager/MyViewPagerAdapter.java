@@ -1,9 +1,10 @@
 package View.ViewPager;
 
 import android.content.Context;
-import androidx.viewpager.widget.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.viewpager.widget.PagerAdapter;
 
 import org.jetbrains.annotations.NotNull;
 

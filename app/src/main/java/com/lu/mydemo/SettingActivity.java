@@ -2,7 +2,6 @@ package com.lu.mydemo;
 
 import android.content.res.ColorStateList;
 import android.graphics.Color;
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -15,13 +14,15 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.lu.mydemo.Notification.AlertCenter;
+import com.tapadoo.alerter.Alerter;
 
 import net.sf.json.JSONObject;
 
 import java.util.ArrayList;
 
-import App.BaseActivity;
 import CJCX.CJCX;
 import Config.ColorManager;
 import UIMS.UIMS;

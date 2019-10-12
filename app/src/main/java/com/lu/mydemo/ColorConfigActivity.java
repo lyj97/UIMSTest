@@ -11,8 +11,6 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.provider.MediaStore;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -20,10 +18,12 @@ import android.view.Window;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.lu.mydemo.Notification.AlertCenter;
 import com.tapadoo.alerter.Alerter;
 
-import App.BaseActivity;
 import Config.ColorManager;
 
 public class ColorConfigActivity extends BaseActivity {

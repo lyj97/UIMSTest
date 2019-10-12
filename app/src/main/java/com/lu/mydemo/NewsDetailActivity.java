@@ -3,7 +3,6 @@ package com.lu.mydemo;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
@@ -16,6 +15,8 @@ import android.webkit.WebView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.lu.mydemo.Notification.AlertCenter;
 import com.tapadoo.alerter.Alerter;
 
@@ -27,7 +28,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import App.BaseActivity;
 import Config.ColorManager;
 import okhttp3.Cookie;
 import okhttp3.CookieJar;

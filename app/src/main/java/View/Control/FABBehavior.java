@@ -1,9 +1,9 @@
 package View.Control;
 
 import android.content.Context;
+
 import androidx.annotation.NonNull;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import androidx.core.view.ViewCompat;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -13,6 +13,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.lu.mydemo.R;
 
 public class FABBehavior extends FloatingActionButton.Behavior {

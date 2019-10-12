@@ -12,7 +12,6 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -21,6 +20,8 @@ import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.tapadoo.alerter.Alerter;
 import com.zhuangfei.timetable.TimetableView;
@@ -33,7 +34,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 
-import App.BaseActivity;
 import Config.ColorManager;
 import Utils.Course.MySubject;
 import Utils.Course.SubjectRepertory;
