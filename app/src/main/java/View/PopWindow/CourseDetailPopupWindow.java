@@ -13,6 +13,8 @@ import android.widget.TextView;
 
 import com.lu.mydemo.R;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import Config.ColorManager;
@@ -34,7 +36,7 @@ public class CourseDetailPopupWindow extends PopupWindow {
 
     private Activity context;
 
-    public CourseDetailPopupWindow(final Activity context, List list, int height, int width) {
+    public CourseDetailPopupWindow(final Activity context, List<MySubject> list, int height, int width) {
         super(context);
         this.context = context;
         LayoutInflater inflater = (LayoutInflater) context
@@ -46,6 +48,8 @@ public class CourseDetailPopupWindow extends PopupWindow {
         teacher_tv = mMenuView.findViewById(R.id.pop_window_course_detail_information_teacher);
 //        week_tv = mMenuView.findViewById(R.id.pop_window_course_detail_information_week);
         time_tv = mMenuView.findViewById(R.id.pop_window_course_detail_information_time);
+
+        Collections.sort(list, MySubject.timeComparater);
 
         CourseWeeklyControl weekly = new CourseWeeklyControl(mMenuView.findViewById(R.id.pop_window_course_detail_time), context);
         weekly.init(list);

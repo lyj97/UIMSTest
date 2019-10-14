@@ -3,6 +3,7 @@ package Utils.Course;
 import com.zhuangfei.timetable.model.Schedule;
 import com.zhuangfei.timetable.model.ScheduleEnable;
 
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -13,6 +14,20 @@ import java.util.List;
 public class MySubject extends Schedule implements ScheduleEnable {
 
     public static final String[] week = {"", "周一", "周二", "周三", "周四", "周五", "周六", "周日"};
+
+    public static Comparator<MySubject> timeComparater = new Comparator<MySubject>() {
+        @Override
+        public int compare(MySubject o1, MySubject o2) {
+            if(o1.day != o2.day){
+                return o1.day - o2.day;
+            }
+            else {
+                return o1.start - o2.start;
+            }
+        }
+    };
+
+    private int db_id;
 
     private int id=0;
 
@@ -38,6 +53,11 @@ public class MySubject extends Schedule implements ScheduleEnable {
      * 第几周至第几周上
      */
     private List<Integer> weekList;
+
+    /**
+     * 单双周标识
+     */
+    private String weekOddEven;
 
     /**
      * 周-自然表示
@@ -115,6 +135,14 @@ public class MySubject extends Schedule implements ScheduleEnable {
         this.time=time;
     }
 
+    public int getDb_id() {
+        return db_id;
+    }
+
+    public void setDb_id(int db_id) {
+        this.db_id = db_id;
+    }
+
     public String getName() {
         return name;
     }
@@ -145,6 +173,14 @@ public class MySubject extends Schedule implements ScheduleEnable {
 
     public List<Integer> getWeekList() {
         return weekList;
+    }
+
+    public String getWeekOddEven() {
+        return weekOddEven;
+    }
+
+    public void setWeekOddEven(String weekOddEven) {
+        this.weekOddEven = weekOddEven;
     }
 
     public int getStart() {
@@ -184,6 +220,7 @@ public class MySubject extends Schedule implements ScheduleEnable {
     }
 
     public void setWeekRange(int beginWeek, int endWeek, String weekOddEven, int dayOfWeek){
+        if(weekOddEven == null) weekOddEven = "";
         if(beginWeek == endWeek) weekRange = "第" + beginWeek + "周";
         else weekRange = "第" + beginWeek + "~" + endWeek + "周";
         switch (weekOddEven.toUpperCase()){

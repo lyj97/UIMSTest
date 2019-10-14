@@ -9,7 +9,7 @@ def isBeta = true
 android {
     defaultConfig {
         versionCode versionMajor * 10000 + versionMinor * 100 + versionPatch
-        if(isBeta)
+        if (isBeta)
             versionName "${versionMajor}.${versionMinor}.${versionPatch}-Beta"
         else
             versionName "${versionMajor}.${versionMinor}.${versionPatch}"
@@ -19,7 +19,7 @@ android {
 android {
     compileSdkVersion 29
     defaultConfig {
-        applicationId "com.lu.uims.uimstest"
+        applicationId "com.lu.mydemo"
         minSdkVersion 24
         targetSdkVersion 29
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -46,7 +46,7 @@ dependencies {
     implementation 'com.github.zfman:TimetableView:v2.0.7'
     implementation 'com.yanzhenjie.recyclerview:support:1.3.2'
     implementation 'com.loopeer.library:cardstack:1.0.2'
-    implementation ('net.sf.json-lib:json-lib:2.4:jdk15'){
+    implementation('net.sf.json-lib:json-lib:2.4:jdk15') {
         exclude group: 'commons-beanutils'
     }
     // https://mvnrepository.com/artifact/commons-beanutils/commons-beanutils

@@ -9,10 +9,12 @@ package com.lu.mydemo;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -37,6 +39,7 @@ import java.util.List;
 import Config.ColorManager;
 import Utils.Course.MySubject;
 import Utils.Course.SubjectRepertory;
+import Utils.Database.MyCourseDBHelper;
 import View.PopWindow.CourseDetailPopupWindow;
 import View.PopWindow.CourseListPopupWindow;
 
@@ -105,7 +108,23 @@ public class WeekCourseActivity extends BaseActivity implements View.OnClickList
      * 2秒后刷新界面，模拟网络请求
      */
     private void requestData() {
-        mySubjects = SubjectRepertory.loadDefaultSubjects();
+        final MyCourseDBHelper dbHelper = new MyCourseDBHelper(WeekCourseActivity.this, "Course_DB", null, 1);
+        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+        mySubjects = dbHelper.getAllCourse(db);
+        if(mySubjects == null || mySubjects.size() == 0) {//尝试重新加载
+            if(mySubjects != null) Log.e("WeekCourseActivity", "Err when get course from db!");
+            mySubjects = SubjectRepertory.loadDefaultSubjects();
+            //TODO DB TEST
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    dbHelper.saveAll(db, mySubjects, true);
+                    Log.i("WeekCourseActivity", "Course:" + dbHelper.getAllCourse(db));
+                    db.close();
+                }
+            }).start();
+        }
+        else db.close();
 //        showLoading("加载中，请稍候...");
         handler.sendEmptyMessage(0x123);
     }
@@ -247,11 +266,6 @@ public class WeekCourseActivity extends BaseActivity implements View.OnClickList
             str += bean.getName() + ","+bean.getWeekList().toString()+","+bean.getStart()+","+bean.getStep()+"\n";
             courseNameSet.add(bean.getName());
         }
-//        Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
-//        if(courseNameSet.size() > 1) {
-//            AlertCenter.showErrorAlert(WeekCourseActivity.this, "课程数大于1！");
-//            return;
-//        }
 
         final AdapterView.OnItemClickListener listener = new AdapterView.OnItemClickListener(){
             @Override

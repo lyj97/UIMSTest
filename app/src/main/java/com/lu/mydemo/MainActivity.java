@@ -79,7 +79,7 @@ public class MainActivity extends BaseActivity {
 
     private TextView enterWeekCourseTextView;
 
-    private TextView about_text_view;
+    private LinearLayout to_setting_layout;
 
     private TextView web_pages_text_view;
     private TextView test;
@@ -143,7 +143,7 @@ public class MainActivity extends BaseActivity {
 
         enterWeekCourseTextView = findViewById(R.id.enterWeekCourseTextView);
 
-        about_text_view = findViewById(R.id.login_goto_about_text_view);
+        to_setting_layout = findViewById(R.id.login_goto_setting_layout_view);
 
         login_main_view = findViewById(R.id.login_main_view);
         linearLayoutView_down_text = findViewById(R.id.LinearLayoutView_down_text);
@@ -312,10 +312,10 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        about_text_view.setOnClickListener(new View.OnClickListener() {
+        to_setting_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this,AboutActivity.class);
+                Intent intent = new Intent(MainActivity.this,SettingActivity.class);
                 startActivity(intent);
             }
         });
@@ -809,6 +809,11 @@ public class MainActivity extends BaseActivity {
         dataList.add(map);
         return dataList;
     }
+
+    //TODO 从数据库中加载课程信息
+//    private List<Map<String, Object>> getCourseListFromDb(){
+//
+//    }
 
     private List<Map<String, Object>> getCourseList() throws Exception{
 

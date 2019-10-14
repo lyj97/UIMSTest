@@ -1,5 +1,6 @@
 package com.lu.mydemo;
 
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -31,6 +32,7 @@ import Utils.Score.ScoreConfig;
 public class SettingActivity extends BaseActivity {
 
     private TextView back_text;
+    private TextView about_tv;
 
     private Spinner spinner;
     private ArrayList<String> termList;
@@ -65,6 +67,7 @@ public class SettingActivity extends BaseActivity {
         setContentView(R.layout.activity_setting);
 
         back_text = findViewById(R.id.activity_setting_navigation_back_text);
+        about_tv = findViewById(R.id.activity_setting_navigation_about_text);
 
         spinner = findViewById(R.id.activity_setting_term_spinner);
 
@@ -281,6 +284,13 @@ public class SettingActivity extends BaseActivity {
         text_view_pink.setOnClickListener(onClickListener);
         text_view_green.setOnClickListener(onClickListener);
 
+        about_tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(SettingActivity.this, AboutActivity.class));
+            }
+        });
+
         back_text.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -303,12 +313,6 @@ public class SettingActivity extends BaseActivity {
 //        });
 
 //        opening = false;
-    }
-
-    @Override
-    protected void onStop() {
-        AlertCenter.showLoading(this, "加载中...");
-        super.onStop();
     }
 
     private void setSpinnerItems(){
