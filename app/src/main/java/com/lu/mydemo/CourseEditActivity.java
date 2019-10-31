@@ -7,13 +7,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,7 +26,6 @@ import java.util.List;
 import Config.ColorManager;
 import UIMSTool.CourseJSONTransfer;
 import Utils.Course.MySubject;
-import View.MyView.MyCourseTimItemView;
 
 public class CourseEditActivity extends AppCompatActivity {
 
@@ -52,27 +48,6 @@ public class CourseEditActivity extends AppCompatActivity {
     private OnItemClickListener onItemClickListener = new OnItemClickListener() {
         @Override
         public void onItemClick(View view, int adapterPosition) {
-//            switch (view.getId()){
-//                case R.id.course_detail_edit_week_layout_text_view : {
-//                    Toast.makeText(CourseEditActivity.this, "week!\nindex:" + adapterPosition, Toast.LENGTH_SHORT).show();
-//                    break;
-//                }
-//                case R.id.course_detail_edit_time_layout_text_view : {
-//                    Toast.makeText(CourseEditActivity.this, "time!\nindex:" + adapterPosition, Toast.LENGTH_SHORT).show();
-//                    break;
-//                }
-//                case R.id.course_detail_edit_teacher_layout_text_view : {
-//                    Toast.makeText(CourseEditActivity.this, "teacher!\nindex:" + adapterPosition, Toast.LENGTH_SHORT).show();
-//                    break;
-//                }
-//                case R.id.course_detail_edit_place_layout_text_view : {
-//                    Toast.makeText(CourseEditActivity.this, "place!\nindex:" + adapterPosition, Toast.LENGTH_SHORT).show();
-//                    break;
-//                }
-//                default:{
-//                    Toast.makeText(CourseEditActivity.this, "ID:" + view.getId() + "\nindex:" + adapterPosition, Toast.LENGTH_SHORT).show();
-//                }
-//            }
             fillView(dataList.get(adapterPosition).getDb_id());
         }
     };

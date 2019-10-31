@@ -53,13 +53,13 @@ import App.BaseActivity;
 import CJCX.CJCX;
 import Config.ColorManager;
 import Config.Version;
+import Sensor.SensorManagerHelper;
 import ToolFor2045_Site.GetInternetInformation;
 import UIMS.UIMS;
 import UIMSTool.ClassSetConvert;
 import UIMSTool.CourseJSONTransfer;
 import Utils.Course.CourseScheduleChange;
 import Utils.Course.MySubject;
-import Utils.Course.SubjectRepertory;
 import Utils.Score.ScoreConfig;
 import Utils.Score.ScoreInf;
 import View.PopWindow.*;
@@ -358,6 +358,20 @@ public class MainActivity extends BaseActivity {
         if(!acceptTestFun) {
             hideTestFun();
         }
+
+        //摇一摇
+//        SensorManagerHelper.OnShakeListener onShakeListener = new SensorManagerHelper.OnShakeListener() {
+//            @Override
+//            public void onShake() {
+//                if(Version.isApkInDebug(MainActivity.this)){
+//                    AlertCenter.showAlert(MainActivity.this, "DEBUG MODE!");
+//                }
+//                else {
+//                    AlertCenter.showWarningAlert(MainActivity.this, "NOT IN DEBUG MODE!");
+//                }
+//            }
+//        };
+//        registerShakeListener(onShakeListener);
     }
 
     @Override
@@ -1556,6 +1570,12 @@ public class MainActivity extends BaseActivity {
                         .show();
             }
         });
+    }
+
+    //摇一摇
+    public void registerShakeListener(SensorManagerHelper.OnShakeListener onShakeListener){
+        SensorManagerHelper sensorManagerHelper = new SensorManagerHelper(this);
+        sensorManagerHelper.setOnShakeListener(onShakeListener);
     }
 
     class noCourseBetterAdapter extends SimpleAdapter {
