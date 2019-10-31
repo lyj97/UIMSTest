@@ -23,6 +23,7 @@ import com.tapadoo.alerter.Alerter;
 import net.sf.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import CJCX.CJCX;
 import Config.ColorManager;
@@ -115,7 +116,10 @@ public class SettingActivity extends BaseActivity {
                         }
                         JSONObject termJSON = UIMS.getTermJSON(term);
                         if(termJSON == null){
-                            AlertCenter.showWarningAlert(SettingActivity.this, "ERROR", "TermJSON is null.");
+//                            AlertCenter.showWarningAlert(SettingActivity.this, "ERROR", "TermJSON is null.");
+                            List<Exception> exceptions = UIMS.getExceptions();
+                            exceptions.add(new IllegalStateException("TermJSON is null."));
+                            AlertCenter.showErrorAlertWithReportButton(SettingActivity.this, "抱歉,数据出错!", exceptions, UIMS.getUser());
                             return;
                         }
                         Log.i("TermJSON", termJSON.toString());
@@ -298,21 +302,12 @@ public class SettingActivity extends BaseActivity {
             }
         });
 
-//        testText.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                new Thread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        CJCX cjcx = new CJCX("54160907", "225577");
-//                        cjcx.login();
-//                        cjcx.getScore();
-//                    }
-//                }).start();
-//            }
-//        });
+    }
 
-//        opening = false;
+    @Override
+    protected void onStart() {
+        super.onStart();
+        changeTheme();
     }
 
     private void setSpinnerItems(){

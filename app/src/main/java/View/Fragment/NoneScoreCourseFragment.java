@@ -138,7 +138,10 @@ public class NoneScoreCourseFragment extends Fragment {
                     termId = termName_TermId.get(termName);
 
                     if(termName == null || termId == null || !(termName.length() > 0) || !(termId.length() > 0)){
-                        AlertCenter.showWarningAlert(context, "数据出错");
+//                        AlertCenter.showWarningAlert(context, "数据出错");
+                        List<Exception> exceptions = UIMS.getExceptions();
+                        exceptions.add(0, new IllegalArgumentException("[TermName]=" + termName + "[TermId]=" + termId));
+                        AlertCenter.showErrorAlertWithReportButton(context, "数据错误!", exceptions, UIMS.getUser());
                         return;
                     }
 

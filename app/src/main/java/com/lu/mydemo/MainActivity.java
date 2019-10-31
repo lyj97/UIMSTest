@@ -58,6 +58,8 @@ import UIMS.UIMS;
 import UIMSTool.ClassSetConvert;
 import UIMSTool.CourseJSONTransfer;
 import Utils.Course.CourseScheduleChange;
+import Utils.Course.MySubject;
+import Utils.Course.SubjectRepertory;
 import Utils.Score.ScoreConfig;
 import Utils.Score.ScoreInf;
 import View.PopWindow.*;
@@ -534,18 +536,10 @@ public class MainActivity extends BaseActivity {
         getCourseSuccess();
     }
 
-    public void loadCourseInformation(){
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                loadTime();
-                getCourseSuccess();
-
-                CourseJSONTransfer.transferCourseList(UIMS.getCourseJSON(), true);
-            }
-        }).start();
-
+    public void loadCourseInformation() {
+        loadTime();
+        CourseJSONTransfer.transferCourseList(getApplicationContext(), UIMS.getCourseJSON(), true);
+        getCourseSuccess();
     }
 
     private void loadLocalInformation(final boolean show) {
@@ -604,7 +598,8 @@ public class MainActivity extends BaseActivity {
 //                            overridePendingTransition(R.anim.up_in, R.anim.up_out);
                     }
                 } catch (Exception e) {
-                    AlertCenter.showWarningAlert(MainActivity.this, e.getMessage());
+//                    AlertCenter.showWarningAlert(MainActivity.this, e.getMessage());
+                    AlertCenter.showErrorAlertWithReportButton(MainActivity.this, "抱歉,出现错误!", e, user);
                     e.printStackTrace();
                 }
             }
@@ -641,7 +636,12 @@ public class MainActivity extends BaseActivity {
     private void getCourseSuccess(){
         try {
             courseList.setOnItemClickListener(null);
-            todayCourseList = getCourseList();
+//            todayCourseList = getCourseList();
+            todayCourseList = getCourseListFromDb();
+            if(todayCourseList == null) {
+                todayCourseList = getCourseList();
+                Log.w("MainActivity", "Load course from DB ERROR!");
+            }
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -811,9 +811,72 @@ public class MainActivity extends BaseActivity {
     }
 
     //TODO 从数据库中加载课程信息
-//    private List<Map<String, Object>> getCourseListFromDb(){
-//
-//    }
+    private List<Map<String, Object>> getCourseListFromDb() throws Exception{
+        Log.i("GetCourse", "教学周:\t" + now_week);
+        Log.i("GetCourse", "星期:\t" + day_of_week);
+
+        if(day_of_week == 0 || now_week == 0) throw new IllegalAccessException("教学周或星期为0（未初始化）！");
+
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        final String now_time = df.format(new Date());
+
+        if(CourseScheduleChange.containsDate(this, now_time)){
+            return getCourseList(CourseScheduleChange.getDate(this, now_time));
+        }
+        else {
+            if (!reLoadTodayCourse && todayCourseList != null) {
+                Log.w("MainActivity", "NOT RELOAD COURSE!");
+                return todayCourseList;
+            }
+            reLoadTodayCourse = false;
+
+            List<Map<String, Object>> dataList = new ArrayList<>();
+            Map<String, Object> map;
+
+            List<MySubject> courseList = null;
+            if(CourseJSONTransfer.transferCourseList(getApplicationContext())){
+                courseList = CourseJSONTransfer.courseList;
+                for(MySubject subject : courseList){
+                    if(day_of_week != subject.getDay() || !subject.getWeekList().contains((int) now_week)) continue;
+                    map = new HashMap<>();
+                    map.put("index", subject.getStart() + " - " + (subject.getStart() + subject.getStep() - 1) + "节");
+                    map.put("title", subject.getName());
+                    map.put("context1", subject.getRoom());
+                    dataList.add(map);
+                }
+
+                Log.i("GetCourse", "今日课程数量:\t" + dataList.size());
+
+                if (dataList.size() == 0) {
+                    map = new HashMap<>();
+                    map.put("index", "");
+                    map.put("title", "今天没课呀~");
+                    map.put("context1", "");
+                    dataList.add(map);
+                } else {
+                    Collections.sort(dataList, new Comparator<Map<String, Object>>() {
+                        @Override
+                        public int compare(Map<String, Object> o1, Map<String, Object> o2) {
+                            return ((String) o1.get("index")).compareTo((String) o2.get("index"));
+                        }
+                    });
+                }
+
+                return dataList;
+            }
+            else {
+                Log.e("MainActivity", "Load Course ERROR!");
+//                AlertCenter.showErrorAlert(MainActivity.this, "课程加载错误！");
+                AlertCenter.showErrorAlertWithReportButton(MainActivity.this, "课程加载错误！", CourseJSONTransfer.getExceptionList(), UIMS.getUser());
+                map = new HashMap<>();
+                map.put("index", "");
+                map.put("title", "课程加载错误");
+                map.put("context1", "请联系开发者，帮助您解决遇到的问题");
+                dataList.add(map);
+                return null;
+            }
+        }
+    }
 
     private List<Map<String, Object>> getCourseList() throws Exception{
 
@@ -960,10 +1023,10 @@ public class MainActivity extends BaseActivity {
 
     private List<Map<String, Object>> getCourseList(final String date) throws Exception{
 
+        final String[] dayOfWeekName = new String[]{"","星期一","星期二","星期三","星期四","星期五","星期六","星期日"};
         if(date.equals("0000-00-00")) {
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
             final String now_time = df.format(new Date());
-            final String[] dayOfWeekName = new String[]{"","星期一","星期二","星期三","星期四","星期五","星期六","星期日"};
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -978,7 +1041,6 @@ public class MainActivity extends BaseActivity {
             map.put("index", "");
             map.put("title", "今天放假啦o(*￣▽￣*)o");
             map.put("context1", "");
-//            map.put("type", "");
             dataList.add(map);
             return dataList;
         }
@@ -1015,7 +1077,6 @@ public class MainActivity extends BaseActivity {
         final int temp_day_of_week_1 = temp_day_of_week;
 
         final String now_time = df.format(new Date());
-        final String[] dayOfWeekName = new String[]{"","星期一","星期二","星期三","星期四","星期五","星期六","星期日"};
 
         runOnUiThread(new Runnable() {
             @Override
@@ -1454,7 +1515,8 @@ public class MainActivity extends BaseActivity {
     public void showResponse(final String string) {
         AlertCenter.hideAlert(this);
         if (string.toLowerCase().contains("failed")) {
-            AlertCenter.showWarningAlert(this, "", "获取数据失败，请稍后重试.");
+//            AlertCenter.showWarningAlert(this, "", "获取数据失败，请稍后重试.");
+            AlertCenter.showErrorAlertWithReportButton(MainActivity.this, "抱歉,数据出错!", UIMS.getExceptions(), UIMS.getUser());
 //                    button_login.setText("重新登录");
 //                    button_login.setEnabled(true);
 //                    button_login.setBackground(getResources().getDrawable(R.drawable.button_internet_background));

@@ -121,6 +121,8 @@ public class ScoreActivity extends BaseActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        long startTime = System.currentTimeMillis();
+        Log.i("ScoreActivity", "StartTime:" + startTime);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scrolling);
         sp = getApplicationContext().getSharedPreferences("ScoreSelectInfo", Context.MODE_PRIVATE);
@@ -283,6 +285,9 @@ public class ScoreActivity extends BaseActivity
 //            }
 //        }).start();
 
+        long endTime = System.currentTimeMillis();
+        Log.i("ScoreActivity", "EndTime:" + endTime);
+        Log.i("ScoreActivity", "Time:" + (endTime - startTime));
     }
 
     @Override
@@ -300,17 +305,18 @@ public class ScoreActivity extends BaseActivity
         getScoreStatistics();
     }
 
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        if(hasFocus){
-
-        }
-    }
+//    @Override
+//    public void onWindowFocusChanged(boolean hasFocus) {
+//        if(hasFocus){
+//
+//        }
+//    }
 
     public void loadScoreList(){
         new Thread(new Runnable() {
             @Override
             public void run() {
+                long startTime = System.currentTimeMillis();
                 if(ScoreConfig.isIsCJCXEnable()){
                     loadCJCXScore();
                 }
@@ -318,6 +324,9 @@ public class ScoreActivity extends BaseActivity
                 if(dataList == null){
                     Log.e("ScoreActivity", "No score data available!");
                     AlertCenter.showErrorAlert(ScoreActivity.this, "错误", "获取成绩数据失败!");
+                    List<Exception>exceptions = ScoreInf.getExceptionList();
+                    exceptions.add(new IllegalStateException("Score DataList is NULL!"));
+                    AlertCenter.showErrorAlertWithReportButton(ScoreActivity.this, "错误", "获取成绩数据失败!", exceptions, UIMS.getUser());
                     return;
                 }
                 runOnUiThread(new Runnable() {
@@ -364,6 +373,8 @@ public class ScoreActivity extends BaseActivity
 //                        Alerter.hide();
 //                    }
 //                });
+                long endTime = System.currentTimeMillis();
+                Log.i("ScoreActivity", "ScoreLoadTime:" + (endTime - startTime));
             }
         }).start();
     }

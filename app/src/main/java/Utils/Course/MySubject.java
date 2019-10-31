@@ -275,13 +275,17 @@ public class MySubject extends Schedule implements ScheduleEnable {
     @Override
     public String toString() {
         return "MySubject{" +
-                "id=" + id +
+                "db_id=" + db_id +
+                ", id=" + id +
                 ", name='" + name + '\'' +
                 ", time='" + time + '\'' +
                 ", room='" + room + '\'' +
                 ", teacher='" + teacher + '\'' +
                 ", weekList=" + weekList +
+                ", weekOddEven='" + weekOddEven + '\'' +
+                ", weekRange='" + weekRange + '\'' +
                 ", start=" + start +
+                ", stepRange='" + stepRange + '\'' +
                 ", step=" + step +
                 ", day=" + day +
                 ", term='" + term + '\'' +

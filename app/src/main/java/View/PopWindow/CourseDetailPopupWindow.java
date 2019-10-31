@@ -2,7 +2,9 @@ package View.PopWindow;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.GradientDrawable;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -10,14 +12,24 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+
+import com.lu.mydemo.CourseEditActivity;
 import com.lu.mydemo.R;
+import com.lu.mydemo.sample.adapter.BaseAdapter;
+import com.lu.mydemo.sample.adapter.MainAdapter;
+import com.yanzhenjie.recyclerview.OnItemClickListener;
+import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
 import Config.ColorManager;
+import UIMSTool.CourseJSONTransfer;
 import Utils.Course.MySubject;
 import View.Control.CourseWeeklyControl;
 
@@ -26,15 +38,29 @@ public class CourseDetailPopupWindow extends PopupWindow {
     private View mMenuView;
 
     private TextView title_tv;
-    private TextView coursePlace_tv;
-    private TextView teacher_tv;
-//    private TextView week_tv;
-    private TextView time_tv;
+
+    private SwipeRecyclerView swipeRecyclerView;
+    private BaseAdapter myAdapter;
+
+    public List<MySubject> dataList;
 
     public Animation mExitAnim;//退出动画
     public Animation mEnterAnim;//进入动画
 
     private Activity context;
+
+    private OnItemClickListener onItemClickListener = new OnItemClickListener() {
+        @Override
+        public void onItemClick(View view, int adapterPosition) {
+            Intent intent = new Intent(context, CourseEditActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putString("courseName", title_tv.getText().toString());
+            bundle.putInt("courseDbId", dataList.get(adapterPosition).getDb_id());
+            intent.putExtra("bundle", bundle);
+            context.startActivity(intent);
+            dismiss();
+        }
+    };
 
     public CourseDetailPopupWindow(final Activity context, List<MySubject> list, int height, int width) {
         super(context);
@@ -44,10 +70,8 @@ public class CourseDetailPopupWindow extends PopupWindow {
         mMenuView = inflater.inflate(R.layout.view_course_detail, null);
 
         title_tv = mMenuView.findViewById(R.id.pop_window_course_detail_layout_title);
-        coursePlace_tv = mMenuView.findViewById(R.id.pop_window_course_detail_information_course_place);
-        teacher_tv = mMenuView.findViewById(R.id.pop_window_course_detail_information_teacher);
-//        week_tv = mMenuView.findViewById(R.id.pop_window_course_detail_information_week);
-        time_tv = mMenuView.findViewById(R.id.pop_window_course_detail_information_time);
+
+        swipeRecyclerView = mMenuView.findViewById(R.id.pop_window_course_detail_item_layout);
 
         Collections.sort(list, MySubject.timeComparater);
 
@@ -99,21 +123,35 @@ public class CourseDetailPopupWindow extends PopupWindow {
         if(list == null || list.size() < 1) return;
         MySubject subject = list.get(0);
         title_tv.setText(subject.getName());
-        coursePlace_tv.setText(subject.getRoom());
-        teacher_tv.setText(subject.getTeacher());
-//        week_tv.setText(subject.getWeekRange());
-        time_tv.setText(subject.getWeekRange() + " " + subject.getStepRange());
 
-        for(int i=1; i<list.size(); i++){
-//            week_tv.setText(week_tv.getText() + "\n" + list.get(i).getWeekRange());
-            time_tv.setText(time_tv.getText() + "\n" + list.get(i).getWeekRange() + " " + list.get(i).getStepRange());
+        dataList = getCourseList(subject.getName());
+        myAdapter = createAdapter();
+        swipeRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+        swipeRecyclerView.setOnItemClickListener(onItemClickListener);
+        swipeRecyclerView.setAdapter(myAdapter);
+        myAdapter.notifyDataSetChanged(dataList);
+
+    }
+
+    public ArrayList<MySubject> getCourseList(String courseName){
+        ArrayList<MySubject> dataList = new ArrayList<>();
+        for(MySubject subject : CourseJSONTransfer.courseList){
+            if(subject.getName().equals(courseName)){
+                dataList.add(subject);
+            }
         }
+        Collections.sort(dataList, MySubject.timeComparater);
+        return dataList;
+    }
 
+    public MainAdapter createAdapter() {
+        return new CourseEditActivity.CourseTimeListAdapter(context);
     }
 
     private void changeTheme(){
         Log.i("Theme", "Change theme.");
 //        mMenuView.findViewById(R.id.pop_window_course_detail_layout_title).setBackground(ColorManager.getTopRadiusBackground());
+        mMenuView.findViewById(R.id.pop_window_course_detail_top_back).setBackground(ColorManager.getTopRadiusBackground());
         mMenuView.findViewById(R.id.pop_window_course_detail_layout).setBackground(ColorManager.getMainBackground());
     }
 

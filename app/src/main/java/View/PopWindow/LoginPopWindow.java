@@ -19,6 +19,8 @@ import com.lu.mydemo.Notification.AlertCenter;
 import com.lu.mydemo.R;
 import com.tapadoo.alerter.Alerter;
 
+import java.util.List;
+
 import Config.ColorManager;
 import UIMS.UIMS;
 
@@ -84,13 +86,16 @@ public class LoginPopWindow extends PopupWindow {
                             sp.edit().putString("USER", userStr).apply();
                             sp.edit().putString("PASSWORD", passwordStr).apply();
 
-                            Log.i("LoginPop", "USER:\t" + userStr);
-                            Log.i("LoginPop", "PASS:\t" + passwordStr);
+//                            Log.i("LoginPop", "USER:\t" + userStr);
+//                            Log.i("LoginPop", "PASS:\t" + passwordStr);
 
                             if (userStr == null || passwordStr == null || userStr.length() != 8 || !(passwordStr.length() > 0)) {
                                 sp.edit().remove("USER").apply();
                                 sp.edit().remove("PASSWORD").apply();
-                                AlertCenter.showWarningAlert(context, "获取已保存账号出错，请输入正确的用户名和密码后重新登录.");
+//                                AlertCenter.showWarningAlert(context, "获取已保存账号出错，请输入正确的用户名和密码后重新登录.");
+                                List<Exception> exceptions = UIMS.getExceptions();
+                                exceptions.add(0, new IllegalArgumentException("[UserStr]=" + userStr + "[PasswordStr]=" + passwordStr));
+                                AlertCenter.showErrorAlertWithReportButton(context, "获取已保存账号出错，请输入正确的用户名和密码后重新登录.", exceptions, userStr);
                                 return;
                             }
 
@@ -126,7 +131,8 @@ public class LoginPopWindow extends PopupWindow {
 //                            loadSuccess();
                                                     }
                                                     else{
-                                                        AlertCenter.showWarningAlert(context, "获取信息出错，请稍后重试...");
+//                                                        AlertCenter.showWarningAlert(context, "获取信息出错，请稍后重试...");
+                                                        AlertCenter.showErrorAlertWithReportButton(context, "获取信息出错，请稍后重试...", UIMS.getExceptions(), userStr);
                                                         dealFinish("登录并更新信息");
                                                         return;
                                                     }
@@ -142,14 +148,16 @@ public class LoginPopWindow extends PopupWindow {
                                                         context.dismissPopWindow();
                                                     }
                                                     else{
-                                                        AlertCenter.showWarningAlert(context, "获取信息出错，请稍后重试...");
+//                                                        AlertCenter.showWarningAlert(context, "获取信息出错，请稍后重试...");
+                                                        AlertCenter.showErrorAlertWithReportButton(context, "获取信息出错，请稍后重试...", UIMS.getExceptions(), userStr);
                                                         dealFinish("登录并更新信息");
                                                         context.reLogin();
                                                         return;
                                                     }
                                                 }
                                                 else{
-                                                    AlertCenter.showWarningAlert(context, "获取信息出错，请稍后重试...");
+//                                                    AlertCenter.showWarningAlert(context, "获取信息出错，请稍后重试...");
+                                                    AlertCenter.showErrorAlertWithReportButton(context, "获取信息出错，请稍后重试...", UIMS.getExceptions(), userStr);
                                                     dealFinish("登录并更新信息");
                                                     context.reLogin();
                                                     return;
@@ -157,15 +165,18 @@ public class LoginPopWindow extends PopupWindow {
 
                                             }
                                             else {
-                                                AlertCenter.showWarningAlert(context, "获取信息出错，请稍后重试...");
+//                                                AlertCenter.showWarningAlert(context, "获取信息出错，请稍后重试...");
+                                                AlertCenter.showErrorAlertWithReportButton(context, "获取信息出错，请稍后重试...", UIMS.getExceptions(), userStr);
                                                 dealFinish("登录并更新信息");
                                             }
                                         else {
-                                            AlertCenter.showWarningAlert(context, "获取信息出错，请稍后重试...");
+//                                            AlertCenter.showWarningAlert(context, "获取信息出错，请稍后重试...");
+                                            AlertCenter.showErrorAlertWithReportButton(context, "获取信息出错，请稍后重试...", UIMS.getExceptions(), userStr);
                                             dealFinish("登录并更新信息");
                                         }
                                     } else {
-                                        AlertCenter.showWarningAlert(context, "获取信息出错，请稍后重试...");
+//                                        AlertCenter.showWarningAlert(context, "获取信息出错，请稍后重试...");
+                                        AlertCenter.showErrorAlertWithReportButton(context, "获取信息出错，请稍后重试...", UIMS.getExceptions(), userStr);
                                         dealFinish("登录并更新信息");
                                     }
                                 } else {
@@ -200,7 +211,8 @@ public class LoginPopWindow extends PopupWindow {
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
-                            AlertCenter.showWarningAlert(context, "Error", e.getMessage());
+//                            AlertCenter.showWarningAlert(context, "Error", e.getMessage());
+                            AlertCenter.showErrorAlertWithReportButton(context, "抱歉,出现错误.", e, UIMS.getUser());
                         }
                     }
                 }).start();

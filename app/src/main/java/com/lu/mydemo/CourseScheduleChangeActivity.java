@@ -228,7 +228,10 @@ public class CourseScheduleChangeActivity extends BaseActivity {
                     }
                     JSONObject termJSON = UIMS.getTermJSON(term);
                     if(termJSON == null){
-                        AlertCenter.showWarningAlert(CourseScheduleChangeActivity.this, "ERROR", "TermJSON is null.");
+//                        AlertCenter.showWarningAlert(CourseScheduleChangeActivity.this, "ERROR", "TermJSON is null.");
+                        List<Exception> exceptions = UIMS.getExceptions();
+                        exceptions.add(new IllegalStateException("TermJSON is null."));
+                        AlertCenter.showErrorAlertWithReportButton(CourseScheduleChangeActivity.this, "抱歉,数据出错!", exceptions, UIMS.getUser());
                         return;
                     }
                     Log.i("TermJSON", termJSON.toString());

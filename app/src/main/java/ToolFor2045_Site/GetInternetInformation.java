@@ -157,7 +157,13 @@ public class GetInternetInformation {
             Log.i("2045_getNewsList[entity]", "entity:\t" + entityStringBuilder.toString());
 //                    showResponse("Login[entity]:\t" + entityStringBuilder.toString());
 
-            return JSONObject.fromObject(entityStringBuilder.toString());
+            try {
+                return JSONObject.fromObject(entityStringBuilder.toString());
+
+            }catch (Exception e){
+                e.printStackTrace();
+                return null;
+            }
         }
         catch (Exception e){
             e.printStackTrace();

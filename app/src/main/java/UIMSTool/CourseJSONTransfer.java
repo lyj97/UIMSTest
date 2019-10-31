@@ -1,5 +1,11 @@
 package UIMSTool;
 
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
+
+import com.lu.mydemo.WeekCourseActivity;
+
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -9,209 +15,236 @@ import java.util.List;
 import Utils.Course.Course;
 import Utils.Course.CourseSchedule;
 import Utils.Course.MySubject;
+import Utils.Database.MyCourseDBHelper;
 
 public class CourseJSONTransfer {
 
     public static Course[] courses;
-    public static List<MySubject> courseList;
+    public static ArrayList<MySubject> courseList;
 
-    public static boolean transfer(JSONObject courseJSON){
+    public static List<Exception> exceptionList = new ArrayList<>();
 
-        try {
+    public static boolean transfer(JSONObject courseJSON) {
 
-            JSONArray json_courses = courseJSON.getJSONArray("value");
 
-            JSONObject teachClassMaster;
+        JSONArray json_courses = courseJSON.getJSONArray("value");
 
-            JSONArray lessonSchedules;
-            JSONArray lessonTeachers;
-            JSONObject teacher;
-            String teacherName;
-            JSONObject lessonSegment;
-            String courName;
+        JSONObject teachClassMaster;
 
-            JSONObject timeBlock;
-            int classSet;
-            int dayOfWeek;
-            int beginWeek;
-            int endWeek;
-            int[] start_end;
-            String weekOddEven = "";
-            JSONObject classroom;
-            String classroomName;
+        JSONArray lessonSchedules;
+        JSONArray lessonTeachers;
+        JSONObject teacher;
+        String teacherName;
+        JSONObject lessonSegment;
+        String courName;
 
-            courses = new Course[json_courses.size()];
+        JSONObject timeBlock;
+        int classSet;
+        int dayOfWeek;
+        int beginWeek;
+        int endWeek;
+        int[] start_end;
+        String weekOddEven = "";
+        JSONObject classroom;
+        String classroomName;
 
-            for (int i = 0; i < json_courses.size(); i++) {
+        courses = new Course[json_courses.size()];
 
-                teachClassMaster = json_courses.getJSONObject(i).getJSONObject("teachClassMaster");
+        for (int i = 0; i < json_courses.size(); i++) {
 
-                lessonSegment = teachClassMaster.getJSONObject("lessonSegment");
-                lessonSchedules = teachClassMaster.getJSONArray("lessonSchedules");
-                lessonTeachers = teachClassMaster.getJSONArray("lessonTeachers");
+            teachClassMaster = json_courses.getJSONObject(i).getJSONObject("teachClassMaster");
 
-                courName = lessonSegment.getString("fullName");
+            lessonSegment = teachClassMaster.getJSONObject("lessonSegment");
+            lessonSchedules = teachClassMaster.getJSONArray("lessonSchedules");
+            lessonTeachers = teachClassMaster.getJSONArray("lessonTeachers");
 
-                teacherName = lessonTeachers.getJSONObject(0).getJSONObject("teacher").getString("name");
+            courName = lessonSegment.getString("fullName");
 
-                Course course = new Course();
-                course.setId(lessonSegment.getInt("lssgId"));
-                course.setCourseName(courName);
-                course.setLessionTeacher(teacherName);
+            teacherName = lessonTeachers.getJSONObject(0).getJSONObject("teacher").getString("name");
 
-                CourseSchedule[] courseShedules = new CourseSchedule[lessonSchedules.size()];
+            Course course = new Course();
+            course.setId(lessonSegment.getInt("lssgId"));
+            course.setCourseName(courName);
+            course.setLessionTeacher(teacherName);
 
-                for (int j = 0; j < lessonSchedules.size(); j++) {
+            CourseSchedule[] courseShedules = new CourseSchedule[lessonSchedules.size()];
 
-                    timeBlock = lessonSchedules.getJSONObject(j).getJSONObject("timeBlock");
-                    classroom = lessonSchedules.getJSONObject(j).getJSONObject("classroom");
-                    classroomName = classroom.getString("fullName");
+            for (int j = 0; j < lessonSchedules.size(); j++) {
 
-                    classSet = timeBlock.getInt("classSet");
-                    dayOfWeek = timeBlock.getInt("dayOfWeek");
-                    beginWeek = timeBlock.getInt("beginWeek");
-                    endWeek = timeBlock.getInt("endWeek");
+                timeBlock = lessonSchedules.getJSONObject(j).getJSONObject("timeBlock");
+                classroom = lessonSchedules.getJSONObject(j).getJSONObject("classroom");
+                classroomName = classroom.getString("fullName");
 
-                    try{
-                        weekOddEven = timeBlock.getString("weekOddEven");
-                    }catch (Exception e){
+                classSet = timeBlock.getInt("classSet");
+                dayOfWeek = timeBlock.getInt("dayOfWeek");
+                beginWeek = timeBlock.getInt("beginWeek");
+                endWeek = timeBlock.getInt("endWeek");
+
+                try {
+                    weekOddEven = timeBlock.getString("weekOddEven");
+                } catch (Exception e) {
 //                    e.printStackTrace();
-                    }
-
-                    CourseSchedule courseShedule = new CourseSchedule();
-                    courseShedule.setStartWeek(beginWeek);
-                    courseShedule.setEndWeek(endWeek);
-                    courseShedule.setLessonWeek(dayOfWeek);
-                    courseShedule.setLessonIndex(classSet);
-                    courseShedule.setClassroomName(classroomName);
-
-                    switch (weekOddEven.toUpperCase()){
-                        case "":{
-                            courseShedule.setTAG(0);
-                            break;
-                        }
-                        case "E":{
-                            //双周
-                            courseShedule.setTAG(2);
-                            break;
-                        }
-                        case "O":{
-                            //单周
-                            courseShedule.setTAG(1);
-                            break;
-                        }
-                    }
-
-                    courseShedules[j] = courseShedule;
-                    weekOddEven = "";
-
                 }
 
-                course.setCourseShedule(courseShedules);
-                courses[i] = course;
+                CourseSchedule courseShedule = new CourseSchedule();
+                courseShedule.setStartWeek(beginWeek);
+                courseShedule.setEndWeek(endWeek);
+                courseShedule.setLessonWeek(dayOfWeek);
+                courseShedule.setLessonIndex(classSet);
+                courseShedule.setClassroomName(classroomName);
+
+                switch (weekOddEven.toUpperCase()) {
+                    case "": {
+                        courseShedule.setTAG(0);
+                        break;
+                    }
+                    case "E": {
+                        //双周
+                        courseShedule.setTAG(2);
+                        break;
+                    }
+                    case "O": {
+                        //单周
+                        courseShedule.setTAG(1);
+                        break;
+                    }
+                }
+
+                courseShedules[j] = courseShedule;
+                weekOddEven = "";
 
             }
 
-            return true;
+            course.setCourseShedule(courseShedules);
+            courses[i] = course;
 
         }
-        catch (Exception e){
-            e.printStackTrace();
+
+        return true;
+
+    }
+
+    public synchronized static boolean transferCourseList(Context context){
+        return transferCourseList(context, null, false);
+    }
+
+    public synchronized static boolean transferCourseList(Context context, JSONObject courseJSON){
+        return transferCourseList(context, courseJSON, false);
+    }
+
+    public synchronized static boolean transferCourseList(Context context, JSONObject courseJSON, boolean forceFlush){
+        if(!forceFlush && courseList!= null && courseList.size() > 0) {
+            Log.w("CourseJSONTransfer", "Ignored course load!");
+            return true;
+        }
+        if(courseJSON == null) {
+            exceptionList.add(new IllegalAccessException("CourseJSON is NULL!"));
             return false;
         }
+        final MyCourseDBHelper dbHelper = new MyCourseDBHelper(context, "Course_DB", null, 1);
+        final SQLiteDatabase db = dbHelper.getReadableDatabase();
+        courseList = dbHelper.getAllCourse(db);
+        if(courseList == null || courseList.size() == 0) {//尝试重新加载
+            if(courseList != null) Log.e("CourseJSONTransfer", "Err when get course from db!");
+            transferCourseList(courseJSON);
+            //TODO DB TEST
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    dbHelper.saveAll(db, courseList, true);
+                    Log.i("CourseJSONTransfer", "Course:" + dbHelper.getAllCourse(db));
+                    db.close();
+                }
+            }).start();
+        }
+        else db.close();
+        return true;
     }
 
     public synchronized static boolean transferCourseList(JSONObject courseJSON){
         return transferCourseList(courseJSON, false);
     }
 
-    public synchronized static boolean transferCourseList(JSONObject courseJSON, boolean forceFlush){
+    public synchronized static boolean transferCourseList(JSONObject courseJSON, boolean forceFlush) {
 
-        if(!forceFlush && courseList != null && courseList.size() > 0) return true;
+        if (!forceFlush && courseList != null && courseList.size() > 0) return true;
 
         courseList = new ArrayList<>();
 
-        try {
+        JSONArray json_courses = courseJSON.getJSONArray("value");
 
-            JSONArray json_courses = courseJSON.getJSONArray("value");
+        JSONObject teachClassMaster;
 
-            JSONObject teachClassMaster;
+        JSONArray lessonSchedules;
+        JSONArray lessonTeachers;
+        JSONObject teacher;
+        String teacherName;
+        JSONObject lessonSegment;
+        String courName;
 
-            JSONArray lessonSchedules;
-            JSONArray lessonTeachers;
-            JSONObject teacher;
-            String teacherName;
-            JSONObject lessonSegment;
-            String courName;
+        JSONObject timeBlock;
+        int classSet;
+        int dayOfWeek;
+        int beginWeek;
+        int endWeek;
+        int[] start_end;
+        String weekOddEven = "";
+        JSONObject classroom;
+        String classroomName;
 
-            JSONObject timeBlock;
-            int classSet;
-            int dayOfWeek;
-            int beginWeek;
-            int endWeek;
-            int[] start_end;
-            String weekOddEven = "";
-            JSONObject classroom;
-            String classroomName;
+        for (int i = 0; i < json_courses.size(); i++) {
 
-            for (int i = 0; i < json_courses.size(); i++) {
+            teachClassMaster = json_courses.getJSONObject(i).getJSONObject("teachClassMaster");
 
-                teachClassMaster = json_courses.getJSONObject(i).getJSONObject("teachClassMaster");
+            lessonSegment = teachClassMaster.getJSONObject("lessonSegment");
+            lessonSchedules = teachClassMaster.getJSONArray("lessonSchedules");
+            lessonTeachers = teachClassMaster.getJSONArray("lessonTeachers");
 
-                lessonSegment = teachClassMaster.getJSONObject("lessonSegment");
-                lessonSchedules = teachClassMaster.getJSONArray("lessonSchedules");
-                lessonTeachers = teachClassMaster.getJSONArray("lessonTeachers");
+            courName = lessonSegment.getString("fullName");
 
-                courName = lessonSegment.getString("fullName");
+            teacherName = lessonTeachers.getJSONObject(0).getJSONObject("teacher").getString("name");
 
-                teacherName = lessonTeachers.getJSONObject(0).getJSONObject("teacher").getString("name");
+            for (int j = 0; j < lessonSchedules.size(); j++) {
 
-                for (int j = 0; j < lessonSchedules.size(); j++) {
+                MySubject subject = new MySubject();
+                subject.setId(lessonSegment.getInt("lssgId"));
+                subject.setName(courName);
+                subject.setTeacher(teacherName);
 
-                    MySubject subject = new MySubject();
-                    subject.setId(lessonSegment.getInt("lssgId"));
-                    subject.setName(courName);
-                    subject.setTeacher(teacherName);
+                timeBlock = lessonSchedules.getJSONObject(j).getJSONObject("timeBlock");
+                classroom = lessonSchedules.getJSONObject(j).getJSONObject("classroom");
+                classroomName = classroom.getString("fullName");
 
-                    timeBlock = lessonSchedules.getJSONObject(j).getJSONObject("timeBlock");
-                    classroom = lessonSchedules.getJSONObject(j).getJSONObject("classroom");
-                    classroomName = classroom.getString("fullName");
+                classSet = timeBlock.getInt("classSet");
+                dayOfWeek = timeBlock.getInt("dayOfWeek");
+                beginWeek = timeBlock.getInt("beginWeek");
+                endWeek = timeBlock.getInt("endWeek");
 
-                    classSet = timeBlock.getInt("classSet");
-                    dayOfWeek = timeBlock.getInt("dayOfWeek");
-                    beginWeek = timeBlock.getInt("beginWeek");
-                    endWeek = timeBlock.getInt("endWeek");
-
-                    try{
-                        weekOddEven = timeBlock.getString("weekOddEven");
-                    }catch (Exception e){
+                try {
+                    weekOddEven = timeBlock.getString("weekOddEven");
+                } catch (Exception e) {
 //                    e.printStackTrace();
-                    }
-
-                    start_end = ClassSetConvert.mathStartEnd(classSet);
-
-                    subject.setWeekList(getWeekList(beginWeek, endWeek, weekOddEven));
-                    subject.setWeekRange(beginWeek, endWeek, weekOddEven, dayOfWeek);
-                    subject.setDay(dayOfWeek);
-                    subject.setRoom(classroomName);
-                    subject.setStart(start_end[0]);
-                    subject.setStep(start_end[1] - start_end[0] + 1);
-                    subject.setStepRange();
-
-                    courseList.add(subject);
-                    weekOddEven = "";
-
                 }
+
+                start_end = ClassSetConvert.mathStartEnd(classSet);
+
+                subject.setWeekList(getWeekList(beginWeek, endWeek, weekOddEven));
+                subject.setWeekRange(beginWeek, endWeek, weekOddEven, dayOfWeek);
+                subject.setDay(dayOfWeek);
+                subject.setRoom(classroomName);
+                subject.setStart(start_end[0]);
+                subject.setStep(start_end[1] - start_end[0] + 1);
+                subject.setStepRange();
+
+                courseList.add(subject);
+                weekOddEven = "";
 
             }
 
-            return true;
+        }
 
-        }
-        catch (Exception e){
-            e.printStackTrace();
-            return false;
-        }
+        return true;
+
     }
 
     public static List<Integer> getWeekList(int beginWeek, int endWeek, String weekOddEven){
@@ -243,4 +276,7 @@ public class CourseJSONTransfer {
         return weekList;
     }
 
+    public static List<Exception> getExceptionList() {
+        return exceptionList;
+    }
 }

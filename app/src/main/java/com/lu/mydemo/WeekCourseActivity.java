@@ -108,12 +108,12 @@ public class WeekCourseActivity extends BaseActivity implements View.OnClickList
      * 2秒后刷新界面，模拟网络请求
      */
     private void requestData() {
-        final MyCourseDBHelper dbHelper = new MyCourseDBHelper(WeekCourseActivity.this, "Course_DB", null, 1);
+        final MyCourseDBHelper dbHelper = new MyCourseDBHelper(getApplicationContext(), "Course_DB", null, 1);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
         mySubjects = dbHelper.getAllCourse(db);
         if(mySubjects == null || mySubjects.size() == 0) {//尝试重新加载
             if(mySubjects != null) Log.e("WeekCourseActivity", "Err when get course from db!");
-            mySubjects = SubjectRepertory.loadDefaultSubjects();
+            mySubjects = SubjectRepertory.loadDefaultSubjects(getApplicationContext());
             //TODO DB TEST
             new Thread(new Runnable() {
                 @Override
@@ -186,9 +186,6 @@ public class WeekCourseActivity extends BaseActivity implements View.OnClickList
                 .callback(new ISchedule.OnItemClickListener() {
                     @Override
                     public void onItemClick(View v, List<Schedule> scheduleList) {
-                        //TODO DEBUG
-//                        Log.i("ClickCourse", scheduleList.toString());
-//                        Log.i("MySubjects", mySubjects.toString());
                         display(scheduleList);
                     }
                 })

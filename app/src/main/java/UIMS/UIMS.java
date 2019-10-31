@@ -27,14 +27,15 @@ import okhttp3.Response;
 
 public class UIMS {
 
+    static String user;
+    static String pass;
+
     JSONObject jsonObject;
     String cookie1;//有pwdStrength
     String cookie2;
     String cookie3;//j_spring_security_check返回
     String cookie4;
     String student_id;
-    String user;
-    String pass;
     String jssionID;
     String jssionID2;
     static String adcId;
@@ -64,6 +65,8 @@ public class UIMS {
     static HashMap<String, String> courseSelectTypeId_courseSelectTypeName = new HashMap<>();//选课类型ID_选课类型名称
     static HashMap<String, String> courseId_courseTypeId = new HashMap<>();
     static HashMap<String, JSONObject> noScoreCourseId_course = new HashMap<>();
+
+    static ArrayList<Exception> exceptions = new ArrayList<>();
 
     OkHttpClient httpClient = new OkHttpClient.Builder()
             .cookieJar(new CookieJar() {
@@ -107,6 +110,7 @@ public class UIMS {
         }
         catch (Exception e){
             e.printStackTrace();
+            exceptions.add(e);
             return false;
         }
     }
@@ -138,6 +142,7 @@ public class UIMS {
                 }
             } catch (Exception e){
 //                e.printStackTrace();
+                exceptions.add(e);
             }
 
             String str = response.headers().get("Set-Cookie");
@@ -157,6 +162,7 @@ public class UIMS {
         }
         catch (Exception e){
             e.printStackTrace();
+            exceptions.add(e);
             return false;
         }
     }
@@ -216,6 +222,7 @@ public class UIMS {
         }
         catch (Exception e){
             e.printStackTrace();
+            exceptions.add(e);
             return false;
         }
     }
@@ -285,12 +292,14 @@ public class UIMS {
                 }
                 catch (Exception e1){
 //                e1.printStackTrace();
+                    exceptions.add(e1);
                     throw new RuntimeException("ERROR！");
                 }
 
             }
             catch (Exception e) {
                 e.printStackTrace();
+                exceptions.add(e);
                 throw new RuntimeException("ERROR！");
             }
 
@@ -303,6 +312,7 @@ public class UIMS {
             return true;
         }
         catch (Exception e){
+            exceptions.add(e);
             e.printStackTrace();
             return false;
         }
@@ -375,6 +385,7 @@ public class UIMS {
         }
         catch (Exception e){
             e.printStackTrace();
+            exceptions.add(e);
             return false;
         }
     }
@@ -386,6 +397,7 @@ public class UIMS {
         }
         catch (Exception e){
             e.printStackTrace();
+            exceptions.add(e);
             return false;
         }
     }
@@ -431,6 +443,7 @@ public class UIMS {
         }
         catch (Exception e){
             e.printStackTrace();
+            exceptions.add(e);
             return false;
         }
     }
@@ -484,13 +497,15 @@ public class UIMS {
             try {
                 dealCourseHistoryWithScore();
             } catch (Exception e){
-                e.printStackTrace();;
+                e.printStackTrace();
+                exceptions.add(e);
                 return false;
             }
             return true;
         }
         catch (Exception e){
             e.printStackTrace();
+            exceptions.add(e);
             return false;
         }
     }
@@ -534,6 +549,7 @@ public class UIMS {
         }
         catch (Exception e){
             e.printStackTrace();
+            exceptions.add(e);
             return false;
         }
     }
@@ -583,6 +599,7 @@ public class UIMS {
         }
         catch (Exception e){
             e.printStackTrace();
+            exceptions.add(e);
             return false;
         }
     }
@@ -629,6 +646,7 @@ public class UIMS {
         }
         catch (Exception e){
             e.printStackTrace();
+            exceptions.add(e);
             return false;
         }
     }
@@ -680,6 +698,7 @@ public class UIMS {
         }
         catch (Exception e){
             e.printStackTrace();
+            exceptions.add(e);
             return false;
         }
     }
@@ -718,17 +737,24 @@ public class UIMS {
 //                    showResponse("Login[entity]:\t" + entityStringBuilder.toString());
             scoreJSON = JSONObject.fromObject(entityStringBuilder.toString());
 
-            studentJSON = scoreJSON.getJSONArray("value").getJSONObject(0).getJSONObject("student");
-            setStudentJSON(studentJSON);
+            try {
+                studentJSON = scoreJSON.getJSONArray("value").getJSONObject(0).getJSONObject("student");
+                setStudentJSON(studentJSON);
 
-            scoreJSON = addScorePercent(scoreJSON);
-            dealScorePercent();
-            studCnt = studentJSON.getJSONObject("adminClass").getInt("studCnt");
+                scoreJSON = addScorePercent(scoreJSON);
+                dealScorePercent();
+                studCnt = studentJSON.getJSONObject("adminClass").getInt("studCnt");
+            }catch (Exception e){//兼容一条成绩都没有 获取不到信息的情况
+                e.printStackTrace();
+                studentJSON = new JSONObject();
+                return true;
+            }
 
             return true;
         }
         catch (Exception e){
             e.printStackTrace();
+            exceptions.add(e);
             return false;
         }
     }
@@ -773,6 +799,7 @@ public class UIMS {
         }
         catch (Exception e){
             e.printStackTrace();
+            exceptions.add(e);
             return null;
         }
     }
@@ -890,17 +917,20 @@ public class UIMS {
                     }
                 } catch (Exception e1) {
                     e1.printStackTrace();
+                    exceptions.add(e1);
                 }
 
 //                System.out.println(evalItemIds);
 
             } catch (Exception e) {
                 e.printStackTrace();
+                exceptions.add(e);
             }
             return names;
         }
         catch (Exception e){
             e.printStackTrace();
+            exceptions.add(e);
             return null;
         }
     }
@@ -991,16 +1021,19 @@ public class UIMS {
                     }
                 } catch (Exception e1) {
                     e1.printStackTrace();
+                    exceptions.add(e1);
                 }
 
 //                System.out.println(evalItemIds);
 
             } catch (Exception e) {
                 e.printStackTrace();
+                exceptions.add(e);
             }
             return evalItemIds;
         }catch (Exception e){
             e.printStackTrace();
+            exceptions.add(e);
             return null;
         }
     }
@@ -1093,16 +1126,19 @@ public class UIMS {
                     return value;
                 } catch (Exception e1) {
                     e1.printStackTrace();
+                    exceptions.add(e1);
                 }
 
 //            System.out.println(evalItemIds);
 
             } catch (Exception e) {
                 e.printStackTrace();
+                exceptions.add(e);
             }
             return null;
         }catch (Exception e){
             e.printStackTrace();
+            exceptions.add(e);
             return null;
         }
     }
@@ -1274,6 +1310,7 @@ public class UIMS {
                     System.out.println("status:\t" + value.get("status") + "\n");
                 } catch (Exception e1) {
                     e1.printStackTrace();
+                    exceptions.add(e1);
                 }
 
                 if (value.get("status").equals(0)) {
@@ -1282,11 +1319,13 @@ public class UIMS {
 
             } catch (Exception e) {
                 e.printStackTrace();
+                exceptions.add(e);
             }
             return false;
         }
         catch (Exception e){
             e.printStackTrace();
+            exceptions.add(e);
             return false;
         }
     }
@@ -1396,11 +1435,11 @@ public class UIMS {
         return student_id;
     }
 
-    public String getUser() {
+    public static String getUser() {
         return user;
     }
 
-    public String getPass() {
+    public static String getPass() {
         return pass;
     }
 
@@ -1443,10 +1482,14 @@ public class UIMS {
 
     public static void setStudentJSON(JSONObject studentJSON) {
         UIMS.studentJSON = studentJSON;
-        JSONObject adminClass = studentJSON.getJSONObject("adminClass");
-        studCnt = adminClass.getInt("studCnt");
-        adcId = adminClass.getString("adcId");
-        year = studentJSON.getString("egrade");
+        try {
+            JSONObject adminClass = studentJSON.getJSONObject("adminClass");
+            studCnt = adminClass.getInt("studCnt");
+            adcId = adminClass.getString("adcId");
+            year = studentJSON.getString("egrade");
+        }catch (Exception e){//兼容一条成绩都没有 获取不到信息的情况
+            e.printStackTrace();
+        }
     }
 
     public static void setScoreStatisticsJSON(JSONObject scoreStatisticsJSON) {
@@ -1582,5 +1625,17 @@ public class UIMS {
 
     public static void setNoScoreCourseId_course(HashMap<String, JSONObject> noScoreCourseId_course) {
         UIMS.noScoreCourseId_course = noScoreCourseId_course;
+    }
+
+    public static ArrayList<Exception> getExceptions() {
+        return exceptions;
+    }
+
+    public static void setUser(String user) {
+        UIMS.user = user;
+    }
+
+    public static void setPass(String pass) {
+        UIMS.pass = pass;
     }
 }

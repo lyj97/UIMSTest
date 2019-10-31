@@ -107,15 +107,8 @@ public class News {
 //        }).start();
     }
 
-    public static boolean delete(String title){
-        try{
-            delete(newsTitle_listIndex.get(title));
-            return true;
-        }
-        catch (Exception e){
-            e.printStackTrace();
-            return false;
-        }
+    public static void delete(String title){
+        delete(newsTitle_listIndex.get(title));
     }
 
     public static boolean delete(int index){

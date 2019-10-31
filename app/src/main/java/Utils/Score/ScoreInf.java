@@ -22,6 +22,8 @@ import static com.lu.mydemo.ScoreActivity.loadCJCXScore;
 
 public class ScoreInf {
 
+    public static List<Exception> exceptionList = new ArrayList<>();
+
     static HashMap<Integer, String> index_id = new HashMap<>();
     static HashMap<String, String> courseTypeID_courseType = new HashMap<>();
     static HashMap<String, String> termId_termName = new HashMap<>();//学期ID-NAME
@@ -205,6 +207,7 @@ public class ScoreInf {
                 } catch (Exception e) {
                     Log.e("ScoreInf", "UIMS score load error!");
                     Log.i("ScoreInf", "ScoreJSON:\t" + scoreJSON);
+                    exceptionList.add(e);
                     e.printStackTrace();
                 }
             }
@@ -261,6 +264,7 @@ public class ScoreInf {
                                 dataList.add(0, map);
                             } catch (Exception e) {
                                 Log.w("ErrJSON", id_JSON.get(id).toString());
+                                exceptionList.add(e);
                                 e.printStackTrace();
                             }
                         }
@@ -281,6 +285,7 @@ public class ScoreInf {
                     }
                 } catch (Exception e) {
                     Log.e("ScoreInf", "CJCX score load error!");
+                    exceptionList.add(e);
                     e.printStackTrace();
                 }
             }
@@ -290,6 +295,7 @@ public class ScoreInf {
             Log.i("GetScoreList", "Finished! Size:\t" + dataList.size());
 
         } catch (Exception e) {
+            exceptionList.add(e);
             e.printStackTrace();
         }
     }
@@ -429,5 +435,9 @@ public class ScoreInf {
 
     public static int getUpdate_count() {
         return update_count;
+    }
+
+    public static List<Exception> getExceptionList() {
+        return exceptionList;
     }
 }

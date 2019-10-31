@@ -149,14 +149,15 @@ public class NewsDetailActivity extends BaseActivity {
         });
 
         webView = findViewById(R.id.activity_news_detail_web_view);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                newsDetail = getNewsDetail();
-//                Log.i("NewsDetail", newsDetail);
-                getSucceed(newsDetail);
-            }
-        }).start();
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                newsDetail = getNewsDetail();
+////                Log.i("NewsDetail", newsDetail);
+//                getSucceed(newsDetail);
+//            }
+//        }).start();
+        webView.loadUrl(bundle.getString("abs_link"));
         AlertCenter.showLoading(this, "加载中...");
     }
 

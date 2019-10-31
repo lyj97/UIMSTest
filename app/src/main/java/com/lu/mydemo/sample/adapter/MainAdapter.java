@@ -13,6 +13,8 @@ import com.lu.mydemo.R;
 import java.util.List;
 import java.util.Map;
 
+import Utils.Course.MySubject;
+
 
 /**
  * Created by YOLANDA on 2016/7/22.
@@ -86,6 +88,8 @@ public class MainAdapter extends BaseAdapter<MainAdapter.ViewHolder> {
                 this.tvContext2.setText(context2);
             }
         }
+
+        public void setDate(MySubject object){}
 
         public void setData(String title, String description){}
 

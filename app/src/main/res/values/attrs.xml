@@ -6,4 +6,10 @@
         <attr name="textColor" format="color"/>
     </declare-styleable>
 
+    <declare-styleable name="MyTextView">
+        <attr name="mText" format="string" />
+        <attr name="mTextColor" format="color" />
+        <attr name="mTextSize" format="dimension" />
+    </declare-styleable>
+
 </resources>

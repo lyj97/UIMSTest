@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -40,7 +41,9 @@ import java.util.List;
 import java.util.Map;
 
 import Config.ColorManager;
+import Net.NewsClient;
 import ToolFor2045_Site.GetInternetInformation;
+import UIMS.UIMS;
 import Utils.News.News;
 
 public class NewsActivity extends BaseActivity {
@@ -68,6 +71,8 @@ public class NewsActivity extends BaseActivity {
     private static JSONObject tempJsonObject;
 
     public static boolean needFlush = true;
+    public static boolean triedOA = false;
+    public static boolean isLoadedFromOA = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,23 +99,30 @@ public class NewsActivity extends BaseActivity {
             @Override
             public void onItemClick(View view, int adapterPosition) {
 
-                if(((String) dataList.get(adapterPosition).get("department")).length() == 0 && ((String) dataList.get(adapterPosition).get("time")).length() == 0){
+                if(TextUtils.isEmpty((String) dataList.get(adapterPosition).get("department")) || TextUtils.isEmpty((String)  dataList.get(adapterPosition).get("time"))){
                     AlertCenter.showAlert(NewsActivity.this, (String) dataList.get(adapterPosition).get("title"));
                     return;
                 }
 
-                Intent intent = new Intent(NewsActivity.this, NewsDetailActivity.class);
+                //校内通知已经不能校外访问 停用NewsDetailActivity
+//                Intent intent = new Intent(NewsActivity.this, NewsDetailActivity.class);
+//
+//                Bundle bundle = new Bundle();
+//                bundle.putString("title", (String) dataList.get(adapterPosition).get("title"));
+//                bundle.putString("department", (String) dataList.get(adapterPosition).get("department"));
+//                bundle.putString("time", (String) dataList.get(adapterPosition).get("time"));
+//                bundle.putString("link", (String) dataList.get(adapterPosition).get("link"));
+//                bundle.putString("abs_link", (String) dataList.get(adapterPosition).get("abs_link"));
+//                bundle.putBoolean("flagTop", (boolean) dataList.get(adapterPosition).get("flagTop"));
+//
+//                intent.putExtra("bundle", bundle);
+//                startActivity(intent);
 
-                Bundle bundle = new Bundle();
-                bundle.putString("title", (String) dataList.get(adapterPosition).get("title"));
-                bundle.putString("department", (String) dataList.get(adapterPosition).get("department"));
-                bundle.putString("time", (String) dataList.get(adapterPosition).get("time"));
-                bundle.putString("link", (String) dataList.get(adapterPosition).get("link"));
-                bundle.putString("abs_link", (String) dataList.get(adapterPosition).get("abs_link"));
-                bundle.putBoolean("flagTop", (boolean) dataList.get(adapterPosition).get("flagTop"));
-
-                intent.putExtra("bundle", bundle);
-                startActivity(intent);
+                Intent intent1 = new Intent(NewsActivity.this, WebViewActivity.class);
+                Bundle web_bundle = new Bundle();
+                web_bundle.putString("link", (String) dataList.get(adapterPosition).get("abs_link"));
+                intent1.putExtra("bundle", web_bundle);
+                startActivity(intent1);
             }
         });
 
@@ -162,12 +174,14 @@ public class NewsActivity extends BaseActivity {
                     myAdapter.notifyItemChanged(adapterPosition);
                 }
                 else{
-                    if(!News.delete((String) dataList.get(adapterPosition).get("title"))){
-                        AlertCenter.showWarningAlert(NewsActivity.this, "删除收藏失败！");
-                    }
-                    else{
+                    try{
+                        News.delete((String) dataList.get(adapterPosition).get("title"));
                         //只刷新数据变化的条目
                         myAdapter.notifyItemChanged(adapterPosition);
+                    }
+                    catch (Exception e){
+//                        AlertCenter.showWarningAlert(NewsActivity.this, "删除收藏失败！");
+                        AlertCenter.showErrorAlertWithReportButton(NewsActivity.this, "删除收藏失败!", e, UIMS.getUser());
                     }
                 }
 
@@ -284,6 +298,10 @@ public class NewsActivity extends BaseActivity {
     }
 
     private void loadFailed(final boolean isFirst) {
+        if(!triedOA){
+            getNewsListFromOA();
+            return;
+        }
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -308,6 +326,7 @@ public class NewsActivity extends BaseActivity {
     }
 
     private void loadSucceed(final boolean isFirst){
+        Log.i("NewsActivity", "IsFirst:" + isFirst);
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -328,11 +347,16 @@ public class NewsActivity extends BaseActivity {
                     myAdapter.notifyDataSetChanged();
                     swipeRecyclerView.loadMoreFinish(false, true);
                 }
+                Log.i("NewsActivity", "News list size:" + dataList.size());
             }
         });
     }
 
     private void getNewsList(){
+        if(isLoadedFromOA){
+            getNewsListFromOA();
+            return;
+        }
         AlertCenter.showLoading(this, "加载中，请稍候...");
         new Thread(new Runnable() {
             @Override
@@ -370,6 +394,49 @@ public class NewsActivity extends BaseActivity {
                 } catch (Exception e){
                     e.printStackTrace();
                     swipeRecyclerView.loadMoreError(0, "加载失败，请稍后重试...");
+                }
+            }
+        }).start();
+    }
+
+    private void getNewsListFromOA(){
+        AlertCenter.showLoading(this, "由OA加载中，请稍候...");
+        triedOA = true;
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                boolean isFirst = false;
+                if(currentPage == 1) {
+                    dataList = new ArrayList<>();
+                    isFirst = true;
+                }
+                JSONObject object = NewsClient.getNewsList(currentPage);
+                if(object != null) {
+                    try {
+                        JSONArray array = object.getJSONArray("value");
+                        JSONObject item;
+                        for (int i = 0; i < array.size(); i++) {
+                            item = array.getJSONObject(i);
+                            Map<String, Object> map = new HashMap<>();
+                            map.put("title", item.getString("title"));
+                            map.put("department", item.getString("department"));
+                            map.put("time", item.getString("time"));
+                            map.put("link", item.getString("link"));
+                            map.put("abs_link", item.getString("abs_link"));
+                            map.put("flagTop", item.getBoolean("flagTop"));
+                            map.put("is_new", item.getBoolean("is_new"));
+                            dataList.add(map);
+                        }
+
+                        loadSucceed(isFirst);
+
+                        currentPage++;
+                        isLoadedFromOA = true;
+                    } catch (Exception e1) {
+                        e1.printStackTrace();
+                        swipeRecyclerView.loadMoreError(0, "加载失败，请稍后重试...");
+                        loadFailed(isFirst);
+                    }
                 }
             }
         }).start();

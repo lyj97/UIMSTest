@@ -38,6 +38,7 @@ import com.lu.mydemo.Notification.AlertCenter;
 import java.util.HashMap;
 
 import Config.ColorManager;
+import UIMS.UIMS;
 import View.PopWindow.DownloadFileConfirmPopupWindow;
 
 public class WebViewActivity extends BaseActivity {
@@ -121,11 +122,11 @@ public class WebViewActivity extends BaseActivity {
         if(link == null){
             AlertCenter.showErrorAlert(WebViewActivity.this, "ERROR!", "Link is NULL!");
         }
-        else if(link.contains("oa.jlu.edu.cn")){
-            myHeaders = new HashMap<>();
-            myHeaders.put("x-forwarded-for", "49.140.97.100");
-            webView.loadUrl(link, myHeaders);
-        }
+//        else if(link.contains("oa.jlu.edu.cn")){
+//            myHeaders = new HashMap<>();
+//            myHeaders.put("x-forwarded-for", "49.140.97.100");
+//            webView.loadUrl(link, myHeaders);
+//        }
         else {
             webView.loadUrl(link);
         }
@@ -166,7 +167,7 @@ public class WebViewActivity extends BaseActivity {
                     Log.d("fileName:", fileName);
 
                     if(fileName.contains("�")) {
-                        AlertCenter.showWarningAlert(WebViewActivity.this, "So Sorry", "抱歉，文件名可能乱码，请手动更改文件名后确认.");
+                        AlertCenter.showWarningAlert(WebViewActivity.this, "Sorry", "抱歉，文件名可能乱码，请手动更改文件名后确认.");
                     }
 
                     loadingProgressBar.setVisibility(View.GONE);
@@ -196,7 +197,10 @@ public class WebViewActivity extends BaseActivity {
                                         Manifest.permission.WRITE_EXTERNAL_STORAGE},
                                 102);
                     }
-                    else AlertCenter.showErrorAlert(WebViewActivity.this, "Error", e.getMessage());
+                    else {
+//                        AlertCenter.showErrorAlert(WebViewActivity.this, "Error", e.getMessage());
+                        AlertCenter.showErrorAlertWithReportButton(WebViewActivity.this, "抱歉,出现错误.", e, UIMS.getUser());
+                    }
                     e.printStackTrace();
                 }
             }
@@ -247,7 +251,10 @@ public class WebViewActivity extends BaseActivity {
                                 Manifest.permission.WRITE_EXTERNAL_STORAGE},
                         102);
             }
-            else AlertCenter.showErrorAlert(WebViewActivity.this, "Error", e.getMessage());
+            else {
+//                AlertCenter.showErrorAlert(WebViewActivity.this, "Error", e.getMessage());
+                AlertCenter.showErrorAlertWithReportButton(WebViewActivity.this, "抱歉,出现错误.", e, UIMS.getUser());
+            }
             e.printStackTrace();
         }
     }
@@ -310,8 +317,9 @@ public class WebViewActivity extends BaseActivity {
         @Override  //WebView代表是当前的WebView
         public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
             //表示在当前的WebView继续打开网页
-            if(request.getUrl().toString().contains("oa.jlu.edu.cn")) view.loadUrl(request.getUrl().toString(), myHeaders);
-            else view.loadUrl(request.getUrl().toString());
+//            if(request.getUrl().toString().contains("oa.jlu.edu.cn")) view.loadUrl(request.getUrl().toString(), myHeaders);
+//            else view.loadUrl(request.getUrl().toString());
+            view.loadUrl(request.getUrl().toString());
             return true;
         }
 

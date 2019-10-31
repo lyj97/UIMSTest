@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -63,23 +64,30 @@ public class NewsSavedActivity extends BaseActivity {
             @Override
             public void onItemClick(View view, int adapterPosition) {
 
-                if(((String) dataList.get(adapterPosition).get("department")).length() == 0 && ((String) dataList.get(adapterPosition).get("time")).length() == 0){
+                if(TextUtils.isEmpty((String) dataList.get(adapterPosition).get("department")) || TextUtils.isEmpty((String)  dataList.get(adapterPosition).get("time"))){
                     AlertCenter.showAlert(NewsSavedActivity.this, (String) dataList.get(adapterPosition).get("title"));
                     return;
                 }
 
-                Intent intent = new Intent(NewsSavedActivity.this, NewsDetailActivity.class);
+//                Intent intent = new Intent(NewsSavedActivity.this, NewsDetailActivity.class);
+//
+//                Bundle bundle = new Bundle();
+//                bundle.putString("title", (String) dataList.get(adapterPosition).get("title"));
+//                bundle.putString("department", (String) dataList.get(adapterPosition).get("department"));
+//                bundle.putString("time", "收藏于：" + dataList.get(adapterPosition).get("time").toString().substring(2));
+//                bundle.putString("link", (String) dataList.get(adapterPosition).get("link"));
+//                bundle.putString("abs_link", (String) dataList.get(adapterPosition).get("abs_link"));
+//                bundle.putBoolean("flagTop", (boolean) dataList.get(adapterPosition).get("flagTop"));
+//
+//                intent.putExtra("bundle", bundle);
+//                startActivity(intent);
 
-                Bundle bundle = new Bundle();
-                bundle.putString("title", (String) dataList.get(adapterPosition).get("title"));
-                bundle.putString("department", (String) dataList.get(adapterPosition).get("department"));
-                bundle.putString("time", "收藏于：" + dataList.get(adapterPosition).get("time").toString().substring(2));
-                bundle.putString("link", (String) dataList.get(adapterPosition).get("link"));
-                bundle.putString("abs_link", (String) dataList.get(adapterPosition).get("abs_link"));
-                bundle.putBoolean("flagTop", (boolean) dataList.get(adapterPosition).get("flagTop"));
+                Intent intent1 = new Intent(NewsSavedActivity.this, WebViewActivity.class);
+                Bundle web_bundle = new Bundle();
+                web_bundle.putString("link", (String) dataList.get(adapterPosition).get("abs_link"));
+                intent1.putExtra("bundle", web_bundle);
+                startActivity(intent1);
 
-                intent.putExtra("bundle", bundle);
-                startActivity(intent);
             }
         });
 
@@ -257,6 +265,7 @@ public class NewsSavedActivity extends BaseActivity {
                 tvTime = itemView.findViewById(R.id.news_list_item_time);
             }
 
+            @Override
             public void setData(String title, String department, String time, boolean flagTop) {
 
                 tvTitle.setTextColor(ColorManager.getNews_normal_text_color());

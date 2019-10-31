@@ -138,7 +138,8 @@ public class LoginGetScorePopupWindow extends PopupWindow {
                                             context.dismissGetScorePopWindow();
                                         }
                                         else{
-                                            AlertCenter.showWarningAlert(context, "获取信息失败！");
+//                                            AlertCenter.showWarningAlert(context, "获取信息失败！");
+                                            AlertCenter.showErrorAlertWithReportButton(context, "获取信息出错，请稍后重试...", UIMS.getExceptions(), userStr);
                                             dealFinish("重新登录");
                                             return;
                                         }
@@ -306,7 +307,8 @@ public class LoginGetScorePopupWindow extends PopupWindow {
 //                            }
                         } catch (Exception e) {
                             e.printStackTrace();
-                            AlertCenter.showWarningAlert(context, "Error", e.getMessage());
+//                            AlertCenter.showWarningAlert(context, "Error", e.getMessage());
+                            AlertCenter.showErrorAlertWithReportButton(context, "抱歉,出现错误.", e, UIMS.getUser());
                         }
                     }
                 }).start();
