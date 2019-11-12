@@ -26,7 +26,7 @@ import okhttp3.Response;
  */
 public class ExceptionReporter {
 
-    public static final String HOST_ADDRESS = "http://" + Address.myHost + ":8199";
+    public static final String HOST_ADDRESS = "http://uimstest." + Address.myHost + ":8199";
 //    public static final String HOST_ADDRESS = "http://" + "10.33.78.213" + ":8199";
 
     static OkHttpClient httpClient = new OkHttpClient.Builder()

@@ -184,7 +184,7 @@ public class ScoreActivity extends BaseActivity
         swipeRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         //考虑加载性能优化
         swipeRecyclerView.setHasFixedSize(true);//设置子布局（每项）高度相等，避免每次计算高度
-        swipeRecyclerView.setItemViewCacheSize(20);
+        swipeRecyclerView.setItemViewCacheSize(30);
         swipeRecyclerView.setDrawingCacheEnabled(true);
         swipeRecyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
         swipeRecyclerView.setOnItemClickListener(new com.yanzhenjie.recyclerview.OnItemClickListener() {
@@ -896,7 +896,7 @@ public class ScoreActivity extends BaseActivity
         @NonNull
         @Override
         public MainAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            return new ScoreListAdapter.ViewHolder(getInflater().inflate(R.layout.list_item_new, parent, false));
+            return new ScoreListAdapter.ViewHolder(getInflater().inflate(R.layout.list_item_score_new, parent, false));
         }
 
         @Override
