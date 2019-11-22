@@ -13,7 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".CourseEditActivity"></activity>
+        <activity android:name=".DataBackupActivity"></activity>
+        <activity android:name=".CourseEditActivity" />
         <activity android:name=".BaseActivity" />
         <activity android:name=".TestFunctionActivity" />
         <activity android:name=".WebPagesActivity" />

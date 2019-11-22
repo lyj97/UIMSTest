@@ -54,7 +54,7 @@ import View.View.ItemLongClickMaskHelper;
 import View.View.ItemMaskLayout;
 import View.View.TouchCallbackRecyclerView;
 
-public class ExamFragment extends Fragment implements ItemMaskLayout.ItemMaskClickListener, TouchCallbackRecyclerView.ScrollCallback {
+public class ExamFragment extends Fragment implements ItemMaskLayout.ItemMaskClickListener {
 
     private LinearLayout myFragmentLayout;
     private NoneScoreCourseActivity context;
@@ -70,8 +70,6 @@ public class ExamFragment extends Fragment implements ItemMaskLayout.ItemMaskCli
     private static JSONObject tempJsonObject;
 
     public static boolean flush = false;
-
-    private ItemLongClickMaskHelper mMaskHelper;
 
     @Nullable
     @Override
@@ -95,8 +93,6 @@ public class ExamFragment extends Fragment implements ItemMaskLayout.ItemMaskCli
 
         MyAddExamListener addExamListener = new MyAddExamListener();
         addButton.setOnClickListener(addExamListener);
-        mMaskHelper = new ItemLongClickMaskHelper(context);
-        mMaskHelper.setMaskItemListener(this);
 
         myAdapter = createAdapter();
 
@@ -148,13 +144,6 @@ public class ExamFragment extends Fragment implements ItemMaskLayout.ItemMaskCli
                 ExamSchedule.delete(adapterPosition);
                 flushList();
                 NoneScoreCourseFragment.setFlush();
-            }
-        });
-        swipeRecyclerView.setOnItemLongClickListener(new OnItemLongClickListener() {
-            @Override
-            public void onItemLongClick(View view, int adapterPosition) {
-                mMaskHelper.setRootFrameLayout((FrameLayout) view);
-                Toast.makeText(context, "OnLongClick", Toast.LENGTH_SHORT).show();
             }
         });
         swipeRecyclerView.setOnItemClickListener(addExamListener);
@@ -261,11 +250,6 @@ public class ExamFragment extends Fragment implements ItemMaskLayout.ItemMaskCli
         Toast.makeText(context, "delete", Toast.LENGTH_SHORT).show();
     }
 
-    @Override
-    public void onTouchUp(float diffY) {
-        mMaskHelper.dismissItemMaskLayout();
-    }
-
     class CourseExamAdapter extends MainAdapter {
 
         private List<Map<String,Object>> mDataList;
@@ -349,13 +333,11 @@ public class ExamFragment extends Fragment implements ItemMaskLayout.ItemMaskCli
 
         @Override
         public void onClick(View v) {
-            mMaskHelper.dismissItemMaskLayout();
             openPopWindow(-1, false);
         }
 
         @Override
         public void onItemClick(View view, int adapterPosition) {
-            mMaskHelper.dismissItemMaskLayout();
             openPopWindow(adapterPosition, true);
         }
 

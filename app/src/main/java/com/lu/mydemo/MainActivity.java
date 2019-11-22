@@ -55,6 +55,7 @@ import Config.ColorManager;
 import Config.Version;
 import Sensor.SensorManagerHelper;
 import ToolFor2045_Site.GetInternetInformation;
+import ToolFor2045_Site.InformationTest;
 import UIMS.UIMS;
 import UIMSTool.ClassSetConvert;
 import UIMSTool.CourseJSONTransfer;
@@ -597,12 +598,11 @@ public class MainActivity extends BaseActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    if (show) {
+        if (show) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
 //                                long startTime = System.currentTimeMillis();
                         Bundle bundle = new Bundle();
 //                                bundle.putLong("startTime", startTime);
@@ -610,14 +610,14 @@ public class MainActivity extends BaseActivity {
 //                                intent.putExtra("bundle", bundle);
                         startActivity(intent);
 //                            overridePendingTransition(R.anim.up_in, R.anim.up_out);
-                    }
-                } catch (Exception e) {
+                    } catch (Exception e) {
 //                    AlertCenter.showWarningAlert(MainActivity.this, e.getMessage());
-                    AlertCenter.showErrorAlertWithReportButton(MainActivity.this, "抱歉,出现错误!", e, user);
-                    e.printStackTrace();
+                        AlertCenter.showErrorAlertWithReportButton(MainActivity.this, "抱歉,出现错误!", e, user);
+                        e.printStackTrace();
+                    }
                 }
-            }
-        });
+            });
+        }
 
         loadLocalInformationSuccess(null);
 
