@@ -126,8 +126,7 @@ public class InternetInformationPopupWindow extends PopupWindow {
     }
 
     private void changeTheme(){
-        Log.i("Theme", "Change theme.");
-        mMenuView.findViewById(R.id.internet_information_pop_window_main_layout).setBackground(ColorManager.getMainBackground());
+        mMenuView.findViewById(R.id.internet_information_pop_window_main_layout).setBackground(ColorManager.getMainBackground_with_top_redius());
         confirm_text.setTextColor(ColorManager.getPrimaryColor());
     }
 

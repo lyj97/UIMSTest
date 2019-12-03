@@ -22,6 +22,7 @@ import com.tapadoo.alerter.Alerter;
 
 import Config.ColorManager;
 import UIMS.UIMS;
+import Utils.Thread.MyThreadController;
 
 public class LoginGetSelectCoursePopWindow extends PopupWindow {
 
@@ -77,7 +78,7 @@ public class LoginGetSelectCoursePopWindow extends PopupWindow {
                 }
                 AlertCenter.showLoading(context, "登录中，请稍候...");
                 dealing("登录中，请稍候...");
-                new Thread(new Runnable() {
+                MyThreadController.commit(new Runnable() {
                     @Override
                     public void run() {
                         try {
@@ -142,7 +143,7 @@ public class LoginGetSelectCoursePopWindow extends PopupWindow {
                             AlertCenter.showErrorAlertWithReportButton(context, "抱歉,出现错误.", e, UIMS.getUser());
                         }
                     }
-                }).start();
+                });
             }
         });
 
@@ -235,9 +236,7 @@ public class LoginGetSelectCoursePopWindow extends PopupWindow {
     }
 
     private void changeTheme(){
-        Log.i("Theme", "Change theme.");
-        mMenuView.findViewById(R.id.pop_window_login_pop_layout_title).setBackgroundColor(ColorManager.getPrimaryColor());
-        mMenuView.findViewById(R.id.pop_window_login_pop_layout_main_information).setBackground(ColorManager.getMainBackground());
+        mMenuView.findViewById(R.id.pop_window_login_pop_layout_main_information).setBackground(ColorManager.getMainBackground_with_top_redius());
         commitButton.setBackground(ColorManager.getInternetInformationButtonBackground_full());
         user.setBackground(ColorManager.getSpinnerBackground_full());
         password.setBackground(ColorManager.getSpinnerBackground_full());

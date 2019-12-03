@@ -215,9 +215,7 @@ public class AddCourseScheduleChangePopupWindow extends PopupWindow {
     }
 
     private void changeTheme(){
-        Log.i("Theme", "Change theme.");
-        mMenuView.findViewById(R.id.course_schedule_change_pop_layout_title).setBackgroundColor(ColorManager.getPrimaryColor());
-        mMenuView.findViewById(R.id.course_schedule_change_pop_layout_main_information).setBackground(ColorManager.getMainBackground());
+        mMenuView.findViewById(R.id.course_schedule_change_pop_layout).setBackground(ColorManager.getMainBackground_with_top_redius());
         commit_button.setBackground(ColorManager.getInternetInformationButtonBackground_full());
     }
 

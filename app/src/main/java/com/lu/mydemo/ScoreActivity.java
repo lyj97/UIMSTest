@@ -28,7 +28,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.github.mikephil.charting.animation.Easing;
@@ -55,14 +54,14 @@ import Config.ColorManager;
 import UIMS.UIMS;
 import Utils.Score.ScoreConfig;
 import Utils.Score.ScoreInf;
+import Utils.Thread.MyThreadController;
 import View.Listener.AppBarStateChangeListener;
+import View.MyView.MyToolBar;
 import View.PopWindow.LoginGetScorePopupWindow;
 
 public class ScoreActivity extends BaseActivity
 {
 
-//    TextView scoreStatisticsTextViewControl;
-//    TextView centerTitle;
     static SharedPreferences sp;
 
     AppBarLayout appBarLayout;
@@ -77,9 +76,7 @@ public class ScoreActivity extends BaseActivity
     TextView first_bixiu_with_addition_score;
     TextView first_bixiu_with_addition_gpa;
 
-    TextView backTextView;
-//    TextView settingText;
-    TextView hideText;
+    MyToolBar toolBar;
 
     FloatingActionButton fab;
 
@@ -89,8 +86,6 @@ public class ScoreActivity extends BaseActivity
 
     private static PieData[] pieDatas;
     private static boolean[] showScorePercentFlags;
-
-//    private TextView navigation_back;
 
     static HashMap<Integer, String> index_id = new HashMap<>();
     static HashMap<String, String> courseTypeID_courseType = new HashMap<>();
@@ -114,9 +109,6 @@ public class ScoreActivity extends BaseActivity
 
     public static Context context;
 
-//    private boolean isShow = true;
-//    private SharedPreferences sp;
-
     public LoginGetScorePopupWindow getScorePopupWindow;
 
     @Override
@@ -137,14 +129,7 @@ public class ScoreActivity extends BaseActivity
         PE_select = sp.getBoolean("PE_select", false);
         chongxiu_select = sp.getBoolean("chongxiu_select", false);
 
-//        sp = this.getSharedPreferences("ScoreStatistics", Context.MODE_PRIVATE);
-//        isShow = sp.getBoolean("show", true);
-
-//        scoreStatisticsTextViewControl = findViewById(R.id.activity_main_textView_ScoreStatisticsControl);
-//        scoreStatisticsTitleTextView = findViewById(R.id.textView_ScoreStatisticsTitle);
-        backTextView = findViewById(R.id.activity_scrolling_layout_back_text);
-//        settingText = findViewById(R.id.activity_scrolling_layout_setting_text);
-        hideText = findViewById(R.id.activity_scrolling_layout_hide_text);
+        toolBar = new MyToolBar(this);
 
         fab = findViewById(R.id.activity_scrolling_fab);
 
@@ -160,10 +145,9 @@ public class ScoreActivity extends BaseActivity
 
         swipeRecyclerView = findViewById(R.id.activity_main_recycler_view);
 
-//        navigation_back = findViewById(R.id.activity_main_navigation_back_text);
-
         changeTheme();
 
+        toolBar.setSubTitle("成绩统计");
         appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
             @Override
             public void onStateChanged(AppBarLayout appBarLayout, State state) {
@@ -191,7 +175,6 @@ public class ScoreActivity extends BaseActivity
             @Override
             public void onItemClick(View view, int adapterPosition) {
 //                showPercent(index_id.get(adapterPosition), ((String) dataList.get(adapterPosition).get("context1")).contains("是"));
-                //TODO TEST Chart测试
                 showScorePercentFlags[adapterPosition] = !showScorePercentFlags[adapterPosition];
                 setData(index_id.get(adapterPosition), ((String) dataList.get(adapterPosition).get("context1")).contains("是"), adapterPosition);
                 myAdapter.notifyItemChanged(adapterPosition);
@@ -209,27 +192,9 @@ public class ScoreActivity extends BaseActivity
         });
         scoreStatisticsLayout.setVisibility(View.GONE);
 
-//        navigation_back.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                finish();
-//            }
-//        });
-
-        //TODO TEST 成绩统计隐藏测试
-//        scoreStatisticsTextViewControl.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                changeScoreStatisticsState(!isShow);
-//            }
-//        });
-//        changeScoreStatisticsState(isShow);
-
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO flush score
-//                Toast.makeText(ScoreActivity.this, "FLUSH!", Toast.LENGTH_SHORT).show();
                 LoginGetScorePopupWindow window = new LoginGetScorePopupWindow(ScoreActivity.this, findViewById(R.id.activity_scrolling_layout).getHeight(), findViewById(R.id.activity_scrolling_layout).getWidth());
                 window.setFocusable(true);
                 window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
@@ -238,29 +203,16 @@ public class ScoreActivity extends BaseActivity
             }
         });
 
-//        settingText.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                startActivity(new Intent(ScoreActivity.this, SettingActivity.class));
-//            }
-//        });
-
-        backTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-        hideText.setOnClickListener(new View.OnClickListener() {
+        toolBar.setRightOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(scoreStatisticsLayout.getVisibility() == View.VISIBLE){
                     scoreStatisticsLayout.setVisibility(View.GONE);
-                    hideText.setBackground(getDrawable(R.drawable.ic_keyboard_arrow_down_white_24dp));
+                    toolBar.setRightIcon(getDrawable(R.drawable.ic_keyboard_arrow_down_white_24dp));
                 }
                 else{
                     scoreStatisticsLayout.setVisibility(View.VISIBLE);
-                    hideText.setBackground(getDrawable(R.drawable.ic_keyboard_arrow_up_white_24dp));
+                    toolBar.setRightIcon(getDrawable(R.drawable.ic_keyboard_arrow_up_white_24dp));
                 }
             }
         });
@@ -271,19 +223,8 @@ public class ScoreActivity extends BaseActivity
             }
         }
 
-        hideText.callOnClick();//打开时显示成绩统计
+        toolBar.getRightIconIv().callOnClick();//打开时显示成绩统计
         loadScoreList();
-//        long finishTime = System.currentTimeMillis();
-//        Log.i("Time", (finishTime - (long) getIntent().getBundleExtra("bundle").get("startTime")) / 1000 + "");
-
-//        //TODO TEST 数据加载测试【数据与视图层拆分，实现懒加载】
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                ScoreInf.loadScoreList();
-//                Log.i("TEST:ScoreInf", ScoreInf.getDataList().toString());
-//            }
-//        }).start();
 
         long endTime = System.currentTimeMillis();
         Log.i("ScoreActivity", "EndTime:" + endTime);
@@ -301,19 +242,11 @@ public class ScoreActivity extends BaseActivity
             swipeRecyclerView.setAdapter(myAdapter);
             myAdapter.notifyDataSetChanged(dataList);
         }
-//        reloadScoreList();
         getScoreStatistics();
     }
 
-//    @Override
-//    public void onWindowFocusChanged(boolean hasFocus) {
-//        if(hasFocus){
-//
-//        }
-//    }
-
     public void loadScoreList(){
-        new Thread(new Runnable() {
+        MyThreadController.commit(new Runnable() {
             @Override
             public void run() {
                 long startTime = System.currentTimeMillis();
@@ -340,43 +273,10 @@ public class ScoreActivity extends BaseActivity
                         Alerter.hide();
                     }
                 });
-//                final List<Map<String, Object>> datalist = getScoreList();
-//                final ListViewForScrollView lv = findViewById(R.id.activity_main_list_view);
-//
-//                runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        lv.setAdapter(new colorAdapter(ScoreActivity.this, datalist, R.layout.list_item, new String[]{"title", "context1", "context2", "context3", "context4"}, new int[]{R.id.list_item_title, R.id.list_item_context1, R.id.list_item_context2, R.id.list_item_context3, R.id.list_item_context4}));
-//                        lv.addHeaderView(new ViewStub(ScoreActivity.this));
-//                        lv.addFooterView(new ViewStub(ScoreActivity.this));
-//                        lv.setSelector(new ColorDrawable(Color.TRANSPARENT));
-//                        lv.setOnItemClickListener(new OnItemClickListener() {
-//                            //list点击事件
-//                            @Override
-//                            public void onItemClick(AdapterView<?> p1, View p2, int p3, long p4) {
-                                // TODO: Implement this method
-//                Toast.makeText(ScoreActivity.this, "TEMP", Toast.LENGTH_SHORT).show();
-//                Alerter.create(ScoreActivity.this)
-//                        .setTitle("Title")
-//                        .setText("p1:\t" + p1 + "\n" +
-//                                "p2:\t" + p2 + "\n" +
-//                                "p3:\t" + p3 + "\n" +
-//                                "p4:\t" + p4 + "\n"
-//                        )
-//                        .enableSwipeToDismiss()
-//                        .setBackgroundColorInt(Color.rgb(100,100,100))
-//                        .show();
-//                Log.i("ScoreActivity:showPercent", index_id.get(p3 - 1) + ((String) datalist.get(p3 - 1).get("context1")).contains("是"));
-//                                showPercent(index_id.get(p3 - 1), ((String) datalist.get(p3 - 1).get("context1")).contains("是"));
-//                            }
-//                        });
-//                        Alerter.hide();
-//                    }
-//                });
                 long endTime = System.currentTimeMillis();
                 Log.i("ScoreActivity", "ScoreLoadTime:" + (endTime - startTime));
             }
-        }).start();
+        });
     }
 
     public void reloadScoreList(){
@@ -412,191 +312,6 @@ public class ScoreActivity extends BaseActivity
         else {
             Log.e("ScoreList", "Not loaded!");
         }
-
-//        reloadData = false;
-//
-//        courseTypeID_courseType = UIMS.getCourseTypeId_courseType();
-//        dataList = new ArrayList<>();
-//        Map<String,Object> map;
-//
-//        try {
-//
-//            JSONObject scoreJSON = UIMS.getScoreJSON();
-//
-//            JSONArray scores = scoreJSON.getJSONArray("value");
-//
-//            double adviceCredit;
-//
-//            for (int i = 0; i < scores.size(); i++) {
-//                map = new HashMap<>();
-//
-//                JSONObject temp = scores.getJSONObject(i);
-//                JSONObject teachingTerm = temp.getJSONObject("teachingTerm");
-//                JSONObject course = temp.getJSONObject("course");
-//                String asId = temp.getString("asId");
-//                String courName = course.getString("courName");
-//                String termName = teachingTerm.getString("termName");
-//                String courScore = temp.getString("score");
-//                int scoreNum = temp.getInt("scoreNum");
-//                String isReselect = (temp.getString("isReselect").contains("Y")) ? "是" : "否";
-//                String gPoint = temp.getString("gpoint");
-//                String dateScore = temp.getString("dateScore");
-//                String type5 = temp.getString("type5");
-//                adviceCredit = course.getDouble("adviceCredit");
-//                dateScore = dateScore.replaceAll("T", "  ");
-//
-//                map.put("asId", asId);
-//                index_id.put(i, asId);
-//                map.put("title", courName + "(" + courseTypeID_courseType.get(type5) + ")");
-////                map.put("context1","成绩:" + courScore + "  \t  " +
-////                        "重修:" + isReselect);
-////                map.put("context2",
-////                        termName);
-//                map.put("context1", termName + "   \t   " +
-//                        "重修?  " + isReselect);
-//                map.put("context2",
-//                        courScore);
-//                map.put("context3",
-//                        "发布时间： " + dateScore);
-//                map.put("context4",
-//                        adviceCredit);
-//                map.put("context5",
-//                        gPoint);
-//                map.put("type", type5);
-//
-//                if (!chongxiu_select) {//排除所有重修
-//                    if (isReselect.equals("否") ) {//排除所有重修
-//
-////                    if (type5.equals("4161") || type5.equals("4162") || type5.equals("4164") ) {//体育/限选/选修（除校选修）
-//                        if (xuanxiu_select && type5.equals("4161") ){//选修
-//                            required_custom_ScoreSum += scoreNum * adviceCredit;
-//                            required_custom_GPASum += Double.parseDouble(gPoint) * adviceCredit;
-//                            required_custom_CreditSum += adviceCredit;
-//                        }
-//                        if (xianxuan_select && type5.equals("4162") ) {//限选
-//                            required_custom_ScoreSum += scoreNum * adviceCredit;
-//                            required_custom_GPASum += Double.parseDouble(gPoint) * adviceCredit;
-//                            required_custom_CreditSum += adviceCredit;
-//                        }
-//                        if (xiaoxuanxiu_select && type5.equals("4163") ) {//校选修
-//                            required_custom_ScoreSum += scoreNum * adviceCredit;
-//                            required_custom_GPASum += Double.parseDouble(gPoint) * adviceCredit;
-//                            required_custom_CreditSum += adviceCredit;
-//                        }
-//                        if (PE_select && type5.equals("4164") ) {//体育
-//                            required_custom_ScoreSum += scoreNum * adviceCredit;
-//                            required_custom_GPASum += Double.parseDouble(gPoint) * adviceCredit;
-//                            required_custom_CreditSum += adviceCredit;
-//                        }
-//                        if (type5.equals("4160") ) {//仅必修
-//                            if(bixiu_select) {
-//                                required_custom_ScoreSum += scoreNum * adviceCredit;
-//                                required_custom_GPASum += Double.parseDouble(gPoint) * adviceCredit;
-//                                required_custom_CreditSum += adviceCredit;
-//                            }
-//                            requiredScoreSum += scoreNum * adviceCredit;
-//                            requiredGPASum += Double.parseDouble(gPoint) * adviceCredit;
-//                            requiredCreditSum += adviceCredit;
-//                        }
-//
-//                    }
-//                }
-//                else{
-//                    if (type5.equals("4160") ) {//仅必修
-//                        if(bixiu_select) {
-//                            required_custom_ScoreSum += scoreNum * adviceCredit;
-//                            required_custom_GPASum += Double.parseDouble(gPoint) * adviceCredit;
-//                            required_custom_CreditSum += adviceCredit;
-//                        }
-//                        if (isReselect.equals("否") ) {//排除重修
-//                            requiredScoreSum += scoreNum * adviceCredit;
-//                            requiredGPASum += Double.parseDouble(gPoint) * adviceCredit;
-//                            requiredCreditSum += adviceCredit;
-//                        }
-//                    }
-//                    if (xuanxiu_select && type5.equals("4161") ){//选修
-//                        required_custom_ScoreSum += scoreNum * adviceCredit;
-//                        required_custom_GPASum += Double.parseDouble(gPoint) * adviceCredit;
-//                        required_custom_CreditSum += adviceCredit;
-//                    }
-//                    if (xianxuan_select && type5.equals("4162") ) {//限选
-//                        required_custom_ScoreSum += scoreNum * adviceCredit;
-//                        required_custom_GPASum += Double.parseDouble(gPoint) * adviceCredit;
-//                        required_custom_CreditSum += adviceCredit;
-//                    }
-//                    if (xiaoxuanxiu_select && type5.equals("4163") ) {//校选修
-//                        required_custom_ScoreSum += scoreNum * adviceCredit;
-//                        required_custom_GPASum += Double.parseDouble(gPoint) * adviceCredit;
-//                        required_custom_CreditSum += adviceCredit;
-//                    }
-//                    if (PE_select && type5.equals("4164") ) {//体育
-//                        required_custom_ScoreSum += scoreNum * adviceCredit;
-//                        required_custom_GPASum += Double.parseDouble(gPoint) * adviceCredit;
-//                        required_custom_CreditSum += adviceCredit;
-//                    }
-//                }
-//
-//                dataList.add(map);
-//
-//            }
-//
-//            HashMap<String, org.json.JSONObject> id_JSON = CJCX.getId_JSON();
-//            if(!ScoreConfig.isIsCJCXEnable() || id_JSON == null) {
-//                Log.i("GetScoreList", "Ignored CJCX!");
-//                Log.i("GetScoreList", "Finished! Size:\t" + dataList.size());
-//                return;
-//            }
-//            else{
-//                loadCJCXScore();
-//                id_JSON = CJCX.getId_JSON();
-//                if(id_JSON == null) {
-//                    Log.i("GetScoreList", "Ignored CJCX!  Load Failed! No date!");
-//                    return;
-//                }
-//            }
-//            org.json.JSONObject object;
-//            for(String id : id_JSON.keySet()){
-//                if(!index_id.containsValue(id)) {
-//                    try {
-//                        object = id_JSON.get(id);
-//                        map = new HashMap<>();
-//                        map.put("asId", object.getString("lsrId"));
-//                        map.put("title", object.getString("kcmc"));
-//                        try {
-//                            map.put("context1", UIMS.getTermId_termName().get(object.getString("termId")) + "   \t   " +
-//                                    "重修?  " + ((object.getString("isReselect").toUpperCase().equals("N")) ? "否" : "是"));
-//                        }
-//                        catch (Exception e){
-//                            map.put("context1", UIMS.getTermId_termName().get(object.getString("termId")) + "   \t   " +
-//                                    "重修?  " + "否");
-//                        }
-//                        map.put("context2",
-//                                object.getString("cj"));
-//                        map.put("context3",
-//                                "发布时间： " + "--");
-//                        map.put("context4",
-//                                object.getDouble("credit"));
-//                        map.put("context5",
-//                                object.getString("gpoint"));
-//                        map.put("type", "");
-//                        dataList.add(0, map);
-//                    }catch (Exception e){
-//                        Log.w("ErrJSON", id_JSON.get(id).toString());
-//                        e.printStackTrace();
-//                    }
-//                }
-//            }
-//
-//            int index = 0;
-//            for(Map<String,Object> temp : dataList){
-//                index_id.put(index++, (String) temp.get("asId"));
-//            }
-//
-//            Log.i("GetScoreList", "Finished! Size:\t" + dataList.size());
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
 
     }
 
@@ -1078,20 +793,6 @@ public class ScoreActivity extends BaseActivity
                         }
                     });
                     chart.setData(data);
-                    // TODO
-//                    chart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
-//                        @Override
-//                        public void onValueSelected(Entry e, Highlight h) {
-////                            chart.getDescription().setText(e + " \t" + h);
-//                            Log.i("PieChartTest", e + " \t" + h);
-//                            Log.i("PieChartTest", data.getDataSetByIndex((int) h.getX()).toString());
-//                        }
-//
-//                        @Override
-//                        public void onNothingSelected() {
-//                            chart.getDescription().setText("");
-//                        }
-//                    });
                     // undo all highlights
                     chart.highlightValues(null);
 

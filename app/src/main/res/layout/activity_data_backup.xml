@@ -13,61 +13,9 @@
     android:fitsSystemWindows="true"
     tools:context=".DataBackupActivity">
 
-    <LinearLayout
+    <include
         android:id="@+id/activity_data_backup_title_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center">
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
-
-            <TextView
-                android:id="@+id/activity_data_backup_navigation_back_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:background="@drawable/ic_arrow_back_white_24dp"
-                />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:textStyle="bold"
-                android:text="UIMSTest"
-                android:textSize="20sp"
-                android:padding="3dp"
-                android:textColor="@color/color_whiteText"
-                />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textSize="15sp"
-                android:textColor="@color/color_whiteText"
-                android:text="数据备份与恢复" />
-
-        </LinearLayout>
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"/>
-
-    </LinearLayout>
+        layout="@layout/view_tool_bar"/>
 
     <RelativeLayout
         android:id="@+id/activity_data_backup_server_state_layout"

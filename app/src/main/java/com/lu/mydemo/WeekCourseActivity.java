@@ -40,6 +40,7 @@ import Config.ColorManager;
 import Utils.Course.MySubject;
 import Utils.Course.SubjectRepertory;
 import Utils.Database.MyCourseDBHelper;
+import Utils.Thread.MyThreadController;
 import View.PopWindow.CourseDetailPopupWindow;
 import View.PopWindow.CourseListPopupWindow;
 
@@ -114,22 +115,22 @@ public class WeekCourseActivity extends BaseActivity implements View.OnClickList
         if(mySubjects == null || mySubjects.size() == 0) {//尝试重新加载
             if(mySubjects != null) Log.e("WeekCourseActivity", "Err when get course from db!");
             mySubjects = SubjectRepertory.loadDefaultSubjects(getApplicationContext());
-            //TODO DB TEST
-            new Thread(new Runnable() {
+            //DB TEST
+            MyThreadController.commit(new Runnable() {
                 @Override
                 public void run() {
                     dbHelper.saveAll(db, mySubjects, true);
                     Log.i("WeekCourseActivity", "Course:" + dbHelper.getAllCourse(db));
                     db.close();
                 }
-            }).start();
+            });
         }
         else db.close();
 //        showLoading("加载中，请稍候...");
         handler.sendEmptyMessage(0x123);
     }
 
-    Handler handler=new Handler(){
+    Handler handler= new Handler(){
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -268,7 +269,7 @@ public class WeekCourseActivity extends BaseActivity implements View.OnClickList
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if(selectedCourseName == null || selectedCourseName.length() < 1) return;
-                new Thread(new Runnable() {
+                MyThreadController.commit(new Runnable() {
                     @Override
                     public void run() {
 
@@ -279,17 +280,17 @@ public class WeekCourseActivity extends BaseActivity implements View.OnClickList
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                //TODO TEST course_detail.
+                                //TEST course_detail.
                                 CourseDetailPopupWindow informationPopWindow = new CourseDetailPopupWindow(WeekCourseActivity.this, temp_list, findViewById(R.id.weekCourseLayout).getHeight(), findViewById(R.id.weekCourseLayout).getWidth());
                                 informationPopWindow.showAtLocation(WeekCourseActivity.this.findViewById(R.id.weekCourseLayout), Gravity.CENTER | Gravity.CENTER_HORIZONTAL, 0, 0); //设置layout在PopupWindow中显示的位置
                             }
                         });
                     }
-                }).start();
+                });
             }
         };
 
-        new Thread(new Runnable() {
+        MyThreadController.commit(new Runnable() {
             @Override
             public void run() {
                 final List<MySubject> temp_list = new ArrayList<>();
@@ -300,7 +301,7 @@ public class WeekCourseActivity extends BaseActivity implements View.OnClickList
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            //TODO 课程格子列表
+                            //TEST 课程格子列表
                             CourseListPopupWindow courseDetailPopupWindow = new CourseListPopupWindow(WeekCourseActivity.this, temp_list, listener, findViewById(R.id.weekCourseLayout).getHeight(), findViewById(R.id.weekCourseLayout).getWidth());
                             courseDetailPopupWindow.showAtLocation(WeekCourseActivity.this.findViewById(R.id.weekCourseLayout), Gravity.CENTER | Gravity.CENTER_HORIZONTAL, 0, 0); //设置layout在PopupWindow中显示的位置
                         }
@@ -310,14 +311,14 @@ public class WeekCourseActivity extends BaseActivity implements View.OnClickList
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            //TODO 课程详情
+                            //TEST 课程详情
                             CourseDetailPopupWindow informationPopWindow = new CourseDetailPopupWindow(WeekCourseActivity.this, temp_list, findViewById(R.id.weekCourseLayout).getHeight(), findViewById(R.id.weekCourseLayout).getWidth());
                             informationPopWindow.showAtLocation(WeekCourseActivity.this.findViewById(R.id.weekCourseLayout), Gravity.CENTER | Gravity.CENTER_HORIZONTAL, 0, 0); //设置layout在PopupWindow中显示的位置
                         }
                     });
                 }
             }
-        }).start();
+        });
     }
 
     @Override

@@ -2,7 +2,9 @@ package com.lu.mydemo.Notification;
 
 import android.app.Activity;
 import android.content.Context;
+import android.view.Gravity;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.lu.mydemo.R;
@@ -12,6 +14,9 @@ import java.util.List;
 
 import Config.ColorManager;
 import ToolFor2045_Site.ExceptionReporter;
+import Utils.String.FormatCheck;
+import Utils.Thread.MyThreadController;
+import View.PopWindow.SetEmailPopupWindow;
 
 public class AlertCenter {
 
@@ -143,18 +148,42 @@ public class AlertCenter {
                         .addButton("Report!", R.style.AlertButton, new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                new Thread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        try {
-                                            ExceptionReporter.reportException(exception, user_id);
-                                        }catch (Exception e){
-                                            e.printStackTrace();
+                                if(FormatCheck.isEmail(ExceptionReporter.USER_MAIL)) {
+                                    MyThreadController.commit(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            try {
+                                                ExceptionReporter.reportException(exception, user_id);
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
                                         }
-                                    }
-                                }).start();
-                                Toast.makeText(context, "感谢您的反馈!\n^_^", Toast.LENGTH_SHORT).show();
-                                hideAlert(context);
+                                    });
+                                    Toast.makeText(context, "感谢您的反馈^_^", Toast.LENGTH_SHORT).show();
+                                    hideAlert(context);
+                                }
+                                else {
+                                    SetEmailPopupWindow window = new SetEmailPopupWindow(context, new SetEmailPopupWindow.OnDismissListener() {
+                                        @Override
+                                        public void onDismiss() {
+                                            MyThreadController.commit(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    try {
+                                                        ExceptionReporter.reportException(exception, user_id);
+                                                    } catch (Exception e) {
+                                                        e.printStackTrace();
+                                                    }
+                                                }
+                                            });
+                                            Toast.makeText(context, "感谢您的反馈^_^", Toast.LENGTH_SHORT).show();
+                                            hideAlert(context);
+                                        }
+                                    }, context.getWindow().getDecorView().getHeight(), context.getWindow().getDecorView().getWidth());
+                                    window.setFocusable(true);
+                                    window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+                                    window.showAtLocation(context.getWindow().getDecorView(), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0); //设置layout在PopupWindow中显示的位置
+                                }
                             }
                         })
                         .show();
@@ -179,18 +208,42 @@ public class AlertCenter {
                         .addButton("Report!", R.style.AlertButton, new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                new Thread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        try {
-                                            ExceptionReporter.reportException(exceptions, user_id);
-                                        }catch (Exception e){
-                                            e.printStackTrace();
+                                if(FormatCheck.isEmail(ExceptionReporter.USER_MAIL)) {
+                                    MyThreadController.commit(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            try {
+                                                ExceptionReporter.reportException(exceptions, user_id);
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
                                         }
-                                    }
-                                }).start();
-                                Toast.makeText(context, "感谢您的反馈!\n^_^", Toast.LENGTH_SHORT).show();
-                                hideAlert(context);
+                                    });
+                                    Toast.makeText(context, "感谢您的反馈^_^", Toast.LENGTH_SHORT).show();
+                                    hideAlert(context);
+                                }
+                                else {
+                                    SetEmailPopupWindow window = new SetEmailPopupWindow(context, new SetEmailPopupWindow.OnDismissListener() {
+                                        @Override
+                                        public void onDismiss() {
+                                            MyThreadController.commit(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    try {
+                                                        ExceptionReporter.reportException(exceptions, user_id);
+                                                    } catch (Exception e) {
+                                                        e.printStackTrace();
+                                                    }
+                                                }
+                                            });
+                                            Toast.makeText(context, "感谢您的反馈^_^", Toast.LENGTH_SHORT).show();
+                                            hideAlert(context);
+                                        }
+                                    }, context.getWindow().getDecorView().getHeight(), context.getWindow().getDecorView().getWidth());
+                                    window.setFocusable(true);
+                                    window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+                                    window.showAtLocation(context.getWindow().getDecorView(), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0); //设置layout在PopupWindow中显示的位置
+                                }
                             }
                         })
                         .show();

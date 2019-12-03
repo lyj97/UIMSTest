@@ -6,13 +6,6 @@
     android:gravity="bottom|center"
     >
 
-    <TextView
-        android:id="@+id/pop_window_course_detail_top_back"
-        android:layout_width="match_parent"
-        android:layout_height="15dp"
-        android:layout_above="@+id/pop_window_course_detail_layout"
-        android:background="@drawable/shape_rectangle_with_top_radius"/>
-
     <LinearLayout
         android:id="@+id/pop_window_course_detail_layout"
         android:layout_width="match_parent"
@@ -22,6 +15,11 @@
         android:orientation="vertical"
         android:background="@drawable/background_login"
         >
+
+        <TextView
+            android:id="@+id/pop_window_course_detail_top_back"
+            android:layout_width="match_parent"
+            android:layout_height="15dp"/>
 
         <TextView
             android:id="@+id/pop_window_course_detail_layout_title"
@@ -81,7 +79,7 @@
         android:gravity="center"
         android:padding="10dp"
         android:layout_alignParentBottom="true"
-        android:text="Tips:点击上课安排，可进行编辑."
+        android:text="@string/edit_course_introduce"
         android:background="@color/color_grayBackground"/>
 
 </RelativeLayout>

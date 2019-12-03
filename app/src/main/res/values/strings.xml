@@ -10,4 +10,18 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
 
+    <string name="back">返回</string>
+    <string name="sure">确定</string>
+
+    <!--设置邮箱弹窗-->
+    <string name="information_title">提示</string>
+    <string name="email_introduce">为方便后续与您联系，请提供您的邮箱。</string>
+    <string name="email_hint">请输入您的邮箱</string>
+    <string name="email_divider">\@</string>
+    <string name="email_part_2_hint">qq.com</string>
+    <string name="email_edit_MIUI_info">检测到您可能正在使用小米手机(MIUI)，</string>
+
+    <!--课程详情弹窗-->
+    <string name="edit_course_introduce">课程编辑将在后续版本完成，敬请期待.</string>
+
 </resources>

@@ -54,6 +54,7 @@ import CJCX.CJCX;
 import Config.ColorManager;
 import Config.Version;
 import Sensor.SensorManagerHelper;
+import ToolFor2045_Site.ExceptionReporter;
 import ToolFor2045_Site.GetInternetInformation;
 import ToolFor2045_Site.InformationTest;
 import UIMS.UIMS;
@@ -63,6 +64,7 @@ import Utils.Course.CourseScheduleChange;
 import Utils.Course.MySubject;
 import Utils.Score.ScoreConfig;
 import Utils.Score.ScoreInf;
+import Utils.Thread.MyThreadController;
 import View.PopWindow.*;
 
 public class MainActivity extends BaseActivity {
@@ -85,7 +87,7 @@ public class MainActivity extends BaseActivity {
     private LinearLayout to_setting_layout;
 
     private TextView web_pages_text_view;
-    private TextView test;
+    private TextView goToTestTv;
 
     private ScrollView login_main_view;
     private TextView linearLayoutView_down_text;
@@ -158,9 +160,9 @@ public class MainActivity extends BaseActivity {
                 startActivity(new Intent(MainActivity.this, WebPagesActivity.class));
             }
         });
-        //TODO TEST
-        test = findViewById(R.id.login_test);
-        test.setOnClickListener(new View.OnClickListener() {
+        //测试功能
+        goToTestTv = findViewById(R.id.login_test);
+        goToTestTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, TestFunctionActivity.class));
@@ -236,7 +238,7 @@ public class MainActivity extends BaseActivity {
             public void onClick(View v) {
 
                 /**
-                 * TODO TEST 登录逻辑
+                 * TEST 登录逻辑
                  */
                 LoginPopWindow window = new LoginPopWindow(MainActivity.this, findViewById(R.id.activity_login).getHeight(), findViewById(R.id.activity_login).getWidth());
                 window.setFocusable(true);
@@ -253,7 +255,7 @@ public class MainActivity extends BaseActivity {
                 get_save_button.setEnabled(false);
                 get_save_button.setText("数据转换中，请稍候...");
 
-                //TODO TEST 成绩查询不验证数据直接进入
+                //TEST 成绩查询不验证数据直接进入
 //                CJCX.loadCJCXJSON(getApplicationContext());
 //                ScoreActivity.context = getApplicationContext();
                 Intent intent = new Intent(MainActivity.this, ScoreActivity.class);
@@ -352,13 +354,16 @@ public class MainActivity extends BaseActivity {
         });
 
         isInternetInformationShowed = sp.getBoolean("isInternetInformationShowed", false);
-        Log.i("GetInternetInformation", "isInternetInformationShowed:\t" + isInternetInformationShowed);
+//        Log.i("GetInternetInformation", "isInternetInformationShowed:\t" + isInternetInformationShowed);
         if(!isInternetInformationShowed) getInternetInformation();
 
         acceptTestFun = sp.getBoolean("acceptTestFun", false);
         if(!acceptTestFun) {
             hideTestFun();
         }
+
+        //初始化错误上报，获取本地保存的Email地址
+        ExceptionReporter.initUserInformation(getApplicationContext());
 
         //摇一摇
 //        SensorManagerHelper.OnShakeListener onShakeListener = new SensorManagerHelper.OnShakeListener() {
@@ -383,9 +388,9 @@ public class MainActivity extends BaseActivity {
         ColorManager.loadConfig(getApplicationContext(), this);
         changeTheme();
 
-        // TODO TEST 忽略本地数据加载
+        // TEST 忽略本地数据加载
 //        Log.e("TEST", "Local information ignored for TEST!");
-        new Thread(new Runnable() {
+        MyThreadController.commit(new Runnable() {
             @Override
             public void run() {
                 if (!isLocalValueLoaded && isLocalInformationAvailable())
@@ -402,7 +407,7 @@ public class MainActivity extends BaseActivity {
                 ScoreInf.loadScoreList();
 //                Log.i("TEST:ScoreInf", ScoreInf.getDataList().toString());
             }
-        }).start();
+        });
 
         if(isLocalValueLoaded && isCourseNeedReload){
             showWarningAlertWithCancel_OKButton("需要刷新课程信息", "当前学期已经改变，请刷新本地课程信息。");
@@ -428,7 +433,7 @@ public class MainActivity extends BaseActivity {
     }
 
     protected void setButtonText(final Button button, final long sleepTime, final String text, final boolean enable){
-        new Thread(new Runnable() {
+        MyThreadController.commit(new Runnable() {
             @Override
             public void run() {
                 try{
@@ -444,11 +449,11 @@ public class MainActivity extends BaseActivity {
                     }
                 });
             }
-        }).start();
+        });
     }
 
     protected void hideTestFun(){
-        test.setVisibility(View.GONE);
+        goToTestTv.setVisibility(View.GONE);
     }
 
     public void hideMainView(){
@@ -467,7 +472,7 @@ public class MainActivity extends BaseActivity {
             login_main_view.setVisibility(View.INVISIBLE);
             linearLayoutView_down_text.setText("⇧显示下方区域");
             isMainShow = false;
-            new Thread(new Runnable() {
+            MyThreadController.commit(new Runnable() {
                 @Override
                 public void run() {
                     try {
@@ -477,7 +482,7 @@ public class MainActivity extends BaseActivity {
                         e.printStackTrace();
                     }
                 }
-            }).start();
+            });
         }
         sp.edit().putBoolean("isMainShow", isMainShow).apply();
     }
@@ -717,7 +722,7 @@ public class MainActivity extends BaseActivity {
             if (day_of_week <= 0)
                 day_of_week = 7;
 
-            Log.i("loadTime", "day_of_week:\t" + day_of_week);
+//            Log.i("loadTime", "day_of_week:\t" + day_of_week);
 
             now_week = (now - startDate) / (1000 * 3600 * 24 * 7) + 1;
 //            weeks = (int) (vacationDate - startDate / (1000 * 3600 * 24 * 7));
@@ -753,7 +758,7 @@ public class MainActivity extends BaseActivity {
 
     private void loadInformation() {
         //开启线程发起网络请求
-        new Thread(new Runnable() {
+        MyThreadController.commit(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -807,7 +812,7 @@ public class MainActivity extends BaseActivity {
                     });
                 }
             }
-        }).start();
+        });
     }
 
     private boolean isLocalInformationAvailable(){
@@ -824,7 +829,7 @@ public class MainActivity extends BaseActivity {
         return dataList;
     }
 
-    //TODO 从数据库中加载课程信息
+    //TEST 从数据库中加载课程信息
     private List<Map<String, Object>> getCourseListFromDb() throws Exception{
         Log.i("GetCourse", "教学周:\t" + now_week);
         Log.i("GetCourse", "星期:\t" + day_of_week);
@@ -1244,16 +1249,16 @@ public class MainActivity extends BaseActivity {
     }
 
     public void getInternetInformation(){
-        Log.i("GetInternetInformation", "GetInternetInformation");
+//        Log.i("GetInternetInformation", "GetInternetInformation");
         final GetInternetInformation getInf = new GetInternetInformation();
         try {
-            new Thread(new Runnable() {
+            MyThreadController.commit(new Runnable() {
                 @Override
                 public void run() {
                     final JSONObject object = getInf.getVersionInformation();
 
                     if (object == null) {
-                        Log.i("GetInternetInformation", "Object is NULL.");
+//                        Log.i("GetInternetInformation", "Object is NULL.");
                         return;
                     }
 
@@ -1274,7 +1279,7 @@ public class MainActivity extends BaseActivity {
                         e.printStackTrace();
                     }
                 }
-            }).start();
+            });
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -1284,7 +1289,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void changeTheme(){
-        Log.i("Theme", "Change theme.");
+//        Log.i("Theme", "Change theme.");
 //        StausBarControl.setNavigationBarStatusBarTranslucent(MainActivity.this);
         Window window = getWindow();
 //        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
@@ -1388,12 +1393,12 @@ public class MainActivity extends BaseActivity {
     }
 
     private void myTestFunction(){
-        new Thread(new Runnable() {
+        MyThreadController.commit(new Runnable() {
             @Override
             public void run() {
                 try{
                     user = "54160907";
-                    pass = "225577";
+                    pass = "******";
 
                     uims = new UIMS(user, pass);
                     AlertCenter.showLoading(MainActivity.this, "正在连接到UIMS教务系统...");
@@ -1505,7 +1510,7 @@ public class MainActivity extends BaseActivity {
                     e.printStackTrace();
                 }
             }
-        }).start();
+        });
     }
 
     public void dismissPopWindow(){

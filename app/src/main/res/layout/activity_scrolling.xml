@@ -28,110 +28,13 @@
             app:statusBarScrim="#00000000"
             app:layout_scrollFlags="scroll|enterAlways|snap"
             >
-            <!--app:toolbarId="@+id/toolbar">-->
-
-            <!--<android.support.v7.widget.Toolbar-->
-                <!--android:id="@+id/toolbar"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="?attr/actionBarSize"-->
-                <!--android:layout_gravity="center"-->
-                <!--app:layout_collapseMode="pin"-->
-                <!--app:popupTheme="@style/AppTheme.PopupOverlay" />-->
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <LinearLayout
-                    android:id="@+id/activity_scrolling_layout_my_toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1">
-
-                        <TextView
-                            android:id="@+id/activity_scrolling_layout_back_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
-                            android:background="@drawable/ic_arrow_back_white_24dp"
-                            />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:gravity="center"
-                            android:textStyle="bold"
-                            android:text="UIMSTest"
-                            android:textSize="20sp"
-                            android:padding="3dp"
-                            android:textColor="@color/color_whiteText"
-                            />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:textSize="15sp"
-                            android:textColor="@color/color_whiteText"
-                            android:text="成绩统计" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:gravity="end"
-                        android:layout_weight="1">
-
-                        <TextView
-                            android:id="@+id/activity_scrolling_layout_hide_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:layout_marginEnd="10dp"
-                            android:background="@drawable/ic_keyboard_arrow_down_white_24dp"
-                            />
-
-                    </LinearLayout>
-
-                    <!--<LinearLayout-->
-                        <!--android:layout_width="0dp"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_weight="1"-->
-                        <!--android:orientation="horizontal">-->
-
-                        <!--<TextView-->
-                            <!--android:layout_width="0dp"-->
-                            <!--android:layout_height="wrap_content"-->
-                            <!--android:layout_weight="1"-->
-                            <!--/>-->
-
-                        <!--<TextView-->
-                            <!--android:id="@+id/activity_scrolling_layout_setting_text"-->
-                            <!--android:layout_width="wrap_content"-->
-                            <!--android:layout_height="wrap_content"-->
-                            <!--android:layout_marginRight="10dp"-->
-                            <!--android:background="@drawable/ic_settings_white_24dp"-->
-                            <!--/>-->
-
-                    <!--</LinearLayout>-->
-
-                </LinearLayout>
+                <include layout="@layout/view_tool_bar"/>
 
                 <LinearLayout
                     android:id="@+id/activity_main_ScoreStatistics"
@@ -141,14 +44,6 @@
                     android:padding="10dp"
                     android:gravity="center"
                     android:orientation="vertical">
-
-                    <!--<TextView-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:gravity="center"-->
-                        <!--android:textStyle="bold"-->
-                        <!--android:textSize="14sp"-->
-                        <!--android:text="成绩均值"/>-->
 
                     <LinearLayout
                         android:layout_width="wrap_content"

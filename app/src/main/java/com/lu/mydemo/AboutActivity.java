@@ -102,7 +102,7 @@ public class AboutActivity extends BaseActivity {
 
         CharSequence charSequence_link;
 
-        if(Build.MANUFACTURER.toLowerCase().equals("xiaomi")){
+        if(MIUIUtils.isMIUI()){
             charSequence_link = Html.fromHtml(link_MIUI);
             Log.i("AboutActivity", "Rom:\t MIUI");
         }

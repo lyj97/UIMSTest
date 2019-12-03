@@ -36,6 +36,7 @@ import java.util.Map;
 
 import Config.ColorManager;
 import Utils.News.News;
+import Utils.Thread.MyThreadController;
 
 public class NewsSavedActivity extends BaseActivity {
 
@@ -208,7 +209,7 @@ public class NewsSavedActivity extends BaseActivity {
 
     private void getNewsList(){
         AlertCenter.showLoading(this, "加载中，请稍候...");
-        new Thread(new Runnable() {
+        MyThreadController.commit(new Runnable() {
             @Override
             public void run() {
 
@@ -216,7 +217,7 @@ public class NewsSavedActivity extends BaseActivity {
                 loadSucceed();
 
             }
-        }).start();
+        });
     }
 
     protected MainAdapter createAdapter() {

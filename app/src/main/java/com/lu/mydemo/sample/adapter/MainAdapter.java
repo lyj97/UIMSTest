@@ -13,6 +13,7 @@ import com.lu.mydemo.R;
 import java.util.List;
 import java.util.Map;
 
+import Config.ColorManager;
 import Utils.Course.MySubject;
 
 
@@ -67,6 +68,7 @@ public class MainAdapter extends BaseAdapter<MainAdapter.ViewHolder> {
 
         public void setData(String title, String context1, String context2) {
             try {
+                tvTitle.setTextColor(ColorManager.getPrimaryColor());
                 if(context2 == null || context2.equals("")){
                     this.tvTitle.setText(title);
                     this.tvContext1.setText(context1);

@@ -185,22 +185,18 @@ public class ColorConfigActivity extends BaseActivity {
     }
 
     public void checkFilePermission() {
-        isGranted = true;
-        if (ColorConfigActivity.this.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            //如果没有写sd卡权限
-            isGranted = false;
-        }
-        if (ColorConfigActivity.this.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+        //如果没有写sd卡权限
+        isGranted = getApplication().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+        if (getApplication().checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             isGranted = false;
         }
         Log.i("ColorConfigActivity","isGranted == "+isGranted);
         if (!isGranted) {
             ColorConfigActivity.this.requestPermissions(
-                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission
-                            .ACCESS_FINE_LOCATION,
+                    new String[]{
                             Manifest.permission.READ_EXTERNAL_STORAGE,
                             Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                    102);
+                    1);
         }
     }
 

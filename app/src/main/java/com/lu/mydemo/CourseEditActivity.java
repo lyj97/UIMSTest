@@ -52,45 +52,45 @@ public class CourseEditActivity extends AppCompatActivity {
         }
     };
 
-    public View.OnClickListener onClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Toast.makeText(CourseEditActivity.this, v.getId() + "", Toast.LENGTH_SHORT).show();
-            switch (v.getId()) {
-                case R.id.activity_course_edit_detail_course_week_layout: {
-                    Toast.makeText(CourseEditActivity.this, "week_layout!", Toast.LENGTH_SHORT).show();
-                }
-                case R.id.activity_course_edit_detail_course_week_layout_text_view: {
-                    Toast.makeText(CourseEditActivity.this, "week!", Toast.LENGTH_SHORT).show();
-                    break;
-                }
-                case R.id.activity_course_edit_detail_course_time_layout: {
-                    Toast.makeText(CourseEditActivity.this, "time_layout!", Toast.LENGTH_SHORT).show();
-                }
-                case R.id.activity_course_edit_detail_course_time_layout_text_view: {
-                    Toast.makeText(CourseEditActivity.this, "time!", Toast.LENGTH_SHORT).show();
-                    break;
-                }
-                case R.id.activity_course_edit_detail_course_teacher_layout: {
-                    Toast.makeText(CourseEditActivity.this, "teacher_layout!", Toast.LENGTH_SHORT).show();
-                }
-                case R.id.activity_course_edit_detail_course_teacher_layout_text_view: {
-                    Toast.makeText(CourseEditActivity.this, "teacher!", Toast.LENGTH_SHORT).show();
-                    break;
-                }
-                case R.id.activity_course_edit_detail_course_place_layout: {
-                    Toast.makeText(CourseEditActivity.this, "place_layout!", Toast.LENGTH_SHORT).show();
-                }
-                case R.id.activity_course_edit_detail_course_place_layout_text_view: {
-                    Toast.makeText(CourseEditActivity.this, "place!", Toast.LENGTH_SHORT).show();
-                    break;
-                }
-                default: {
-                    Toast.makeText(CourseEditActivity.this, "ID:" + v.getId(), Toast.LENGTH_SHORT).show();
-                }
-            }
-        }
-    };
+//    public View.OnClickListener onClickListener = new View.OnClickListener() {
+//        @Override
+//        public void onClick(View v) {
+//            Toast.makeText(CourseEditActivity.this, v.getId() + "", Toast.LENGTH_SHORT).show();
+//            switch (v.getId()) {
+//                case R.id.activity_course_edit_detail_course_week_layout: {
+//                    Toast.makeText(CourseEditActivity.this, "week_layout!", Toast.LENGTH_SHORT).show();
+//                }
+//                case R.id.activity_course_edit_detail_course_week_layout_text_view: {
+//                    Toast.makeText(CourseEditActivity.this, "week!", Toast.LENGTH_SHORT).show();
+//                    break;
+//                }
+//                case R.id.activity_course_edit_detail_course_time_layout: {
+//                    Toast.makeText(CourseEditActivity.this, "time_layout!", Toast.LENGTH_SHORT).show();
+//                }
+//                case R.id.activity_course_edit_detail_course_time_layout_text_view: {
+//                    Toast.makeText(CourseEditActivity.this, "time!", Toast.LENGTH_SHORT).show();
+//                    break;
+//                }
+//                case R.id.activity_course_edit_detail_course_teacher_layout: {
+//                    Toast.makeText(CourseEditActivity.this, "teacher_layout!", Toast.LENGTH_SHORT).show();
+//                }
+//                case R.id.activity_course_edit_detail_course_teacher_layout_text_view: {
+//                    Toast.makeText(CourseEditActivity.this, "teacher!", Toast.LENGTH_SHORT).show();
+//                    break;
+//                }
+//                case R.id.activity_course_edit_detail_course_place_layout: {
+//                    Toast.makeText(CourseEditActivity.this, "place_layout!", Toast.LENGTH_SHORT).show();
+//                }
+//                case R.id.activity_course_edit_detail_course_place_layout_text_view: {
+//                    Toast.makeText(CourseEditActivity.this, "place!", Toast.LENGTH_SHORT).show();
+//                    break;
+//                }
+//                default: {
+//                    Toast.makeText(CourseEditActivity.this, "ID:" + v.getId(), Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//        }
+//    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,10 +123,10 @@ public class CourseEditActivity extends AppCompatActivity {
             }
         });
 
-        findViewById(R.id.activity_course_edit_detail_course_week_layout).setOnClickListener(onClickListener);
-        findViewById(R.id.activity_course_edit_detail_course_time_layout).setOnClickListener(onClickListener);
-        findViewById(R.id.activity_course_edit_detail_course_teacher_layout).setOnClickListener(onClickListener);
-        findViewById(R.id.activity_course_edit_detail_course_place_layout).setOnClickListener(onClickListener);
+//        findViewById(R.id.activity_course_edit_detail_course_week_layout).setOnClickListener(onClickListener);
+//        findViewById(R.id.activity_course_edit_detail_course_time_layout).setOnClickListener(onClickListener);
+//        findViewById(R.id.activity_course_edit_detail_course_teacher_layout).setOnClickListener(onClickListener);
+//        findViewById(R.id.activity_course_edit_detail_course_place_layout).setOnClickListener(onClickListener);
     }
 
     public void fillView(int courseDbId){

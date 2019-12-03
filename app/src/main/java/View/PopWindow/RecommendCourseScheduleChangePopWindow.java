@@ -231,10 +231,14 @@ public class RecommendCourseScheduleChangePopWindow extends PopupWindow {
             if (convertView == null) {
                 convertView = LinearLayout.inflate(mMenuView.getContext(), R.layout.list_item_course_schedule_change, null);
             }//这个TextView是R.layout.list_item里面的，修改这个字体的颜色
+            TextView title = convertView.findViewById(R.id.course_schedule_change_list_item_title);
+
             TextView context1 = convertView.findViewById(R.id.course_schedule_change_list_item_context1);
             TextView split1 = convertView.findViewById(R.id.course_schedule_change_list_item_split1);
             TextView context2 = convertView.findViewById(R.id.course_schedule_change_list_item_context2);
             TextView split2 = convertView.findViewById(R.id.course_schedule_change_list_item_split2);
+
+            title.setTextColor(ColorManager.getPrimaryColor());
 
             //根据Key值取出装入的数据，然后进行比较
             try {
@@ -257,9 +261,7 @@ public class RecommendCourseScheduleChangePopWindow extends PopupWindow {
     }
 
     private void changeTheme(){
-        Log.i("Theme", "Change theme.");
-        mMenuView.findViewById(R.id.recommend_course_schedule_change_information).setBackgroundColor(ColorManager.getPrimaryColor());
-        course_list.setBackground(ColorManager.getMainBackground());
+        mMenuView.findViewById(R.id.recommend_course_schedule_change_pop_layout).setBackground(ColorManager.getMainBackground_with_top_redius());
         commit_button.setBackground(ColorManager.getInternetInformationButtonBackground_full());
     }
 

@@ -143,7 +143,7 @@ public class WebViewActivity extends BaseActivity {
 
                 try {
 
-                    // TODO: 处理下载事件
+                    // 处理下载事件
                     // 指定下载地址
                     request = new DownloadManager.Request(Uri.parse(url));
                     // 允许媒体扫描，根据下载的文件类型被加入相册、音乐等媒体库
@@ -191,11 +191,10 @@ public class WebViewActivity extends BaseActivity {
                     if(e.getMessage().toLowerCase().contains("no permission to write to")){
                         AlertCenter.showErrorAlert(WebViewActivity.this, "ERROR!", "下载文件需要您同意“读写手机存储”权限，请同意后重试！");
                         WebViewActivity.this.requestPermissions(
-                                new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission
-                                        .ACCESS_FINE_LOCATION,
+                                new String[]{
                                         Manifest.permission.READ_EXTERNAL_STORAGE,
                                         Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                                102);
+                                1);
                     }
                     else {
 //                        AlertCenter.showErrorAlert(WebViewActivity.this, "Error", e.getMessage());
@@ -245,11 +244,10 @@ public class WebViewActivity extends BaseActivity {
             if(e.getMessage().toLowerCase().contains("no permission to write to")){
                 AlertCenter.showErrorAlert(WebViewActivity.this, "ERROR!", "下载文件需要您同意“读写手机存储”权限，请同意后重试！");
                 WebViewActivity.this.requestPermissions(
-                        new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission
-                                .ACCESS_FINE_LOCATION,
+                        new String[]{
                                 Manifest.permission.READ_EXTERNAL_STORAGE,
                                 Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                        102);
+                        1);
             }
             else {
 //                AlertCenter.showErrorAlert(WebViewActivity.this, "Error", e.getMessage());
@@ -278,11 +276,10 @@ public class WebViewActivity extends BaseActivity {
         Log.i("File","isGranted == "+isGranted);
         if (!isGranted) {
             WebViewActivity.this.requestPermissions(
-                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission
-                            .ACCESS_FINE_LOCATION,
+                    new String[]{
                             Manifest.permission.READ_EXTERNAL_STORAGE,
                             Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                    102);
+                    1);
         }
     }
 

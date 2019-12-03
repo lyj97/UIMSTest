@@ -44,7 +44,7 @@ public class ItemLongClickMaskHelper {
         mMaskItemLayout.setMaskItemClickListener(new ItemMaskLayout.ItemMaskClickListener() {
             @Override
             public void delete() {
-                Toast.makeText(context, "delete", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(context, "delete", Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/set_email_pop_window_main_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/background_login"
+        >
+
+        <TextView
+            android:id="@+id/set_email_pop_window_title_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_margin="5dp"
+            android:text="@string/information_title"
+            android:textSize="17sp"
+            android:textColor="@color/app_white"
+            />
+
+        <TextView
+            android:id="@+id/set_email_pop_window_introduce_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_margin="5dp"
+            android:layout_below="@+id/set_email_pop_window_title_text"
+            android:text="@string/email_introduce"
+            android:textSize="15sp"/>
+
+        <EditText
+            android:id="@+id/set_email_pop_window_email"
+            android:inputType="textEmailAddress"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_below="@+id/set_email_pop_window_introduce_text"
+            android:layout_gravity="center_horizontal"
+            android:autofillHints="email"
+            android:gravity="center"
+            android:layout_margin="10dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:background="@drawable/login_edit_text_background"
+            android:windowSoftInputMode="stateHidden"
+            tools:visibility="gone"
+            android:hint="@string/email_hint"/>
+
+        <LinearLayout
+            android:id="@+id/set_email_pop_window_email_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="visible"
+            tools:visibility="visible"
+            android:layout_below="@+id/set_email_pop_window_introduce_text">
+
+            <EditText
+                android:id="@+id/set_email_pop_window_email_part_1"
+                android:inputType="text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:gravity="center"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/email_divider"/>
+
+            <EditText
+                android:id="@+id/set_email_pop_window_email_part_2"
+                android:inputType="text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/email_part_2_hint"/>
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/set_email_pop_window_commit_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/set_email_pop_window_email_layout"
+            android:background="@drawable/button_internet_background"
+            android:layout_margin="10dp"
+            android:text="@string/sure"
+            />
+
+    </RelativeLayout>
+
+</RelativeLayout>

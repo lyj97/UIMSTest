@@ -8,28 +8,25 @@
     android:orientation="vertical"
     >
 
-    <TextView
-        android:id="@+id/pop_window_login_pop_layout_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:gravity="center"
-        android:text="更新信息"
-        android:textSize="17sp"
-        android:paddingTop="20dp"
-        android:paddingBottom="10dp"
-        android:textColor="@color/app_white"
-        android:background="@drawable/shape_rectangle_with_top_radius"
-        />
-
     <LinearLayout
         android:id="@+id/pop_window_login_pop_layout_main_information"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/pop_window_login_pop_layout_title"
         android:orientation="vertical"
         android:background="@drawable/background_login"
         >
+
+        <TextView
+            android:id="@+id/pop_window_login_pop_layout_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="更新信息"
+            android:textSize="17sp"
+            android:paddingTop="20dp"
+            android:paddingBottom="10dp"
+            android:textColor="@color/app_white"
+            />
 
         <EditText
             android:id="@+id/pop_window_login_id"
@@ -66,7 +63,7 @@
         android:layout_below="@+id/pop_window_login_pop_layout_main_information"
         android:orientation="vertical"
         android:padding="5dp"
-        android:background="@drawable/shape_rectangle_bottom_no_radius"
+        android:background="@drawable/shape_rectangle_no_radius"
         >
 
         <Button

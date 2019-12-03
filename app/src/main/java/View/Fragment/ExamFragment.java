@@ -247,7 +247,7 @@ public class ExamFragment extends Fragment implements ItemMaskLayout.ItemMaskCli
 
     @Override
     public void delete() {
-        Toast.makeText(context, "delete", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(context, "delete", Toast.LENGTH_SHORT).show();
     }
 
     class CourseExamAdapter extends MainAdapter {

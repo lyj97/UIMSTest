@@ -29,6 +29,7 @@ import java.util.Map;
 
 import Config.ColorManager;
 import ToolFor2045_Site.GetInternetInformation;
+import Utils.Thread.MyThreadController;
 
 public class WebPagesActivity extends BaseActivity {
 
@@ -84,7 +85,7 @@ public class WebPagesActivity extends BaseActivity {
 
     private void getRemoteItems(){
         AlertCenter.showLoading(WebPagesActivity.this, "加载中...");
-        new Thread(new Runnable() {
+        MyThreadController.commit(new Runnable() {
             @Override
             public void run() {
                 try{
@@ -110,7 +111,7 @@ public class WebPagesActivity extends BaseActivity {
                     e.printStackTrace();
                 }
             }
-        }).start();
+        });
     }
 
     protected MainAdapter createAdapter() {

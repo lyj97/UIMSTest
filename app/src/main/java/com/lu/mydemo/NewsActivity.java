@@ -45,6 +45,7 @@ import Net.NewsClient;
 import ToolFor2045_Site.GetInternetInformation;
 import UIMS.UIMS;
 import Utils.News.News;
+import Utils.Thread.MyThreadController;
 
 public class NewsActivity extends BaseActivity {
 
@@ -288,13 +289,13 @@ public class NewsActivity extends BaseActivity {
     }
 
     private void searchNews(final String queryStr){
-        new Thread(new Runnable() {
+        MyThreadController.commit(new Runnable() {
             @Override
             public void run() {
                 JSONObject object = loadClient.searchNews(queryStr);
                 AlertCenter.showAlert(NewsActivity.this, "Response", object.toString());
             }
-        }).start();
+        });
     }
 
     private void loadFailed(final boolean isFirst) {
@@ -326,7 +327,7 @@ public class NewsActivity extends BaseActivity {
     }
 
     private void loadSucceed(final boolean isFirst){
-        Log.i("NewsActivity", "IsFirst:" + isFirst);
+//        Log.i("NewsActivity", "IsFirst:" + isFirst);
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -358,7 +359,7 @@ public class NewsActivity extends BaseActivity {
             return;
         }
         AlertCenter.showLoading(this, "加载中，请稍候...");
-        new Thread(new Runnable() {
+        MyThreadController.commit(new Runnable() {
             @Override
             public void run() {
                 boolean isFirst = false;
@@ -396,13 +397,13 @@ public class NewsActivity extends BaseActivity {
                     swipeRecyclerView.loadMoreError(0, "加载失败，请稍后重试...");
                 }
             }
-        }).start();
+        });
     }
 
     private void getNewsListFromOA(){
         AlertCenter.showLoading(this, "由OA加载中，请稍候...");
         triedOA = true;
-        new Thread(new Runnable() {
+        MyThreadController.commit(new Runnable() {
             @Override
             public void run() {
                 boolean isFirst = false;
@@ -439,7 +440,7 @@ public class NewsActivity extends BaseActivity {
                     }
                 }
             }
-        }).start();
+        });
     }
 
     public static void setFlush(){

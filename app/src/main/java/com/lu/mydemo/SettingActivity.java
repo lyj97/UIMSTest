@@ -5,12 +5,15 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,13 +30,14 @@ import java.util.List;
 
 import CJCX.CJCX;
 import Config.ColorManager;
+import ToolFor2045_Site.ExceptionReporter;
 import UIMS.UIMS;
 import Utils.Score.ScoreConfig;
+import View.MyView.MyToolBar;
+import View.PopWindow.SetEmailPopupWindow;
 
 public class SettingActivity extends BaseActivity {
-
-    private TextView back_text;
-    private TextView about_tv;
+    MyToolBar toolBar;
 
     private Spinner spinner;
     private ArrayList<String> termList;
@@ -58,6 +62,8 @@ public class SettingActivity extends BaseActivity {
     private TextView text_view_pink;
     private TextView text_view_green;
 
+    private EditText email_edit_text;
+
 //    private TextView testText;
 
     private String theme = ColorManager.getThemeName();
@@ -66,9 +72,7 @@ public class SettingActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
-
-        back_text = findViewById(R.id.activity_setting_navigation_back_text);
-        about_tv = findViewById(R.id.activity_setting_navigation_about_text);
+        toolBar = new MyToolBar(this);
 
         spinner = findViewById(R.id.activity_setting_term_spinner);
 
@@ -92,6 +96,8 @@ public class SettingActivity extends BaseActivity {
         text_view_pink = findViewById(R.id.activity_setting_color_pink_text);
         text_view_green = findViewById(R.id.activity_setting_color_green_text);
 
+        email_edit_text = findViewById(R.id.activity_setting_email);
+
 //        testText = findViewById(R.id.activity_setting_test_text);
 
         changeTheme();
@@ -105,17 +111,17 @@ public class SettingActivity extends BaseActivity {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if(hasTerm) {
+                if (hasTerm) {
                     String term = termList.get(position);
                     Log.i("Term", term);
-                    if(term != null){
-                        if(term.equals(UIMS.getTermName())){
+                    if (term != null) {
+                        if (term.equals(UIMS.getTermName())) {
                             Log.i("SetTerm", "Ignored! Term not change.");
                             MainActivity.setIsCourseNeedReload(false);
                             return;
                         }
                         JSONObject termJSON = UIMS.getTermJSON(term);
-                        if(termJSON == null){
+                        if (termJSON == null) {
 //                            AlertCenter.showWarningAlert(SettingActivity.this, "ERROR", "TermJSON is null.");
                             List<Exception> exceptions = UIMS.getExceptions();
                             exceptions.add(new IllegalStateException("TermJSON is null."));
@@ -144,28 +150,28 @@ public class SettingActivity extends BaseActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 //                Toast.makeText(SettingActivity.this, "OnCheckedChange!", Toast.LENGTH_SHORT).show();
                 ScoreActivity.setReLoadSocreList(true);
-                switch (buttonView.getId()){
-                    case R.id.activity_setting_score_xuanxiu_checkbox : {
+                switch (buttonView.getId()) {
+                    case R.id.activity_setting_score_xuanxiu_checkbox: {
                         ScoreActivity.setXuanxiu_select(check_box_xuanxiu.isChecked());
                         break;
                     }
-                    case R.id.activity_setting_score_xianxuan_checkbox : {
+                    case R.id.activity_setting_score_xianxuan_checkbox: {
                         ScoreActivity.setXianxuan_select(check_box_xianxuan.isChecked());
                         break;
                     }
-                    case R.id.activity_setting_score_xiaoxuanxiu_checkbox : {
+                    case R.id.activity_setting_score_xiaoxuanxiu_checkbox: {
                         ScoreActivity.setXiaoxuanxiu_select(check_box_xiaoxuanxiu.isChecked());
                         break;
                     }
-                    case R.id.activity_setting_score_PE_checkbox : {
+                    case R.id.activity_setting_score_PE_checkbox: {
                         ScoreActivity.setPE_select(check_box_PE.isChecked());
                         break;
                     }
-                    case R.id.activity_setting_score_cjcx_checkbox : {
+                    case R.id.activity_setting_score_cjcx_checkbox: {
                         CJCX.setCJCXEnable(getApplicationContext(), check_box_cjcx_enable.isChecked());
                         break;
                     }
-                    case R.id.activity_setting_test_enable_checkbox : {
+                    case R.id.activity_setting_test_enable_checkbox: {
                         MainActivity.setAcceptTestFun(check_box_test.isChecked());
                         break;
                     }
@@ -213,29 +219,29 @@ public class SettingActivity extends BaseActivity {
         View.OnClickListener text_onClick = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switch (v.getId()){
-                    case R.id.activity_setting_score_xuanxiu_text:{
-                        check_box_xuanxiu.setChecked(! check_box_xuanxiu.isChecked());
+                switch (v.getId()) {
+                    case R.id.activity_setting_score_xuanxiu_text: {
+                        check_box_xuanxiu.setChecked(!check_box_xuanxiu.isChecked());
                         break;
                     }
-                    case R.id.activity_setting_score_xianxuan_text:{
-                        check_box_xianxuan.setChecked(! check_box_xianxuan.isChecked());
+                    case R.id.activity_setting_score_xianxuan_text: {
+                        check_box_xianxuan.setChecked(!check_box_xianxuan.isChecked());
                         break;
                     }
-                    case R.id.activity_setting_score_PE_text:{
-                        check_box_PE.setChecked(! check_box_PE.isChecked());
+                    case R.id.activity_setting_score_PE_text: {
+                        check_box_PE.setChecked(!check_box_PE.isChecked());
                         break;
                     }
-                    case R.id.activity_setting_score_xiaoxuanxiu_text:{
-                        check_box_xiaoxuanxiu.setChecked(! check_box_xiaoxuanxiu.isChecked());
+                    case R.id.activity_setting_score_xiaoxuanxiu_text: {
+                        check_box_xiaoxuanxiu.setChecked(!check_box_xiaoxuanxiu.isChecked());
                         break;
                     }
-                    case R.id.activity_setting_score_cjcx_text:{
-                        check_box_cjcx_enable.setChecked(! check_box_cjcx_enable.isChecked());
+                    case R.id.activity_setting_score_cjcx_text: {
+                        check_box_cjcx_enable.setChecked(!check_box_cjcx_enable.isChecked());
                         break;
                     }
-                    case R.id.activity_setting_test_enable_text:{
-                        check_box_test.setChecked(! check_box_test.isChecked());
+                    case R.id.activity_setting_test_enable_text: {
+                        check_box_test.setChecked(!check_box_test.isChecked());
                         break;
                     }
                 }
@@ -252,9 +258,9 @@ public class SettingActivity extends BaseActivity {
         View.OnClickListener onClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switch (v.getId()){
-                    case R.id.activity_setting_color_blue_text : {
-                        if(!theme.equals("blue")){
+                switch (v.getId()) {
+                    case R.id.activity_setting_color_blue_text: {
+                        if (!theme.equals("blue")) {
                             theme = "blue";
                             ColorManager.saveTheme(theme);
                             changeTheme();
@@ -262,8 +268,8 @@ public class SettingActivity extends BaseActivity {
                         }
                         break;
                     }
-                    case R.id.activity_setting_color_pink_text : {
-                        if(!theme.equals("pink")){
+                    case R.id.activity_setting_color_pink_text: {
+                        if (!theme.equals("pink")) {
                             theme = "pink";
                             ColorManager.saveTheme(theme);
                             changeTheme();
@@ -271,8 +277,8 @@ public class SettingActivity extends BaseActivity {
                         }
                         break;
                     }
-                    case R.id.activity_setting_color_green_text : {
-                        if(!theme.equals("green")){
+                    case R.id.activity_setting_color_green_text: {
+                        if (!theme.equals("green")) {
                             theme = "green";
                             ColorManager.saveTheme(theme);
                             changeTheme();
@@ -288,19 +294,28 @@ public class SettingActivity extends BaseActivity {
         text_view_pink.setOnClickListener(onClickListener);
         text_view_green.setOnClickListener(onClickListener);
 
-        about_tv.setOnClickListener(new View.OnClickListener() {
+        email_edit_text.setEnabled(false);
+        View.OnClickListener emailClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SetEmailPopupWindow window = new SetEmailPopupWindow(SettingActivity.this, null, findViewById(R.id.activity_setting).getHeight(), findViewById(R.id.activity_setting).getWidth());
+                window.setFocusable(true);
+                window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+                window.showAtLocation(SettingActivity.this.findViewById(R.id.activity_setting), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0); //设置layout在PopupWindow中显示的位置
+            }
+        };
+        findViewById(R.id.activity_setting_email_layout).setOnClickListener(emailClickListener);
+
+        toolBar.setSubTitle("设置");
+        toolBar.setRightIcon(getDrawable(R.drawable.ic_info_outline_white_24dp));
+        toolBar.setRightOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(SettingActivity.this, AboutActivity.class));
             }
         });
 
-        back_text.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        updateData();
 
     }
 
@@ -308,6 +323,16 @@ public class SettingActivity extends BaseActivity {
     protected void onStart() {
         super.onStart();
         changeTheme();
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        if(hasFocus) updateData();
+        super.onWindowFocusChanged(hasFocus);
+    }
+
+    private void updateData(){
+        email_edit_text.setText(ExceptionReporter.USER_MAIL);
     }
 
     private void setSpinnerItems(){

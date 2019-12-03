@@ -16,6 +16,7 @@ import Utils.Course.Course;
 import Utils.Course.CourseSchedule;
 import Utils.Course.MySubject;
 import Utils.Database.MyCourseDBHelper;
+import Utils.Thread.MyThreadController;
 
 public class CourseJSONTransfer {
 
@@ -148,14 +149,14 @@ public class CourseJSONTransfer {
             if(courseList != null) Log.e("CourseJSONTransfer", "Err when get course from db!");
             transferCourseList(courseJSON);
             //TODO DB TEST
-            new Thread(new Runnable() {
+            MyThreadController.commit(new Runnable() {
                 @Override
                 public void run() {
                     dbHelper.saveAll(db, courseList, true);
                     Log.i("CourseJSONTransfer", "Course:" + dbHelper.getAllCourse(db));
                     db.close();
                 }
-            }).start();
+            });
         }
         else db.close();
         return true;

@@ -16,6 +16,7 @@ import UIMS.Address;
 import UIMS.GetMD5;
 import Utils.Score.ScoreConfig;
 import Utils.Score.ScoreInf;
+import Utils.Thread.MyThreadController;
 import okhttp3.FormBody;
 
 public class CJCX {
@@ -177,14 +178,14 @@ public class CJCX {
         try {
             ScoreConfig.setCJCXEnable(context.getApplicationContext(), enable);
             sp.edit().putBoolean("CJCXEnable", ScoreConfig.isIsCJCXEnable()).apply();
-            new Thread(new Runnable() {
+            MyThreadController.commit(new Runnable() {
                 @Override
                 public void run() {
                     ScoreActivity.setReLoadSocreList(true);
                     ScoreInf.loadScoreList();
                     ScoreActivity.getScoreList();
                 }
-            }).start();
+            });
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -221,7 +222,7 @@ public class CJCX {
         try{
             ScoreConfig.setCJCXEnable(context.getApplicationContext(), sp.getBoolean("CJCXEnable", true));
             if(!ScoreConfig.isIsCJCXEnable()) return;
-            // TODO TEST 忽略本地CJCX SCORE存储
+            // TEST 忽略本地CJCX SCORE存储
 //            Log.e("TEST", "Local CJCX Score ignored for TEST!");
             setCJCXScoreJSON(new JSONObject(sp.getString("CJCXScore", "")));
         }catch (Exception e){
@@ -260,7 +261,7 @@ public class CJCX {
         try{
             CJCX.CJCXTermJSON = new JSONObject(sp.getString("CJCXTermJSON", ""));
             if(!ScoreConfig.isIsCJCXEnable()) return;
-            // TODO TEST 忽略本地CJCX SCORE存储
+            // TEST 忽略本地CJCX SCORE存储
 //            Log.e("TEST", "Local CJCX Score ignored for TEST!");
             dealTermArray();
         }catch (Exception e){

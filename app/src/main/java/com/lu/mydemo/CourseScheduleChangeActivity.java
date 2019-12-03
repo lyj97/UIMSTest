@@ -54,6 +54,7 @@ import Config.ColorManager;
 import ToolFor2045_Site.GetInternetInformation;
 import UIMS.UIMS;
 import Utils.Course.CourseScheduleChange;
+import Utils.Thread.MyThreadController;
 import View.PopWindow.*;
 
 public class CourseScheduleChangeActivity extends BaseActivity {
@@ -219,7 +220,7 @@ public class CourseScheduleChangeActivity extends BaseActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String term = termList.get(position);
-                Log.i("Term", term);
+//                Log.i("Term", term);
                 if(term != null){
                     if(term.equals(UIMS.getTermName())){
                         Log.i("SetTerm", "Ignored! Term not change.");
@@ -234,7 +235,7 @@ public class CourseScheduleChangeActivity extends BaseActivity {
                         AlertCenter.showErrorAlertWithReportButton(CourseScheduleChangeActivity.this, "抱歉,数据出错!", exceptions, UIMS.getUser());
                         return;
                     }
-                    Log.i("TermJSON", termJSON.toString());
+//                    Log.i("TermJSON", termJSON.toString());
                     UIMS.setTeachingTerm(termJSON);
                     MainActivity.saveTeachingTerm();
                     Toast.makeText(CourseScheduleChangeActivity.this, "当前学期已设为：\t" + UIMS.getTermName(), Toast.LENGTH_SHORT).show();
@@ -270,17 +271,17 @@ public class CourseScheduleChangeActivity extends BaseActivity {
         final GetInternetInformation change = new GetInternetInformation();
         isRecommendShowed = true;
         try {
-            new Thread(new Runnable() {
+            MyThreadController.commit(new Runnable() {
                 @Override
                 public void run() {
                     final JSONObject object = change.getRecommendChange();
                     if (object == null) {
-                        Log.i("GetRecommendCourseScheduleChange", "Object is NULL.");
+//                        Log.i("GetRecommendCourseScheduleChange", "Object is NULL.");
                         return;
                     }
                     JSONArray array = object.getJSONArray("value");
                     if(array.size() == 0 || CourseScheduleChange.containsDate(MainActivity.context, array)) {
-                        Log.i("GetRecommendCourseScheduleChange", "Contains all in array.");
+//                        Log.i("GetRecommendCourseScheduleChange", "Contains all in array.");
                         return;
                     }
                     recommendPopWindow = new RecommendCourseScheduleChangePopWindow(CourseScheduleChangeActivity.this, object, new View.OnClickListener() {
@@ -307,14 +308,14 @@ public class CourseScheduleChangeActivity extends BaseActivity {
                         }
                     });
                 }
-            }).start();
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     private void flushList(){
-        new Thread(new Runnable() {
+        MyThreadController.commit(new Runnable() {
             @Override
             public void run() {
                 dataList = getChangeList();
@@ -327,7 +328,7 @@ public class CourseScheduleChangeActivity extends BaseActivity {
                     }
                 });
             }
-        }).start();
+        });
 
     }
 
@@ -415,7 +416,7 @@ public class CourseScheduleChangeActivity extends BaseActivity {
             terms.add(entry.getValue());
         }
 //        showResponse("termId_termName.size:\t" + termId_termName.size());
-        Log.i("termId_termName.size", "" + termId_termName.size());
+//        Log.i("termId_termName.size", "" + termId_termName.size());
         Collections.sort(terms, new Comparator<String>() {
             @Override
             public int compare(String o1, String o2) {

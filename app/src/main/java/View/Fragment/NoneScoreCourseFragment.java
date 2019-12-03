@@ -56,6 +56,7 @@ import CJCX.CJCX;
 import Config.ColorManager;
 import UIMS.UIMS;
 import Utils.Exam.ExamSchedule;
+import Utils.Thread.MyThreadController;
 import View.PopWindow.AddCourseExamPopupWindow;
 import View.PopWindow.LoginGetSelectCoursePopWindow;
 
@@ -333,7 +334,7 @@ public class NoneScoreCourseFragment extends Fragment {
             return;
         }
         AlertCenter.showLoading(context, "加载【" + termId_termName.get(termID) + "】数据中，请稍候...");
-        new Thread(new Runnable() {
+        MyThreadController.commit(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -349,7 +350,7 @@ public class NoneScoreCourseFragment extends Fragment {
                     ((NoneScoreCourseActivity) context).finish();
                 }
             }
-        }).start();
+        });
     }
 
     private void getNoneScoreCourseSuccess(){

@@ -300,9 +300,7 @@ public class AddCourseExamPopupWindow extends PopupWindow {
     }
 
     private void changeTheme(){
-        Log.i("Theme", "Change theme.");
-        mMenuView.findViewById(R.id.add_exam_pop_layout_title).setBackgroundColor(ColorManager.getPrimaryColor());
-        mMenuView.findViewById(R.id.add_exam_pop_layout_main_information).setBackground(ColorManager.getMainBackground());
+        mMenuView.findViewById(R.id.add_exam_pop_layout).setBackground(ColorManager.getMainBackground_with_top_redius());
         commit_button.setBackground(ColorManager.getInternetInformationButtonBackground_full());
     }
 

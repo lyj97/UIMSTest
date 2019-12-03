@@ -47,6 +47,7 @@ public class ColorManager {
     private static Drawable topRadiusBackground;
     private static Drawable mainBackground;
     private static Drawable mainBackground_full;
+    private static Drawable mainBackground_with_top_redius;
     private static Drawable localInformationButtonBackground;
     private static Drawable internetInformationButtonBackground;
     private static Drawable internetInformationButtonBackground_full;
@@ -93,6 +94,7 @@ public class ColorManager {
                 topRadiusBackground = context.getDrawable(R.drawable.shape_rectangle_with_top_radius);
                 mainBackground = context.getDrawable(R.drawable.background_login);
                 mainBackground_full = context.getDrawable(R.drawable.background_login_full);
+                mainBackground_with_top_redius = context.getDrawable(R.drawable.background_login_with_top_rectangle);
                 localInformationButtonBackground = context.getDrawable(R.drawable.button_local_background);
                 internetInformationButtonBackground = context.getDrawable(R.drawable.button_internet_background);
                 internetInformationButtonBackground_full = context.getDrawable(R.drawable.button_internet_background_full);
@@ -119,6 +121,7 @@ public class ColorManager {
                 topRadiusBackground = context.getDrawable(R.drawable.shape_rectangle_with_top_radius_pink);
                 mainBackground = context.getDrawable(R.drawable.background_login_pink);
                 mainBackground_full = context.getDrawable(R.drawable.background_login_pink_full);
+                mainBackground_with_top_redius = context.getDrawable(R.drawable.background_login_pink_with_top_rectangle);
                 localInformationButtonBackground = context.getDrawable(R.drawable.button_local_background_pink);
                 internetInformationButtonBackground = context.getDrawable(R.drawable.button_internet_background_pink);
                 internetInformationButtonBackground_full = context.getDrawable(R.drawable.button_internet_background_pink_full);
@@ -145,6 +148,7 @@ public class ColorManager {
                 topRadiusBackground = context.getDrawable(R.drawable.shape_rectangle_with_top_radius_green);
                 mainBackground = context.getDrawable(R.drawable.background_login_green);
                 mainBackground_full = context.getDrawable(R.drawable.background_login_green_full);
+                mainBackground_with_top_redius = context.getDrawable(R.drawable.background_login_green_with_top_rectangle);
                 localInformationButtonBackground = context.getDrawable(R.drawable.button_local_background_green);
                 internetInformationButtonBackground = context.getDrawable(R.drawable.button_internet_background_green);
                 internetInformationButtonBackground_full = context.getDrawable(R.drawable.button_internet_background_green_full);
@@ -170,6 +174,7 @@ public class ColorManager {
                 topRadiusBackground = context.getDrawable(R.drawable.shape_rectangle_with_top_radius);
                 mainBackground = context.getDrawable(R.drawable.background_login);
                 mainBackground_full = context.getDrawable(R.drawable.background_login_full);
+                mainBackground_with_top_redius = context.getDrawable(R.drawable.background_login_with_top_rectangle);
                 localInformationButtonBackground = context.getDrawable(R.drawable.button_local_background);
                 internetInformationButtonBackground = context.getDrawable(R.drawable.button_internet_background);
                 internetInformationButtonBackground_full = context.getDrawable(R.drawable.button_internet_background_full);
@@ -230,6 +235,10 @@ public class ColorManager {
 
     public static Drawable getInternetInformationButtonBackground_full() {
         return internetInformationButtonBackground_full;
+    }
+
+    public static Drawable getMainBackground_with_top_redius() {
+        return mainBackground_with_top_redius;
     }
 
     public static Drawable getInternetInformationButtonBackground_disable_full() {

@@ -1,5 +1,7 @@
 package ToolFor2045_Site;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -27,6 +29,8 @@ import okhttp3.Response;
 public class ExceptionReporter {
 
     public static final String HOST_ADDRESS = "http://uimstest." + Address.myHost + ":8199";
+    public static String USER_MAIL = "";
+    public static SharedPreferences sp;
 //    public static final String HOST_ADDRESS = "http://" + "10.33.78.213" + ":8199";
 
     static OkHttpClient httpClient = new OkHttpClient.Builder()
@@ -45,6 +49,24 @@ public class ExceptionReporter {
             .connectTimeout(10, TimeUnit.SECONDS)
             .build();
 
+    public static void initUserInformation(Context context){
+        sp = context.getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+        if(sp == null) return;
+        if(sp.contains("UserEmail")){
+            USER_MAIL = sp.getString("UserEmail", "");
+        }
+    }
+
+    public static void setUserMail(String mail){
+        USER_MAIL = mail;
+        saveUserEmail();
+    }
+
+    public static void saveUserEmail(){
+        if(sp == null) return;
+        sp.edit().putString("UserEmail", USER_MAIL).apply();
+    }
+
     public static String reportException(Exception exception, String userId) throws Exception{
         Log.i("ExceptionReporter", "ReportResponse");
         if(exception == null) return "";
@@ -53,6 +75,7 @@ public class ExceptionReporter {
                 .add("message", exception.getMessage() == null ? "" : exception.getMessage())
                 .add("detail", Arrays.asList(exception.getStackTrace()).toString())
                 .add("user_id", userId)
+                .add("mail", USER_MAIL)
                 .build();
         Request request = new Request.Builder()
                 .url(HOST_ADDRESS + "/api/exception/upload")
@@ -78,6 +101,7 @@ public class ExceptionReporter {
                 .add("message", exceptions.get(0).getMessage() == null ? "" : exceptions.get(0).getMessage())
                 .add("detail", getExceptionString(exceptions))
                 .add("user_id", userId)
+                .add("mail", USER_MAIL)
                 .build();
         Request request = new Request.Builder()
                 .url(HOST_ADDRESS + "/api/exception/upload")

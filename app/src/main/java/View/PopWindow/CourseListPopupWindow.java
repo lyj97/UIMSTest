@@ -118,9 +118,7 @@ public class CourseListPopupWindow extends PopupWindow {
     }
 
     private void changeTheme(){
-        Log.i("Theme", "Change theme.");
-        mMenuView.findViewById(R.id.pop_window_course_list_layout_title).setBackground(ColorManager.getTopRadiusBackground());
-        mMenuView.findViewById(R.id.pop_window_course_list_layout_course_list_view).setBackground(ColorManager.getMainBackground());
+        mMenuView.findViewById(R.id.pop_window_course_list_layout).setBackground(ColorManager.getMainBackground_with_top_redius());
     }
 
 }

@@ -29,6 +29,7 @@ import java.util.Map;
 
 import Config.ColorManager;
 import ToolFor2045_Site.GetInternetInformation;
+import Utils.Thread.MyThreadController;
 
 public class TestFunctionActivity extends BaseActivity {
 
@@ -83,7 +84,7 @@ public class TestFunctionActivity extends BaseActivity {
     }
 
     private void getTestFunctionList(){
-        new Thread(new Runnable() {
+        MyThreadController.commit(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -112,7 +113,7 @@ public class TestFunctionActivity extends BaseActivity {
                     e.printStackTrace();
                 }
             }
-        }).start();
+        });
     }
 
     protected MainAdapter createAdapter() {

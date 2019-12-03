@@ -52,12 +52,13 @@ public class CourseDetailPopupWindow extends PopupWindow {
     private OnItemClickListener onItemClickListener = new OnItemClickListener() {
         @Override
         public void onItemClick(View view, int adapterPosition) {
-            Intent intent = new Intent(context, CourseEditActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putString("courseName", title_tv.getText().toString());
-            bundle.putInt("courseDbId", dataList.get(adapterPosition).getDb_id());
-            intent.putExtra("bundle", bundle);
-            context.startActivity(intent);
+//            Intent intent = new Intent(context, CourseEditActivity.class);
+//            Bundle bundle = new Bundle();
+//            bundle.putString("courseName", title_tv.getText().toString());
+//            bundle.putInt("courseDbId", dataList.get(adapterPosition).getDb_id());
+//            intent.putExtra("bundle", bundle);
+//            context.startActivity(intent);
+            Toast.makeText(context, "课程编辑将在后续版本完成，敬请期待！", Toast.LENGTH_SHORT).show();
             dismiss();
         }
     };
@@ -149,10 +150,7 @@ public class CourseDetailPopupWindow extends PopupWindow {
     }
 
     private void changeTheme(){
-        Log.i("Theme", "Change theme.");
-//        mMenuView.findViewById(R.id.pop_window_course_detail_layout_title).setBackground(ColorManager.getTopRadiusBackground());
-        mMenuView.findViewById(R.id.pop_window_course_detail_top_back).setBackground(ColorManager.getTopRadiusBackground());
-        mMenuView.findViewById(R.id.pop_window_course_detail_layout).setBackground(ColorManager.getMainBackground());
+        mMenuView.findViewById(R.id.pop_window_course_detail_layout).setBackground(ColorManager.getMainBackground_with_top_redius());
     }
 
 }
