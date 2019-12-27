@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background_login"
-    tools:context="com.lu.mydemo.MainActivity"
+    tools:context="com.lu.mydemo.Activity.MainActivity"
     android:orientation="vertical"
     android:fitsSystemWindows="true">
 
@@ -232,8 +232,6 @@
                             />
 
                     </LinearLayout>
-
-
 
                 </LinearLayout>
 

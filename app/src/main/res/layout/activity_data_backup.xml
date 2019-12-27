@@ -11,7 +11,7 @@
     android:background="@drawable/background_login"
     android:gravity="top"
     android:fitsSystemWindows="true"
-    tools:context=".DataBackupActivity">
+    tools:context=".Activity.DataBackupActivity">
 
     <include
         android:id="@+id/activity_data_backup_title_bar"

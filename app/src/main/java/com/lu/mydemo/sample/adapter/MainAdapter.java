@@ -13,8 +13,8 @@ import com.lu.mydemo.R;
 import java.util.List;
 import java.util.Map;
 
-import Config.ColorManager;
-import Utils.Course.MySubject;
+import com.lu.mydemo.Config.ColorManager;
+import com.lu.mydemo.Utils.Course.MySubject;
 
 
 /**

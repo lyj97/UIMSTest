@@ -7,6 +7,8 @@
 
     <color name="color_whiteText">#FFFFFF</color>
 
+    <color name="splash_background">#4FB3FF</color>
+
     <color name="color_white">#FFFFFF</color>
     <color name="color_dark_text">#1F1F1F</color>
     <color name="color_warn_button">#BFD55D5D</color>

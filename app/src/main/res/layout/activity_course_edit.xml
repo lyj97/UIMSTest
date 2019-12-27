@@ -11,7 +11,7 @@
     android:background="@drawable/background_login"
     android:gravity="top"
     android:fitsSystemWindows="true"
-    tools:context=".CourseEditActivity">
+    tools:context=".Activity.CourseEditActivity">
 
     <LinearLayout
         android:id="@+id/activity_course_edit_title_layout"

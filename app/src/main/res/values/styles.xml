@@ -7,7 +7,7 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:navigationBarColor">@color/color_grayBackground</item>
-<!--        <item name="android:windowTranslucentStatus">true</item>-->
+        <!--        <item name="android:windowTranslucentStatus">true</item>-->
     </style>
 
     <style name="AppTheme.Main" parent="AppTheme" />
@@ -21,7 +21,7 @@
         <item name="android:navigationBarColor">@color/color_grayBackground</item>
     </style>
 
-    <style name="AnimationActivity" parent="@android:style/Animation.Activity" >
+    <style name="AnimationActivity" parent="@android:style/Animation.Activity">
         <item name="android:activityOpenEnterAnimation">@anim/up_in</item>
         <item name="android:activityOpenExitAnimation">@anim/up_out</item>
         <item name="android:activityCloseEnterAnimation">@anim/down_in</item>
@@ -77,21 +77,25 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" >
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="android:textSize">16sp</item>
         <item name="android:textAlignment">center</item>
         <item name="android:colorBackground">#00000000</item>
     </style>
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" >
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
         <item name="android:textSize">16sp</item>
         <item name="android:textAlignment">center</item>
         <item name="android:colorBackground">#00000000</item>
+    </style>
+
+    <style name="SplashTheme" parent="AppTheme">
+        <item name="android:windowBackground">@drawable/splash_screen</item>
     </style>
 
 </resources>
 
-<!--<style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">-->
+    <!--<style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">-->
     <!--&lt;!&ndash;Appbar背景色，应用的主要色调，actionBar默认使用该颜色&ndash;&gt;-->
     <!--<item name="android:colorPrimary">@color/material_animations_primary</item>-->
     <!--&lt;!&ndash;状态栏颜色，应用的主要暗色调，statusBarColor默认使用该颜色&ndash;&gt;-->
@@ -133,4 +137,4 @@
     <!--<item name="android:windowContentTransitions">true</item>-->
     <!--<item name="android:windowAllowEnterTransitionOverlap">false</item>-->
     <!--<item name="android:windowAllowReturnTransitionOverlap">false</item>-->
-<!--</style>-->
+    <!--</style>-->

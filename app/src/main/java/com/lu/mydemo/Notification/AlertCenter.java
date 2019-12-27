@@ -1,7 +1,6 @@
 package com.lu.mydemo.Notification;
 
 import android.app.Activity;
-import android.content.Context;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
@@ -12,11 +11,11 @@ import com.tapadoo.alerter.Alerter;
 
 import java.util.List;
 
-import Config.ColorManager;
-import ToolFor2045_Site.ExceptionReporter;
-import Utils.String.FormatCheck;
-import Utils.Thread.MyThreadController;
-import View.PopWindow.SetEmailPopupWindow;
+import com.lu.mydemo.Config.ColorManager;
+import com.lu.mydemo.ToolFor2045_Site.InformationUploader;
+import com.lu.mydemo.Utils.String.FormatCheck;
+import com.lu.mydemo.Utils.Thread.MyThreadController;
+import com.lu.mydemo.View.PopWindow.SetEmailPopupWindow;
 
 public class AlertCenter {
 
@@ -148,12 +147,12 @@ public class AlertCenter {
                         .addButton("Report!", R.style.AlertButton, new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                if(FormatCheck.isEmail(ExceptionReporter.USER_MAIL)) {
+                                if(FormatCheck.isEmail(InformationUploader.USER_MAIL)) {
                                     MyThreadController.commit(new Runnable() {
                                         @Override
                                         public void run() {
                                             try {
-                                                ExceptionReporter.reportException(exception, user_id);
+                                                InformationUploader.reportException(exception, user_id);
                                             } catch (Exception e) {
                                                 e.printStackTrace();
                                             }
@@ -170,7 +169,7 @@ public class AlertCenter {
                                                 @Override
                                                 public void run() {
                                                     try {
-                                                        ExceptionReporter.reportException(exception, user_id);
+                                                        InformationUploader.reportException(exception, user_id);
                                                     } catch (Exception e) {
                                                         e.printStackTrace();
                                                     }
@@ -208,12 +207,12 @@ public class AlertCenter {
                         .addButton("Report!", R.style.AlertButton, new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                if(FormatCheck.isEmail(ExceptionReporter.USER_MAIL)) {
+                                if(FormatCheck.isEmail(InformationUploader.USER_MAIL)) {
                                     MyThreadController.commit(new Runnable() {
                                         @Override
                                         public void run() {
                                             try {
-                                                ExceptionReporter.reportException(exceptions, user_id);
+                                                InformationUploader.reportException(exceptions, user_id);
                                             } catch (Exception e) {
                                                 e.printStackTrace();
                                             }
@@ -230,7 +229,7 @@ public class AlertCenter {
                                                 @Override
                                                 public void run() {
                                                     try {
-                                                        ExceptionReporter.reportException(exceptions, user_id);
+                                                        InformationUploader.reportException(exceptions, user_id);
                                                     } catch (Exception e) {
                                                         e.printStackTrace();
                                                     }
