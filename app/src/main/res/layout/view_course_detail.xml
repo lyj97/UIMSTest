@@ -4,24 +4,27 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="bottom|center"
-    android:orientation="vertical"
     >
 
     <LinearLayout
         android:id="@+id/pop_window_course_detail_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/pop_window_course_detail_bottom_back"
         android:gravity="bottom|center"
         android:orientation="vertical"
-        android:layout_alignParentBottom="true"
         android:background="@drawable/background_login"
         >
 
         <TextView
-            android:id="@+id/pop_window_course_detail_layout_title"
+            android:id="@+id/pop_window_course_detail_top_back"
             android:layout_width="match_parent"
+            android:layout_height="15dp"/>
+
+        <TextView
+            android:id="@+id/pop_window_course_detail_layout_title"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:text="课程详情"
             android:textSize="17sp"
             android:paddingTop="20dp"
@@ -39,51 +42,13 @@
             android:baselineAligned="false"
             >
 
-            <GridLayout
-                android:layout_width="wrap_content"
+            <com.yanzhenjie.recyclerview.SwipeRecyclerView
+                android:id="@+id/pop_window_course_detail_item_layout"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:gravity="start"
-                android:padding="5dp"
-                android:columnCount="2"
-                android:orientation="horizontal">
-
-<!--                <TextView-->
-<!--                    android:background="@drawable/ic_date_range_white_24dp"/>-->
-
-<!--                <TextView-->
-<!--                    android:id="@+id/pop_window_course_detail_information_week"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:text="Week, DayOfWeek"/>-->
-
-                <TextView
-                    android:background="@drawable/ic_alarm_white_24dp"/>
-
-                <TextView
-                    android:id="@+id/pop_window_course_detail_information_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Time"/>
-
-                <TextView
-                    android:background="@drawable/ic_place_white_24dp"/>
-
-                <TextView
-                    android:id="@+id/pop_window_course_detail_information_course_place"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="CoursePlace"/>
-
-                <TextView
-                    android:background="@drawable/ic_perm_identity_white_24dp"/>
-
-                <TextView
-                    android:id="@+id/pop_window_course_detail_information_teacher"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Teacher"/>
-
-            </GridLayout>
+                android:layout_weight="1"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -106,5 +71,15 @@
         </LinearLayout>
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/pop_window_course_detail_bottom_back"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="10dp"
+        android:layout_alignParentBottom="true"
+        android:text="@string/edit_course_introduce"
+        android:background="@color/color_grayBackground"/>
 
 </RelativeLayout>

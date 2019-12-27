@@ -8,7 +8,7 @@
     android:background="@drawable/background_login"
     android:orientation="vertical"
     android:fitsSystemWindows="true"
-    tools:context=".PingjiaoActivity">
+    tools:context=".Activity.PingjiaoActivity">
 
     <LinearLayout
         android:id="@+id/activity_pingjiao_top_view"

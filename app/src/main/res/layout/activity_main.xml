@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background_login"
-    tools:context="com.lu.mydemo.MainActivity"
+    tools:context="com.lu.mydemo.Activity.MainActivity"
     android:orientation="vertical"
     android:fitsSystemWindows="true">
 
@@ -210,13 +210,28 @@
 
                     </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/login_goto_about_text_view"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:id="@+id/login_goto_setting_layout_view"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="5dp"
-                        android:text="ⓘ关于UIMSTest"
-                        />
+                        android:orientation="horizontal"
+                        android:gravity="center_horizontal"
+                        >
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/ic_settings_white_24dp"/>
+
+                        <TextView
+                            android:id="@+id/login_goto_setting_text_view"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:text="设置"
+                            />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 

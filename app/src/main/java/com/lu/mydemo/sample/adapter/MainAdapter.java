@@ -1,16 +1,20 @@
 package com.lu.mydemo.sample.adapter;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.lu.mydemo.R;
 
 import java.util.List;
 import java.util.Map;
+
+import com.lu.mydemo.Config.ColorManager;
+import com.lu.mydemo.Utils.Course.MySubject;
 
 
 /**
@@ -64,6 +68,7 @@ public class MainAdapter extends BaseAdapter<MainAdapter.ViewHolder> {
 
         public void setData(String title, String context1, String context2) {
             try {
+                tvTitle.setTextColor(ColorManager.getPrimaryColor());
                 if(context2 == null || context2.equals("")){
                     this.tvTitle.setText(title);
                     this.tvContext1.setText(context1);
@@ -85,6 +90,8 @@ public class MainAdapter extends BaseAdapter<MainAdapter.ViewHolder> {
                 this.tvContext2.setText(context2);
             }
         }
+
+        public void setDate(MySubject object){}
 
         public void setData(String title, String description){}
 

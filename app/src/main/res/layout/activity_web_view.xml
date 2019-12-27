@@ -76,7 +76,7 @@
         <!--android:textColor="#FFFFFF"-->
         <!--android:text="Title" />-->
 
-    <View.View.ScrollingTextView
+    <com.lu.mydemo.View.View.ScrollingTextView
         android:id="@+id/activity_web_view_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
