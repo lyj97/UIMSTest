@@ -42,4 +42,10 @@
     <string name="tab_text_3">All Function</string>
     <string name="tab_text_4">成绩</string>
 
+    <!--课程编辑-->
+    <string name="week_img_desc">上课周数</string>
+    <string name="time_img_desc">上课时间</string>
+    <string name="teacher_img_desc">教师</string>
+    <string name="place_img_desc">上课地点</string>
+
 </resources>

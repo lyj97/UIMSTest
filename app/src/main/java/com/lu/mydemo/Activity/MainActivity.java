@@ -669,9 +669,9 @@ public class MainActivity extends BaseActivity {
                 final SQLiteDatabase db = dbHelper.getWritableDatabase();
                 dbHelper.saveAll(db, SubjectRepertory.loadDefaultSubjects(getApplicationContext()), true);
                 db.close();
-                todayCourseList = getCourseList();
+//                todayCourseList = getCourseList();
             }
-            else todayCourseList = getCourseListFromDb();
+            todayCourseList = getCourseListFromDb();
             if(todayCourseList == null) {
                 todayCourseList = getCourseList();
                 Log.w("MainActivity", "Load course from DB ERROR!");

@@ -738,7 +738,13 @@ public class UIMS {
             }
             // 利用从HttpEntity中得到的String生成JsonObject
 //                    showResponse("Login[entity]:\t" + entityStringBuilder.toString());
-            scoreJSON = JSONObject.fromObject(entityStringBuilder.toString());
+            try {
+                scoreJSON = JSONObject.fromObject(entityStringBuilder.toString());
+            }
+            catch (Exception e){
+                e.printStackTrace();
+                scoreJSON = new JSONObject();
+            }
 
             try {
                 studentJSON = scoreJSON.getJSONArray("value").getJSONObject(0).getJSONObject("student");

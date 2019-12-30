@@ -94,6 +94,47 @@ public class MyCourseDBHelper extends SQLiteOpenHelper {
         }
     }
 
+    public void insertCourseTime(SQLiteDatabase db, MySubject subject) {
+        if(db == null || subject == null) return;
+        db.execSQL("INSERT INTO " + TABLE_NAME +
+                " (course_id, course_name, room, teacher, week_list, weekOddEven, start_index, step, day, term) " +
+                "VALUES " +
+                "(\"" +
+                subject.getId() + "\",\"" +
+                subject.getName() + "\",\"" +
+                subject.getRoom() + "\",\"" +
+                subject.getTeacher() + "\",\"" +
+                transWeekList(subject.getWeekList()) + "\",\"" +
+                subject.getWeekOddEven() + "\",\"" +
+                subject.getStart() + "\",\"" +
+                subject.getStep() + "\",\"" +
+                subject.getDay() + "\",\"" +
+                subject.getTerm() + "\")");
+    }
+
+    public void updateCourse(SQLiteDatabase db, MySubject subject) {
+        if(db == null || subject == null) return;
+        db.execSQL("UPDATE " + TABLE_NAME +
+                " SET (room, teacher, week_list, start_index, step, day) " +
+                "= " +
+                "(\"" +
+                subject.getRoom() + "\",\"" +
+                subject.getTeacher() + "\",\"" +
+                transWeekList(subject.getWeekList()) + "\",\"" +
+                subject.getStart() + "\",\"" +
+                subject.getStep() + "\",\"" +
+                subject.getDay() + "\")" +
+                "WHERE id = \"" + subject.getDb_id() + "\""
+        );
+    }
+
+    public void deleteCourse(SQLiteDatabase db, MySubject subject) {
+        if(db == null || subject == null) return;
+        db.execSQL("DELETE FROM " + TABLE_NAME +
+                " WHERE id = \"" + subject.getDb_id() + "\""
+        );
+    }
+
     public String transWeekList(List<Integer> list){
         StringBuilder builder = new StringBuilder();
         for(int num : list){

@@ -2,7 +2,9 @@ package com.lu.mydemo.View.PopWindow;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.GradientDrawable;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -48,13 +50,13 @@ public class CourseDetailPopupWindow extends PopupWindow {
     private OnItemClickListener onItemClickListener = new OnItemClickListener() {
         @Override
         public void onItemClick(View view, int adapterPosition) {
-//            Intent intent = new Intent(context, CourseEditActivity.class);
-//            Bundle bundle = new Bundle();
-//            bundle.putString("courseName", title_tv.getText().toString());
-//            bundle.putInt("courseDbId", dataList.get(adapterPosition).getDb_id());
-//            intent.putExtra("bundle", bundle);
-//            context.startActivity(intent);
-            Toast.makeText(context, "课程编辑将在后续版本完成，敬请期待！", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(context, CourseEditActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putString("courseName", title_tv.getText().toString());
+            bundle.putInt("courseDbId", dataList.get(adapterPosition).getDb_id());
+            intent.putExtra("bundle", bundle);
+            context.startActivity(intent);
+//            Toast.makeText(context, "课程编辑将在后续版本完成，敬请期待！", Toast.LENGTH_SHORT).show();
             dismiss();
         }
     };

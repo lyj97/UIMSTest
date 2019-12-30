@@ -11,7 +11,7 @@
 
     <color name="color_white">#FFFFFF</color>
     <color name="color_dark_text">#1F1F1F</color>
-    <color name="color_warn_button">#BFD55D5D</color>
+    <color name="color_warn_button">#BFFF5353</color>
     <color name="color_alerter_warning_background">#D5F1923D</color>
     <color name="color_alerter_progress_bar">#FF9800</color>
     <color name="color_alerter_error_background">#D5F13D58</color>

@@ -124,6 +124,45 @@ public class CourseJSONTransfer {
 
     }
 
+    public synchronized static boolean insertCourseTime(Context context, MySubject subject){
+        final MyCourseDBHelper dbHelper = new MyCourseDBHelper(context, "Course_DB", null, 1);
+        final SQLiteDatabase db = dbHelper.getReadableDatabase();
+        try {
+            dbHelper.insertCourseTime(db, subject);
+            return true;
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public synchronized static boolean updateCourse(Context context, MySubject subject){
+        final MyCourseDBHelper dbHelper = new MyCourseDBHelper(context, "Course_DB", null, 1);
+        final SQLiteDatabase db = dbHelper.getReadableDatabase();
+        try {
+            dbHelper.updateCourse(db, subject);
+            return true;
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public synchronized static boolean deleteCourse(Context context, MySubject subject){
+        final MyCourseDBHelper dbHelper = new MyCourseDBHelper(context, "Course_DB", null, 1);
+        final SQLiteDatabase db = dbHelper.getReadableDatabase();
+        try {
+            dbHelper.deleteCourse(db, subject);
+            return true;
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public synchronized static boolean transferCourseList(Context context){
         return transferCourseList(context, null, false);
     }
