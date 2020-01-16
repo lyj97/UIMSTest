@@ -1,6 +1,9 @@
 package com.lu.mydemo.UIMS;
 
+import android.text.TextUtils;
 import android.util.Log;
+
+import com.lu.mydemo.Utils.Common.Address;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONException;
@@ -55,7 +58,6 @@ public class UIMS {
     static JSONObject scoreJSON;
     static JSONObject scoreStatisticsJSON;
     static JSONObject studentJSON;
-    static JSONObject informationJSON;
     static JSONObject termJSON;//学期
     static JSONObject courseHistoryJSON;//处理历史选课记录用
     static JSONObject teachingTermJSON;//TeachingTerm，与当前学期、教学周相关
@@ -103,6 +105,9 @@ public class UIMS {
             Response response = httpClient.newCall(request).execute();
             Log.i("OKHttp_Request", String.format("Received response for %s %n%s", response.request().url(), response.networkResponse().headers()));
             String str = response.headers().get("Set-Cookie");
+            if(TextUtils.isEmpty(str)) {
+                return false;
+            }
             str = str.split(";")[0];
             jssionID = str.split("=")[1];
             cookie1 = "loginPage=userLogin.jsp; alu=" + user + "; pwdStrength=1; JSESSIONID=" + jssionID;
@@ -229,99 +234,8 @@ public class UIMS {
         }
     }
 
-    public boolean getUserInformation(){//个人信息（包含重要个人信息）
-        try {
-            JSONObject params = new JSONObject();
-            params.put("studId",student_id);
-
-            JSONObject request_json = new JSONObject();
-            request_json.put("tag","student@stu_infor_table");
-            request_json.put("params",params);
-
-            RequestBody requestBody = RequestBody.create(JSON, request_json.toString());
-
-            Request request = new Request.Builder()
-                    .url(Address.hostAddress + "/ntms/service/res.do")
-                    .header("User-Agent", "Mozilla/5.0 (Windows NT 9.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36")
-                    .header("Cookie", cookie3)
-                    .header("Host", Address.host)
-                    .header("Origin", Address.hostAddress)
-                    .header("Content-Type", "application/json")
-                    .header("Referer", Address.hostAddress + "/ntms/index.do")
-                    .post(requestBody)
-                    .build();
-//            Log.i("OKHttp_Request", String.format("Sending request %s %n%s", request.url(), request.headers()));
-//            Log.i("okhttp_request_body", request.body().toString());
-            Response response = httpClient.newCall(request).execute();
-            BufferedReader bufferedReader = new BufferedReader(
-                    new InputStreamReader(response.body().byteStream(), "UTF-8"), 8 * 1024);
-            StringBuilder entityStringBuilder = new StringBuilder();
-            String line = null;
-            while ((line = bufferedReader.readLine()) != null) {
-                entityStringBuilder.append(line + "\n");
-            }
-            // 利用从HttpEntity中得到的String生成JsonObject
-//                    showResponse("Login[entity]:\t" + entityStringBuilder.toString());
-            Log.i("GetUserInf[entity]", "entity:\t" + entityStringBuilder.toString());
-            JSONObject temp = JSONObject.fromObject(entityStringBuilder.toString());
-
-            String schoolName = "";//学院
-            String deptName = "";//专业
-            String admissionYear = "";//入学时间
-            String name = "";
-
-            try {
-
-                if (temp != null) {
-//                    Log.i("GetUserInformation", temp.toString());
-                } else {
-//                    Log.e("GetUserInformation", "Object IS NULL!");
-                }
-
-                JSONObject value = (JSONObject)temp.get("value");
-                JSONObject person = null;
-                JSONObject department = null;
-                JSONObject school = null;
-                try{
-                    person = value.getJSONObject("person");
-                    department = value.getJSONObject("department");
-                    school = value.getJSONObject("school");
-
-                    schoolName = school.getString("schoolName");//学院
-                    deptName = department.getString("deptName");//专业
-                    admissionYear = value.getString("admissionYear");//入学时间
-                    name = person.getString("name");
-
-                }
-                catch (Exception e1){
-//                e1.printStackTrace();
-                    exceptions.add(e1);
-                    throw new RuntimeException("ERROR！");
-                }
-
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-                exceptions.add(e);
-                throw new RuntimeException("ERROR！");
-            }
-
-            informationJSON = JSONObject.fromObject(
-                    "{\"college\":\"" + schoolName + "\"," +
-                            "\"major\":\"" + deptName + "\"," +
-                            "\"grade\":\"" + admissionYear + "\"," +
-                            "\"name\":\"" + name + "\"}");
-
-            return true;
-        }
-        catch (Exception e){
-            exceptions.add(e);
-            e.printStackTrace();
-            return false;
-        }
-    }
-
     /**
+     * 未更新接口
      * branch	byId
      * params	{…}
          * termId	???
@@ -405,6 +319,11 @@ public class UIMS {
         }
     }
 
+    /**
+     * 未更新接口
+     * @param termID
+     * @return
+     */
     public boolean getCourseSchedule(String termID){//课程表【课程解析在UIMSTool中的CourseJSONTransfer】
         try {
             JSONObject params = new JSONObject();
@@ -452,6 +371,7 @@ public class UIMS {
     }
 
     /**
+     * 未更新接口
      * branch	default
      * params	{…}
      * studId	???
@@ -513,6 +433,10 @@ public class UIMS {
         }
     }
 
+    /**
+     * 未更新接口
+     * @return
+     */
     public boolean getScoreStatistics(){//绩点统计
         try {
             JSONObject request_json1 = new JSONObject();
@@ -558,6 +482,7 @@ public class UIMS {
     }
 
     /**
+     * 【重复接口】
      * branch	default
      * params	{}
      * tag	search@teachingTerm
@@ -655,21 +580,39 @@ public class UIMS {
     }
 
     /**
+     * TODO 已弃用接口
      * branch	byCategory
      * params	{…}
      *      cg	SELECT_TYPE
      * tag	sysDict
+     *
+     * {
+     *      "tag":"getAllById@sysDict",
+     *      "branch":"byId",
+     *      "params":{
+     *          "id":4160
+     *      }
+     * }
+     *
      * @return
      */
     public boolean getCourseSelectType(){//选课类型
         try {
+//            JSONObject request_json1 = new JSONObject();
+//            request_json1.put("cg","SELECT_TYPE");
+//
+//            JSONObject request_json = new JSONObject();
+//            request_json.put("branch","byCategory");
+//            request_json.put("params",request_json1);
+//            request_json.put("tag","sysDict");
+
             JSONObject request_json1 = new JSONObject();
-            request_json1.put("cg","SELECT_TYPE");
+            request_json1.put("id","4160");
 
             JSONObject request_json = new JSONObject();
-            request_json.put("branch","byCategory");
+            request_json.put("branch","byId");
             request_json.put("params",request_json1);
-            request_json.put("tag","sysDict");
+            request_json.put("tag","getAllById@sysDict");
 
             RequestBody requestBody = RequestBody.create(JSON, request_json.toString());
 
@@ -711,7 +654,7 @@ public class UIMS {
             JSONObject request_json = new JSONObject();
             request_json.put("branch","latest");
             request_json.put("params","{}");
-            request_json.put("rowLimit","99");
+            request_json.put("rowLimit","150");
             request_json.put("tag","archiveScore@queryCourseScore");
 
             RequestBody requestBody = RequestBody.create(JSON, request_json.toString());
@@ -756,7 +699,8 @@ public class UIMS {
             }catch (Exception e){//兼容一条成绩都没有 获取不到信息的情况
                 e.printStackTrace();
                 studentJSON = new JSONObject();
-                return true;
+                studCnt = getClassStudentCount();
+                return studCnt > 0;
             }
 
             return true;
@@ -766,6 +710,61 @@ public class UIMS {
             exceptions.add(e);
             return false;
         }
+    }
+
+    public int getClassStudentCount(){
+        try {
+            JSONObject params = new JSONObject();
+
+            params.put("deptId",department);
+            params.put("egrade", "20" + user.substring(2, 4));
+
+            JSONObject request_json = new JSONObject();
+            request_json.put("tag","adminClass");
+            request_json.put("branch","deptGrade");
+            request_json.put("params",params);
+
+            RequestBody requestBody = RequestBody.create(JSON, request_json.toString());
+
+            Request request = new Request.Builder()
+                    .url(Address.hostAddress + "/ntms/score/course-score-stat.do")
+                    .header("User-Agent", "Mozilla/5.0 (Windows NT 9.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36")
+                    .header("Cookie", cookie3)
+                    .header("Host", Address.host)
+                    .header("Origin", Address.hostAddress)
+                    .header("Content-Type", "application/json")
+                    .header("Referer", Address.hostAddress + "/ntms/index.do")
+                    .post(requestBody)
+                    .build();
+//            Log.i("OKHttp_Request", String.format("Sending request %s %n%s", request.url(), request.headers()));
+//            Log.i("okhttp_request_body", request.body().toString());
+            Response response = httpClient.newCall(request).execute();
+            BufferedReader bufferedReader = new BufferedReader(
+                    new InputStreamReader(response.body().byteStream(), "UTF-8"), 8 * 1024);
+            StringBuilder entityStringBuilder = new StringBuilder();
+            String line = null;
+            while ((line = bufferedReader.readLine()) != null) {
+                entityStringBuilder.append(line + "\n");
+            }
+            JSONObject responseJSON = JSONObject.fromObject(entityStringBuilder.toString());
+            JSONArray value = responseJSON.getJSONArray("value");
+            for(Object object : value){
+                JSONObject item = (JSONObject) object;
+                String className = item.getString("className");
+                if(className.equals(user.substring(0, 6))){
+                    if(studentJSON == null){
+                        studentJSON = new JSONObject();
+                    }
+                    studentJSON.put("adminClass", item);
+                    return item.getInt("studCnt");
+                }
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            exceptions.add(e);
+        }
+        return 0;
     }
 
     public JSONObject getScorePercent(String asID){//成绩
@@ -1551,9 +1550,9 @@ public class UIMS {
         return studentJSON;
     }
 
-    public static JSONObject getInformationJSON() {
-        return informationJSON;
-    }
+//    public static JSONObject getInformationJSON() {
+//        return informationJSON;
+//    }
 
     public static JSONObject getTeachingTermJSON() {
         return teachingTermJSON;
@@ -1571,9 +1570,9 @@ public class UIMS {
         term_id = value.getString("termId");
     }
 
-    public static void setInformationJSON(JSONObject informationJSON) {
-        UIMS.informationJSON = informationJSON;
-    }
+//    public static void setInformationJSON(JSONObject informationJSON) {
+//        UIMS.informationJSON = informationJSON;
+//    }
 
     public static void setCourseJSON(JSONObject courseJSON) {
         UIMS.courseJSON = courseJSON;

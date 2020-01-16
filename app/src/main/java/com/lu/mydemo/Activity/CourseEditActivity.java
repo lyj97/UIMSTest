@@ -12,10 +12,12 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,10 +48,10 @@ public class CourseEditActivity extends BaseActivity {
     private CheckBox editCourseSingleWeekCheckBox;
     private CheckBox editCourseDoubleWeekCheckBox;
 
-    private EditText editCourseStartTime_tv;
-    private EditText editCourseEndTime_tv;
+    private Spinner editCourseStartTime_spinner;
+    private Spinner editCourseEndTime_spinner;
 
-    private EditText editCourseDay_tv;
+    private Spinner editCourseDay_spinner;
 
     private EditText editCourseTeacher_tv;
     private EditText editCoursePlace_tv;
@@ -70,6 +72,9 @@ public class CourseEditActivity extends BaseActivity {
     public MySubject currentEditSubject;
     public boolean isAddingNew = false;
 
+    public List<Integer> courseIndexList = new ArrayList<>();
+    public List<String> courseDayList = new ArrayList<>();
+
     private OnItemClickListener onItemClickListener = new OnItemClickListener() {
         @Override
         public void onItemClick(View view, int adapterPosition) {
@@ -89,10 +94,10 @@ public class CourseEditActivity extends BaseActivity {
         editCourseSingleWeekCheckBox = findViewById(R.id.activity_course_edit_detail_course_week_single_week_check_box);
         editCourseDoubleWeekCheckBox = findViewById(R.id.activity_course_edit_detail_course_week_double_week_check_box);
 
-        editCourseStartTime_tv = findViewById(R.id.activity_course_edit_detail_course_time_start_edit_text);
-        editCourseEndTime_tv = findViewById(R.id.activity_course_edit_detail_course_time_end_edit_text);
+        editCourseStartTime_spinner = findViewById(R.id.activity_course_edit_detail_course_time_start_spinner);
+        editCourseEndTime_spinner = findViewById(R.id.activity_course_edit_detail_course_time_end_spinner);
 
-        editCourseDay_tv = findViewById(R.id.activity_course_edit_detail_course_day_edit_text);
+        editCourseDay_spinner = findViewById(R.id.activity_course_edit_detail_course_day_spinner);
 
         editCourseTeacher_tv = findViewById(R.id.activity_course_edit_detail_course_teacher_layout_text_view);
         editCoursePlace_tv = findViewById(R.id.activity_course_edit_detail_course_place_layout_text_view);
@@ -186,6 +191,23 @@ public class CourseEditActivity extends BaseActivity {
                 });
             }
         });
+
+        //课程
+        for(int i=1; i<=11; i++){
+            courseIndexList.add(i);
+        }
+        courseDayList.add("星期一");
+        courseDayList.add("星期二");
+        courseDayList.add("星期三");
+        courseDayList.add("星期四");
+        courseDayList.add("星期五");
+        courseDayList.add("星期六");
+        courseDayList.add("星期日");
+
+        editCourseStartTime_spinner.setAdapter(new ArrayAdapter<>(this, R.layout.list_item_spinner, R.id.select_text_item, courseIndexList));
+        editCourseEndTime_spinner.setAdapter(new ArrayAdapter<>(this, R.layout.list_item_spinner, R.id.select_text_item, courseIndexList));
+
+        editCourseDay_spinner.setAdapter(new ArrayAdapter<>(this, R.layout.list_item_spinner, R.id.select_text_item, courseDayList));
     }
 
     public void fillView(int courseDbId){
@@ -217,15 +239,16 @@ public class CourseEditActivity extends BaseActivity {
         }
         editCourseStartWeek_tv.setText(String.valueOf(currentEditSubject.getWeekList().get(0)));
         editCourseEndWeek_tv.setText(String.valueOf(currentEditSubject.getWeekList().get(currentEditSubject.getWeekList().size() - 1)));
+
         if(isSingleWeek(currentEditSubject.getWeekList())){
             setCheckSingleWeek();
         }
         else if(isDoubleWeek(currentEditSubject.getWeekList())){
             setCheckDoubleWeek();
         }
-        editCourseStartTime_tv.setText(String.valueOf(currentEditSubject.getStart()));
-        editCourseEndTime_tv.setText(String.valueOf(currentEditSubject.getStart() + currentEditSubject.getStep() - 1));
-        editCourseDay_tv.setText(String.valueOf(currentEditSubject.getDay()));
+        editCourseStartTime_spinner.setSelection(currentEditSubject.getStart() - 1);
+        editCourseEndTime_spinner.setSelection(currentEditSubject.getStart() + currentEditSubject.getStep() - 1 - 1);
+        editCourseDay_spinner.setSelection(currentEditSubject.getDay() - 1);
         editCourseTeacher_tv.setText(currentEditSubject.getTeacher());
         editCoursePlace_tv.setText(currentEditSubject.getRoom());
     }
@@ -235,23 +258,23 @@ public class CourseEditActivity extends BaseActivity {
         editCourseEndWeek_tv.setText("");
         editCourseSingleWeekCheckBox.setChecked(false);
         editCourseDoubleWeekCheckBox.setChecked(false);
-        editCourseStartTime_tv.setText("");
-        editCourseEndTime_tv.setText("");
-        editCourseDay_tv.setText("");
+        editCourseStartTime_spinner.setSelection(0);
+        editCourseEndTime_spinner.setSelection(0);
+        editCourseDay_spinner.setSelection(0);
         editCourseTeacher_tv.setText(currentEditSubject.getTeacher());
         editCoursePlace_tv.setText(currentEditSubject.getRoom());
     }
 
     public void saveEdit(){
-        int edit_day = Integer.parseInt(editCourseDay_tv.getText().toString());
+        int edit_day = editCourseDay_spinner.getSelectedItemPosition() + 1;
         if(!(edit_day >= 1 && edit_day <= 7)){
             AlertCenter.showErrorAlert(CourseEditActivity.this, "星期必须为 1~7 之间的值");
             return;
         }
         if(currentEditSubject != null) {
             currentEditSubject.setWeekList(getWeekList());
-            currentEditSubject.setStart(Integer.parseInt(editCourseStartTime_tv.getText().toString()));
-            currentEditSubject.setStep(Integer.parseInt(editCourseEndTime_tv.getText().toString()) - Integer.parseInt(editCourseStartTime_tv.getText().toString()) + 1);
+            currentEditSubject.setStart(editCourseStartTime_spinner.getSelectedItemPosition() + 1);
+            currentEditSubject.setStep(editCourseEndTime_spinner.getSelectedItemPosition() - editCourseStartTime_spinner.getSelectedItemPosition() + 1);
             currentEditSubject.setDay(edit_day);
             currentEditSubject.setRoom(editCoursePlace_tv.getText().toString());
             currentEditSubject.setTeacher(editCourseTeacher_tv.getText().toString());

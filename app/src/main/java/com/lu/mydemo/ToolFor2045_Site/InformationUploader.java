@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import com.lu.mydemo.Config.Version;
-import com.lu.mydemo.UIMS.Address;
+import com.lu.mydemo.Utils.Common.Address;
 import okhttp3.Cookie;
 import okhttp3.CookieJar;
 import okhttp3.FormBody;

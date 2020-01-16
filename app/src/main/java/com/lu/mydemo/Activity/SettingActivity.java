@@ -270,11 +270,11 @@ public class SettingActivity extends BaseActivity {
             if(!(termList.size() > 0)){
                 termList = new ArrayList<>();
                 termList.add("暂无学期数据\n请在首页点击“刷新信息”按钮");
-                spinner.setAdapter(new ArrayAdapter(this, R.layout.list_item_spinner, R.id.select_text_item, termList));
+                spinner.setAdapter(new ArrayAdapter<>(this, R.layout.list_item_spinner, R.id.select_text_item, termList));
                 hasTerm = false;
             }
             else{
-                spinner.setAdapter(new ArrayAdapter(this, R.layout.list_item_spinner, R.id.select_text_item, termList));
+                spinner.setAdapter(new ArrayAdapter<>(this, R.layout.list_item_spinner, R.id.select_text_item, termList));
                 spinner.setSelection(termList.indexOf(UIMS.getTermName()));
                 hasTerm = true;
             }
@@ -283,7 +283,7 @@ public class SettingActivity extends BaseActivity {
             hasTerm = false;
             termList = new ArrayList<>();
             termList.add("暂无学期数据\n请在首页点击“刷新信息”按钮");
-            spinner.setAdapter(new ArrayAdapter(this, R.layout.list_item_spinner, R.id.select_text_item, termList));
+            spinner.setAdapter(new ArrayAdapter<>(this, R.layout.list_item_spinner, R.id.select_text_item, termList));
 //            finish();
         }
     }

@@ -1,5 +1,7 @@
 package com.lu.mydemo.OA;
 
+import android.text.TextUtils;
+
 import com.lu.mydemo.ToolFor2045_Site.GetInternetInformation;
 import com.lu.mydemo.ToolFor2045_Site.InformationUploader;
 import com.lu.mydemo.Utils.Thread.MyThreadController;
@@ -22,6 +24,8 @@ public class NewsClient {
     public static ConcurrentHashMap<Integer, JSONObject> page_newsListMap = new ConcurrentHashMap<>();
 
     public static boolean hasStarted = false;
+
+    public static boolean OA_AVAILABLE = false;
 
     public static JSONObject getNewsList(int page){
         JSONObject news_json = new JSONObject();
@@ -65,6 +69,7 @@ public class NewsClient {
             }
             news_json.put("value", array);
             page_newsListMap.put(page, news_json);
+            OA_AVAILABLE = true;
             return news_json;
         }
         return null;
@@ -84,6 +89,34 @@ public class NewsClient {
             return content_box.get(0).toString();
         }
         return "";
+    }
+
+    public static String getNewsDetailFromServer(String link){
+        if(TextUtils.isEmpty(link)) return "";
+        String newsId = link.substring(link.indexOf("?id=") + 4, link.indexOf("&channelId"));
+        if(!TextUtils.isEmpty(newsId)){
+            GetInternetInformation client = new GetInternetInformation();
+            JSONObject newsJSON = client.getNewsDetail(newsId);
+            try{
+                return newsJSON.getJSONObject("data").getString("detail");
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return "";
+    }
+
+    public static JSONObject getNewsListFromServer(int page, String searchStr){
+        GetInternetInformation client = new GetInternetInformation();
+        JSONObject news_json = null;
+        try{
+            news_json = JSONObject.fromObject(client.getNewNewsList(page, searchStr));
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return news_json;
     }
 
     public static void initUploadCheck(){
@@ -131,7 +164,7 @@ public class NewsClient {
                 @Override
                 public void run() {
                     JSONObject pageJSON;
-                    for(int i=0; i<page; i++) {
+                    for(int i=1; i<=page; i++) {
                         pageJSON = page_newsListMap.get(i);
                         if(pageJSON == null) {
                             try {

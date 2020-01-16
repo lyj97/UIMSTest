@@ -89,16 +89,19 @@ public class WebPagesActivity extends BaseActivity {
             @Override
             public void run() {
                 try{
-                    dataList = new ArrayList<>();
-                    JSONObject object = loadClient.getTestItems();
-                    JSONArray array = object.getJSONArray("value");
-                    for(Object item : array){
-                        Map<String, Object> map = new HashMap<>();
-                        map.put("title", ((JSONObject) item).getString("title"));
-                        map.put("description", ((JSONObject) item).getString("description"));
-                        map.put("link", ((JSONObject) item).getString("link"));
-                        dataList.add(map);
-                    }
+//                    dataList = new ArrayList<>();
+//                    JSONObject object = loadClient.getTestItems();
+//                    JSONArray array = object.getJSONArray("value");
+//                    for(Object item : array){
+//                        Map<String, Object> map = new HashMap<>();
+//                        map.put("title", ((JSONObject) item).getString("title"));
+//                        map.put("description", ((JSONObject) item).getString("description"));
+//                        map.put("link", ((JSONObject) item).getString("link"));
+//                        dataList.add(map);
+//                    }
+
+                    initPageList();
+
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -112,6 +115,19 @@ public class WebPagesActivity extends BaseActivity {
                 }
             }
         });
+    }
+
+    public void initPageList() {
+        dataList = new ArrayList<>();
+        JSONObject object = loadClient.getWebPagesItems();
+        JSONArray array = object.getJSONArray("data");
+        for (Object item : array) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("title", ((JSONObject) item).getString("title"));
+            map.put("description", ((JSONObject) item).getString("description"));
+            map.put("link", ((JSONObject) item).getString("link"));
+            dataList.add(map);
+        }
     }
 
     protected MainAdapter createAdapter() {

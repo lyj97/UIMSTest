@@ -1,4 +1,4 @@
-package com.lu.mydemo.UIMS;
+package com.lu.mydemo.Utils.Common;
 
 public class Address {
     public static String host = "uims.jlu.edu.cn";
@@ -13,5 +13,8 @@ public class Address {
 
     public static String myHost_HUAWEI = "uimstest.2045.site";
     public static String myHostAddress_HUAWEI = "http://" + myHost_HUAWEI + ":8199";
+
+    public static String vpnHost = "vpns.jlu.edu.cn";
+    public static String vpnAddress = "https://vpns.jlu.edu.cn";
 
 }

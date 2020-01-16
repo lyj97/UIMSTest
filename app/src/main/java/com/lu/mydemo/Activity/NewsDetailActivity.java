@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
+import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.URLSpan;
 import android.view.View;
@@ -110,24 +111,30 @@ public class NewsDetailActivity extends BaseActivity {
                 }
             }
         });
-        Intent intent = getIntent();
-        bundle = intent.getBundleExtra("bundle");
-        detailTitle.setText(bundle.getString("title"));
-        detailDepartment.setText(bundle.getString("department"));
-        detailTime.setText(bundle.getString("time"));
+        boolean isFromOa = false;
+        boolean isFromServer = false;
+        bundle = getIntent().getBundleExtra("bundle");
+        if(bundle != null) {
+            detailTitle.setText(bundle.getString("title"));
+            detailDepartment.setText(bundle.getString("department"));
+            detailTime.setText(bundle.getString("time"));
 //        detailLink.setText(Html.fromHtml("<a href=\'" + bundle.getString("abs_link") + "\'>浏览器打开</a>"));
 //        detailLink.setMovementMethod(LinkMovementMethod.getInstance());
-        detailLink.setText("浏览器打开");
-        detailLink.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent1 = new Intent(NewsDetailActivity.this, WebViewActivity.class);
-                Bundle web_bundle = new Bundle();
-                web_bundle.putString("link", bundle.getString("abs_link"));
-                intent1.putExtra("bundle", web_bundle);
-                startActivity(intent1);
-            }
-        });
+            detailLink.setText("浏览器打开");
+            detailLink.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent1 = new Intent(NewsDetailActivity.this, WebViewActivity.class);
+                    Bundle web_bundle = new Bundle();
+                    web_bundle.putString("link", bundle.getString("abs_link"));
+                    intent1.putExtra("bundle", web_bundle);
+                    startActivity(intent1);
+                }
+            });
+
+            isFromOa = bundle.getBoolean("isLoadedFromOA");
+            isFromServer = bundle.getBoolean("isLoadedFromServer");
+        }
 
         CharSequence text  =  detailLink.getText();
         if (text instanceof Spannable){
@@ -164,7 +171,12 @@ public class NewsDetailActivity extends BaseActivity {
 //        }).start();
 //        webView.loadUrl(bundle.getString("abs_link"));
 
-        getNewsDetailFromOA();
+        if(isFromOa) {
+            getNewsDetailFromOA();
+        }
+        else {
+            getNewsDetailFromServer();
+        }
         AlertCenter.showLoading(this, "加载中...");
     }
 
@@ -253,6 +265,26 @@ public class NewsDetailActivity extends BaseActivity {
                     newsDetail = NewsClient.getNewsDetailFromOA(bundle.getString("abs_link"));
                     getSucceed();
                     uploadNewsDetail();
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                    AlertCenter.showErrorAlertWithReportButton(NewsDetailActivity.this, e.getMessage(), e, UIMS.getUser());
+                }
+            }
+        });
+    }
+
+    public void getNewsDetailFromServer(){
+        MyThreadController.commit(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    String link = bundle.getString("abs_link");
+                    if(!TextUtils.isEmpty(link)){
+                        newsDetail = NewsClient.getNewsDetailFromServer(link);
+                        getSucceed();
+                        uploadNewsDetail();
+                    }
                 }
                 catch (Exception e){
                     e.printStackTrace();

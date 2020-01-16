@@ -60,10 +60,21 @@
 
         </LinearLayout>
 
-        <TextView
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:gravity="center|end">
+
+            <TextView
+                android:id="@+id/activity_web_view_navigation_custom_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/ic_create_white_24dp"
+                />
+
+        </LinearLayout>
 
     </LinearLayout>
 
@@ -87,6 +98,32 @@
         android:singleLine="true"
         android:textColor="#FFFFFF"
         android:text="Title" />
+
+    <LinearLayout
+        android:id="@+id/activity_web_view_custom_operation_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <EditText
+            android:id="@+id/activity_web_view_custom_operation_link_edit_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/activity_web_view_custom_operation_commit_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:textColor="@color/color_white"
+            android:text="提交"/>
+
+    </LinearLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"

@@ -70,24 +70,31 @@ public class NewsSavedActivity extends BaseActivity {
                     return;
                 }
 
-//                Intent intent = new Intent(NewsSavedActivity.this, NewsDetailActivity.class);
-//
-//                Bundle bundle = new Bundle();
-//                bundle.putString("title", (String) dataList.get(adapterPosition).get("title"));
-//                bundle.putString("department", (String) dataList.get(adapterPosition).get("department"));
-//                bundle.putString("time", "收藏于：" + dataList.get(adapterPosition).get("time").toString().substring(2));
-//                bundle.putString("link", (String) dataList.get(adapterPosition).get("link"));
-//                bundle.putString("abs_link", (String) dataList.get(adapterPosition).get("abs_link"));
-//                bundle.putBoolean("flagTop", (boolean) dataList.get(adapterPosition).get("flagTop"));
-//
-//                intent.putExtra("bundle", bundle);
-//                startActivity(intent);
+                Intent intent = new Intent(NewsSavedActivity.this, NewsDetailActivity.class);
 
-                Intent intent1 = new Intent(NewsSavedActivity.this, WebViewActivity.class);
-                Bundle web_bundle = new Bundle();
-                web_bundle.putString("link", (String) dataList.get(adapterPosition).get("abs_link"));
-                intent1.putExtra("bundle", web_bundle);
-                startActivity(intent1);
+                Bundle bundle = new Bundle();
+                bundle.putString("title", (String) dataList.get(adapterPosition).get("title"));
+                bundle.putString("department", (String) dataList.get(adapterPosition).get("department"));
+                String timeStr = "";
+                try{
+                    timeStr = (String) dataList.get(adapterPosition).get("time");
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                }
+                if(timeStr!= null && timeStr.length() > 2) bundle.putString("time", "收藏于：" + timeStr.substring(2));
+                bundle.putString("link", (String) dataList.get(adapterPosition).get("link"));
+                bundle.putString("abs_link", (String) dataList.get(adapterPosition).get("abs_link"));
+                bundle.putBoolean("flagTop", (boolean) dataList.get(adapterPosition).get("flagTop"));
+
+                intent.putExtra("bundle", bundle);
+                startActivity(intent);
+
+//                Intent intent1 = new Intent(NewsSavedActivity.this, WebViewActivity.class);
+//                Bundle web_bundle = new Bundle();
+//                web_bundle.putString("link", (String) dataList.get(adapterPosition).get("abs_link"));
+//                intent1.putExtra("bundle", web_bundle);
+//                startActivity(intent1);
 
             }
         });

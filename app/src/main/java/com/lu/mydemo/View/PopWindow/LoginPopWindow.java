@@ -109,7 +109,7 @@ public class LoginPopWindow extends PopupWindow {
                                     if (uims.getCurrentUserInfo()) {
 //                                showAlert("", "欢迎您, " + uims.getNickName() + " ." + "\n" +
 //                                        "您是UIMS系统第 " + uims.getLoginCounter() + " 位访问者.");
-                                        if (uims.getUserInformation())
+//                                        if (uims.getUserInformation())
                                             if (uims.getTermArray()) {
                                                 context.loginSuccess();
 
@@ -170,11 +170,11 @@ public class LoginPopWindow extends PopupWindow {
                                                 AlertCenter.showErrorAlertWithReportButton(context, "获取信息出错，请稍后重试...", UIMS.getExceptions(), userStr);
                                                 dealFinish("登录并更新信息");
                                             }
-                                        else {
-//                                            AlertCenter.showWarningAlert(context, "获取信息出错，请稍后重试...");
-                                            AlertCenter.showErrorAlertWithReportButton(context, "获取信息出错，请稍后重试...", UIMS.getExceptions(), userStr);
-                                            dealFinish("登录并更新信息");
-                                        }
+//                                        else {
+////                                            AlertCenter.showWarningAlert(context, "获取信息出错，请稍后重试...");
+//                                            AlertCenter.showErrorAlertWithReportButton(context, "获取信息出错，请稍后重试...", UIMS.getExceptions(), userStr);
+//                                            dealFinish("登录并更新信息");
+//                                        }
                                     } else {
 //                                        AlertCenter.showWarningAlert(context, "获取信息出错，请稍后重试...");
                                         AlertCenter.showErrorAlertWithReportButton(context, "获取信息出错，请稍后重试...", UIMS.getExceptions(), userStr);

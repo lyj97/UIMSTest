@@ -264,7 +264,6 @@ public class ScoreActivity extends BaseActivity
                 getScoreList();
                 if(dataList == null){
                     Log.e("ScoreActivity", "No score data available!");
-                    AlertCenter.showErrorAlert(ScoreActivity.this, "错误", "获取成绩数据失败!");
                     List<Exception>exceptions = ScoreInf.getExceptionList();
                     exceptions.add(new IllegalStateException("Score DataList is NULL!"));
                     AlertCenter.showErrorAlertWithReportButton(ScoreActivity.this, "错误", "获取成绩数据失败!", exceptions, UIMS.getUser());
@@ -346,16 +345,6 @@ public class ScoreActivity extends BaseActivity
             double gpaFirst = scoreStatistics.getJSONArray("value").getJSONObject(0).getDouble("gpaFirst");
             double gpaBest = scoreStatistics.getJSONArray("value").getJSONObject(0).getDouble("gpaBest");
 
-//            Map<String, Object> map = new HashMap<>();
-//        map.put("title","绩点统计");
-//        map.put("context","【首次成绩】：平均成绩:" + avgScoreFirst + "  " + "平均绩点:" + gpaFirst + "  \n" +
-//                "【最好成绩】：平均成绩:" + avgScoreBest + "  " + "平均绩点:" + gpaBest);
-
-//        String title = "绩点统计";
-//        String title = "学分成绩";
-//        String value = "【首次成绩】 \t平均成绩:" + String.format("%.2f", avgScoreFirst) + "  " + "平均绩点:" + String.format("%.2f", gpaFirst) + "\n" +
-//                "【最好成绩】 \t平均成绩:" + String.format("%.2f", avgScoreBest) + "  " + "平均绩点:" + String.format("%.2f", gpaBest) + "\n" +
-//                "必修平均成绩:" + String.format("%.2f", requiredScoreSum / requiredCreditSum) + " \t 必修平均绩点:" + String.format("%.2f", requiredGPASum / requiredCreditSum);
             first_score.setText(String.format("%.2f", avgScoreFirst));
             first_gpa.setText(String.format("%.2f", gpaFirst));
             best_score.setText(String.format("%.2f", avgScoreBest));
@@ -372,63 +361,6 @@ public class ScoreActivity extends BaseActivity
 
     }
 
-    public void showPercent(final String asID, boolean isReSelect){
-        final JSONObject percent = UIMS.getScorePercentJSON(asID);
-
-        if(percent == null){
-            AlertCenter.showAlert(this, "成绩分布走丢了(っ °Д °;)っ\n\n" +
-                    "校外成绩查询(com.lu.mydemo.CJCX)无成绩分布哦;\n" +
-                    "如在校内，请连接校园网后点击“刷新信息”再试一下吧.");
-            return;
-        }
-
-        JSONArray items = percent.getJSONArray("items");
-
-        StringBuilder stringBuilder = new StringBuilder();
-        JSONObject temp;
-        String label;
-        double perc;
-        int i = 0;
-        try{
-            while(true) {
-                temp = items.getJSONObject(i);
-                label = temp.getString("label");
-                perc = temp.getDouble("percent");
-
-                if (i != 0) stringBuilder.append('\n');
-                stringBuilder.append(label);
-//                Log.i("ScoreActivity", "label: " + label + "\tlength: " + label.length());
-                if (label.length() == 8) stringBuilder.append(":\t");
-                else if (label.length() < 8) stringBuilder.append(":\t\t\t");
-                else stringBuilder.append(":\t\t");
-                stringBuilder.append(getScorePercentString(perc));
-                stringBuilder.append(String.format("%.1f", perc) + " %");
-                if (UIMS.getCourseTypeId(asID).equals("4160") && !isReSelect)
-                    stringBuilder.append("\t(约 " + String.format("%.0f", UIMS.getStudCnt() * perc * 0.01) + " 人)");
-                i++;
-            }
-
-        }catch (Exception e) {
-//            e.printStackTrace();
-            if(UIMS.getCourseTypeId(asID).equals("4160") && ! isReSelect) stringBuilder.append("\n\n人数仅供参考哦(￣▽￣)");
-        }
-        final String str = stringBuilder.toString();
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Alerter.create(ScoreActivity.this)
-                        .setTitle(percent.getString("courName"))
-                        .setText(str)
-                        .enableSwipeToDismiss()
-                        .setDuration(4000)
-                        .hideIcon()
-//                        .enableProgress(true)
-                        .setBackgroundColorInt(ColorManager.getTopAlertBackgroundColor())
-                        .show();
-            }
-        });
-    }
-
     private void setData(final String asID, boolean isReSelect, final int position){
 
         if(pieDatas[position] != null){
@@ -437,6 +369,7 @@ public class ScoreActivity extends BaseActivity
         }
 
         final JSONObject percent = UIMS.getScorePercentJSON(asID);
+        final int studentCount = UIMS.getStudCnt();
 
         if(percent == null){
 
@@ -457,8 +390,8 @@ public class ScoreActivity extends BaseActivity
                 label = temp.getString("label");
                 perc = temp.getDouble("percent");
 
-                if (UIMS.getCourseTypeId(asID).equals("4160") && !isReSelect)
-                    values.add(new PieEntry((float) perc, label + "\n(约 " + String.format("%.0f", UIMS.getStudCnt() * perc * 0.01) + " 人)"));
+                if (studentCount > 0 && UIMS.getCourseTypeId(asID).equals("4160") && !isReSelect)
+                    values.add(new PieEntry((float) perc, label + "\n(约 " + String.format("%.0f", studentCount * perc * 0.01) + " 人)"));
                 else
                     values.add(new PieEntry((float) perc, label));
                 i++;
@@ -516,15 +449,6 @@ public class ScoreActivity extends BaseActivity
         return s;
     }
 
-    private String getScorePercentString(double percent){
-        StringBuilder stringBuilder = new StringBuilder();
-        for(int i=0; i<(int)percent/3; i++){
-            stringBuilder.append("|");
-        }
-        stringBuilder.append("\t\t");
-        return stringBuilder.toString();
-    }
-
     public void showResponse(final String string){
         runOnUiThread(new Runnable() {
             @Override
@@ -574,9 +498,6 @@ public class ScoreActivity extends BaseActivity
 
         findViewById(R.id.activity_scrolling_layout).setBackground(ColorManager.getMainBackground_full());
         fab.setBackgroundTintList(getColorStateListTest());
-//        fab.setColorFilter(ColorManager.getPrimaryColor());
-//        fab.setRippleColor(ColorManager.getPrimaryColor());
-//        fab.setBackgroundColor(ColorManager.getPrimaryColor());
     }
 
     public void dismissGetScorePopWindow(){
@@ -813,40 +734,6 @@ public class ScoreActivity extends BaseActivity
             }
         }
 
-    }
-
-    class colorAdapter extends SimpleAdapter {
-        List<? extends Map<String, ?>> mdata;
-
-        public colorAdapter(Context context, List<? extends Map<String, ?>> data, int resource, String[] from,
-                               int[] to) {
-            super(context, data, resource, from, to);
-            this.mdata = data;
-        }
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            if (convertView == null) {
-                convertView = LinearLayout.inflate(getBaseContext(), R.layout.list_item_new, null);
-            }//这个TextView是R.layout.list_item里面的，修改这个字体的颜色
-            TextView textView = (TextView) convertView.findViewById(R.id.list_item_title);
-            //获取每次进来时 mData里面存的值  若果相同则变颜色
-            //根据Key值取出装入的数据，然后进行比较
-            String ss=(String)mdata.get(position).get("type");
-            if(ss.equals("4160")){
-                textView.setTextColor(getResources().getColor(R.color.course_bixiu));
-            }else if(ss.equals("4161")){
-                textView.setTextColor(getResources().getColor(R.color.course_xuanxiu));
-            }else if(ss.equals("4162")){
-                textView.setTextColor(getResources().getColor(R.color.course_xianxuan));
-            }else if(ss.equals("4163")){
-                textView.setTextColor(getResources().getColor(R.color.course_xiaoxuanxiu));
-            }else if(ss.equals("4164")){
-                textView.setTextColor(getResources().getColor(R.color.course_tiyu));
-            }
-            //Log.i("TAG", Integer.toString(position));
-            //Log.i("TAG", (String) mData.get(position).get("text"));
-            return super.getView(position, convertView, parent);
-        }
     }
 
     public static void loadScoreSelect(){

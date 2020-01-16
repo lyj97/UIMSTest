@@ -396,7 +396,7 @@ public class CourseScheduleChangeActivity extends BaseActivity {
     private void setSpinnerItems(){
         if(MainActivity.isLocalValueLoaded){
             termList = getTermArray();
-            spinner.setAdapter(new ArrayAdapter(this, R.layout.list_item_spinner, R.id.select_text_item, termList));
+            spinner.setAdapter(new ArrayAdapter<>(this, R.layout.list_item_spinner, R.id.select_text_item, termList));
             spinner.setSelection(termList.indexOf(UIMS.getTermName()));
         }
         else{

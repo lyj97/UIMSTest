@@ -5,9 +5,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.drawable.GradientDrawable;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -15,11 +17,13 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.lu.mydemo.Activity.MainActivity;
 import com.lu.mydemo.Notification.AlertCenter;
 import com.lu.mydemo.Activity.ScoreActivity;
 import com.lu.mydemo.R;
+import com.lu.mydemo.Utils.StudentVPN.VPNClient;
 import com.tapadoo.alerter.Alerter;
 
 import com.lu.mydemo.CJCX.CJCX;
@@ -35,8 +39,14 @@ public class LoginGetScorePopupWindow extends PopupWindow {
     private EditText user;
     private EditText password;
 
+    private View configLayout;
+    private View vpnLayout;
+
     private CheckBox checkBox_UIMS;
     private CheckBox checkBox_CJCX;
+    private CheckBox checkBox_VPN;
+
+    private TextView useVPNTv;
 
     private Button commitButton;
     private Button cancelButton;
@@ -52,7 +62,11 @@ public class LoginGetScorePopupWindow extends PopupWindow {
 
     public static boolean loginSuccess = false;
 
-    public LoginGetScorePopupWindow(final ScoreActivity context, int height, int width) {
+    public LoginGetScorePopupWindow(final ScoreActivity context, int height, int width){
+        this(context, height, width, null);
+    }
+
+    public LoginGetScorePopupWindow(final ScoreActivity context, int height, int width, final VPNClient vpnClient) {
         super(context);
         this.context = context;
         sp = MainActivity.context.getSharedPreferences("userInfo", Context.MODE_PRIVATE);//共用LoginActivity账户
@@ -63,8 +77,14 @@ public class LoginGetScorePopupWindow extends PopupWindow {
         user = mMenuView.findViewById(R.id.pop_window_login_get_score_id);
         password = mMenuView.findViewById(R.id.pop_window_login_get_score_password);
 
+        configLayout = mMenuView.findViewById(R.id.pop_window_login_get_score_config_layout);
+        vpnLayout = mMenuView.findViewById(R.id.pop_window_login_get_score_VPN_layout);
+
         checkBox_UIMS = mMenuView.findViewById(R.id.pop_window_login_get_score_UIMS_check_box);
         checkBox_CJCX = mMenuView.findViewById(R.id.pop_window_login_get_score_CJCX_check_box);
+        checkBox_VPN = mMenuView.findViewById(R.id.pop_window_login_get_score_VPN_check_box);
+
+        useVPNTv = mMenuView.findViewById(R.id.pop_window_login_get_score_use_vpn);
 
         commitButton = mMenuView.findViewById(R.id.pop_window_login_get_score_commit_button);
         cancelButton = mMenuView.findViewById(R.id.pop_window_login_get_score_cancel_button);
@@ -97,6 +117,33 @@ public class LoginGetScorePopupWindow extends PopupWindow {
 
         checkBox_UIMS.setOnCheckedChangeListener(onCheckedChangeListener);
         checkBox_CJCX.setOnCheckedChangeListener(onCheckedChangeListener);
+
+        useVPNTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                dismiss();
+//                LoginVPNPopupWindow window = new LoginVPNPopupWindow(context, context.findViewById(R.id.activity_scrolling_layout).getHeight(), context.findViewById(R.id.activity_scrolling_layout).getWidth());
+//                window.setFocusable(true);
+//                window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+//                window.showAtLocation(context.findViewById(R.id.activity_scrolling_layout), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0); //设置layout在PopupWindow中显示的位置
+                Toast.makeText(context, "该功能尚未完成，敬请期待！", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        if(vpnClient != null){
+            checkBox_VPN.setChecked(true);
+            configLayout.setVisibility(View.GONE);
+            useVPNTv.setVisibility(View.GONE);
+            vpnLayout.setVisibility(View.VISIBLE);
+            checkBox_VPN.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    configLayout.setVisibility(View.VISIBLE);
+                    useVPNTv.setVisibility(View.VISIBLE);
+                    vpnLayout.setVisibility(View.GONE);
+                }
+            });
+        }
 
         commitButton.setText("更新成绩");
 
@@ -225,87 +272,6 @@ public class LoginGetScorePopupWindow extends PopupWindow {
                                         "  ￣へ￣  ");
                                 dealFinish("更新成绩");
                             }
-//                            context.showLoading("正在连接到UIMS教务系统...");
-//                            if (uims.connectToUIMS()) {
-//                                context.showLoading("正在登录...");
-//                                if (uims.login()) {
-//                                    if (uims.getCurrentUserInfo(false)) {
-//                                        uims.getScoreStatistics();
-//                                        uims.getRecentScore();
-//                                        if(ScoreConfig.isIsCJCXEnable()) {
-//                                            com.lu.mydemo.CJCX cjcx = new com.lu.mydemo.CJCX(uims.getUser(), uims.getPass());
-//                                            if (cjcx.login()) {
-//                                                if (cjcx.getScore()) {
-//                                                    context.showAlert("CJCX查询成功！");
-//                                                    ScoreActivity.saveCJCXScore();
-//                                                }
-//                                            }
-//                                        }
-//                                        MainActivity.saveScoreJSON();
-//                                        context.showAlert("成绩刷新成功！");
-//                                        context.reloadScoreList();
-//                                        context.dismissGetScorePopWindow();
-//                                    }
-//                                    else{
-//                                        context.showWarningAlert("获取信息失败！");
-//                                        dealFinish("重新登录");
-//                                        return;
-//                                    }
-//
-//                                } else {
-////                                showResponse("Login failed!");
-//                                    context.runOnUiThread(new Runnable() {
-//                                        @Override
-//                                        public void run() {
-//                                            Alerter.hide();
-//                                            context.showWarningAlert("", "登录失败，请检查用户名和密码是否正确.\n\n" +
-//                                                    "教务账号：\t您的教学号\n" +
-//                                                    "教务密码：\t默认密码为身份证号后六位");
-//
-//                                            dealFinish("重新登录");
-//
-//                                            return;
-//                                        }
-//                                    });
-//                                }
-//                            } else {
-////                            showResponse("Login failed!");
-//                                if(ScoreConfig.isIsCJCXEnable()) {
-//                                    if(ScoreConfig.isIsUIMSEnable())
-//                                        context.showLoading("连接UIMS失败！\n\n" +
-//                                            "正在尝试校外(com.lu.mydemo.CJCX)查询，请稍候...");
-//                                    com.lu.mydemo.CJCX cjcx = new com.lu.mydemo.CJCX(uims.getUser(), uims.getPass());
-//                                    if (cjcx.login()) {
-//                                        if(com.lu.mydemo.UIMS.getTermId_termName() == null || ! (com.lu.mydemo.UIMS.getTermId_termName().size() > 0)){
-//                                            if(cjcx.getTeachingTerm()){
-//                                                ScoreActivity.saveCJCXTerm();
-//                                            }
-//                                        }
-//                                        if (cjcx.getScore()) {
-//                                            context.showAlert("CJCX查询成功！\n" +
-//                                                    "本次查询更新了 " + cjcx.getUpdate_count() + " 条成绩信息.");
-//                                            ScoreActivity.saveCJCXScore();
-//                                            context.reloadScoreList();
-//                                            context.dismissGetScorePopWindow();
-//                                            return;
-//                                        }
-//                                    }
-//                                }
-//                                MainActivity.saveScoreJSON();
-//                                context.runOnUiThread(new Runnable() {
-//                                    @Override
-//                                    public void run() {
-//                                        Alerter.hide();
-//                                        context.showErrorAlert("", "登录失败，请检查是否连接校园网！\n\n" +
-//                                                "您可以连接JLU.NET或JLU.TEST;\n" +
-//                                                "若您未开通校园网，可以考虑连接JLU.PC，此时无需登录到网络，完成“信息更新”后即可断开，切回流量.\n\n" +
-//                                                "若您在校外，请在设置中勾选\"启用校外查询(com.lu.mydemo.CJCX)\"\n" +
-//                                                "如有问题，请在\"关于\"页反馈.");
-//                                        dealFinish("重新登录");
-//                                        return;
-//                                    }
-//                                });
-//                            }
                         } catch (Exception e) {
                             e.printStackTrace();
 //                            AlertCenter.showWarningAlert(context, "Error", e.getMessage());

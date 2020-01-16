@@ -1,7 +1,5 @@
 package com.lu.mydemo.ToolFor2045_Site;
 
-import android.util.Log;
-
 import net.sf.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -10,9 +8,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import com.lu.mydemo.UIMS.Address;
+import com.lu.mydemo.Utils.Common.Address;
+
+import org.jetbrains.annotations.NotNull;
+
 import okhttp3.Cookie;
 import okhttp3.CookieJar;
+import okhttp3.FormBody;
 import okhttp3.HttpUrl;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
@@ -23,13 +25,14 @@ import static net.sf.json.JSONObject.fromObject;
 
 public class GetInternetInformation {
 
-    OkHttpClient httpClient = new OkHttpClient.Builder()
+    private OkHttpClient httpClient = new OkHttpClient.Builder()
             .cookieJar(new CookieJar() {
                 @Override
-                public void saveFromResponse(HttpUrl httpUrl, List<Cookie> list) { }
+                public void saveFromResponse(@NotNull HttpUrl httpUrl, @NotNull List<Cookie> list) { }
 
+                @NotNull
                 @Override
-                public List<Cookie> loadForRequest(HttpUrl httpUrl) {
+                public List<Cookie> loadForRequest(@NotNull HttpUrl httpUrl) {
                     return new ArrayList<>();
                 }
             })
@@ -38,7 +41,7 @@ public class GetInternetInformation {
             .followSslRedirects(false)
             .connectTimeout(10, TimeUnit.SECONDS)
             .build();
-    MultipartBody.Builder builder;
+    private MultipartBody.Builder builder;
 
     public JSONObject getVersionInformation() {
         try {
@@ -133,6 +136,28 @@ public class GetInternetInformation {
         }
     }
 
+    public JSONObject getWebPagesItems(){
+        try {
+            builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
+            Request request = new Request.Builder()
+                    .url(Address.myHostAddress_HUAWEI + "/api/common/website/list")
+                    .build();
+            Response response = httpClient.newCall(request).execute();
+            BufferedReader bufferedReader = new BufferedReader(
+                    new InputStreamReader(response.body().byteStream(), "UTF-8"), 8 * 1024);
+            StringBuilder entityStringBuilder = new StringBuilder();
+            String line = null;
+            while ((line = bufferedReader.readLine()) != null) {
+                entityStringBuilder.append(line + "\n");
+            }
+            return JSONObject.fromObject(entityStringBuilder.toString());
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public JSONObject getNewsList(int page) {
         try {
             builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
@@ -160,6 +185,71 @@ public class GetInternetInformation {
                 return JSONObject.fromObject(entityStringBuilder.toString());
 
             }catch (Exception e){
+                e.printStackTrace();
+                return null;
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public JSONObject getNewNewsList(int page, String searchStr) {
+        try {
+            builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
+            FormBody formBody = new FormBody.Builder()
+                    .add("page", String.valueOf(page))
+                    .add("searchName", searchStr == null ? "" : searchStr)
+                    .build();
+            Request request = new Request.Builder()
+                    .url(Address.myHostAddress_HUAWEI + "/api/common/oa/list")
+                    .post(formBody)
+                    .build();
+            Response response = httpClient.newCall(request).execute();
+            BufferedReader bufferedReader = new BufferedReader(
+                    new InputStreamReader(response.body().byteStream(), "UTF-8"), 8 * 1024);
+            StringBuilder entityStringBuilder = new StringBuilder();
+            String line = null;
+            while ((line = bufferedReader.readLine()) != null) {
+                entityStringBuilder.append(line + "\n");
+            }
+            try {
+                return JSONObject.fromObject(entityStringBuilder.toString());
+
+            }catch (Exception e){
+                e.printStackTrace();
+                return null;
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public JSONObject getNewsDetail(String id){
+        try {
+            builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
+            FormBody formBody = new FormBody.Builder()
+                    .add("id", id)
+                    .build();
+            Request request = new Request.Builder()
+                    .url(Address.myHostAddress_HUAWEI + "/api/common/oa/detail")
+                    .post(formBody)
+                    .build();
+            Response response = httpClient.newCall(request).execute();
+            BufferedReader bufferedReader = new BufferedReader(
+                    new InputStreamReader(response.body().byteStream(), "UTF-8"), 8 * 1024);
+            StringBuilder entityStringBuilder = new StringBuilder();
+            String line = null;
+            while ((line = bufferedReader.readLine()) != null) {
+                entityStringBuilder.append(line + "\n");
+            }
+            try {
+                return JSONObject.fromObject(entityStringBuilder.toString());
+
+            } catch (Exception e) {
                 e.printStackTrace();
                 return null;
             }

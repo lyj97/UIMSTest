@@ -27,6 +27,7 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -45,6 +46,11 @@ public class WebViewActivity extends BaseActivity {
     private TextView titleTextView;
     private TextView backTextView;
     private TextView closeTextView;
+    private TextView customOperationTv;
+
+    private View customerLinkLayout;
+    private EditText linkEditText;
+    private TextView commitTv;
 
     private ProgressBar loadingProgressBar;
     private WebView webView;
@@ -72,6 +78,11 @@ public class WebViewActivity extends BaseActivity {
         titleTextView = findViewById(R.id.activity_web_view_title);
         backTextView = findViewById(R.id.activity_web_view_navigation_back_text);
         closeTextView = findViewById(R.id.activity_web_view_navigation_close_text);
+        customOperationTv = findViewById(R.id.activity_web_view_navigation_custom_text);
+
+        customerLinkLayout = findViewById(R.id.activity_web_view_custom_operation_layout);
+        linkEditText = findViewById(R.id.activity_web_view_custom_operation_link_edit_text);
+        commitTv = findViewById(R.id.activity_web_view_custom_operation_commit_text_view);
 
         loadingProgressBar = findViewById(R.id.activity_web_view_loading_progress_bar);
         webView = findViewById(R.id.activity_web_view_web_view);
@@ -83,6 +94,51 @@ public class WebViewActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+
+        customOperationTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                customerLinkLayout.setVisibility((customerLinkLayout.getVisibility() == View.VISIBLE) ? View.GONE : View.VISIBLE);
+            }
+        });
+
+        commitTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String link = linkEditText.getText().toString();
+                if(link.startsWith("http")){
+                    link = link.replaceFirst("http://", "");
+                    link = link.replaceFirst("https://", "");
+                }
+                if(link.endsWith("/")){
+                    link = link.substring(0, link.length() - 1);
+                }
+                String jsCode =
+                        "function changeFirstItem(){" +
+//                                "document.querySelector('div.web-card-box').setAttribute('data-url','/http/" + link + "');" +
+//                                "document.querySelector('div.web-card-box').querySelector('div.card-logo').innerHTML = '';" +
+//                                "document.querySelector('div.web-card-box').querySelector('div.card-title').innerHTML = '点击这里打开自定义网址';" +
+//                                "document.querySelector('div.web-card-box').querySelector('div.card-description').innerHTML = '" + link + "';" +
+
+                                "var cardBox = document.querySelector('div.web-card-box');" +
+                                "cardBox.setAttribute('data-url','/http/" + link + "');" +
+                                "var cardLogo = cardBox.querySelector('div.card-logo');" +
+                                "var cardTitle = cardBox.querySelector('div.card-title');" +
+                                "var cardDescription = cardBox.querySelector('div.card-description');" +
+                                "cardLogo.innerHTML = '';" +
+                                "cardTitle.innerHTML = '点击这里打开自定义网址';" +
+                                "cardDescription.innerHTML = '" + link + "';" +
+
+                        "}\n" +
+                         "changeFirstItem();";
+                try {
+                    webView.loadUrl("javascript:" + jsCode);
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -222,6 +278,16 @@ public class WebViewActivity extends BaseActivity {
         super.onStop();
     }
 
+    public void checkVPNUrl(String url){
+        String vpnUrl = "vpns.jlu.edu.cn";
+        if(url.contains(vpnUrl)){
+            customOperationTv.setVisibility(View.VISIBLE);
+        }
+        else {
+            customOperationTv.setVisibility(View.GONE);
+        }
+    }
+
     public void setFileName(String fileName){
         this.fileName = fileName;
     }
@@ -325,6 +391,7 @@ public class WebViewActivity extends BaseActivity {
 //            Log.d("WebView","开始访问网页");
 //            AlertCenter.showLoading(WebViewActivity.this, "加载中...");
             loadingProgressBar.setVisibility(View.VISIBLE);
+            checkVPNUrl(url);
             if(webView.canGoBack()) closeTextView.setVisibility(View.VISIBLE);
         }
 

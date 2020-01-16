@@ -7,10 +7,12 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lu.mydemo.R;
+import com.lu.mydemo.UIMS.UIMSTest;
 import com.tapadoo.alerter.Alerter;
 
 import net.sf.json.JSONObject;
@@ -22,12 +24,11 @@ import com.lu.mydemo.Config.ColorManager;
 import com.lu.mydemo.UIMS.UIMS;
 import com.lu.mydemo.View.PopWindow.LoginPingjiaoPopupWindow;
 
-import static com.lu.mydemo.UIMS.UIMSTest.getAnswer;
-
 public class PingjiaoActivity extends BaseActivity {
 
     TextView backText;
     TextView mainText;
+    ScrollView mainTextLayout;
     double Ver = 0.2;
 
     UIMS uims;
@@ -42,6 +43,7 @@ public class PingjiaoActivity extends BaseActivity {
 
         backText = findViewById(R.id.activity_pingjiao_navigation_back_text);
         mainText = findViewById(R.id.activity_pingjiao_main_text);
+        mainTextLayout = findViewById(R.id.activity_pingjiao_main_text_layout);
 
         mainText.setText("");
 
@@ -65,6 +67,7 @@ public class PingjiaoActivity extends BaseActivity {
             @Override
             public void run() {
                 mainText.setText(mainText.getText() + "\n" + str);
+                mainTextLayout.smoothScrollTo(0, mainText.getBottom());
             }
         });
     }
@@ -164,7 +167,7 @@ public class PingjiaoActivity extends BaseActivity {
                                                     pingjiao_inf = uims.post_pingjiao(list.get(i));
                                                     puzzle = pingjiao_inf.getString("puzzle");
                                                     parts = puzzle.split("_");
-                                                    answer = getAnswer(parts, names, puzzle.length());
+                                                    answer = UIMSTest.getAnswer(parts, names, puzzle.length());
                                                     System.out.println(answer);
                                                     targetClar = pingjiao_inf.getJSONObject("targetClar");
                                                     addText("person:");

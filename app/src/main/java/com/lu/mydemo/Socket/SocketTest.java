@@ -5,7 +5,7 @@ import net.sf.json.JSONObject;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-import com.lu.mydemo.UIMS.Address;
+import com.lu.mydemo.Utils.Common.Address;
 
 public class SocketTest {
 

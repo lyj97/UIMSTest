@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
-    android:orientation="vertical"
-    >
+    android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/pop_window_login_get_score_pop_layout"
@@ -66,6 +66,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/pop_window_login_get_score_config_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -103,6 +104,36 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="CJCX(校外)"
+                    />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/pop_window_login_get_score_use_vpn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="使用学生VPN更新 >"
+                tools:visibility="gone"/>
+
+            <LinearLayout
+                android:id="@+id/pop_window_login_get_score_VPN_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:background="#00000000"
+                android:visibility="gone">
+
+                <CheckBox
+                    android:id="@+id/pop_window_login_get_score_VPN_check_box"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="使用学生VPN"
                     />
 
             </LinearLayout>

@@ -509,7 +509,7 @@ public class MainActivity extends BaseActivity {
         sp.edit().putString("TermJSON", UIMS.getTermJSON().toString()).apply();
         sp.edit().putString("TeachingTermJSON", UIMS.getTeachingTermJSON().toString()).apply();
 
-        final JSONObject informationJSON = UIMS.getInformationJSON();
+//        final JSONObject informationJSON = UIMS.getInformationJSON();
         final JSONObject teachingTermJSON = UIMS.getTeachingTermJSON();
 
 //        isLoginIn = true;
@@ -1424,11 +1424,12 @@ public class MainActivity extends BaseActivity {
                             if (uims.getCurrentUserInfo()) {
                                 AlertCenter.showAlert(MainActivity.this, "", "欢迎您, " + uims.getNickName() + " ." + "\n" +
                                         "您是UIMS系统第 " + uims.getLoginCounter() + " 位访问者.");
-                                if(uims.getUserInformation()) loginSuccess();
-                                else{
-                                    showResponse("Login failed!");
-                                    return;
-                                }
+//                                if(uims.getUserInformation()) loginSuccess();
+//                                else{
+//                                    showResponse("Login failed!");
+//                                    return;
+//                                }
+                                loginSuccess();
                                 if(!uims.getTermArray()){
                                     showResponse("Login failed!");
                                     return;

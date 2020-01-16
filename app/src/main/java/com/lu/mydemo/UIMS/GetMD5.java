@@ -32,8 +32,4 @@ public class GetMD5 {
         return md5StrBuff.toString();
     }
 
-    public static void main(String[] args) {
-        System.out.println(GetMD5.getMD5Str("UIMS" + "54160907" + "225577"));
-    }
-
 }

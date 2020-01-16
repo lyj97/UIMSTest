@@ -83,7 +83,6 @@
                     android:id="@+id/activity_course_edit_detail_course_week_start_edit_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:inputType="number"
                     app:layout_constraintEnd_toStartOf="@+id/activity_course_edit_detail_course_week_to_text_view"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"/>
@@ -103,7 +102,6 @@
                     android:id="@+id/activity_course_edit_detail_course_week_end_edit_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:inputType="number"
                     app:layout_constraintStart_toEndOf="@+id/activity_course_edit_detail_course_week_to_text_view"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"/>
@@ -172,7 +170,7 @@
                     android:id="@+id/activity_course_edit_detail_course_time_layout_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintEnd_toStartOf="@+id/activity_course_edit_detail_course_time_start_edit_text"
+                    app:layout_constraintEnd_toStartOf="@+id/activity_course_edit_detail_course_time_start_spinner"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:paddingEnd="15dp"
@@ -180,11 +178,10 @@
                     android:text="时间"
                     android:textSize="15sp"/>
 
-                <EditText
-                    android:id="@+id/activity_course_edit_detail_course_time_start_edit_text"
+                <Spinner
+                    android:id="@+id/activity_course_edit_detail_course_time_start_spinner"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:inputType="number"
                     app:layout_constraintEnd_toStartOf="@+id/activity_course_edit_detail_course_time_to_text_view"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"/>
@@ -200,11 +197,10 @@
                     android:text="至"
                     android:textSize="15sp"/>
 
-                <EditText
-                    android:id="@+id/activity_course_edit_detail_course_time_end_edit_text"
+                <Spinner
+                    android:id="@+id/activity_course_edit_detail_course_time_end_spinner"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:inputType="number"
                     app:layout_constraintStart_toEndOf="@+id/activity_course_edit_detail_course_time_to_text_view"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"/>
@@ -213,28 +209,17 @@
                     android:id="@+id/activity_course_edit_detail_course_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintStart_toEndOf="@+id/activity_course_edit_detail_course_time_end_edit_text"
+                    app:layout_constraintStart_toEndOf="@+id/activity_course_edit_detail_course_time_end_spinner"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:text="节"
                     android:textSize="15sp"/>
 
-                <TextView
-                    android:id="@+id/activity_course_edit_detail_course_day"
+                <Spinner
+                    android:id="@+id/activity_course_edit_detail_course_day_spinner"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
                     app:layout_constraintStart_toEndOf="@+id/activity_course_edit_detail_course_time"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    android:text="周"/>
-
-                <EditText
-                    android:id="@+id/activity_course_edit_detail_course_day_edit_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:inputType="number"
-                    app:layout_constraintStart_toEndOf="@+id/activity_course_edit_detail_course_day"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"/>
 

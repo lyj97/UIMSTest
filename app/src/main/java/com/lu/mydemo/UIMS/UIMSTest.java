@@ -12,8 +12,6 @@ public class UIMSTest {
     static UIMS uims;
 
     public static void main(String[] args) {
-        user = "54160907";
-        pass = "225577";
 
         uims = new UIMS(user, pass);
         System.out.println("正在连接到UIMS教务系统...");
@@ -24,11 +22,11 @@ public class UIMSTest {
                 if (uims.getCurrentUserInfo()) {
                     showAlert("", "欢迎您, " + uims.getNickName() + " ." + "\n" +
                             "您是UIMS系统第 " + uims.getLoginCounter() + " 位访问者.");
-                    if (uims.getUserInformation()) ;
-                    else {
-                        showResponse("Login failed!");
-                        return;
-                    }
+//                    if (uims.getUserInformation()) ;
+//                    else {
+//                        showResponse("Login failed!");
+//                        return;
+//                    }
                     if (!uims.getTermArray()) {
                         showResponse("Login failed!");
                         return;

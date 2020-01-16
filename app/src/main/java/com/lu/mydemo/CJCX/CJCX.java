@@ -12,7 +12,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 
 import com.lu.mydemo.Net.HTTP;
-import com.lu.mydemo.UIMS.Address;
+import com.lu.mydemo.Utils.Common.Address;
 import com.lu.mydemo.UIMS.GetMD5;
 import com.lu.mydemo.Utils.Score.ScoreConfig;
 import com.lu.mydemo.Utils.Score.ScoreInf;

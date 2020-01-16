@@ -3,6 +3,7 @@ package com.lu.mydemo.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -21,6 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.lu.mydemo.Notification.AlertCenter;
 import com.lu.mydemo.OA.NewsClient;
 import com.lu.mydemo.R;
+import com.lu.mydemo.Utils.Time.TimeZoneTransform;
 import com.lu.mydemo.sample.adapter.BaseAdapter;
 import com.lu.mydemo.sample.adapter.MainAdapter;
 import com.tapadoo.alerter.Alerter;
@@ -35,10 +37,14 @@ import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import com.lu.mydemo.Config.ColorManager;
@@ -58,6 +64,10 @@ public class NewsActivity extends BaseActivity {
 
     private LinearLayout openLinkLayout;
     private TextView hideText;
+
+    private TextView flagOA;
+    private TextView flagServer;
+
     private EditText newsLinkText;
     private Button openLinkButton;
 
@@ -77,6 +87,9 @@ public class NewsActivity extends BaseActivity {
     public static boolean triedOA = false;
     public static boolean isLoadedFromOA = false;
 
+    public static boolean triedServer = false;
+    public static boolean isLoadedFromServer = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,6 +103,10 @@ public class NewsActivity extends BaseActivity {
 
         openLinkLayout = findViewById(R.id.activity_news_open_link_layout);
         hideText = findViewById(R.id.activity_news_hide_text);
+
+        flagOA = findViewById(R.id.activity_news_flag_oa);
+        flagServer = findViewById(R.id.activity_news_flag_server);
+
         newsLinkText = findViewById(R.id.activity_news_open_link_layout_url);
         openLinkButton = findViewById(R.id.activity_news_open_link_layout_commit_button);
 
@@ -101,6 +118,10 @@ public class NewsActivity extends BaseActivity {
         swipeRecyclerView.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int adapterPosition) {
+
+                if(isLoadedFromServer){
+
+                }
 
                 if(TextUtils.isEmpty((String) dataList.get(adapterPosition).get("department")) || TextUtils.isEmpty((String)  dataList.get(adapterPosition).get("time"))){
                     AlertCenter.showAlert(NewsActivity.this, (String) dataList.get(adapterPosition).get("title"));
@@ -117,6 +138,9 @@ public class NewsActivity extends BaseActivity {
                 bundle.putString("link", (String) dataList.get(adapterPosition).get("link"));
                 bundle.putString("abs_link", (String) dataList.get(adapterPosition).get("abs_link"));
                 bundle.putBoolean("flagTop", (boolean) dataList.get(adapterPosition).get("flagTop"));
+
+                bundle.putBoolean("isLoadedFromOA", isLoadedFromOA);
+                bundle.putBoolean("isLoadedFromServer", isLoadedFromServer);
 
                 intent.putExtra("bundle", bundle);
                 startActivity(intent);
@@ -305,6 +329,16 @@ public class NewsActivity extends BaseActivity {
             getNewsListFromOA();
             return;
         }
+        else {
+            flagOA.setBackground(new ColorDrawable(Color.RED));
+        }
+        if(!triedServer){
+            getNewsListFromServer();
+            return;
+        }
+        else {
+            flagServer.setBackground(new ColorDrawable(Color.RED));
+        }
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -334,6 +368,12 @@ public class NewsActivity extends BaseActivity {
             @Override
             public void run() {
                 Alerter.hide();
+                if(isLoadedFromOA){
+                    flagOA.setBackground(new ColorDrawable(Color.GREEN));
+                }
+                if(isLoadedFromServer){
+                    flagServer.setBackground(new ColorDrawable(Color.GREEN));
+                }
                 if(isFirst){
                     swipeRecyclerView.setAdapter(myAdapter);
                     myAdapter.notifyDataSetChanged(dataList);
@@ -358,6 +398,10 @@ public class NewsActivity extends BaseActivity {
     private void getNewsList(){
         if(isLoadedFromOA){
             getNewsListFromOA();
+            return;
+        }
+        if(isLoadedFromServer){
+            getNewsListFromServer();
             return;
         }
         AlertCenter.showLoading(this, "加载中，请稍候...");
@@ -431,10 +475,58 @@ public class NewsActivity extends BaseActivity {
                             dataList.add(map);
                         }
 
-                        loadSucceed(isFirst);
-
                         currentPage++;
                         isLoadedFromOA = true;
+
+                        loadSucceed(isFirst);
+                    } catch (Exception e1) {
+                        e1.printStackTrace();
+                        swipeRecyclerView.loadMoreError(0, "加载失败，请稍后重试...");
+                        loadFailed(isFirst);
+                    }
+                }
+            }
+        });
+    }
+
+    private void getNewsListFromServer(){
+        AlertCenter.showLoading(this, "由Server加载中，请稍候...");
+        triedServer = true;
+        final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA);
+        final SimpleDateFormat format_server = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.ROOT);
+        MyThreadController.commit(new Runnable() {
+            @Override
+            public void run() {
+                boolean isFirst = false;
+                if(currentPage == 1) {
+                    dataList = new ArrayList<>();
+                    isFirst = true;
+                }
+                JSONObject object = NewsClient.getNewsListFromServer(currentPage, "");
+                if(object != null) {
+                    try {
+                        JSONArray array = object.getJSONArray("data");
+                        JSONObject item;
+                        for (int i = 0; i < array.size(); i++) {
+                            item = array.getJSONObject(i);
+                            Map<String, Object> map = new HashMap<>();
+                            map.put("title", item.getString("title"));
+                            map.put("department", item.getString("department"));
+                            String publishTimeStr = item.getString("publish_time").replaceAll("T", " ");
+                            if(!TextUtils.isEmpty(publishTimeStr)) {
+                                map.put("time", TimeZoneTransform.gmt2Gmt_8Str(format_server.parse(publishTimeStr), format));
+                            }
+                            map.put("link", item.getString("link"));
+                            map.put("abs_link", item.getString("link"));
+                            map.put("flagTop", false);
+                            map.put("is_new", false);
+                            dataList.add(map);
+                        }
+
+                        currentPage++;
+                        isLoadedFromServer = true;
+
+                        loadSucceed(isFirst);
                     } catch (Exception e1) {
                         e1.printStackTrace();
                         swipeRecyclerView.loadMoreError(0, "加载失败，请稍后重试...");
