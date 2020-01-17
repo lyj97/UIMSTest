@@ -186,7 +186,7 @@ public class LoginGetScorePopupWindow extends PopupWindow {
                                     return;
                                 }
                                 if(!uims_new.getCurrentUserInfo()){
-                                    AlertCenter.showErrorAlertWithReportButton(context, "获取用户信息失败，请稍后重试.", UIMS_New.getExceptionList(), UIMS.getUser());
+                                    AlertCenter.showWarningAlert(context, "获取用户信息失败，请检查您的用户名/密码后重试.");
                                     return;
                                 }
                                 UIMS.setCurrentUserInfoJSON(uims_new.getCurrentUserInfoJSON());
