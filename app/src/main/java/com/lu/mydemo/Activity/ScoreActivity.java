@@ -377,7 +377,16 @@ public class ScoreActivity extends BaseActivity
 
         ArrayList<PieEntry> values = new ArrayList<>();
 
-        JSONArray items = percent.getJSONArray("items");
+        JSONArray items;
+
+        try{
+            items = percent.getJSONArray("items");
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            Log.i("ScoreActivity", percent.toString());
+            return;
+        }
 
         JSONObject temp;
         String label;

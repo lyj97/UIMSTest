@@ -402,8 +402,8 @@ public class UIMS_New {
     }
 
     public JSONObject getScorePercent(String asID){
-        String url = Address.hostAddress + "/ntms/service/res.do";
-        if(mUseStudentVPN) url = mVPNBaseUrl + "/ntms/service/res.do";
+        String url = Address.hostAddress + "/ntms/score/course-score-stat.do";
+        if(mUseStudentVPN) url = mVPNBaseUrl + "/ntms/score/course-score-stat.do";
 
         HashMap<String, String> mHeaderList = new HashMap<>();
         mHeaderList.put("User-Agent", mUserAgentStr);
