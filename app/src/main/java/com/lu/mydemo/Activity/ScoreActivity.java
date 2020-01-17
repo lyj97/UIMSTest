@@ -13,17 +13,13 @@ import android.text.style.StyleSpan;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
-import android.widget.SimpleAdapter;
-import android.view.View;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,8 +36,17 @@ import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.lu.mydemo.CJCX.CJCX;
+import com.lu.mydemo.Config.ColorManager;
 import com.lu.mydemo.Notification.AlertCenter;
 import com.lu.mydemo.R;
+import com.lu.mydemo.UIMS.UIMS;
+import com.lu.mydemo.Utils.Score.ScoreConfig;
+import com.lu.mydemo.Utils.Score.ScoreInf;
+import com.lu.mydemo.Utils.Thread.MyThreadController;
+import com.lu.mydemo.View.Listener.AppBarStateChangeListener;
+import com.lu.mydemo.View.MyView.MyToolBar;
+import com.lu.mydemo.View.PopWindow.LoginGetScorePopupWindow;
 import com.lu.mydemo.sample.adapter.BaseAdapter;
 import com.lu.mydemo.sample.adapter.MainAdapter;
 import com.tapadoo.alerter.Alerter;
@@ -50,15 +55,10 @@ import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
-import com.lu.mydemo.CJCX.CJCX;
-import com.lu.mydemo.Config.ColorManager;
-import com.lu.mydemo.UIMS.UIMS;
-import com.lu.mydemo.Utils.Score.ScoreConfig;
-import com.lu.mydemo.Utils.Score.ScoreInf;
-import com.lu.mydemo.Utils.Thread.MyThreadController;
-import com.lu.mydemo.View.Listener.AppBarStateChangeListener;
-import com.lu.mydemo.View.MyView.MyToolBar;
-import com.lu.mydemo.View.PopWindow.LoginGetScorePopupWindow;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ScoreActivity extends BaseActivity
 {
@@ -110,7 +110,7 @@ public class ScoreActivity extends BaseActivity
 
     public static Context context;
 
-    public LoginGetScorePopupWindow getScorePopupWindow;
+    public PopupWindow mPopUpWindow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -199,8 +199,11 @@ public class ScoreActivity extends BaseActivity
                 LoginGetScorePopupWindow window = new LoginGetScorePopupWindow(ScoreActivity.this, findViewById(R.id.activity_scrolling_layout).getHeight(), findViewById(R.id.activity_scrolling_layout).getWidth());
                 window.setFocusable(true);
                 window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+//                LoginVPNPopupWindow window = new LoginVPNPopupWindow(ScoreActivity.this, findViewById(R.id.activity_scrolling_layout).getHeight(), findViewById(R.id.activity_scrolling_layout).getWidth());
+//                window.setFocusable(true);
+//                window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
                 window.showAtLocation(ScoreActivity.this.findViewById(R.id.activity_scrolling_layout), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0); //设置layout在PopupWindow中显示的位置
-                getScorePopupWindow = window;
+                mPopUpWindow = window;
             }
         });
 
@@ -257,7 +260,6 @@ public class ScoreActivity extends BaseActivity
         MyThreadController.commit(new Runnable() {
             @Override
             public void run() {
-                long startTime = System.currentTimeMillis();
                 if(ScoreConfig.isIsCJCXEnable()){
                     loadCJCXScore();
                 }
@@ -277,11 +279,8 @@ public class ScoreActivity extends BaseActivity
                         myAdapter = createAdapter();
                         swipeRecyclerView.setAdapter(myAdapter);
                         myAdapter.notifyDataSetChanged(dataList);
-                        Alerter.hide();
                     }
                 });
-                long endTime = System.currentTimeMillis();
-                Log.i("ScoreActivity", "ScoreLoadTime:" + (endTime - startTime));
             }
         });
     }
@@ -500,19 +499,41 @@ public class ScoreActivity extends BaseActivity
         fab.setBackgroundTintList(getColorStateListTest());
     }
 
-    public void dismissGetScorePopWindow(){
-        try{
-            Thread.sleep(500);
-        }catch (Exception e){
-            e.printStackTrace();
+    public void dismissPopupWindow(){
+        if(mPopUpWindow == null){
+            return;
         }
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                getScorePopupWindow.dismiss();
-                getScorePopupWindow = null;
+                mPopUpWindow.dismiss();
+                mPopUpWindow = null;
             }
         });
+    }
+
+    public void dismissShowNewPopupWindow(final PopupWindow popupWindow){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if(mPopUpWindow != null){
+                    mPopUpWindow.dismiss();
+                }
+                mPopUpWindow = popupWindow;
+                popupWindow.showAtLocation(findViewById(R.id.activity_scrolling_layout), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
+            }
+        });
+    }
+
+    public PopupWindow getPopUpWindow() {
+        return mPopUpWindow;
+    }
+
+    public void setPopUpWindow(PopupWindow popUpWindow) {
+        if(this.mPopUpWindow != null){
+            dismissPopupWindow();
+        }
+        this.mPopUpWindow = popUpWindow;
     }
 
     protected MainAdapter createAdapter() {

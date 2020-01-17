@@ -36,6 +36,7 @@ public class VPNClient {
     private String logoutOtherToken;
 
     private static String baseUrl = Address.vpnAddress;
+    private static String userAgentStr = "Mozilla/5.0 (Windows NT 9.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36";
 
     public static VPNClient getInstance(Context context){
         SharedPreferences sp = context.getSharedPreferences(vpnKey, Context.MODE_PRIVATE);
@@ -103,7 +104,7 @@ public class VPNClient {
         String headerKey = "set-cookie";
 
         HashMap<String, String> mHeaderList = new HashMap<>();
-        mHeaderList.put("User-Agent", "Mozilla/5.0 (Windows NT 9.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36");
+        mHeaderList.put("User-Agent", userAgentStr);
         List<Map.Entry<String, String>> headers = new ArrayList<>(mHeaderList.entrySet());
 
         String headerValue = HTTPTools.getResponseHeader(url, headers, headerKey);
@@ -129,7 +130,7 @@ public class VPNClient {
         String url = baseUrl + "/do-login?fromUrl=";
 
         HashMap<String, String> mHeaderList = new HashMap<>();
-        mHeaderList.put("User-Agent", "Mozilla/5.0 (Windows NT 9.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36");
+        mHeaderList.put("User-Agent", userAgentStr);
         mHeaderList.put("Cookie", cookie);
         List<Map.Entry<String, String>> headers = new ArrayList<>(mHeaderList.entrySet());
 
@@ -149,7 +150,7 @@ public class VPNClient {
         String url = baseUrl + "/do-confirm-login";
 
         HashMap<String, String> mHeaderList = new HashMap<>();
-        mHeaderList.put("User-Agent", "Mozilla/5.0 (Windows NT 9.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36");
+        mHeaderList.put("User-Agent", userAgentStr);
         mHeaderList.put("Cookie", cookie);
         List<Map.Entry<String, String>> headers = new ArrayList<>(mHeaderList.entrySet());
 
@@ -168,7 +169,7 @@ public class VPNClient {
         String url = baseUrl + "/";
 
         HashMap<String, String> mHeaderList = new HashMap<>();
-        mHeaderList.put("User-Agent", "Mozilla/5.0 (Windows NT 9.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36");
+        mHeaderList.put("User-Agent", userAgentStr);
         mHeaderList.put("Cookie", cookie);
         List<Map.Entry<String, String>> headers = new ArrayList<>(mHeaderList.entrySet());
 
@@ -182,7 +183,7 @@ public class VPNClient {
         String url = baseUrl + "/login";
 
         HashMap<String, String> mHeaderList = new HashMap<>();
-        mHeaderList.put("User-Agent", "Mozilla/5.0 (Windows NT 9.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36");
+        mHeaderList.put("User-Agent", userAgentStr);
         mHeaderList.put("Cookie", cookie);
         List<Map.Entry<String, String>> headers = new ArrayList<>(mHeaderList.entrySet());
 
@@ -190,7 +191,7 @@ public class VPNClient {
 
         try {
             assert response != null;
-            String responseBodyStr = HTTPTools.getOrOrOutResponse(response, true);
+            String responseBodyStr = HTTPTools.getOrOrOutResponse(response, false);
             assert responseBodyStr != null;
             String startStr = "var logoutOtherToken";
             String endStr = "if (logoutOtherToken != \"\")";

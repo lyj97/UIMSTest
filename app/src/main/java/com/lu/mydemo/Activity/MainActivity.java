@@ -1412,8 +1412,8 @@ public class MainActivity extends BaseActivity {
             @Override
             public void run() {
                 try{
-                    user = "54160907";
-                    pass = "******";
+                    user = "user";
+                    pass = "pass";
 
                     uims = new UIMS(user, pass);
                     AlertCenter.showLoading(MainActivity.this, "正在连接到UIMS教务系统...");

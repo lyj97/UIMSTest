@@ -58,8 +58,8 @@ public class SocketTest {
     public static void main(String[] args) {
         connect();
         JSONObject info = new JSONObject();
-        info.put("id", "54160907");
-        info.put("pass", "225577");
+        info.put("id", "id");
+        info.put("pass", "pass");
         JSONObject object = new JSONObject();
         object.put("type", "UserLogin");
         object.put("info", info);

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.drawable.GradientDrawable;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -17,20 +18,24 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.lu.mydemo.Activity.MainActivity;
-import com.lu.mydemo.Notification.AlertCenter;
 import com.lu.mydemo.Activity.ScoreActivity;
-import com.lu.mydemo.R;
-import com.lu.mydemo.Utils.StudentVPN.VPNClient;
-import com.tapadoo.alerter.Alerter;
-
 import com.lu.mydemo.CJCX.CJCX;
 import com.lu.mydemo.Config.ColorManager;
+import com.lu.mydemo.Notification.AlertCenter;
+import com.lu.mydemo.R;
 import com.lu.mydemo.UIMS.UIMS;
+import com.lu.mydemo.UIMS.UIMS_New;
 import com.lu.mydemo.Utils.Score.ScoreConfig;
+import com.lu.mydemo.Utils.StudentVPN.VPNClient;
 import com.lu.mydemo.Utils.Thread.MyThreadController;
+import com.tapadoo.alerter.Alerter;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
+import java.util.HashMap;
 
 public class LoginGetScorePopupWindow extends PopupWindow {
 
@@ -69,6 +74,7 @@ public class LoginGetScorePopupWindow extends PopupWindow {
     public LoginGetScorePopupWindow(final ScoreActivity context, int height, int width, final VPNClient vpnClient) {
         super(context);
         this.context = context;
+        context.setPopUpWindow(this);
         sp = MainActivity.context.getSharedPreferences("userInfo", Context.MODE_PRIVATE);//共用LoginActivity账户
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -121,12 +127,11 @@ public class LoginGetScorePopupWindow extends PopupWindow {
         useVPNTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                dismiss();
-//                LoginVPNPopupWindow window = new LoginVPNPopupWindow(context, context.findViewById(R.id.activity_scrolling_layout).getHeight(), context.findViewById(R.id.activity_scrolling_layout).getWidth());
-//                window.setFocusable(true);
-//                window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-//                window.showAtLocation(context.findViewById(R.id.activity_scrolling_layout), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0); //设置layout在PopupWindow中显示的位置
-                Toast.makeText(context, "该功能尚未完成，敬请期待！", Toast.LENGTH_SHORT).show();
+                LoginVPNPopupWindow window = new LoginVPNPopupWindow(context, context.findViewById(R.id.activity_scrolling_layout).getHeight(), context.findViewById(R.id.activity_scrolling_layout).getWidth());
+                window.setFocusable(true);
+                window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+                context.dismissShowNewPopupWindow(window);
+//                Toast.makeText(context, "该功能尚未完成，敬请期待！", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -168,8 +173,34 @@ public class LoginGetScorePopupWindow extends PopupWindow {
                             sp.edit().putString("USER", userStr).apply();
                             sp.edit().putString("PASSWORD", passwordStr).apply();
 
-                            Log.i("LoginPop", "USER:\t" + userStr);
-                            Log.i("LoginPop", "PASS:\t" + passwordStr);
+                            if(checkBox_VPN.isChecked() && vpnClient != null && !TextUtils.isEmpty(vpnClient.getCookie())){
+                                UIMS_New uims_new = new UIMS_New(vpnClient, userStr, passwordStr, true);
+                                AlertCenter.showLoading(context, "正在连接到UIMS教务系统(使用学生VPN)...");
+                                if(!uims_new.connectToUIMS()){
+                                    AlertCenter.showWarningAlert(context, "未能连接到UIMS教务系统，请检查您的网络连接.");
+                                    return;
+                                }
+                                AlertCenter.showLoading(context, "正在登录(使用学生VPN)...");
+                                if(!uims_new.loginUIMS()){
+                                    AlertCenter.showWarningAlert(context, "登录UIMS教务系统失败，请检查您的用户名/密码后重试.");
+                                    return;
+                                }
+                                if(!uims_new.getCurrentUserInfo()){
+                                    AlertCenter.showErrorAlertWithReportButton(context, "获取用户信息失败，请稍后重试.", UIMS_New.getExceptionList(), UIMS.getUser());
+                                    return;
+                                }
+                                UIMS.setCurrentUserInfoJSON(uims_new.getCurrentUserInfoJSON());
+                                if(!uims_new.getRecentScore()){
+                                    AlertCenter.showErrorAlertWithReportButton(context, "获取成绩失败，请稍后重试.", UIMS_New.getExceptionList(), UIMS.getUser());
+                                    return;
+                                }
+                                dealScoreJSON(uims_new.getRecentScoreJSON(), uims_new);
+                                MainActivity.saveScoreJSON();
+                                AlertCenter.showAlert(context, "成绩刷新成功！");
+                                context.reloadScoreList();
+                                context.dismissPopupWindow();
+                                return;
+                            }
 
                             uims = new UIMS(userStr, passwordStr);
                             if(ScoreConfig.isIsUIMSEnable()){
@@ -183,7 +214,7 @@ public class LoginGetScorePopupWindow extends PopupWindow {
                                             MainActivity.saveScoreJSON();
                                             AlertCenter.showAlert(context, "成绩刷新成功！");
                                             context.reloadScoreList();
-                                            context.dismissGetScorePopWindow();
+                                            context.dismissPopupWindow();
                                         }
                                         else{
 //                                            AlertCenter.showWarningAlert(context, "获取信息失败！");
@@ -223,7 +254,7 @@ public class LoginGetScorePopupWindow extends PopupWindow {
                                                         "本次查询更新了 " + cjcx.getUpdate_count() + " 条成绩信息.");
                                                 ScoreActivity.saveCJCXScore();
                                                 context.reloadScoreList();
-                                                context.dismissGetScorePopWindow();
+                                                context.dismissPopupWindow();
                                                 return;
                                             }
                                         }
@@ -261,7 +292,7 @@ public class LoginGetScorePopupWindow extends PopupWindow {
                                                 "本次查询更新了 " + cjcx.getUpdate_count() + " 条成绩信息.");
                                         ScoreActivity.saveCJCXScore();
                                         context.reloadScoreList();
-                                        context.dismissGetScorePopWindow();
+                                        context.dismissPopupWindow();
                                         return;
                                     }
                                 }
@@ -306,7 +337,7 @@ public class LoginGetScorePopupWindow extends PopupWindow {
         //设置SelectPicPopupWindow弹出窗体的宽
         this.setWidth(width);
         //设置SelectPicPopupWindow弹出窗体的高
-//        this.setHeight(1500);
+//        this.setHeight(height);
         //设置SelectPicPopupWindow弹出窗体可点击
         this.setFocusable(true);
         //设置SelectPicPopupWindow弹出窗体动画效果
@@ -360,12 +391,51 @@ public class LoginGetScorePopupWindow extends PopupWindow {
         });
     }
 
+    private void dealScoreJSON(JSONObject scoreJSON, UIMS_New uims_new){
+        HashMap<String, JSONObject> id_scorePercent = UIMS.getId_scorePercent();
+
+        JSONArray scores;
+        try{
+            scores = scoreJSON.getJSONArray("value");
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return;
+        }
+        int i = 0;
+        net.sf.json.JSONObject percentJSON;
+        while (true) {
+            try {
+                net.sf.json.JSONObject temp = scores.getJSONObject(i);
+                net.sf.json.JSONObject temp2 = temp.getJSONObject("course");
+
+                String asId = temp.getString("asId");
+                if (id_scorePercent.containsKey(asId)) {
+                    percentJSON = id_scorePercent.get(asId);
+                }
+                else {
+                    percentJSON = uims_new.getScorePercent(asId);
+                }
+                assert percentJSON != null;
+                percentJSON.put("courName", temp2.getString("courName"));
+                temp.put("percent", percentJSON);
+
+                temp.remove("student");
+
+                i++;
+            } catch (Exception e) {
+                break;
+            }
+        }
+        UIMS.setScoreJSON(scoreJSON);
+    }
+
     @Override
     public void dismiss() {
         super.dismiss();
         InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         View view = context.getWindow().peekDecorView();
-        if(view != null){
+        if(view != null && inputMethodManager != null){
             inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }

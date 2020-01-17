@@ -56,7 +56,6 @@ public class CourseDetailPopupWindow extends PopupWindow {
             bundle.putInt("courseDbId", dataList.get(adapterPosition).getDb_id());
             intent.putExtra("bundle", bundle);
             context.startActivity(intent);
-//            Toast.makeText(context, "课程编辑将在后续版本完成，敬请期待！", Toast.LENGTH_SHORT).show();
             dismiss();
         }
     };

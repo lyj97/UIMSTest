@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="center_horizontal"
+    android:gravity="center_horizontal|bottom"
+    android:layout_alignParentBottom="true"
     android:orientation="vertical">
 
     <LinearLayout
@@ -66,7 +67,6 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/pop_window_login_get_score_config_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -74,6 +74,7 @@
             >
 
             <LinearLayout
+                android:id="@+id/pop_window_login_get_score_config_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"

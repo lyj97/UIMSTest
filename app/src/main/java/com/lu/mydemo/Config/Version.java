@@ -7,7 +7,7 @@ public class Version {
 
     private static int versionMajor = 1;
     private static int versionMinor = 2;
-    private static int versionPatch = 16;
+    private static int versionPatch = 17;
     private static boolean isBeta = true;
 
     public static String getVersionName(){

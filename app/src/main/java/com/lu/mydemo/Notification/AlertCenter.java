@@ -16,8 +16,11 @@ import com.lu.mydemo.ToolFor2045_Site.InformationUploader;
 import com.lu.mydemo.Utils.String.FormatCheck;
 import com.lu.mydemo.Utils.Thread.MyThreadController;
 import com.lu.mydemo.View.PopWindow.SetEmailPopupWindow;
+import com.tapadoo.alerter.OnHideAlertListener;
 
 public class AlertCenter {
+
+    public static boolean isLoadingShowing = false;
 
     public static void hideAlert(final Activity context){
         context.runOnUiThread(new Runnable() {
@@ -39,12 +42,19 @@ public class AlertCenter {
                         .setProgressColorRes(R.color.color_alerter_progress_bar)
                         .setDuration(Integer.MAX_VALUE)
                         .setBackgroundColorInt(ColorManager.getTopAlertBackgroundColor())
+                        .setOnHideListener(new OnHideAlertListener() {
+                            @Override
+                            public void onHide() {
+                                isLoadingShowing = false;
+                            }
+                        })
                         .show();
             }
         });
     }
 
     public static void showAlert(final Activity context, final String message) {
+        isLoadingShowing = false;
         context.runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -59,6 +69,7 @@ public class AlertCenter {
     }
 
     public static void showAlert(final Activity context, final String title, final String message) {
+        isLoadingShowing = false;
         context.runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -73,6 +84,7 @@ public class AlertCenter {
     }
 
     public static void showWarningAlert(final Activity context, final String message) {
+        isLoadingShowing = false;
         context.runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -87,6 +99,7 @@ public class AlertCenter {
     }
 
     public static void showWarningAlert(final Activity context, final String title, final String message) {
+        isLoadingShowing = false;
         context.runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -101,6 +114,7 @@ public class AlertCenter {
     }
 
     public static void showErrorAlert(final Activity context, final String message) {
+        isLoadingShowing = false;
         context.runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -116,6 +130,7 @@ public class AlertCenter {
     }
 
     public static void showErrorAlert(final Activity context, final String title, final String message) {
+        isLoadingShowing = false;
         context.runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -135,6 +150,7 @@ public class AlertCenter {
     }
 
     public static void showErrorAlertWithReportButton(final Activity context, final String title, final String message, final Exception exception, final String user_id) {
+        isLoadingShowing = false;
         context.runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -195,6 +211,7 @@ public class AlertCenter {
     }
 
     public static void showErrorAlertWithReportButton(final Activity context, final String title, final String message, final List<Exception> exceptions, final String user_id) {
+        isLoadingShowing = false;
         context.runOnUiThread(new Runnable() {
             @Override
             public void run() {

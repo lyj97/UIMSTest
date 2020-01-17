@@ -6,6 +6,7 @@
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
     android:orientation="vertical"
+    android:background="@drawable/background_login"
     >
 
     <LinearLayout
@@ -13,7 +14,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@drawable/background_login"
         >
 
         <TextView
@@ -63,7 +63,6 @@
         android:layout_below="@+id/pop_window_login_pop_layout_main_information"
         android:orientation="vertical"
         android:padding="5dp"
-        android:background="@drawable/shape_rectangle_no_radius"
         >
 
         <Button

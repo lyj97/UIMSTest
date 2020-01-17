@@ -34,7 +34,7 @@
     <string name="email_edit_MIUI_info">检测到您可能正在使用小米手机(MIUI)</string>
 
     <!--课程详情弹窗-->
-    <string name="edit_course_introduce">课程编辑将在后续版本完成，敬请期待.</string>
+    <string name="edit_course_introduce">Tips: 点击上方时间段进行编辑.</string>
 
     <!--Tab-->
     <string name="tab_text_1">Tab 1</string>

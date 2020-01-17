@@ -90,7 +90,7 @@ public class ScoreInf {
 
                     JSONArray scores = scoreJSON.getJSONArray("value");
 
-                    double adviceCredit;
+                    double credit;
 
                     for (int i = 0; i < scores.size(); i++) {
                         map = new HashMap<>();
@@ -105,9 +105,9 @@ public class ScoreInf {
                         int scoreNum = temp.getInt("scoreNum");
                         String isReselect = (temp.getString("isReselect").contains("Y")) ? "是" : "否";
                         String gPoint = temp.getString("gpoint");
+                        credit = temp.getDouble("credit");
                         String dateScore = temp.getString("dateScore");
                         String type5 = temp.getString("type5");
-                        adviceCredit = course.getDouble("adviceCredit");
                         dateScore = dateScore.replaceAll("T", "  ");
 
                         map.put("asId", asId);
@@ -124,7 +124,7 @@ public class ScoreInf {
                         map.put("context3",
                                 "发布时间： " + dateScore);
                         map.put("context4",
-                                adviceCredit);
+                                credit);
                         map.put("context5",
                                 gPoint);
                         map.put("type", type5);
@@ -134,69 +134,69 @@ public class ScoreInf {
 
 //                    if (type5.equals("4161") || type5.equals("4162") || type5.equals("4164") ) {//体育/限选/选修（除校选修）
                                 if (xuanxiu_select && type5.equals("4161")) {//选修
-                                    required_custom_ScoreSum += scoreNum * adviceCredit;
-                                    required_custom_GPASum += Double.parseDouble(gPoint) * adviceCredit;
-                                    required_custom_CreditSum += adviceCredit;
+                                    required_custom_ScoreSum += scoreNum * credit;
+                                    required_custom_GPASum += Double.parseDouble(gPoint) * credit;
+                                    required_custom_CreditSum += credit;
                                 }
                                 if (xianxuan_select && type5.equals("4162")) {//限选
-                                    required_custom_ScoreSum += scoreNum * adviceCredit;
-                                    required_custom_GPASum += Double.parseDouble(gPoint) * adviceCredit;
-                                    required_custom_CreditSum += adviceCredit;
+                                    required_custom_ScoreSum += scoreNum * credit;
+                                    required_custom_GPASum += Double.parseDouble(gPoint) * credit;
+                                    required_custom_CreditSum += credit;
                                 }
                                 if (xiaoxuanxiu_select && type5.equals("4163")) {//校选修
-                                    required_custom_ScoreSum += scoreNum * adviceCredit;
-                                    required_custom_GPASum += Double.parseDouble(gPoint) * adviceCredit;
-                                    required_custom_CreditSum += adviceCredit;
+                                    required_custom_ScoreSum += scoreNum * credit;
+                                    required_custom_GPASum += Double.parseDouble(gPoint) * credit;
+                                    required_custom_CreditSum += credit;
                                 }
                                 if (PE_select && type5.equals("4164")) {//体育
-                                    required_custom_ScoreSum += scoreNum * adviceCredit;
-                                    required_custom_GPASum += Double.parseDouble(gPoint) * adviceCredit;
-                                    required_custom_CreditSum += adviceCredit;
+                                    required_custom_ScoreSum += scoreNum * credit;
+                                    required_custom_GPASum += Double.parseDouble(gPoint) * credit;
+                                    required_custom_CreditSum += credit;
                                 }
                                 if (type5.equals("4160")) {//仅必修
                                     if (bixiu_select) {
-                                        required_custom_ScoreSum += scoreNum * adviceCredit;
-                                        required_custom_GPASum += Double.parseDouble(gPoint) * adviceCredit;
-                                        required_custom_CreditSum += adviceCredit;
+                                        required_custom_ScoreSum += scoreNum * credit;
+                                        required_custom_GPASum += Double.parseDouble(gPoint) * credit;
+                                        required_custom_CreditSum += credit;
                                     }
-                                    requiredScoreSum += scoreNum * adviceCredit;
-                                    requiredGPASum += Double.parseDouble(gPoint) * adviceCredit;
-                                    requiredCreditSum += adviceCredit;
+                                    requiredScoreSum += scoreNum * credit;
+                                    requiredGPASum += Double.parseDouble(gPoint) * credit;
+                                    requiredCreditSum += credit;
                                 }
 
                             }
                         } else {
                             if (type5.equals("4160")) {//仅必修
                                 if (bixiu_select) {
-                                    required_custom_ScoreSum += scoreNum * adviceCredit;
-                                    required_custom_GPASum += Double.parseDouble(gPoint) * adviceCredit;
-                                    required_custom_CreditSum += adviceCredit;
+                                    required_custom_ScoreSum += scoreNum * credit;
+                                    required_custom_GPASum += Double.parseDouble(gPoint) * credit;
+                                    required_custom_CreditSum += credit;
                                 }
                                 if (isReselect.equals("否")) {//排除重修
-                                    requiredScoreSum += scoreNum * adviceCredit;
-                                    requiredGPASum += Double.parseDouble(gPoint) * adviceCredit;
-                                    requiredCreditSum += adviceCredit;
+                                    requiredScoreSum += scoreNum * credit;
+                                    requiredGPASum += Double.parseDouble(gPoint) * credit;
+                                    requiredCreditSum += credit;
                                 }
                             }
                             if (xuanxiu_select && type5.equals("4161")) {//选修
-                                required_custom_ScoreSum += scoreNum * adviceCredit;
-                                required_custom_GPASum += Double.parseDouble(gPoint) * adviceCredit;
-                                required_custom_CreditSum += adviceCredit;
+                                required_custom_ScoreSum += scoreNum * credit;
+                                required_custom_GPASum += Double.parseDouble(gPoint) * credit;
+                                required_custom_CreditSum += credit;
                             }
                             if (xianxuan_select && type5.equals("4162")) {//限选
-                                required_custom_ScoreSum += scoreNum * adviceCredit;
-                                required_custom_GPASum += Double.parseDouble(gPoint) * adviceCredit;
-                                required_custom_CreditSum += adviceCredit;
+                                required_custom_ScoreSum += scoreNum * credit;
+                                required_custom_GPASum += Double.parseDouble(gPoint) * credit;
+                                required_custom_CreditSum += credit;
                             }
                             if (xiaoxuanxiu_select && type5.equals("4163")) {//校选修
-                                required_custom_ScoreSum += scoreNum * adviceCredit;
-                                required_custom_GPASum += Double.parseDouble(gPoint) * adviceCredit;
-                                required_custom_CreditSum += adviceCredit;
+                                required_custom_ScoreSum += scoreNum * credit;
+                                required_custom_GPASum += Double.parseDouble(gPoint) * credit;
+                                required_custom_CreditSum += credit;
                             }
                             if (PE_select && type5.equals("4164")) {//体育
-                                required_custom_ScoreSum += scoreNum * adviceCredit;
-                                required_custom_GPASum += Double.parseDouble(gPoint) * adviceCredit;
-                                required_custom_CreditSum += adviceCredit;
+                                required_custom_ScoreSum += scoreNum * credit;
+                                required_custom_GPASum += Double.parseDouble(gPoint) * credit;
+                                required_custom_CreditSum += credit;
                             }
                         }
 

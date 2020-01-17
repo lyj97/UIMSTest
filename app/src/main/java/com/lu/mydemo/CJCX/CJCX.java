@@ -157,7 +157,7 @@ public class CJCX {
     }
 
     public static void test(String[] args) {
-        CJCX cjcx = new CJCX("54160907", "225577");
+        CJCX cjcx = new CJCX("user", "pass");
         cjcx.login();
         cjcx.getScore();
     }

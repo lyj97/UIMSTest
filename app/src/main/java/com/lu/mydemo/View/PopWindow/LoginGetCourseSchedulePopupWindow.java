@@ -241,7 +241,7 @@ public class LoginGetCourseSchedulePopupWindow extends PopupWindow {
     }
 
     private void changeTheme(){
-        mMenuView.findViewById(R.id.pop_window_login_pop_layout_main_information).setBackground(ColorManager.getMainBackground_with_top_redius());
+        mMenuView.findViewById(R.id.pop_window_login_pop_layout).setBackground(ColorManager.getMainBackground_with_top_redius());
         commitButton.setBackground(ColorManager.getInternetInformationButtonBackground_full());
         user.setBackground(ColorManager.getSpinnerBackground_full());
         password.setBackground(ColorManager.getSpinnerBackground_full());

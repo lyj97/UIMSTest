@@ -6,9 +6,12 @@ import android.content.SharedPreferences;
 import android.graphics.drawable.GradientDrawable;
 import android.text.InputType;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -41,13 +44,13 @@ public class LoginVPNPopupWindow extends PopupWindow {
 
     private Activity context;
 
-    public static boolean loginSuccess = false;
-
     public LoginVPNPopupWindow(final ScoreActivity context, int height, int width) {
         super(context);
         this.context = context;
+        context.setPopUpWindow(this);
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        assert inflater != null;
         mMenuView = inflater.inflate(R.layout.pop_window_login, null);
 
         user = mMenuView.findViewById(R.id.pop_window_login_id);
@@ -98,7 +101,9 @@ public class LoginVPNPopupWindow extends PopupWindow {
                             int result = vpnClient.startLogin();
                             switch (result){
                                 case 0:{
-                                    dealFinish("登录成功");
+                                    dealFinish(commitText);
+                                    AlertCenter.showAlert(context, "登录学生VPN成功.");
+                                    loginVPNSuccess(vpnClient);
                                     break;
                                 }
                                 case -1:{
@@ -153,7 +158,7 @@ public class LoginVPNPopupWindow extends PopupWindow {
         //设置SelectPicPopupWindow弹出窗体的宽
         this.setWidth(width);
         //设置SelectPicPopupWindow弹出窗体的高
-//        this.setHeight(1500);
+//        this.setHeight(height);
         //设置SelectPicPopupWindow弹出窗体可点击
         this.setFocusable(true);
         //设置SelectPicPopupWindow弹出窗体动画效果
@@ -183,6 +188,18 @@ public class LoginVPNPopupWindow extends PopupWindow {
             }
         });
 
+    }
+
+    private void loginVPNSuccess(final VPNClient vpnClient){
+        context.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                LoginGetScorePopupWindow window = new LoginGetScorePopupWindow((ScoreActivity) context, context.findViewById(R.id.activity_scrolling_layout).getHeight(), context.findViewById(R.id.activity_scrolling_layout).getWidth(), vpnClient);
+                window.setFocusable(true);
+                window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+                ((ScoreActivity) context).dismissShowNewPopupWindow(window);
+            }
+        });
     }
 
     private void dealing(final String commitButtonText){
@@ -218,7 +235,7 @@ public class LoginVPNPopupWindow extends PopupWindow {
     }
 
     private void changeTheme(){
-        mMenuView.findViewById(R.id.pop_window_login_pop_layout_main_information).setBackground(ColorManager.getMainBackground_with_top_redius());
+        mMenuView.findViewById(R.id.pop_window_login_pop_layout).setBackground(ColorManager.getMainBackground_with_top_redius());
         commitButton.setBackground(ColorManager.getInternetInformationButtonBackground_full());
         user.setBackground(ColorManager.getSpinnerBackground_full());
         password.setBackground(ColorManager.getSpinnerBackground_full());
