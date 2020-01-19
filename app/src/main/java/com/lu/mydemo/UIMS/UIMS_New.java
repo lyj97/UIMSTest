@@ -33,8 +33,10 @@ public class UIMS_New {
     private VPNClient mVPNClient;
 
     private JSONObject mCurrentUserInfoJSON;
+    private JSONObject mCourseSelectTypeJSON;
     private JSONObject mScoreStatisticsJSON;
     private JSONObject mRecentScoreJSON;
+    private int classStudentCount;
     private int personId;
     private int teachingTerm;
     private int department;
@@ -82,7 +84,9 @@ public class UIMS_New {
 
         Response response = HTTPTools.getResponse(url, headers);
 
-        assert response != null;
+        if(response == null){
+            return false;
+        }
         String headerValue = response.header(headerKey);
         HTTPTools.getOrOrOutResponse(response, true);
 
@@ -130,14 +134,15 @@ public class UIMS_New {
 
         Response response = HTTPTools.postResponse(url, headers, formBody);
 
+        if(response == null){
+            return false;
+        }
+
         HTTPTools.getOrOrOutResponse(response, true);
         if(mUseStudentVPN){
             return true;
         }
 
-        if(response == null){
-            return false;
-        }
         try{
             String str = response.headers().get("Location");
             if(str == null || str.contains("loginError")){
@@ -184,6 +189,7 @@ public class UIMS_New {
         if(response == null){
             return false;
         }
+
         if(mUseStudentVPN){
             String responseStr = HTTPTools.getOrOrOutResponse(response, true);
             JSONObject responseJSON;
@@ -260,6 +266,10 @@ public class UIMS_New {
 
         Response response = HTTPTools.postResponse(url, headers, requestBody);
 
+        if(response == null){
+            return false;
+        }
+
         HTTPTools.getOrOrOutResponse(response, true);
 
         return true;
@@ -292,6 +302,10 @@ public class UIMS_New {
 
         Response response = HTTPTools.postResponse(url, headers, requestBody);
 
+        if(response == null){
+            return false;
+        }
+
         String responseStr = HTTPTools.getOrOrOutResponse(response, true);
         JSONObject responseJSON;
         try{
@@ -302,11 +316,55 @@ public class UIMS_New {
                 JSONObject item = (JSONObject) object;
                 String className = item.getString("className");
                 if(className.equals(mStudentId.substring(0, 6))){
-                    int studCnt = item.getInt("studCnt");
-                    System.out.println("班级人数:" + studCnt);
+                    classStudentCount = item.getInt("studCnt");
                     break;
                 }
             }
+        }
+        catch (Exception e){
+            mExceptionList.add(e);
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    public boolean getCourseSelectType(){
+        String url = Address.hostAddress + "/ntms/service/res.do";
+        if(mUseStudentVPN) url = mVPNBaseUrl + "/ntms/service/res.do";
+
+        HashMap<String, String> mHeaderList = new HashMap<>();
+        mHeaderList.put("User-Agent", mUserAgentStr);
+        if(!mUseStudentVPN) {
+            mHeaderList.put("Cookie", cookie3);
+        }
+        if(mUseStudentVPN) {
+            mHeaderList.put("Cookie", mVPNClient.getCookie());
+        }
+        List<Map.Entry<String, String>> headers = new ArrayList<>(mHeaderList.entrySet());
+
+        JSONObject request_json1 = new JSONObject();
+        request_json1.put("id","4160");
+
+        JSONObject request_json = new JSONObject();
+        request_json.put("branch","byId");
+        request_json.put("params",request_json1);
+        request_json.put("tag","getAllById@sysDict");
+
+        RequestBody requestBody = RequestBody.create(request_json.toString(), JSON);
+
+        Response response = HTTPTools.postResponse(url, headers, requestBody);
+
+        if(response == null){
+            return false;
+        }
+
+        String responseStr = HTTPTools.getOrOrOutResponse(response, true);
+        JSONObject responseJSON;
+        try {
+            responseJSON = JSONObject.fromObject(responseStr);
+            assert responseJSON != null;
+            mCourseSelectTypeJSON = responseJSON;
         }
         catch (Exception e){
             mExceptionList.add(e);
@@ -342,6 +400,10 @@ public class UIMS_New {
         RequestBody requestBody = RequestBody.create(request_json.toString(), JSON);
 
         Response response = HTTPTools.postResponse(url, headers, requestBody);
+
+        if(response == null){
+            return false;
+        }
 
         String responseStr = HTTPTools.getOrOrOutResponse(response, true);
         JSONObject responseJSON;
@@ -385,6 +447,10 @@ public class UIMS_New {
 
         Response response = HTTPTools.postResponse(url, headers, requestBody);
 
+        if(response == null){
+            return false;
+        }
+
         String responseStr = HTTPTools.getOrOrOutResponse(response, true);
         JSONObject responseJSON;
         try {
@@ -422,6 +488,10 @@ public class UIMS_New {
 
         Response response = HTTPTools.postResponse(url, headers, requestBody);
 
+        if(response == null){
+            return null;
+        }
+
         String responseStr = HTTPTools.getOrOrOutResponse(response, true);
         JSONObject responseJSON;
         try {
@@ -438,6 +508,14 @@ public class UIMS_New {
 
     public JSONObject getCurrentUserInfoJSON() {
         return mCurrentUserInfoJSON;
+    }
+
+    public int getClassStudentNumber(){
+        return classStudentCount;
+    }
+
+    public JSONObject getCourseSelectTypeJSON() {
+        return mCourseSelectTypeJSON;
     }
 
     public JSONObject getScoreStatisticsJSON() {

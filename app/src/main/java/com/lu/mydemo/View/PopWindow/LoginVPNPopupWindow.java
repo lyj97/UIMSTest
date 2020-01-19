@@ -35,6 +35,8 @@ public class LoginVPNPopupWindow extends PopupWindow {
 
     private View mMenuView;
 
+    private TextView mTitleTv;
+
     private EditText user;
     private EditText password;
 
@@ -52,6 +54,8 @@ public class LoginVPNPopupWindow extends PopupWindow {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         assert inflater != null;
         mMenuView = inflater.inflate(R.layout.pop_window_login, null);
+
+        mTitleTv = mMenuView.findViewById(R.id.pop_window_login_pop_layout_title);
 
         user = mMenuView.findViewById(R.id.pop_window_login_id);
         password = mMenuView.findViewById(R.id.pop_window_login_password);
@@ -80,11 +84,14 @@ public class LoginVPNPopupWindow extends PopupWindow {
         String userHintStr = "学生邮箱前缀";
         String passHintStr = "学生邮箱密码";
 
+        final String commitText = "登录学生VPN";
+
+        mTitleTv.setText(commitText);
+
         user.setInputType(InputType.TYPE_CLASS_TEXT);
         user.setHint(userHintStr);
         password.setHint(passHintStr);
 
-        final String commitText = "登录学生VPN";
         commitButton.setText(commitText);
 
         commitButton.setOnClickListener(new View.OnClickListener() {

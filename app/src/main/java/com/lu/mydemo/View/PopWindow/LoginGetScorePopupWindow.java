@@ -177,23 +177,31 @@ public class LoginGetScorePopupWindow extends PopupWindow {
                                 UIMS_New uims_new = new UIMS_New(vpnClient, userStr, passwordStr, true);
                                 AlertCenter.showLoading(context, "正在连接到UIMS教务系统(使用学生VPN)...");
                                 if(!uims_new.connectToUIMS()){
-                                    AlertCenter.showWarningAlert(context, "未能连接到UIMS教务系统，请检查您的网络连接.");
+                                    AlertCenter.showWarningAlert(context, "未能连接到UIMS教务系统，请检查您的网络连接或稍后重试(也可能是学生VPN的问题).");
+                                    dealFinish("重新登录");
                                     return;
                                 }
                                 AlertCenter.showLoading(context, "正在登录(使用学生VPN)...");
                                 if(!uims_new.loginUIMS()){
                                     AlertCenter.showWarningAlert(context, "登录UIMS教务系统失败，请检查您的用户名/密码后重试.");
+                                    dealFinish("重新登录");
                                     return;
                                 }
                                 if(!uims_new.getCurrentUserInfo()){
                                     AlertCenter.showWarningAlert(context, "获取用户信息失败，请检查您的用户名/密码后重试.");
+                                    dealFinish("重新登录");
                                     return;
                                 }
+                                dealCurrentUserInfoJSON(uims_new);
                                 UIMS.setCurrentUserInfoJSON(uims_new.getCurrentUserInfoJSON());
-                                if(!uims_new.getRecentScore()){
+                                if(!uims_new.getCourseSelectType() || !uims_new.getScoreStatistics() || !uims_new.getRecentScore()){
                                     AlertCenter.showErrorAlertWithReportButton(context, "获取成绩失败，请稍后重试.", UIMS_New.getExceptionList(), UIMS.getUser());
+                                    dealFinish("更新成绩");
                                     return;
                                 }
+                                UIMS.setCourseTypeJSON(uims_new.getCourseSelectTypeJSON());
+                                UIMS.setCourseSelectTypeJSON(uims_new.getCourseSelectTypeJSON());
+                                UIMS.setScoreStatisticsJSON(uims_new.getScoreStatisticsJSON());
                                 dealScoreJSON(uims_new.getRecentScoreJSON(), uims_new);
                                 MainActivity.saveScoreJSON();
                                 AlertCenter.showAlert(context, "成绩刷新成功！");
@@ -389,6 +397,21 @@ public class LoginGetScorePopupWindow extends PopupWindow {
                 commitButton.setBackground(ColorManager.getInternetInformationButtonBackground_full());
             }
         });
+    }
+
+    private void dealCurrentUserInfoJSON(UIMS_New uims_new){
+        JSONObject studentJSON = new JSONObject();
+        JSONObject defRes;
+        try {
+            defRes = uims_new.getCurrentUserInfoJSON().getJSONObject("defRes");
+            uims_new.getClassStudentCount();
+            defRes.put("studCnt", uims_new.getClassStudentNumber());
+            studentJSON.put("adminClass", defRes);
+            UIMS.setStudentJSON(studentJSON);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     private void dealScoreJSON(JSONObject scoreJSON, UIMS_New uims_new){

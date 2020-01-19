@@ -114,8 +114,6 @@ public class ScoreActivity extends BaseActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        long startTime = System.currentTimeMillis();
-        Log.i("ScoreActivity", "StartTime:" + startTime);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scrolling);
         sp = getApplicationContext().getSharedPreferences("ScoreSelectInfo", Context.MODE_PRIVATE);
@@ -228,10 +226,6 @@ public class ScoreActivity extends BaseActivity
         }
 
         toolBar.getRightIconIv().callOnClick();//打开时显示成绩统计
-
-        long endTime = System.currentTimeMillis();
-        Log.i("ScoreActivity", "EndTime:" + endTime);
-        Log.i("ScoreActivity", "TeachTimeTools:" + (endTime - startTime));
     }
 
     @Override
