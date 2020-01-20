@@ -2,16 +2,6 @@ package com.lu.mydemo.Activity;
 
 import android.content.Context;
 import android.os.Bundle;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.tabs.TabLayout;
-
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +9,13 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.tabs.TabLayout;
 import com.lu.mydemo.Activity.ui.main.SectionsPagerAdapter;
 import com.lu.mydemo.R;
 import com.lu.mydemo.UIMSTool.CourseJSONTransfer;
@@ -62,7 +59,7 @@ public class NewMainActivity extends BaseActivity {
                     dismissLoading();
                 }
                 else {
-                    showToast("虽然这是更新按钮，但并不会更新数据" + "\n" +
+                    showToast("虽然这是更新按钮，但并不会更新数据\n" +
                             "(￣y▽,￣)╭ ");
                     showLoading();
                 }
@@ -106,16 +103,6 @@ public class NewMainActivity extends BaseActivity {
                         }
                     });
 
-                    //课程测试
-//                    runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            CourseAdapter adapter = new CourseAdapter(NewMainActivity.this, getTestCourse());
-//                            recyclerView.setLayoutManager(new LinearLayoutManager(NewMainActivity.this));
-//                            recyclerView.setAdapter(adapter);
-//                            dismissLoading();
-//                        }
-//                    });
                 }
             }
         };
@@ -140,60 +127,6 @@ public class NewMainActivity extends BaseActivity {
             }
         });
     }
-
-//    //TODO 课程测试数据
-//    public List<MySubject> getTestCourse(){
-//        List<Integer> testWeekList = new ArrayList<>();
-//        for(int i=0; i<8; i++){
-//            testWeekList.add(i);
-//        }
-//
-//        List<MySubject> testCourseList = new ArrayList<>();
-//
-//        MySubject subject = new MySubject();
-//        subject.setName("测试课程");
-//        subject.setRoom("测试课程 - 上课地点");
-//        subject.setWeekList(testWeekList);
-//        subject.setDay(TeachTimeTools.day_of_week);
-//        testCourseList.add(subject);
-//
-//        subject = new MySubject();
-//        subject.setName("测试课程 测试课程");
-//        subject.setRoom("测试课程 - 上课地点 测试课程 - 上课地点");
-//        subject.setWeekList(testWeekList);
-//        subject.setDay(TeachTimeTools.day_of_week);
-//        testCourseList.add(subject);
-//
-//        subject = new MySubject();
-//        subject.setName("测试课程 测试课程 测试课程");
-//        subject.setRoom("测试课程 - 上课地点 测试课程 - 上课地点 测试课程 - 上课地点");
-//        subject.setWeekList(testWeekList);
-//        subject.setDay(TeachTimeTools.day_of_week);
-//        testCourseList.add(subject);
-//
-//        subject = new MySubject();
-//        subject.setName("测试课程");
-//        subject.setRoom("测试课程 - 上课地点");
-//        subject.setWeekList(testWeekList);
-//        subject.setDay(TeachTimeTools.day_of_week);
-//        testCourseList.add(subject);
-//
-//        subject = new MySubject();
-//        subject.setName("测试课程 测试课程");
-//        subject.setRoom("测试课程 - 上课地点 测试课程 - 上课地点");
-//        subject.setWeekList(testWeekList);
-//        subject.setDay(TeachTimeTools.day_of_week);
-//        testCourseList.add(subject);
-//
-//        subject = new MySubject();
-//        subject.setName("测试课程 测试课程 测试课程");
-//        subject.setRoom("测试课程 - 上课地点 测试课程 - 上课地点 测试课程 - 上课地点");
-//        subject.setWeekList(testWeekList);
-//        subject.setDay(TeachTimeTools.day_of_week);
-//        testCourseList.add(subject);
-//
-//        return testCourseList;
-//    }
 
     class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder>{
 

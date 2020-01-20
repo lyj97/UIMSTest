@@ -1,27 +1,26 @@
 package com.lu.mydemo.ToolFor2045_Site;
 
+import com.lu.mydemo.Utils.Common.Address;
+
 import net.sf.json.JSONObject;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
-
-import com.lu.mydemo.Utils.Common.Address;
-
-import org.jetbrains.annotations.NotNull;
 
 import okhttp3.Cookie;
 import okhttp3.CookieJar;
 import okhttp3.FormBody;
 import okhttp3.HttpUrl;
-import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-
-import static net.sf.json.JSONObject.fromObject;
 
 public class GetInternetInformation {
 
@@ -41,30 +40,20 @@ public class GetInternetInformation {
             .followSslRedirects(false)
             .connectTimeout(10, TimeUnit.SECONDS)
             .build();
-    private MultipartBody.Builder builder;
 
     public JSONObject getVersionInformation() {
         try {
-            builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
             Request request = new Request.Builder()
                     .url(Address.myHostAddress + "/UIMSTest/GetVersionInformation")
                     .build();
-//                    Log.i("okhttp_request", request.toString());
-//            Log.i("OKHttp_Request", String.format("Sending request %s %n%s",
-//                    request.url(), request.headers()));
             Response response = httpClient.newCall(request).execute();
-//            Log.i("OKHttp_Request", String.format("Received response for %s %n%s",
-//                    response.request().url(), response.networkResponse().headers()));
             BufferedReader bufferedReader = new BufferedReader(
-                    new InputStreamReader(response.body().byteStream(), "UTF-8"), 8 * 1024);
+                    new InputStreamReader(Objects.requireNonNull(response.body()).byteStream(), StandardCharsets.UTF_8), 8 * 1024);
             StringBuilder entityStringBuilder = new StringBuilder();
-            String line = null;
+            String line;
             while ((line = bufferedReader.readLine()) != null) {
-                entityStringBuilder.append(line + "\n");
+                entityStringBuilder.append(line).append("\n");
             }
-            // 利用从HttpEntity中得到的String生成JsonObject
-//            Log.i("2045_getVersionInformation[entity]", "entity:\t" + entityStringBuilder.toString());
-//                    showResponse("Login[entity]:\t" + entityStringBuilder.toString());
 
             return JSONObject.fromObject(entityStringBuilder.toString());
         }
@@ -76,26 +65,17 @@ public class GetInternetInformation {
 
     public JSONObject getRecommendChange() {
         try {
-            builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
             Request request = new Request.Builder()
                     .url(Address.myHostAddress + "/UIMSTest/GetRecommendChange")
                     .build();
-//                    Log.i("okhttp_request", request.toString());
-//            Log.i("OKHttp_Request", String.format("Sending request %s %n%s",
-//                    request.url(), request.headers()));
             Response response = httpClient.newCall(request).execute();
-//            Log.i("OKHttp_Request", String.format("Received response for %s %n%s",
-//                    response.request().url(), response.networkResponse().headers()));
             BufferedReader bufferedReader = new BufferedReader(
-                    new InputStreamReader(response.body().byteStream(), "UTF-8"), 8 * 1024);
+                    new InputStreamReader(Objects.requireNonNull(response.body()).byteStream(), StandardCharsets.UTF_8), 8 * 1024);
             StringBuilder entityStringBuilder = new StringBuilder();
-            String line = null;
+            String line;
             while ((line = bufferedReader.readLine()) != null) {
-                entityStringBuilder.append(line + "\n");
+                entityStringBuilder.append(line).append("\n");
             }
-            // 利用从HttpEntity中得到的String生成JsonObject
-//            Log.i("2045_getRecommendChange[entity]", "entity:\t" + entityStringBuilder.toString());
-//                    showResponse("Login[entity]:\t" + entityStringBuilder.toString());
 
             return JSONObject.fromObject(entityStringBuilder.toString());
         }
@@ -107,26 +87,17 @@ public class GetInternetInformation {
 
     public JSONObject getTestItems() {
         try {
-            builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
             Request request = new Request.Builder()
                     .url(Address.myHostAddress + "/UIMSTest/GetTestFunctionItems")
                     .build();
-//                    Log.i("okhttp_request", request.toString());
-//            Log.i("OKHttp_Request", String.format("Sending request %s %n%s",
-//                    request.url(), request.headers()));
             Response response = httpClient.newCall(request).execute();
-//            Log.i("OKHttp_Request", String.format("Received response for %s %n%s",
-//                    response.request().url(), response.networkResponse().headers()));
             BufferedReader bufferedReader = new BufferedReader(
-                    new InputStreamReader(response.body().byteStream(), "UTF-8"), 8 * 1024);
+                    new InputStreamReader(Objects.requireNonNull(response.body()).byteStream(), StandardCharsets.UTF_8), 8 * 1024);
             StringBuilder entityStringBuilder = new StringBuilder();
-            String line = null;
+            String line;
             while ((line = bufferedReader.readLine()) != null) {
-                entityStringBuilder.append(line + "\n");
+                entityStringBuilder.append(line).append("\n");
             }
-            // 利用从HttpEntity中得到的String生成JsonObject
-//            Log.i("2045_getTestFunctionItems[entity]", "entity:\t" + entityStringBuilder.toString());
-//                    showResponse("Login[entity]:\t" + entityStringBuilder.toString());
 
             return JSONObject.fromObject(entityStringBuilder.toString());
         }
@@ -138,17 +109,16 @@ public class GetInternetInformation {
 
     public JSONObject getWebPagesItems(){
         try {
-            builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
             Request request = new Request.Builder()
                     .url(Address.myHostAddress_HUAWEI + "/api/common/website/list")
                     .build();
             Response response = httpClient.newCall(request).execute();
             BufferedReader bufferedReader = new BufferedReader(
-                    new InputStreamReader(response.body().byteStream(), "UTF-8"), 8 * 1024);
+                    new InputStreamReader(Objects.requireNonNull(response.body()).byteStream(), StandardCharsets.UTF_8), 8 * 1024);
             StringBuilder entityStringBuilder = new StringBuilder();
-            String line = null;
+            String line;
             while ((line = bufferedReader.readLine()) != null) {
-                entityStringBuilder.append(line + "\n");
+                entityStringBuilder.append(line).append("\n");
             }
             return JSONObject.fromObject(entityStringBuilder.toString());
         }
@@ -160,26 +130,17 @@ public class GetInternetInformation {
 
     public JSONObject getNewsList(int page) {
         try {
-            builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
             Request request = new Request.Builder()
                     .url(Address.myHostAddress + "/UIMSTest/GetNewsList?page=" + page)
                     .build();
-//                    Log.i("okhttp_request", request.toString());
-//            Log.i("OKHttp_Request", String.format("Sending request %s %n%s",
-//                    request.url(), request.headers()));
             Response response = httpClient.newCall(request).execute();
-//            Log.i("OKHttp_Request", String.format("Received response for %s %n%s",
-//                    response.request().url(), response.networkResponse().headers()));
             BufferedReader bufferedReader = new BufferedReader(
-                    new InputStreamReader(response.body().byteStream(), "UTF-8"), 8 * 1024);
+                    new InputStreamReader(Objects.requireNonNull(response.body()).byteStream(), StandardCharsets.UTF_8), 8 * 1024);
             StringBuilder entityStringBuilder = new StringBuilder();
-            String line = null;
+            String line;
             while ((line = bufferedReader.readLine()) != null) {
-                entityStringBuilder.append(line + "\n");
+                entityStringBuilder.append(line).append("\n");
             }
-            // 利用从HttpEntity中得到的String生成JsonObject
-//            Log.i("2045_getNewsList[entity]", "entity:\t" + entityStringBuilder.toString());
-//                    showResponse("Login[entity]:\t" + entityStringBuilder.toString());
 
             try {
                 return JSONObject.fromObject(entityStringBuilder.toString());
@@ -197,7 +158,6 @@ public class GetInternetInformation {
 
     public JSONObject getNewNewsList(int page, String searchStr) {
         try {
-            builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
             FormBody formBody = new FormBody.Builder()
                     .add("page", String.valueOf(page))
                     .add("searchName", searchStr == null ? "" : searchStr)
@@ -208,11 +168,11 @@ public class GetInternetInformation {
                     .build();
             Response response = httpClient.newCall(request).execute();
             BufferedReader bufferedReader = new BufferedReader(
-                    new InputStreamReader(response.body().byteStream(), "UTF-8"), 8 * 1024);
+                    new InputStreamReader(Objects.requireNonNull(response.body()).byteStream(), StandardCharsets.UTF_8), 8 * 1024);
             StringBuilder entityStringBuilder = new StringBuilder();
-            String line = null;
+            String line;
             while ((line = bufferedReader.readLine()) != null) {
-                entityStringBuilder.append(line + "\n");
+                entityStringBuilder.append(line).append("\n");
             }
             try {
                 return JSONObject.fromObject(entityStringBuilder.toString());
@@ -230,7 +190,6 @@ public class GetInternetInformation {
 
     public JSONObject getNewsDetail(String id){
         try {
-            builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
             FormBody formBody = new FormBody.Builder()
                     .add("id", id)
                     .build();
@@ -240,11 +199,11 @@ public class GetInternetInformation {
                     .build();
             Response response = httpClient.newCall(request).execute();
             BufferedReader bufferedReader = new BufferedReader(
-                    new InputStreamReader(response.body().byteStream(), "UTF-8"), 8 * 1024);
+                    new InputStreamReader(Objects.requireNonNull(response.body()).byteStream(), StandardCharsets.UTF_8), 8 * 1024);
             StringBuilder entityStringBuilder = new StringBuilder();
-            String line = null;
+            String line;
             while ((line = bufferedReader.readLine()) != null) {
-                entityStringBuilder.append(line + "\n");
+                entityStringBuilder.append(line).append("\n");
             }
             try {
                 return JSONObject.fromObject(entityStringBuilder.toString());
@@ -262,24 +221,17 @@ public class GetInternetInformation {
 
     public JSONObject searchNews(String queryStr) {
         try {
-            builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
             Request request = new Request.Builder()
                     .url(Address.myHostAddress + "/UIMSTest/SearchNews?queryStr=" + queryStr)
                     .build();
-//                    Log.i("okhttp_request", request.toString());
-//            Log.i("OKHttp_Request", String.format("Sending request %s %n%s", request.url(), request.headers()));
             Response response = httpClient.newCall(request).execute();
-//            Log.i("OKHttp_Request", String.format("Received response for %s %n%s", response.request().url(), response.networkResponse().headers()));
             BufferedReader bufferedReader = new BufferedReader(
-                    new InputStreamReader(response.body().byteStream(), "UTF-8"), 8 * 1024);
+                    new InputStreamReader(Objects.requireNonNull(response.body()).byteStream(), StandardCharsets.UTF_8), 8 * 1024);
             StringBuilder entityStringBuilder = new StringBuilder();
-            String line = null;
+            String line;
             while ((line = bufferedReader.readLine()) != null) {
                 entityStringBuilder.append(line).append("\n");
             }
-            // 利用从HttpEntity中得到的String生成JsonObject
-//            Log.i("2045_searchNews[entity]", "entity:\t" + entityStringBuilder.toString());
-//                    showResponse("Login[entity]:\t" + entityStringBuilder.toString());
 
             return JSONObject.fromObject(entityStringBuilder.toString());
         }
@@ -302,24 +254,46 @@ public class GetInternetInformation {
      */
     public JSONObject getRemoteNewsPage(){
         try {
-            builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
             Request request = new Request.Builder()
                     .url(Address.myHostAddress_HUAWEI + "/api/common/oa/pageNumber")
                     .build();
-//                    Log.i("okhttp_request", request.toString());
-//            Log.i("OKHttp_Request", String.format("Sending request %s %n%s", request.url(), request.headers()));
             Response response = httpClient.newCall(request).execute();
-//            Log.i("OKHttp_Request", String.format("Received response for %s %n%s", response.request().url(), response.networkResponse().headers()));
             BufferedReader bufferedReader = new BufferedReader(
-                    new InputStreamReader(response.body().byteStream(), "UTF-8"), 8 * 1024);
+                    new InputStreamReader(Objects.requireNonNull(response.body()).byteStream(), StandardCharsets.UTF_8), 8 * 1024);
             StringBuilder entityStringBuilder = new StringBuilder();
-            String line = null;
+            String line;
             while ((line = bufferedReader.readLine()) != null) {
                 entityStringBuilder.append(line).append("\n");
             }
-            // 利用从HttpEntity中得到的String生成JsonObject
-//            Log.i("2045_searchNews[entity]", "entity:\t" + entityStringBuilder.toString());
-//                    showResponse("Login[entity]:\t" + entityStringBuilder.toString());
+            return JSONObject.fromObject(entityStringBuilder.toString());
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * 获取服务器下发的更改VPN首页指向链接的js代码
+     * @return JSCodeJSON
+     */
+    public JSONObject getRemoteJSCode(String inputLink){
+        try {
+            FormBody formBody = new FormBody.Builder()
+                    .add("link", inputLink)
+                    .build();
+            Request request = new Request.Builder()
+                    .url(Address.myHostAddress_HUAWEI + "/api/LinkJSCode/getCode")
+                    .post(formBody)
+                    .build();
+            Response response = httpClient.newCall(request).execute();
+            BufferedReader bufferedReader = new BufferedReader(
+                    new InputStreamReader(Objects.requireNonNull(response.body()).byteStream(), StandardCharsets.UTF_8), 8 * 1024);
+            StringBuilder entityStringBuilder = new StringBuilder();
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                entityStringBuilder.append(line).append("\n");
+            }
             return JSONObject.fromObject(entityStringBuilder.toString());
         }
         catch (Exception e){

@@ -38,7 +38,9 @@ import java.util.HashMap;
 
 import com.lu.mydemo.Config.ColorManager;
 import com.lu.mydemo.R;
+import com.lu.mydemo.ToolFor2045_Site.GetInternetInformation;
 import com.lu.mydemo.UIMS.UIMS;
+import com.lu.mydemo.Utils.Thread.MyThreadController;
 import com.lu.mydemo.View.PopWindow.DownloadFileConfirmPopupWindow;
 
 public class WebViewActivity extends BaseActivity {
@@ -107,38 +109,29 @@ public class WebViewActivity extends BaseActivity {
         commitTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String link = linkEditText.getText().toString();
-                if(link.startsWith("http")){
-                    link = link.replaceFirst("http://", "");
-                    link = link.replaceFirst("https://", "");
-                }
-                if(link.endsWith("/")){
-                    link = link.substring(0, link.length() - 1);
-                }
-                String jsCode =
-                        "function changeFirstItem(){" +
-//                                "document.querySelector('div.web-card-box').setAttribute('data-url','/http/" + link + "');" +
-//                                "document.querySelector('div.web-card-box').querySelector('div.card-logo').innerHTML = '';" +
-//                                "document.querySelector('div.web-card-box').querySelector('div.card-title').innerHTML = '点击这里打开自定义网址';" +
-//                                "document.querySelector('div.web-card-box').querySelector('div.card-description').innerHTML = '" + link + "';" +
-
-                                "var cardBox = document.querySelector('div.web-card-box');" +
-                                "cardBox.setAttribute('data-url','/http/" + link + "');" +
-                                "var cardLogo = cardBox.querySelector('div.card-logo');" +
-                                "var cardTitle = cardBox.querySelector('div.card-title');" +
-                                "var cardDescription = cardBox.querySelector('div.card-description');" +
-                                "cardLogo.innerHTML = '';" +
-                                "cardTitle.innerHTML = '点击这里打开自定义网址';" +
-                                "cardDescription.innerHTML = '" + link + "';" +
-
-                        "}\n" +
-                         "changeFirstItem();";
-                try {
-                    webView.loadUrl("javascript:" + jsCode);
-                }
-                catch (Exception e){
-                    e.printStackTrace();
-                }
+                AlertCenter.showLoading(WebViewActivity.this, "获取中，请稍后...");
+                MyThreadController.commit(new Runnable() {
+                    @Override
+                    public void run() {
+                        GetInternetInformation client = new GetInternetInformation();
+                        String link = linkEditText.getText().toString();
+                        if(link.startsWith("http")){
+                            link = link.replaceFirst("http://", "");
+                            link = link.replaceFirst("https://", "");
+                        }
+                        if(link.endsWith("/")){
+                            link = link.substring(0, link.length() - 1);
+                        }
+                        String jsCode;
+                        try {
+                            jsCode = client.getRemoteJSCode(link).getString("data");
+                            webViewLoadUrl(jsCode);
+                        }
+                        catch (Exception e){
+                            e.printStackTrace();
+                        }
+                    }
+                });
             }
         });
 
@@ -276,6 +269,16 @@ public class WebViewActivity extends BaseActivity {
             e.printStackTrace();
         }
         super.onStop();
+    }
+
+    public void webViewLoadUrl(final String jsCode){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                AlertCenter.hideAlert(WebViewActivity.this);
+                webView.loadUrl("javascript:" + jsCode);
+            }
+        });
     }
 
     public void checkVPNUrl(String url){

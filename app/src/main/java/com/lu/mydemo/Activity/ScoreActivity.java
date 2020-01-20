@@ -6,7 +6,10 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.SpannableString;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
@@ -36,6 +39,7 @@ import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputEditText;
 import com.lu.mydemo.CJCX.CJCX;
 import com.lu.mydemo.Config.ColorManager;
 import com.lu.mydemo.Notification.AlertCenter;
@@ -59,6 +63,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class ScoreActivity extends BaseActivity
 {
@@ -78,6 +83,8 @@ public class ScoreActivity extends BaseActivity
     TextView first_bixiu_with_addition_gpa;
 
     MyToolBar toolBar;
+
+    TextInputEditText searchEditText;
 
     FloatingActionButton fab;
 
@@ -129,6 +136,8 @@ public class ScoreActivity extends BaseActivity
         chongxiu_select = sp.getBoolean("chongxiu_select", false);
 
         toolBar = new MyToolBar(this);
+
+        searchEditText = findViewById(R.id.activity_scrolling_search_edit_text);
 
         fab = findViewById(R.id.activity_scrolling_fab);
 
@@ -197,9 +206,6 @@ public class ScoreActivity extends BaseActivity
                 LoginGetScorePopupWindow window = new LoginGetScorePopupWindow(ScoreActivity.this, findViewById(R.id.activity_scrolling_layout).getHeight(), findViewById(R.id.activity_scrolling_layout).getWidth());
                 window.setFocusable(true);
                 window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-//                LoginVPNPopupWindow window = new LoginVPNPopupWindow(ScoreActivity.this, findViewById(R.id.activity_scrolling_layout).getHeight(), findViewById(R.id.activity_scrolling_layout).getWidth());
-//                window.setFocusable(true);
-//                window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
                 window.showAtLocation(ScoreActivity.this.findViewById(R.id.activity_scrolling_layout), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0); //设置layout在PopupWindow中显示的位置
                 mPopUpWindow = window;
             }
@@ -225,6 +231,34 @@ public class ScoreActivity extends BaseActivity
             }
         }
 
+        searchEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(final CharSequence s, final int start, final int before, final int count) {
+                MyThreadController.commit(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(TextUtils.isEmpty(s)){
+                            reloadScoreList();
+                        }
+                        else if(before > 0 || count > 0) {
+                            getScoreList();
+                            searchInScoreList(s.toString());
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
         toolBar.getRightIconIv().callOnClick();//打开时显示成绩统计
     }
 
@@ -247,6 +281,14 @@ public class ScoreActivity extends BaseActivity
         super.onWindowFocusChanged(hasFocus);
         if(hasFocus){
             loadScoreList();
+            if(!TextUtils.isEmpty(searchEditText.getText())){
+                MyThreadController.commit(new Runnable() {
+                    @Override
+                    public void run() {
+                        searchInScoreList(searchEditText.getText().toString());
+                    }
+                });
+            }
         }
     }
 
@@ -300,7 +342,7 @@ public class ScoreActivity extends BaseActivity
         if(!reloadData && dataList != null && dataList.size() > 0) return;
 
         if(ScoreInf.isScoreListLoaded()){
-            dataList = ScoreInf.getDataList();
+            dataList = new ArrayList<>(ScoreInf.getDataList());
             pieDatas = new PieData[dataList.size()];
             showScorePercentFlags = new boolean[dataList.size()];
             for(int i=0; i<dataList.size(); i++){
@@ -313,6 +355,29 @@ public class ScoreActivity extends BaseActivity
             Log.e("ScoreList", "Not loaded!");
         }
 
+    }
+
+    public void searchInScoreList(final String searchStr){
+        MyThreadController.commit(new Runnable() {
+            @Override
+            public void run() {
+                dataList = new ArrayList<>(ScoreInf.getDataList());
+                List<Map<String, Object>> tempList = new ArrayList<>(dataList);
+                for(Map<String, Object> item : tempList){
+                    String title = Objects.requireNonNull(item.get("title")).toString();
+                    String context1 = Objects.requireNonNull(item.get("context1")).toString();
+                    if(!title.contains(searchStr) && !context1.contains(searchStr)){
+                        dataList.remove(item);
+                    }
+                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        myAdapter.notifyDataSetChanged(dataList);
+                    }
+                });
+            }
+        });
     }
 
     private void getScoreStatistics() {

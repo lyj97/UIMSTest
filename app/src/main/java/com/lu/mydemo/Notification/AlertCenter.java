@@ -20,7 +20,7 @@ import com.tapadoo.alerter.OnHideAlertListener;
 
 public class AlertCenter {
 
-    public static boolean isLoadingShowing = false;
+    private static boolean isLoadingShowing = false;
 
     public static void hideAlert(final Activity context){
         context.runOnUiThread(new Runnable() {
@@ -265,6 +265,10 @@ public class AlertCenter {
                         .show();
             }
         });
+    }
+
+    public static boolean isLoadingShowing() {
+        return isLoadingShowing;
     }
 
 }
