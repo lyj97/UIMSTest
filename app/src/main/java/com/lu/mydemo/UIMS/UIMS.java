@@ -1421,7 +1421,7 @@ public class UIMS {
     }
 
     public static JSONObject getTermJSON(String term_id){
-        if(term_id == null){
+        if(term_id == null || termJSON == null){
             Log.e("Get term failed:", "term_id is NULL");
             return null;
         }

@@ -33,6 +33,7 @@ public class UIMS_New {
     private VPNClient mVPNClient;
 
     private JSONObject mCurrentUserInfoJSON;
+    private JSONObject mTeachingTermJSON;
     private JSONObject mCourseSelectTypeJSON;
     private JSONObject mScoreStatisticsJSON;
     private JSONObject mRecentScoreJSON;
@@ -126,10 +127,11 @@ public class UIMS_New {
         }
         List<Map.Entry<String, String>> headers = new ArrayList<>(mHeaderList.entrySet());
 
+        String mouthPathStr = "YGQABYCQDLYEgDaZHwDqZJgD8aLwENbNwEdbPQEubQwE/bRgFQbSgFhbTgFxbUgGBbWQGSbWwGjbYgGybZgHEbbAHWbcAHlbdgH2bfQIIbgQIXbiAIpbjwI5blQJJbmwJabpAJsbqgJ8brQKMbtQKdbugKtbwAK/bxwLPbywLgb0QLwb1gMAa2gMSa4QMiZ6AMybYAOW";
         FormBody formBody = new FormBody.Builder()
                 .add("j_username", mStudentId)
                 .add("j_password", GetMD5.getMD5Str("UIMS" + mStudentId + mPassword))
-                .add("mousePath", "YGQABYCQDLYEgDaZHwDqZJgD8aLwENbNwEdbPQEubQwE/bRgFQbSgFhbTgFxbUgGBbWQGSbWwGjbYgGybZgHEbbAHWbcAHlbdgH2bfQIIbgQIXbiAIpbjwI5blQJJbmwJabpAJsbqgJ8brQKMbtQKdbugKtbwAK/bxwLPbywLgb0QLwb1gMAa2gMSa4QMiZ6AMybYAOW")
+                .add("mousePath", mouthPathStr)
                 .build();
 
         Response response = HTTPTools.postResponse(url, headers, formBody);
@@ -270,7 +272,18 @@ public class UIMS_New {
             return false;
         }
 
-        HTTPTools.getOrOrOutResponse(response, true);
+        String responseStr = HTTPTools.getOrOrOutResponse(response, true);
+        JSONObject responseJSON;
+        try {
+            responseJSON = JSONObject.fromObject(responseStr);
+            assert responseJSON != null;
+            mTeachingTermJSON = responseJSON;
+        }
+        catch (Exception e){
+            mExceptionList.add(e);
+            e.printStackTrace();
+            return false;
+        }
 
         return true;
     }
@@ -506,8 +519,16 @@ public class UIMS_New {
         }
     }
 
+    public String getStudentId() {
+        return mStudentId;
+    }
+
     public JSONObject getCurrentUserInfoJSON() {
         return mCurrentUserInfoJSON;
+    }
+
+    public JSONObject getmTeachingTermJSON() {
+        return mTeachingTermJSON;
     }
 
     public int getClassStudentNumber(){

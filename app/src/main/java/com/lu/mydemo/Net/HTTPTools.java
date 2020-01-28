@@ -75,7 +75,7 @@ public class HTTPTools {
         final javax.net.ssl.SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
 
         httpClient = new OkHttpClient.Builder()
-                .sslSocketFactory(sslSocketFactory)
+                .sslSocketFactory(sslSocketFactory, (X509TrustManager) trustAllCerts[0])
                 .hostnameVerifier(new HostnameVerifier() {
                     @Override
                     public boolean verify(String hostname, SSLSession session) {

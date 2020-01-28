@@ -175,6 +175,7 @@ public class LoginGetScorePopupWindow extends PopupWindow {
 
                             if(checkBox_VPN.isChecked() && vpnClient != null && !TextUtils.isEmpty(vpnClient.getCookie())){
                                 UIMS_New uims_new = new UIMS_New(vpnClient, userStr, passwordStr, true);
+                                UIMS.setUser(userStr);
                                 AlertCenter.showLoading(context, "正在连接到UIMS教务系统(使用学生VPN)...");
                                 if(!uims_new.connectToUIMS()){
                                     AlertCenter.showWarningAlert(context, "未能连接到UIMS教务系统，请检查您的网络连接或稍后重试(也可能是学生VPN的问题).");
@@ -194,16 +195,17 @@ public class LoginGetScorePopupWindow extends PopupWindow {
                                 }
                                 dealCurrentUserInfoJSON(uims_new);
                                 UIMS.setCurrentUserInfoJSON(uims_new.getCurrentUserInfoJSON());
-                                if(!uims_new.getCourseSelectType() || !uims_new.getScoreStatistics() || !uims_new.getRecentScore()){
+                                if(!uims_new.getTeachingTerm() || !uims_new.getCourseSelectType() || !uims_new.getScoreStatistics() || !uims_new.getRecentScore()){
                                     AlertCenter.showErrorAlertWithReportButton(context, "获取成绩失败，请稍后重试.", UIMS_New.getExceptionList(), UIMS.getUser());
                                     dealFinish("更新成绩");
                                     return;
                                 }
+                                UIMS.setTeachingTerm(uims_new.getmTeachingTermJSON());
                                 UIMS.setCourseTypeJSON(uims_new.getCourseSelectTypeJSON());
                                 UIMS.setCourseSelectTypeJSON(uims_new.getCourseSelectTypeJSON());
                                 UIMS.setScoreStatisticsJSON(uims_new.getScoreStatisticsJSON());
                                 dealScoreJSON(uims_new.getRecentScoreJSON(), uims_new);
-                                MainActivity.saveScoreJSON();
+                                MainActivity.saveVPNData();
                                 AlertCenter.showAlert(context, "成绩刷新成功！");
                                 context.reloadScoreList();
                                 context.dismissPopupWindow();
@@ -288,7 +290,7 @@ public class LoginGetScorePopupWindow extends PopupWindow {
                                 }
                             }
                             else if(ScoreConfig.isIsCJCXEnable()){
-                                CJCX cjcx = new CJCX(uims.getUser(), uims.getPass());
+                                CJCX cjcx = new CJCX(UIMS.getUser(), UIMS.getPass());
                                 if (cjcx.login()) {
                                     if(UIMS.getTermId_termName() == null || ! (UIMS.getTermId_termName().size() > 0)){
                                         if(cjcx.getTeachingTerm()){
@@ -303,6 +305,14 @@ public class LoginGetScorePopupWindow extends PopupWindow {
                                         context.dismissPopupWindow();
                                         return;
                                     }
+                                    else {
+                                        AlertCenter.showErrorAlert(context, "查询失败，请稍后重试.");
+                                        dealFinish("更新成绩");
+                                    }
+                                }
+                                else {
+                                    AlertCenter.showErrorAlert(context, "登陆失败，请检查用户名/密码是否正确或稍后重试.");
+                                    dealFinish("更新成绩");
                                 }
                             }
                             else {
@@ -407,6 +417,7 @@ public class LoginGetScorePopupWindow extends PopupWindow {
             uims_new.getClassStudentCount();
             defRes.put("studCnt", uims_new.getClassStudentNumber());
             studentJSON.put("adminClass", defRes);
+            studentJSON.put("egrade", uims_new.getStudentId().substring(2, 4));
             UIMS.setStudentJSON(studentJSON);
         }
         catch (Exception e){

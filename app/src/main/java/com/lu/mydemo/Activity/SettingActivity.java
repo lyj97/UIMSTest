@@ -269,7 +269,7 @@ public class SettingActivity extends BaseActivity {
             termList = CourseScheduleChangeActivity.getTermArray();
             if(!(termList.size() > 0)){
                 termList = new ArrayList<>();
-                termList.add("暂无学期数据\n请在首页点击“刷新信息”按钮");
+                termList.add("暂无学期数据\n请在首页点击“更新信息”按钮");
                 spinner.setAdapter(new ArrayAdapter<>(this, R.layout.list_item_spinner, R.id.select_text_item, termList));
                 hasTerm = false;
             }
@@ -282,7 +282,7 @@ public class SettingActivity extends BaseActivity {
         else{
             hasTerm = false;
             termList = new ArrayList<>();
-            termList.add("暂无学期数据\n请在首页点击“刷新信息”按钮");
+            termList.add("暂无学期数据\n请在首页点击“更新信息”按钮");
             spinner.setAdapter(new ArrayAdapter<>(this, R.layout.list_item_spinner, R.id.select_text_item, termList));
 //            finish();
         }

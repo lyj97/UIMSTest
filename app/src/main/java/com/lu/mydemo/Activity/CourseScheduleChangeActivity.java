@@ -396,11 +396,20 @@ public class CourseScheduleChangeActivity extends BaseActivity {
     private void setSpinnerItems(){
         if(MainActivity.isLocalValueLoaded){
             termList = getTermArray();
-            spinner.setAdapter(new ArrayAdapter<>(this, R.layout.list_item_spinner, R.id.select_text_item, termList));
-            spinner.setSelection(termList.indexOf(UIMS.getTermName()));
+            if(termList == null || termList.size() == 0){
+                termList = new ArrayList<>();
+                termList.add("暂无学期数据\n请在首页点击“更新信息”按钮");
+                spinner.setAdapter(new ArrayAdapter<>(this, R.layout.list_item_spinner, R.id.select_text_item, termList));
+            }
+            else {
+                spinner.setAdapter(new ArrayAdapter<>(this, R.layout.list_item_spinner, R.id.select_text_item, termList));
+                spinner.setSelection(termList.indexOf(UIMS.getTermName()));
+            }
         }
         else{
-            showResponse("本地暂无学期数据，请刷新信息后重试。");
+            termList = new ArrayList<>();
+            termList.add("暂无学期数据\n请在首页点击“更新信息”按钮");
+            spinner.setAdapter(new ArrayAdapter<>(this, R.layout.list_item_spinner, R.id.select_text_item, termList));
 //            finish();
         }
     }

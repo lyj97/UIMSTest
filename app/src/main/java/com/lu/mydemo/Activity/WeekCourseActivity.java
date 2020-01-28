@@ -134,6 +134,10 @@ public class WeekCourseActivity extends BaseActivity implements View.OnClickList
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if(alertDialog!=null) alertDialog.hide();
+            if(mySubjects == null){
+                Alerter.hide();
+                return;
+            }
             mWeekView.source(mySubjects).showView();
             mTimetableView.source(mySubjects).showView();
             Alerter.hide();

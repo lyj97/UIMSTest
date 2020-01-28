@@ -341,21 +341,21 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        timeInformation.setOnClickListener(new View.OnClickListener() {
+        View.OnClickListener goToCourseScheduleChangeActivityListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this,CourseScheduleChangeActivity.class);
-                startActivity(intent);
+                if (isLocalValueLoaded) {
+                    Intent intent = new Intent(MainActivity.this, CourseScheduleChangeActivity.class);
+                    startActivity(intent);
+                }
+                else {
+                    AlertCenter.showAlert(MainActivity.this, "还没有已经保存的信息哦，点击\"更新信息\"再试试吧(*^_^*).");
+                }
             }
-        });
+        };
 
-        termInformation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this,CourseScheduleChangeActivity.class);
-                startActivity(intent);
-            }
-        });
+        timeInformation.setOnClickListener(goToCourseScheduleChangeActivityListener);
+        termInformation.setOnClickListener(goToCourseScheduleChangeActivityListener);
 
         isInternetInformationShowed = sp.getBoolean("isInternetInformationShowed", false);
 //        Log.i("GetInternetInformation", "isInternetInformationShowed:\t" + isInternetInformationShowed);
@@ -392,24 +392,22 @@ public class MainActivity extends BaseActivity {
         ColorManager.loadConfig(getApplicationContext(), this);
         changeTheme();
 
-        // TEST 忽略本地数据加载
-//        Log.e("TEST", "Local information ignored for TEST!");
         MyThreadController.commit(new Runnable() {
             @Override
             public void run() {
-                if (!isLocalValueLoaded && isLocalInformationAvailable())
+                if (!isLocalValueLoaded) {
                     loadLocalInformation(false);
-//                else loadCourseInformation();
+                }
                 ScoreConfig.loadScoreConfig(getApplicationContext());
                 try {
                     CJCX.loadCJCXJSON(getApplicationContext());
                     CJCX.loadCJCXTermJSON(getApplicationContext());
                 } catch (Exception e) {
+                    e.printStackTrace();
                     Log.e("MainActivity", "com.lu.mydemo.CJCX Error:" + e.getMessage());
                 }
                 ScoreActivity.context = getApplicationContext();
                 ScoreInf.loadScoreList();
-//                Log.i("TEST:ScoreInf", ScoreInf.getDataList().toString());
             }
         });
 
@@ -438,6 +436,17 @@ public class MainActivity extends BaseActivity {
 //            initTeachTimeToolInf();
             get_save_button.setText("成绩查询");
             get_save_button.setEnabled(true);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        try {
+            saveData();
+        }
+        catch (Exception e){
+            e.printStackTrace();
         }
     }
 
@@ -519,6 +528,7 @@ public class MainActivity extends BaseActivity {
             try{
                 value = teachingTermJSON.getJSONArray("value").getJSONObject(0);
             }catch (JSONException e){
+                e.printStackTrace();
                 value = teachingTermJSON;
             }
             weeks = value.getInt("weeks");
@@ -557,12 +567,41 @@ public class MainActivity extends BaseActivity {
         sp.edit().putString("CourseTypeJSON", UIMS.getCourseTypeJSON().toString()).apply();
         sp.edit().putString("CourseSelectTypeJSON", UIMS.getCourseSelectTypeJSON().toString()).apply();
         sp.edit().putString("ScoreStatisticsJSON", UIMS.getScoreStatisticsJSON().toString()).apply();
+        sp.edit().putString("CurrentUserInfoJSON", UIMS.getCurrentUserInfoJSON().toString()).apply();
+        sp.edit().putString("TermJSON", UIMS.getTermJSON().toString()).apply();
+        sp.edit().putString("TeachingTermJSON", UIMS.getTeachingTermJSON().toString()).apply();
 
         AlertCenter.showAlert(MainActivity.this, "信息刷新成功", "以后大部分功能就不需要校园网啦!\n" +
                 "祝使用愉快呀！");
 
         loadLocalInformationSuccess(null);
         getCourseSuccess(reloadCourse);
+    }
+
+    public static void saveData(){
+        if(sp != null) {
+            sp.edit().putString("ScoreJSON", UIMS.getScoreJSON().toString()).apply();
+            sp.edit().putString("CourseJSON", UIMS.getCourseJSON().toString()).apply();
+            sp.edit().putString("StudentJSON", UIMS.getStudentJSON().toString()).apply();
+            sp.edit().putString("CourseTypeJSON", UIMS.getCourseTypeJSON().toString()).apply();
+            sp.edit().putString("CourseSelectTypeJSON", UIMS.getCourseSelectTypeJSON().toString()).apply();
+            sp.edit().putString("ScoreStatisticsJSON", UIMS.getScoreStatisticsJSON().toString()).apply();
+            sp.edit().putString("CurrentUserInfoJSON", UIMS.getCurrentUserInfoJSON().toString()).apply();
+            sp.edit().putString("TermJSON", UIMS.getTermJSON().toString()).apply();
+            sp.edit().putString("TeachingTermJSON", UIMS.getTeachingTermJSON().toString()).apply();
+        }
+    }
+
+    public static void saveVPNData(){
+        if(sp != null) {
+            sp.edit().putString("ScoreJSON", UIMS.getScoreJSON().toString()).apply();
+            sp.edit().putString("StudentJSON", UIMS.getStudentJSON().toString()).apply();
+            sp.edit().putString("CourseTypeJSON", UIMS.getCourseTypeJSON().toString()).apply();
+            sp.edit().putString("CourseSelectTypeJSON", UIMS.getCourseSelectTypeJSON().toString()).apply();
+            sp.edit().putString("ScoreStatisticsJSON", UIMS.getScoreStatisticsJSON().toString()).apply();
+            sp.edit().putString("CurrentUserInfoJSON", UIMS.getCurrentUserInfoJSON().toString()).apply();
+            sp.edit().putString("TeachingTermJSON", UIMS.getTeachingTermJSON().toString()).apply();
+        }
     }
 
     public void loadCourseInformation() {
@@ -574,27 +613,43 @@ public class MainActivity extends BaseActivity {
     private void loadLocalInformation(final boolean show) {
 
         if (!isLocalValueLoaded) {
-            AlertCenter.showLoading(MainActivity.this, "正在加载本地数据...");
+            if(isLocalInformationAvailable()) {
+                AlertCenter.showLoading(MainActivity.this, "正在加载本地数据...");
 
-            UIMS.setCurrentUserInfoJSON(JSONObject.fromObject(sp.getString("CurrentUserInfoJSON", "")));
-            UIMS.setScoreJSON(JSONObject.fromObject(sp.getString("ScoreJSON", "")));
-            UIMS.setStudentJSON(JSONObject.fromObject(sp.getString("StudentJSON", "")));
-            UIMS.setCourseTypeJSON(JSONObject.fromObject(sp.getString("CourseTypeJSON", "")));
-            UIMS.setCourseSelectTypeJSON(JSONObject.fromObject(sp.getString("CourseSelectTypeJSON", "")));
-            UIMS.setScoreStatisticsJSON(JSONObject.fromObject(sp.getString("ScoreStatisticsJSON", "")));
-            UIMS.setTermJSON(JSONObject.fromObject(sp.getString("TermJSON", "")));
-            UIMS.setTeachingTerm(JSONObject.fromObject(sp.getString("TeachingTermJSON", "")));
-            UIMS.setCourseJSON(JSONObject.fromObject(sp.getString("CourseJSON", "")));
+                UIMS.setCurrentUserInfoJSON(JSONObject.fromObject(sp.getString("CurrentUserInfoJSON", "")));
+                UIMS.setScoreJSON(JSONObject.fromObject(sp.getString("ScoreJSON", "")));
+                UIMS.setStudentJSON(JSONObject.fromObject(sp.getString("StudentJSON", "")));
+                UIMS.setCourseTypeJSON(JSONObject.fromObject(sp.getString("CourseTypeJSON", "")));
+                UIMS.setCourseSelectTypeJSON(JSONObject.fromObject(sp.getString("CourseSelectTypeJSON", "")));
+                UIMS.setScoreStatisticsJSON(JSONObject.fromObject(sp.getString("ScoreStatisticsJSON", "")));
+                UIMS.setTermJSON(JSONObject.fromObject(sp.getString("TermJSON", "")));
+                UIMS.setTeachingTerm(JSONObject.fromObject(sp.getString("TeachingTermJSON", "")));
+                UIMS.setCourseJSON(JSONObject.fromObject(sp.getString("CourseJSON", "")));
 
-            loadCourseInformation();
-            CJCX.loadCJCXJSON(getApplicationContext());
-            CJCX.loadCJCXTermJSON(getApplicationContext());
-            ScoreActivity.context = getApplicationContext();
-//            ScoreActivity.getScoreList();
+                loadCourseInformation();
+                CJCX.loadCJCXJSON(getApplicationContext());
+                CJCX.loadCJCXTermJSON(getApplicationContext());
+                ScoreActivity.context = getApplicationContext();
 
-            ScoreInf.loadScoreList();
-//            Log.i("TEST:ScoreInf", ScoreInf.getDataList().toString());
+                ScoreInf.loadScoreList();
+            }
+            else if(isLocalScoreInfAvailable()) {
+                AlertCenter.showLoading(MainActivity.this, "正在加载本地数据...");
 
+                UIMS.setCurrentUserInfoJSON(JSONObject.fromObject(sp.getString("CurrentUserInfoJSON", "")));
+                UIMS.setScoreJSON(JSONObject.fromObject(sp.getString("ScoreJSON", "")));
+                UIMS.setStudentJSON(JSONObject.fromObject(sp.getString("StudentJSON", "")));
+                UIMS.setCourseTypeJSON(JSONObject.fromObject(sp.getString("CourseTypeJSON", "")));
+                UIMS.setCourseSelectTypeJSON(JSONObject.fromObject(sp.getString("CourseSelectTypeJSON", "")));
+                UIMS.setScoreStatisticsJSON(JSONObject.fromObject(sp.getString("ScoreStatisticsJSON", "")));
+                UIMS.setTeachingTerm(JSONObject.fromObject(sp.getString("TeachingTermJSON", "")));
+
+                CJCX.loadCJCXJSON(getApplicationContext());
+                CJCX.loadCJCXTermJSON(getApplicationContext());
+                ScoreActivity.context = getApplicationContext();
+
+                ScoreInf.loadScoreList();
+            }
         }
 
         final JSONObject teachingTermJSON = UIMS.getTeachingTermJSON();
@@ -604,6 +659,7 @@ public class MainActivity extends BaseActivity {
             try {
                 value = teachingTermJSON.getJSONArray("value").getJSONObject(0);
             } catch (JSONException e) {
+                e.printStackTrace();
                 value = teachingTermJSON;
             }
             weeks = value.getInt("weeks");
@@ -633,7 +689,17 @@ public class MainActivity extends BaseActivity {
             });
         }
 
-        loadLocalInformationSuccess(null);
+        if(UIMS.getTermJSON() != null && UIMS.getTermId_termName() != null && UIMS.getTermId_termName().size() > 0) {
+            loadLocalInformationSuccess(null);
+        }
+        else {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Alerter.hide();
+                }
+            });
+        }
 
     }
 
@@ -721,6 +787,7 @@ public class MainActivity extends BaseActivity {
             try{
                 value = teachingTermJSON.getJSONArray("value").getJSONObject(0);
             }catch (JSONException e){
+                e.printStackTrace();
                 value = teachingTermJSON;
             }
             final String now_time = df.format(new Date());
@@ -831,7 +898,22 @@ public class MainActivity extends BaseActivity {
     }
 
     private boolean isLocalInformationAvailable(){
-        return (sp.contains("CurrentUserInfoJSON") && sp.contains("ScoreJSON") && sp.contains("CourseJSON") && sp.contains("ScoreStatisticsJSON") && sp.contains("StudentJSON") && sp.contains("CourseTypeJSON") && sp.contains("CourseSelectTypeJSON") && sp.contains("TermJSON")  && sp.contains("TeachingTermJSON"));
+        return (
+                sp.contains("CurrentUserInfoJSON") && sp.contains("ScoreJSON") &&
+                sp.contains("CourseJSON") && sp.contains("ScoreStatisticsJSON") &&
+                sp.contains("StudentJSON") && sp.contains("CourseTypeJSON") &&
+                sp.contains("CourseSelectTypeJSON") && sp.contains("TermJSON")  &&
+                sp.contains("TeachingTermJSON")
+        );
+    }
+
+    private boolean isLocalScoreInfAvailable(){
+        return (
+                sp.contains("CurrentUserInfoJSON") && sp.contains("ScoreJSON") &&
+                sp.contains("ScoreStatisticsJSON") && sp.contains("StudentJSON") &&
+                sp.contains("CourseTypeJSON") && sp.contains("CourseSelectTypeJSON") &&
+                sp.contains("TeachingTermJSON")
+        );
     }
 
     private List<Map<String, Object>> getCourseListNotice(String str){
@@ -901,11 +983,11 @@ public class MainActivity extends BaseActivity {
             else {
                 Log.e("MainActivity", "Load Course ERROR!");
 //                AlertCenter.showErrorAlert(MainActivity.this, "课程加载错误！");
-                AlertCenter.showErrorAlertWithReportButton(MainActivity.this, "课程加载错误！", CourseJSONTransfer.getExceptionList(), UIMS.getUser());
+//                AlertCenter.showErrorAlertWithReportButton(MainActivity.this, "课程加载错误！", CourseJSONTransfer.getExceptionList(), UIMS.getUser());
                 map = new HashMap<>();
                 map.put("index", "");
-                map.put("title", "课程加载错误");
-                map.put("context1", "请联系开发者，帮助您解决遇到的问题");
+                map.put("title", "暂无课程信息\n请点击\"更新信息\"登录并刷新本地数据.");
+                map.put("context1", "");
                 dataList.add(map);
                 return dataList;
             }
@@ -994,7 +1076,7 @@ public class MainActivity extends BaseActivity {
                         try {
                             weekOddEven = timeBlock.getString("weekOddEven");
                         } catch (Exception e) {
-//                    e.printStackTrace();
+                            e.printStackTrace();
                         }
 
                         switch (weekOddEven.toUpperCase()) {
@@ -1096,7 +1178,7 @@ public class MainActivity extends BaseActivity {
         try {
             value = teachingTermJSON.getJSONArray("value").getJSONObject(0);
         }catch (Exception e){
-//            e.printStackTrace();
+            e.printStackTrace();
             Log.w("MainActivity", "Using teaching term information from com.lu.mydemo.CJCX.");
             value = teachingTermJSON;
         }
