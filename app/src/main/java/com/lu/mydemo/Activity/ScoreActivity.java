@@ -115,6 +115,8 @@ public class ScoreActivity extends BaseActivity
 
     private static boolean reloadData = false;
 
+    private boolean isScoreStatisticsLayoutShowing;
+
     public static Context context;
 
     public PopupWindow mPopUpWindow;
@@ -160,10 +162,10 @@ public class ScoreActivity extends BaseActivity
             @Override
             public void onStateChanged(AppBarLayout appBarLayout, State state) {
                 Log.d("STATE", state.name());
-                if( state == State.EXPANDED ) {
+                if( state == State.EXPANDED && isScoreStatisticsLayoutShowing) {
                     //展开状态
                     scoreStatisticsLayout.setVisibility(View.VISIBLE);
-                }else if(state == State.COLLAPSED){
+                }else if(state == State.COLLAPSED && isScoreStatisticsLayoutShowing){
                     //折叠状态
                     scoreStatisticsLayout.setVisibility(View.INVISIBLE);
                 }else {
@@ -215,10 +217,12 @@ public class ScoreActivity extends BaseActivity
             @Override
             public void onClick(View v) {
                 if(scoreStatisticsLayout.getVisibility() == View.VISIBLE){
+                    isScoreStatisticsLayoutShowing = false;
                     scoreStatisticsLayout.setVisibility(View.GONE);
                     toolBar.setRightIcon(getDrawable(R.drawable.ic_keyboard_arrow_down_white_24dp));
                 }
                 else{
+                    isScoreStatisticsLayoutShowing = true;
                     scoreStatisticsLayout.setVisibility(View.VISIBLE);
                     toolBar.setRightIcon(getDrawable(R.drawable.ic_keyboard_arrow_up_white_24dp));
                 }

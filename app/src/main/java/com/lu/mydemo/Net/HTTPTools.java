@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
@@ -19,9 +20,11 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+import kotlin.Pair;
 import okhttp3.Cookie;
 import okhttp3.CookieJar;
 import okhttp3.FormBody;
+import okhttp3.Headers;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -234,9 +237,18 @@ public class HTTPTools {
                 entityStringBuilder.append(line).append("\n");
             }
             if(output) {
-                System.out.println("------Response Body------");
+                System.out.println("------Response Header------");
+                Headers headers = response.headers();
+                headers.forEach(new Consumer<Pair<? extends String, ? extends String>>() {
+                    @Override
+                    public void accept(Pair<? extends String, ? extends String> pair) {
+                        System.out.println(pair.component1() + "\t:\t" + pair.component2());
+                    }
+                });
+                System.out.println("---------------------------");
+                System.out.println("-------Response Body-------");
                 System.out.println(entityStringBuilder);
-                System.out.println("-------------------------");
+                System.out.println("---------------------------");
             }
             return entityStringBuilder.toString();
         }

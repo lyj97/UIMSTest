@@ -98,7 +98,7 @@ public class UIMS {
 //            builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
             Request request = new Request.Builder()
                     .url(Address.hostAddress + "/ntms/")
-                    .header("User-Agent", "Mozilla/5.0 (Windows NT 9.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36")
+                    .header("User-Agent", UIMSStaticRes.UserAgentStr)
                     .build();
 //                    Log.i("okhttp_request", request.toString());
             Log.i("OKHttp_Request", String.format("Sending request %s %n%s", request.url(), request.headers()));
@@ -123,14 +123,14 @@ public class UIMS {
     public boolean login(){//登录
         try {
             FormBody formBody = new FormBody.Builder()
-                    .add("j_username", user)
-                    .add("j_password", GetMD5.getMD5Str("UIMS" + user + pass))
-                    .add("mousePath", "YGQABYCQDLYEgDaZHwDqZJgD8aLwENbNwEdbPQEubQwE/bRgFQbSgFhbTgFxbUgGBbWQGSbWwGjbYgGybZgHEbbAHWbcAHlbdgH2bfQIIbgQIXbiAIpbjwI5blQJJbmwJabpAJsbqgJ8brQKMbtQKdbugKtbwAK/bxwLPbywLgb0QLwb1gMAa2gMSa4QMiZ6AMybYAOW")
+                    .add("username", user)
+                    .add("password", GetMD5.getMD5Str("UIMS" + user + pass))
+                    .add("mousePath", UIMSStaticRes.MouthPathStr)
                     .build();
 
             Request request = new Request.Builder()
                     .url(Address.hostAddress + "/ntms/j_spring_security_check")
-                    .header("User-Agent", "Mozilla/5.0 (Windows NT 9.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36")
+                    .header("User-Agent", UIMSStaticRes.UserAgentStr)
                     .header("Cookie", cookie1)
                     .header("Referer", Address.hostAddress + "/ntms/userLogin.jsp?reason=nologin")
                     .post(formBody)
@@ -187,7 +187,7 @@ public class UIMS {
                     .header("Connection", "keep-alive")
                     .header("Origin", Address.hostAddress)
                     .header("Content-Type", "application/x-www-form-urlencoded")
-                    .header("User-Agent", "Mozilla/5.0 (Windows NT 9.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36")
+                    .header("User-Agent", UIMSStaticRes.UserAgentStr)
                     .header("Cookie", cookie3)
                     .post(formBody)
                     .build();
@@ -256,7 +256,7 @@ public class UIMS {
 
             Request request = new Request.Builder()
                     .url(Address.hostAddress + "/ntms/service/res.do")
-                    .header("User-Agent", "Mozilla/5.0 (Windows NT 9.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36")
+                    .header("User-Agent", UIMSStaticRes.UserAgentStr)
                     .header("Cookie", cookie3)
                     .header("Host", Address.host)
                     .header("Origin", Address.hostAddress)
@@ -339,7 +339,7 @@ public class UIMS {
 
             Request request = new Request.Builder()
                     .url(Address.hostAddress + "/ntms/service/res.do")
-                    .header("User-Agent", "Mozilla/5.0 (Windows NT 9.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36")
+                    .header("User-Agent", UIMSStaticRes.UserAgentStr)
                     .header("Cookie", cookie3)
                     .header("Host", Address.host)
                     .header("Origin", Address.hostAddress)
@@ -395,7 +395,7 @@ public class UIMS {
 
             Request request = new Request.Builder()
                     .url(Address.hostAddress + "/ntms/service/res.do")
-                    .header("User-Agent", "Mozilla/5.0 (Windows NT 9.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36")
+                    .header("User-Agent", UIMSStaticRes.UserAgentStr)
                     .header("Cookie", cookie3)
                     .header("Host", Address.host)
                     .header("Origin", Address.hostAddress)
@@ -451,7 +451,7 @@ public class UIMS {
 
             Request request = new Request.Builder()
                     .url(Address.hostAddress + "/ntms/service/res.do")
-                    .header("User-Agent", "Mozilla/5.0 (Windows NT 9.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36")
+                    .header("User-Agent", UIMSStaticRes.UserAgentStr)
                     .header("Cookie", cookie3)
                     .header("Host", Address.host)
                     .header("Origin", Address.hostAddress)
@@ -500,7 +500,7 @@ public class UIMS {
 
             Request request = new Request.Builder()
                     .url(Address.hostAddress + "/ntms/service/res.do")
-                    .header("User-Agent", "Mozilla/5.0 (Windows NT 9.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36")
+                    .header("User-Agent", UIMSStaticRes.UserAgentStr)
                     .header("Cookie", cookie3)
                     .header("Host", Address.host)
                     .header("Origin", Address.hostAddress)
@@ -548,7 +548,7 @@ public class UIMS {
 
             Request request = new Request.Builder()
                     .url(Address.hostAddress + "/ntms/service/res.do")
-                    .header("User-Agent", "Mozilla/5.0 (Windows NT 9.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36")
+                    .header("User-Agent", UIMSStaticRes.UserAgentStr)
                     .header("Cookie", cookie3)
                     .header("Host", Address.host)
                     .header("Origin", Address.hostAddress)
@@ -618,7 +618,7 @@ public class UIMS {
 
             Request request = new Request.Builder()
                     .url(Address.hostAddress + "/ntms/service/res.do")
-                    .header("User-Agent", "Mozilla/5.0 (Windows NT 9.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36")
+                    .header("User-Agent", UIMSStaticRes.UserAgentStr)
                     .header("Cookie", cookie3)
                     .header("Host", Address.host)
                     .header("Origin", Address.hostAddress)
@@ -661,7 +661,7 @@ public class UIMS {
 
             Request request = new Request.Builder()
                     .url(Address.hostAddress + "/ntms/service/res.do")
-                    .header("User-Agent", "Mozilla/5.0 (Windows NT 9.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36")
+                    .header("User-Agent", UIMSStaticRes.UserAgentStr)
                     .header("Cookie", cookie3)
                     .header("Host", Address.host)
                     .header("Origin", Address.hostAddress)
@@ -728,7 +728,7 @@ public class UIMS {
 
             Request request = new Request.Builder()
                     .url(Address.hostAddress + "/ntms/score/course-score-stat.do")
-                    .header("User-Agent", "Mozilla/5.0 (Windows NT 9.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36")
+                    .header("User-Agent", UIMSStaticRes.UserAgentStr)
                     .header("Cookie", cookie3)
                     .header("Host", Address.host)
                     .header("Origin", Address.hostAddress)
@@ -783,7 +783,7 @@ public class UIMS {
 
             Request request = new Request.Builder()
                     .url(Address.hostAddress + "/ntms/score/course-score-stat.do")
-                    .header("User-Agent", "Mozilla/5.0 (Windows NT 9.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36")
+                    .header("User-Agent", UIMSStaticRes.UserAgentStr)
                     .header("Cookie", cookie3)
                     .header("Host", Address.host)
                     .header("Origin", Address.hostAddress)
@@ -891,7 +891,7 @@ public class UIMS {
 
             Request request = new Request.Builder()
                     .url(Address.hostAddress + "/ntms/service/res.do")
-                    .header("User-Agent", "Mozilla/5.0 (Windows NT 9.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36")
+                    .header("User-Agent", UIMSStaticRes.UserAgentStr)
                     .header("Cookie", cookie3)
                     .header("Host", Address.host)
                     .header("Origin", Address.hostAddress)
@@ -989,7 +989,7 @@ public class UIMS {
 
             Request request = new Request.Builder()
                     .url(Address.hostAddress + "/ntms/service/res.do")
-                    .header("User-Agent", "Mozilla/5.0 (Windows NT 9.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36")
+                    .header("User-Agent", UIMSStaticRes.UserAgentStr)
                     .header("Cookie", cookie3)
                     .header("Host", Address.host)
                     .header("Pragma", "no-cache")
@@ -1101,7 +1101,7 @@ public class UIMS {
 
             Request request = new Request.Builder()
                     .url(Address.hostAddress + "/ntms/action/eval/fetch-eval-item.do")
-                    .header("User-Agent", "Mozilla/5.0 (Windows NT 9.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36")
+                    .header("User-Agent", UIMSStaticRes.UserAgentStr)
                     .header("Cookie", cookie3)
                     .header("Host", Address.host)
                     .header("Pragma", "no-cache")
@@ -1288,7 +1288,7 @@ public class UIMS {
 
             Request request = new Request.Builder()
                     .url(Address.hostAddress + "/ntms/action/eval/eval-with-answer.do")
-                    .header("User-Agent", "Mozilla/5.0 (Windows NT 9.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36")
+                    .header("User-Agent", UIMSStaticRes.UserAgentStr)
                     .header("Cookie", cookie3)
                     .header("Host", Address.host)
                     .header("Pragma", "no-cache")

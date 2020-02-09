@@ -49,7 +49,6 @@ public class UIMS_New {
     private static MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
     private static String mVPNBaseUrl = "https://vpns.jlu.edu.cn/https/77726476706e69737468656265737421e5fe4c8f693a6445300d8db9d6562d";
-    private static String mUserAgentStr = "Mozilla/5.0 (Windows NT 9.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36";
 
     private static List<Exception> mExceptionList = new ArrayList<>();
 
@@ -77,7 +76,7 @@ public class UIMS_New {
         String headerKey = "Set-Cookie";
 
         HashMap<String, String> mHeaderList = new HashMap<>();
-        mHeaderList.put("User-Agent", mUserAgentStr);
+        mHeaderList.put("User-Agent", UIMSStaticRes.UserAgentStr);
         if(mUseStudentVPN) {
             mHeaderList.put("Cookie", mVPNClient.getCookie());
         }
@@ -118,7 +117,7 @@ public class UIMS_New {
 
         HashMap<String, String> mHeaderList = new HashMap<>();
         mHeaderList.put("Content-Type", "application/x-www-form-urlencoded");
-        mHeaderList.put("User-Agent", mUserAgentStr);
+        mHeaderList.put("User-Agent", UIMSStaticRes.UserAgentStr);
         if(mUseStudentVPN) {
             mHeaderList.put("Cookie", mVPNClient.getCookie());
         }
@@ -127,11 +126,10 @@ public class UIMS_New {
         }
         List<Map.Entry<String, String>> headers = new ArrayList<>(mHeaderList.entrySet());
 
-        String mouthPathStr = "YGQABYCQDLYEgDaZHwDqZJgD8aLwENbNwEdbPQEubQwE/bRgFQbSgFhbTgFxbUgGBbWQGSbWwGjbYgGybZgHEbbAHWbcAHlbdgH2bfQIIbgQIXbiAIpbjwI5blQJJbmwJabpAJsbqgJ8brQKMbtQKdbugKtbwAK/bxwLPbywLgb0QLwb1gMAa2gMSa4QMiZ6AMybYAOW";
         FormBody formBody = new FormBody.Builder()
-                .add("j_username", mStudentId)
-                .add("j_password", GetMD5.getMD5Str("UIMS" + mStudentId + mPassword))
-                .add("mousePath", mouthPathStr)
+                .add("username", mStudentId)
+                .add("password", GetMD5.getMD5Str("UIMS" + mStudentId + mPassword))
+                .add("mousePath", UIMSStaticRes.MouthPathStr)
                 .build();
 
         Response response = HTTPTools.postResponse(url, headers, formBody);
@@ -140,7 +138,6 @@ public class UIMS_New {
             return false;
         }
 
-        HTTPTools.getOrOrOutResponse(response, true);
         if(mUseStudentVPN){
             return true;
         }
@@ -172,10 +169,10 @@ public class UIMS_New {
 
     public boolean getCurrentUserInfo(){
         String url = Address.hostAddress + "/ntms/action/getCurrentUserInfo.do";
-        if(mUseStudentVPN) url = mVPNBaseUrl + "/ntms/action/getCurrentUserInfo.do";
+        if(mUseStudentVPN) url = mVPNBaseUrl + "/ntms/action/getCurrentUserInfo.do?vpn-12-o2-uims.jlu.edu.cn";
 
         HashMap<String, String> mHeaderList = new HashMap<>();
-        mHeaderList.put("User-Agent", mUserAgentStr);
+        mHeaderList.put("User-Agent", UIMSStaticRes.UserAgentStr);
         if(!mUseStudentVPN) {
             mHeaderList.put("Cookie", cookie3);
         }
@@ -192,8 +189,8 @@ public class UIMS_New {
             return false;
         }
 
+        String responseStr = HTTPTools.getOrOrOutResponse(response, true);
         if(mUseStudentVPN){
-            String responseStr = HTTPTools.getOrOrOutResponse(response, true);
             JSONObject responseJSON;
             try{
                 responseJSON = JSONObject.fromObject(responseStr);
@@ -235,7 +232,7 @@ public class UIMS_New {
                 cookie3 = "loginPage=userLogin.jsp; alu=" + mStudentId + "; pwdStrength=1; JSESSIONID=" + jSessionID2;
                 cookie4 = "loginPage=userLogin.jsp; alu=" + mStudentId + "; JSESSIONID=" + jSessionID2;
             } else {
-                HTTPTools.getOrOrOutResponse(response, true);
+                System.out.println("[Response]:\t" + responseStr);
                 return false;
             }
             return !TextUtils.isEmpty(jSessionID2);
@@ -244,10 +241,10 @@ public class UIMS_New {
 
     public boolean getTeachingTerm(){
         String url = Address.hostAddress + "/ntms/service/res.do";
-        if(mUseStudentVPN) url = mVPNBaseUrl + "/ntms/service/res.do";
+        if(mUseStudentVPN) url = mVPNBaseUrl + "/ntms/service/res.do?vpn-12-o2-uims.jlu.edu.cn";
 
         HashMap<String, String> mHeaderList = new HashMap<>();
-        mHeaderList.put("User-Agent", mUserAgentStr);
+        mHeaderList.put("User-Agent", UIMSStaticRes.UserAgentStr);
         if(!mUseStudentVPN) {
             mHeaderList.put("Cookie", cookie3);
         }
@@ -257,7 +254,7 @@ public class UIMS_New {
         List<Map.Entry<String, String>> headers = new ArrayList<>(mHeaderList.entrySet());
 
         JSONObject params = new JSONObject();
-        params.put("termId", teachingTerm);//TODO TermId
+        params.put("termId", teachingTerm);
 
         JSONObject request_json = new JSONObject();
         request_json.put("tag","search@teachingTerm");
@@ -290,10 +287,10 @@ public class UIMS_New {
 
     public boolean getClassStudentCount(){
         String url = Address.hostAddress + "/ntms/service/res.do";
-        if(mUseStudentVPN) url = mVPNBaseUrl + "/ntms/service/res.do";
+        if(mUseStudentVPN) url = mVPNBaseUrl + "/ntms/service/res.do?vpn-12-o2-uims.jlu.edu.cn";
 
         HashMap<String, String> mHeaderList = new HashMap<>();
-        mHeaderList.put("User-Agent", mUserAgentStr);
+        mHeaderList.put("User-Agent", UIMSStaticRes.UserAgentStr);
         if(!mUseStudentVPN) {
             mHeaderList.put("Cookie", cookie3);
         }
@@ -336,6 +333,7 @@ public class UIMS_New {
         }
         catch (Exception e){
             mExceptionList.add(e);
+            System.out.println("[Response]:\t" + responseStr);
             e.printStackTrace();
             return false;
         }
@@ -344,10 +342,10 @@ public class UIMS_New {
 
     public boolean getCourseSelectType(){
         String url = Address.hostAddress + "/ntms/service/res.do";
-        if(mUseStudentVPN) url = mVPNBaseUrl + "/ntms/service/res.do";
+        if(mUseStudentVPN) url = mVPNBaseUrl + "/ntms/service/res.do?vpn-12-o2-uims.jlu.edu.cn";
 
         HashMap<String, String> mHeaderList = new HashMap<>();
-        mHeaderList.put("User-Agent", mUserAgentStr);
+        mHeaderList.put("User-Agent", UIMSStaticRes.UserAgentStr);
         if(!mUseStudentVPN) {
             mHeaderList.put("Cookie", cookie3);
         }
@@ -390,10 +388,10 @@ public class UIMS_New {
 
     public boolean getRecentScore(){
         String url = Address.hostAddress + "/ntms/service/res.do";
-        if(mUseStudentVPN) url = mVPNBaseUrl + "/ntms/service/res.do";
+        if(mUseStudentVPN) url = mVPNBaseUrl + "/ntms/service/res.do?vpn-12-o2-uims.jlu.edu.cn";
 
         HashMap<String, String> mHeaderList = new HashMap<>();
-        mHeaderList.put("User-Agent", mUserAgentStr);
+        mHeaderList.put("User-Agent", UIMSStaticRes.UserAgentStr);
         if(!mUseStudentVPN) {
             mHeaderList.put("Cookie", cookie3);
         }
@@ -436,10 +434,10 @@ public class UIMS_New {
 
     public boolean getScoreStatistics(){
         String url = Address.hostAddress + "/ntms/service/res.do";
-        if(mUseStudentVPN) url = mVPNBaseUrl + "/ntms/service/res.do";
+        if(mUseStudentVPN) url = mVPNBaseUrl + "/ntms/service/res.do?vpn-12-o2-uims.jlu.edu.cn";
 
         HashMap<String, String> mHeaderList = new HashMap<>();
-        mHeaderList.put("User-Agent", mUserAgentStr);
+        mHeaderList.put("User-Agent", UIMSStaticRes.UserAgentStr);
         if(!mUseStudentVPN) {
             mHeaderList.put("Cookie", cookie3);
         }
@@ -482,10 +480,10 @@ public class UIMS_New {
 
     public JSONObject getScorePercent(String asID){
         String url = Address.hostAddress + "/ntms/score/course-score-stat.do";
-        if(mUseStudentVPN) url = mVPNBaseUrl + "/ntms/score/course-score-stat.do";
+        if(mUseStudentVPN) url = mVPNBaseUrl + "/ntms/score/course-score-stat.do?vpn-12-o2-uims.jlu.edu.cn";
 
         HashMap<String, String> mHeaderList = new HashMap<>();
-        mHeaderList.put("User-Agent", mUserAgentStr);
+        mHeaderList.put("User-Agent", UIMSStaticRes.UserAgentStr);
         if(!mUseStudentVPN) {
             mHeaderList.put("Cookie", cookie3);
         }

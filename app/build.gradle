@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 def versionMajor = 1
 def versionMinor = 2
-def versionPatch = 18
+def versionPatch = 19
 
 def isBeta = false
 
@@ -52,9 +52,9 @@ dependencies {
     implementation group: 'commons-beanutils', name: 'commons-beanutils', version: '20030211.134440'
     //implementation 'net.sf.json-lib:json-lib:2.4:jdk15'
     //把commons-beanutils-1.8.0.jar中的org/apache/commons/collections目录和目录下的class直接删掉
-    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'com.google.android.material:material:1.1.0'
     implementation 'org.jsoup:jsoup:1.12.1'
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'

@@ -48,4 +48,7 @@
     <string name="teacher_img_desc">教师</string>
     <string name="place_img_desc">上课地点</string>
 
+    <!--MainActivity-->
+    <string name="close">关 闭</string>
+
 </resources>

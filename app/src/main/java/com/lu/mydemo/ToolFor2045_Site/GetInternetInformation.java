@@ -1,5 +1,7 @@
 package com.lu.mydemo.ToolFor2045_Site;
 
+import com.lu.mydemo.Config.Version;
+import com.lu.mydemo.UIMS.UIMS;
 import com.lu.mydemo.Utils.Common.Address;
 
 import net.sf.json.JSONObject;
@@ -284,6 +286,36 @@ public class GetInternetInformation {
                     .build();
             Request request = new Request.Builder()
                     .url(Address.myHostAddress_HUAWEI + "/api/LinkJSCode/getCode")
+                    .post(formBody)
+                    .build();
+            Response response = httpClient.newCall(request).execute();
+            BufferedReader bufferedReader = new BufferedReader(
+                    new InputStreamReader(Objects.requireNonNull(response.body()).byteStream(), StandardCharsets.UTF_8), 8 * 1024);
+            StringBuilder entityStringBuilder = new StringBuilder();
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                entityStringBuilder.append(line).append("\n");
+            }
+            return JSONObject.fromObject(entityStringBuilder.toString());
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * 获取服务器下发的Config数据
+     * @return JSCodeJSON
+     */
+    public JSONObject getRemoteConfig(){
+        try {
+            FormBody formBody = new FormBody.Builder()
+                    .add("user", UIMS.getUser() == null ? "" : UIMS.getUser())
+                    .add("version", String.valueOf(Version.getVersionCode()))
+                    .build();
+            Request request = new Request.Builder()
+                    .url(Address.myHostAddress_HUAWEI + "/api/config/getConfigJSON")
                     .post(formBody)
                     .build();
             Response response = httpClient.newCall(request).execute();

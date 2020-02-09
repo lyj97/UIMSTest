@@ -14,6 +14,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -53,6 +55,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
+import java.util.function.BiConsumer;
 
 import com.lu.mydemo.CJCX.CJCX;
 import com.lu.mydemo.Config.ColorManager;
@@ -77,8 +81,9 @@ public class MainActivity extends BaseActivity {
     private TextView timeInformation;
     private TextView termInformation;
     private ListView courseList;
+    private ListView mMessageListLv;
 
-    private Button load_internet_inf_button;
+    private Button webPagesButton;
     private Button get_save_button;
     private Button getNoneScoreCourseButton;
     private Button getNewsButton;
@@ -89,7 +94,7 @@ public class MainActivity extends BaseActivity {
 
     private LinearLayout to_setting_layout;
 
-    private TextView web_pages_text_view;
+    private TextView load_internet_inf_tv;
     private TextView goToTestTv;
 
     private ScrollView login_main_view;
@@ -143,9 +148,10 @@ public class MainActivity extends BaseActivity {
         timeInformation = findViewById(R.id.time_information);
         termInformation = findViewById(R.id.term_information);
         courseList = findViewById(R.id.course_list);
+        mMessageListLv = findViewById(R.id.message_list);
         UIMSTest = findViewById(R.id.UIMSTest);
         activity_login = findViewById(R.id.activity_login);
-        load_internet_inf_button = findViewById(R.id.load_internet_information_button);
+        load_internet_inf_tv = findViewById(R.id.load_internet_information_tv);
         get_save_button = findViewById(R.id.get_saved_button);
         getNoneScoreCourseButton = findViewById(R.id.load_none_score_course_information_button);
         getNewsButton = findViewById(R.id.get_news_button);
@@ -157,13 +163,9 @@ public class MainActivity extends BaseActivity {
         login_main_view = findViewById(R.id.login_main_view);
         linearLayoutView_down_text = findViewById(R.id.LinearLayoutView_down_text);
 
-        web_pages_text_view = findViewById(R.id.login_web_pages);
-        web_pages_text_view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, WebPagesActivity.class));
-            }
-        });
+        webPagesButton = findViewById(R.id.web_pages_button);
+        webPagesButton.setVisibility(View.GONE);
+
         //测试功能
         goToTestTv = findViewById(R.id.login_test);
         goToTestTv.setOnClickListener(new View.OnClickListener() {
@@ -237,7 +239,7 @@ public class MainActivity extends BaseActivity {
 
 //        if(isLocalInformationAvailable()) loadLocalInformation(false);
 
-        load_internet_inf_button.setOnClickListener(new View.OnClickListener() {
+        load_internet_inf_tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -264,16 +266,6 @@ public class MainActivity extends BaseActivity {
 //                ScoreActivity.context = getApplicationContext();
                 Intent intent = new Intent(MainActivity.this, ScoreActivity.class);
                 startActivity(intent);
-
-//                if(isLocalInformationAvailable()){
-////                    showLoading("数据转换中，请稍候...");
-//                    loadLocalInformation(true);
-//                }
-//                else{
-//                    showAlert("还没有已经保存的信息哦，点击\"更新信息\"再试试吧(*^_^*).");
-//                    get_save_button.setEnabled(true);
-//                    get_save_button.setText("成绩查询");
-//                }
             }
         });
 
@@ -513,6 +505,28 @@ public class MainActivity extends BaseActivity {
         sp.edit().putBoolean("isMainShow", isMainShow).apply();
     }
 
+    public void setWebLink(final String link){
+        if(TextUtils.isEmpty(link)){
+            return;
+        }
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                webPagesButton.setVisibility(View.VISIBLE);
+                webPagesButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(MainActivity.this, WebViewActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putString("link", link);
+                        intent.putExtra("bundle", bundle);
+                        startActivity(intent);
+                    }
+                });
+            }
+        });
+    }
+
     public void loginSuccess() {
         sp.edit().putString("CurrentUserInfoJSON", UIMS.getCurrentUserInfoJSON().toString()).apply();
         sp.edit().putString("TermJSON", UIMS.getTermJSON().toString()).apply();
@@ -746,7 +760,7 @@ public class MainActivity extends BaseActivity {
                 @Override
                 public void run() {
                     Log.i("Login", "CourseListSize:\t" + todayCourseList.size());
-                    courseList.setAdapter(new noCourseBetterAdapter(context, todayCourseList, R.layout.list_item_today_course, new String[]{"index", "title", "context1"}, new int[]{R.id.get_none_score_course_title_index, R.id.get_none_score_course_title, R.id.get_none_score_course_context1}));
+                    courseList.setAdapter(new NoCourseBetterAdapter(context, todayCourseList, R.layout.list_item_today_course, new String[]{"index", "title", "context1"}, new int[]{R.id.get_none_score_course_title_index, R.id.get_none_score_course_title, R.id.get_none_score_course_context1}));
                     if(!listHaveHeadFoot) {
                         courseList.addHeaderView(new ViewStub(context));
                         courseList.addFooterView(new ViewStub(context));
@@ -759,7 +773,7 @@ public class MainActivity extends BaseActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    courseList.setAdapter(new noCourseBetterAdapter(context, getCourseListNotice("暂无课程信息\n请点击\"更新信息\"登录并刷新本地数据."), R.layout.list_item_today_course, new String[]{"index", "title", "context1"}, new int[]{R.id.get_none_score_course_title_index, R.id.get_none_score_course_title, R.id.get_none_score_course_context1}));
+                    courseList.setAdapter(new NoCourseBetterAdapter(context, getCourseListNotice("暂无课程信息\n请点击\"更新信息\"登录并刷新本地数据."), R.layout.list_item_today_course, new String[]{"index", "title", "context1"}, new int[]{R.id.get_none_score_course_title_index, R.id.get_none_score_course_title, R.id.get_none_score_course_context1}));
                     courseList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -887,9 +901,7 @@ public class MainActivity extends BaseActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            load_internet_inf_button.setText("更新信息");
-                            load_internet_inf_button.setEnabled(true);
-                            load_internet_inf_button.setBackground(getResources().getDrawable(R.drawable.button_internet_background));
+                            load_internet_inf_tv.setText("更新信息");
                         }
                     });
                 }
@@ -1346,34 +1358,66 @@ public class MainActivity extends BaseActivity {
     }
 
     public void getInternetInformation(){
-//        Log.i("GetInternetInformation", "GetInternetInformation");
         final GetInternetInformation getInf = new GetInternetInformation();
         try {
             MyThreadController.commit(new Runnable() {
                 @Override
                 public void run() {
-                    final JSONObject object = getInf.getVersionInformation();
-
-                    if (object == null) {
-//                        Log.i("GetInternetInformation", "Object is NULL.");
-                        return;
-                    }
-
-                    try {
-                        int internetVersion = object.getInt("VersionCode");
-                        Log.i("Version", "" + internetVersion);
-//                        Log.e("MainActivity", "Ignored internet information version check for TEST!");
-                        if(!Version.isIsBeta() && internetVersion <= Version.getVersionCode()) return;//不是测试版 不提示同版本更新
-                        else if(internetVersion < Version.getVersionCode()) return;//测试版 提示同版本正式版更新
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                InternetInformationPopupWindow informationPopWindow = new InternetInformationPopupWindow(MainActivity.this, object, findViewById(R.id.activity_login).getHeight(), findViewById(R.id.activity_login).getWidth());
-                                informationPopWindow.showAtLocation(MainActivity.this.findViewById(R.id.activity_login), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0); //设置layout在PopupWindow中显示的位置
+                    final JSONObject responseJSON = getInf.getRemoteConfig();
+                    if(responseJSON != null){
+                        try{
+                            final JSONObject configJSON = responseJSON.getJSONObject("data");
+                            String webLink = configJSON.getString("webLink");
+                            setWebLink(webLink);
+                            JSONArray messageArray = configJSON.getJSONArray("message");
+                            List<Map<String, Object>> messageList = new ArrayList<>();
+                            for(final Object message : messageArray){
+                                final Map<String, Object> messageItem = new HashMap<>();
+                                JSONObject messageItemJSON = (JSONObject) message;
+                                messageItemJSON.forEach(new BiConsumer() {
+                                    @Override
+                                    public void accept(Object o, Object o2) {
+                                        messageItem.put((String) o, o2);
+                                    }
+                                });
+                                messageList.add(messageItem);
                             }
-                        });
-                    } catch (Exception e){
-                        e.printStackTrace();
+                            int titleLine = 2;
+                            int detailLine = 4;
+                            int linkLine = 6;
+                            try{
+                                titleLine = configJSON.getInt("titleLine");
+                                detailLine = configJSON.getInt("detailLine");
+                                linkLine = configJSON.getInt("linkLine");
+                            } catch (Exception e){
+                                e.printStackTrace();
+                            }
+                            initMessageList(messageList, titleLine, detailLine, linkLine);
+                        }
+                        catch (Exception e){
+                            Log.e("MainActivity", "ResponseJSON:\t" + responseJSON);
+                            e.printStackTrace();
+                        }
+                    }
+                    final JSONObject object = getInf.getVersionInformation();
+                    if (object != null) {
+                        try {
+                            int internetVersion = object.getInt("VersionCode");
+                            Log.i("Version", "" + internetVersion);
+                            if (!Version.isIsBeta() && internetVersion <= Version.getVersionCode())
+                                return;//不是测试版 不提示同版本更新
+                            else if (internetVersion < Version.getVersionCode())
+                                return;//测试版 提示同版本正式版更新
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    InternetInformationPopupWindow informationPopWindow = new InternetInformationPopupWindow(MainActivity.this, object, findViewById(R.id.activity_login).getHeight(), findViewById(R.id.activity_login).getWidth());
+                                    informationPopWindow.showAtLocation(MainActivity.this.findViewById(R.id.activity_login), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0); //设置layout在PopupWindow中显示的位置
+                                }
+                            });
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             });
@@ -1381,8 +1425,19 @@ public class MainActivity extends BaseActivity {
             e.printStackTrace();
         } finally {
             isInternetInformationShowed = true;
-//            sp.edit().putBoolean("isInternetInformationShowed", true).apply();
         }
+    }
+
+    private void initMessageList(final List<Map<String, Object>> list, final int titleMaxLine, final int detailMaxLine, final int linkMaxLine){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mMessageListLv.setAdapter(new MessageListAdapter(context, list, R.layout.list_item_message,
+                        new String[]{"title", "detail", "linkText"},
+                        new int[]{R.id.list_item_message_detail_title, R.id.list_item_message_detail_context, R.id.list_item_message_link},
+                        titleMaxLine, detailMaxLine, linkMaxLine));
+            }
+        });
     }
 
     private void changeTheme(){
@@ -1401,7 +1456,7 @@ public class MainActivity extends BaseActivity {
         getNewsButton.setBackground(ColorManager.getLocalInformationButtonBackground());
         get_save_button.setBackground(ColorManager.getLocalInformationButtonBackground());
         getNoneScoreCourseButton.setBackground(ColorManager.getLocalInformationButtonBackground());
-        load_internet_inf_button.setBackground(ColorManager.getInternetInformationButtonBackground_full());
+        webPagesButton.setBackground(ColorManager.getLocalInformationButtonBackground());
     }
 
     public static void loadColorConfig(){
@@ -1688,10 +1743,10 @@ public class MainActivity extends BaseActivity {
         sensorManagerHelper.setOnShakeListener(onShakeListener);
     }
 
-    class noCourseBetterAdapter extends SimpleAdapter {
+    class NoCourseBetterAdapter extends SimpleAdapter {
         List<? extends Map<String, ?>> mdata;
 
-        public noCourseBetterAdapter(Context context, List<? extends Map<String, ?>> data, int resource, String[] from, int[] to) {
+        public NoCourseBetterAdapter(Context context, List<? extends Map<String, ?>> data, int resource, String[] from, int[] to) {
             super(context, data, resource, from, to);
             this.mdata = data;
         }
@@ -1699,10 +1754,8 @@ public class MainActivity extends BaseActivity {
         public View getView(int position, View convertView, ViewGroup parent) {
             if (convertView == null) {
                 convertView = LinearLayout.inflate(getBaseContext(), R.layout.list_item_today_course, null);
-            }//这个TextView是R.layout.list_item里面的，修改这个字体的颜色
-            TextView textView = (TextView) convertView.findViewById(R.id.get_none_score_course_title_index);
-            //获取每次进来时 mData里面存的值  若果相同则变颜色
-            //根据Key值取出装入的数据，然后进行比较
+            }
+            TextView textView = convertView.findViewById(R.id.get_none_score_course_title_index);
             String ss=(String)mdata.get(position).get("index");
 
             if(ss == null || !(ss.length() > 0)) {
@@ -1710,8 +1763,97 @@ public class MainActivity extends BaseActivity {
                 textView.setWidth(0);
             }
 
-            //Log.i("TAG", Integer.toString(position));
-            //Log.i("TAG", (String) mData.get(position).get("text"));
+            return super.getView(position, convertView, parent);
+        }
+    }
+
+    class MessageListAdapter extends SimpleAdapter {
+        List<? extends Map<String, ?>> mData;
+
+        int mTitleMaxLine;
+        int mDetailMaxLine;
+        int mLinkMaxLine;
+
+        public MessageListAdapter(Context context, List<? extends Map<String, ?>> data, int resource, String[] from, int[] to,
+                                  int titleMaxLine, int detailMaxLine, int linkMaxLine) {
+            super(context, data, resource, from, to);
+            this.mData = data;
+
+            mTitleMaxLine = titleMaxLine;
+            mDetailMaxLine = detailMaxLine;
+            mLinkMaxLine = linkMaxLine;
+        }
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            if (convertView == null) {
+                convertView = LinearLayout.inflate(getBaseContext(), R.layout.list_item_message, null);
+            }
+
+            TextView titleTv = convertView.findViewById(R.id.list_item_message_detail_title);
+            TextView detailTv = convertView.findViewById(R.id.list_item_message_detail_context);
+            TextView linkTv = convertView.findViewById(R.id.list_item_message_link);
+
+            titleTv.setMaxLines(mTitleMaxLine);
+            detailTv.setMaxLines(mDetailMaxLine);
+            linkTv.setMaxLines(mLinkMaxLine);
+
+            final String titleStr = (String) mData.get(position).get("title");
+            final String detailStr = (String) mData.get(position).get("detail");
+            final String linkTextStr = (String) mData.get(position).get("linkText");
+            final String linkStr = (String) mData.get(position).get("link");
+            boolean openInApp = false;
+            try{
+                openInApp = (Boolean) Objects.requireNonNull(mData.get(position).get("openInApp"));
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+
+            if(TextUtils.isEmpty(titleStr)){
+                titleTv.setHeight(0);
+            }
+            else {
+                titleTv.setText(titleStr);
+            }
+            if(TextUtils.isEmpty(detailStr)){
+                detailTv.setHeight(0);
+            }
+            else {
+                detailTv.setText(detailStr);
+            }
+            if(TextUtils.isEmpty(linkTextStr) || TextUtils.isEmpty(linkStr)){
+                linkTv.setWidth(0);
+            }
+            else {
+                if(openInApp){
+                    linkTv.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(MainActivity.this, WebViewActivity.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putString("link", linkStr);
+                            intent.putExtra("bundle", bundle);
+                            startActivity(intent);
+                        }
+                    });
+                }
+                else {
+                    linkTv.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            try {
+                                Uri uri = Uri.parse(linkStr);
+                                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                                startActivity(intent);
+                            }
+                            catch (Exception e){
+                                e.printStackTrace();
+                                AlertCenter.showErrorAlertWithReportButton(MainActivity.this, e.getMessage(), e, UIMS.getUser());
+                            }
+                        }
+                    });
+                }
+            }
             return super.getView(position, convertView, parent);
         }
     }

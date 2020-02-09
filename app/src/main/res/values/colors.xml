@@ -16,6 +16,8 @@
     <color name="color_alerter_progress_bar">#FF9800</color>
     <color name="color_alerter_error_background">#D5F13D58</color>
     <color name="color_no_color">#00000000</color>
+    <color name="color_message_detail">#CCFFBD83</color>
+    <color name="color_message_link">#CCFF9E4F</color>
 
     <color name="colorPrimary">#2196F3</color>
     <color name="colorPrimaryDark">#1976D2</color>

@@ -40,6 +40,7 @@ import com.lu.mydemo.Config.ColorManager;
 import com.lu.mydemo.R;
 import com.lu.mydemo.ToolFor2045_Site.GetInternetInformation;
 import com.lu.mydemo.UIMS.UIMS;
+import com.lu.mydemo.Utils.Common.Address;
 import com.lu.mydemo.Utils.Thread.MyThreadController;
 import com.lu.mydemo.View.PopWindow.DownloadFileConfirmPopupWindow;
 
@@ -176,6 +177,9 @@ public class WebViewActivity extends BaseActivity {
 //            webView.loadUrl(link, myHeaders);
 //        }
         else {
+            if(!link.startsWith("http")){
+                link = "http://" + link;
+            }
             webView.loadUrl(link);
         }
 
@@ -291,6 +295,26 @@ public class WebViewActivity extends BaseActivity {
         }
     }
 
+    public void check2045Url(String url){
+        try{
+            Uri uri = Uri.parse(url);
+            String host = uri.getHost();
+            if(host != null && host.contains(Address.myHost)){
+                titleTextView.setVisibility(View.GONE);
+            }
+            else {
+                if(titleTextView.getVisibility() == View.GONE || titleTextView.getVisibility() == View.INVISIBLE){
+                    titleTextView.setVisibility(View.VISIBLE);
+                }
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+            if(titleTextView.getVisibility() == View.GONE || titleTextView.getVisibility() == View.INVISIBLE){
+                titleTextView.setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
     public void setFileName(String fileName){
         this.fileName = fileName;
     }
@@ -395,6 +419,7 @@ public class WebViewActivity extends BaseActivity {
 //            AlertCenter.showLoading(WebViewActivity.this, "加载中...");
             loadingProgressBar.setVisibility(View.VISIBLE);
             checkVPNUrl(url);
+            check2045Url(url);
             if(webView.canGoBack()) closeTextView.setVisibility(View.VISIBLE);
         }
 

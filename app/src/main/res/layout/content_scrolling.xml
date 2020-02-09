@@ -3,29 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_toEndOf="@+id/activity_scrolling_layout_my_toolbar"
+    android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".Activity.ScoreActivity"
     tools:showIn="@layout/activity_scrolling">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+    <com.yanzhenjie.recyclerview.SwipeRecyclerView
+        android:id="@+id/activity_main_recycler_view"
+        android:divider="#00000000"
+        android:dividerHeight="5dp"
         android:padding="3dp"
-        android:orientation="vertical">
-
-        <com.yanzhenjie.recyclerview.SwipeRecyclerView
-            android:id="@+id/activity_main_recycler_view"
-            android:divider="#00000000"
-            android:dividerHeight="5dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/shape_just_with_radius"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            >
-        </com.yanzhenjie.recyclerview.SwipeRecyclerView>
-
-    </LinearLayout>
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/shape_just_with_radius"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        />
 
 </androidx.core.widget.NestedScrollView>
