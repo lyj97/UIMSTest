@@ -19,6 +19,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.lu.mydemo.Config.OptionManager;
 import com.lu.mydemo.Notification.AlertCenter;
 
 import net.sf.json.JSONObject;
@@ -32,6 +33,8 @@ import com.lu.mydemo.R;
 import com.lu.mydemo.ToolFor2045_Site.InformationUploader;
 import com.lu.mydemo.UIMS.UIMS;
 import com.lu.mydemo.Utils.Score.ScoreConfig;
+import com.lu.mydemo.Utils.Score.ScoreInf;
+import com.lu.mydemo.Utils.Thread.MyThreadController;
 import com.lu.mydemo.View.MyView.MyToolBar;
 import com.lu.mydemo.View.PopWindow.SetEmailPopupWindow;
 
@@ -42,17 +45,26 @@ public class SettingActivity extends BaseActivity {
     private ArrayList<String> termList;
     private boolean hasTerm = false;
 
+    private boolean scoreConfigChanged = false;
+
+    private CheckBox check_box_bixiu;
     private CheckBox check_box_xuanxiu;
     private CheckBox check_box_xianxuan;
     private CheckBox check_box_PE;
     private CheckBox check_box_xiaoxuanxiu;
+    private CheckBox check_box_chongxiu;
+    private TextView text_bixiu;
     private TextView text_xuanxiu;
     private TextView text_xianxuan;
     private TextView text_PE;
     private TextView text_xiaoxuanxiu;
+    private TextView text_chongxiu;
 
     private CheckBox check_box_cjcx_enable;
     private TextView text_cjcx_enable;
+
+    private CheckBox check_box_show_not_cur_week_course;
+    private TextView text_show_not_cur_week_course;
 
     private CheckBox check_box_test;
     private TextView text_test;
@@ -71,18 +83,25 @@ public class SettingActivity extends BaseActivity {
 
         spinner = findViewById(R.id.activity_setting_term_spinner);
 
+        check_box_bixiu = findViewById(R.id.activity_setting_score_bixiu_checkbox);
         check_box_xuanxiu = findViewById(R.id.activity_setting_score_xuanxiu_checkbox);
         check_box_xianxuan = findViewById(R.id.activity_setting_score_xianxuan_checkbox);
         check_box_PE = findViewById(R.id.activity_setting_score_PE_checkbox);
         check_box_xiaoxuanxiu = findViewById(R.id.activity_setting_score_xiaoxuanxiu_checkbox);
+        check_box_chongxiu = findViewById(R.id.activity_setting_score_chongxiu_checkbox);
 
+        text_bixiu = findViewById(R.id.activity_setting_score_bixiu_text);
         text_xuanxiu = findViewById(R.id.activity_setting_score_xuanxiu_text);
         text_xianxuan = findViewById(R.id.activity_setting_score_xianxuan_text);
         text_PE = findViewById(R.id.activity_setting_score_PE_text);
         text_xiaoxuanxiu = findViewById(R.id.activity_setting_score_xiaoxuanxiu_text);
+        text_chongxiu = findViewById(R.id.activity_setting_score_chongxiu_text);
 
         check_box_cjcx_enable = findViewById(R.id.activity_setting_score_cjcx_checkbox);
         text_cjcx_enable = findViewById(R.id.activity_setting_score_cjcx_text);
+
+        check_box_show_not_cur_week_course = findViewById(R.id.activity_setting_course_show_no_cur_week_checkbox);
+        text_show_not_cur_week_course = findViewById(R.id.activity_setting_course_show_no_cur_week_text);
 
         check_box_test = findViewById(R.id.activity_setting_test_enable_checkbox);
         text_test = findViewById(R.id.activity_setting_test_enable_text);
@@ -139,23 +158,36 @@ public class SettingActivity extends BaseActivity {
         CompoundButton.OnCheckedChangeListener onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                Toast.makeText(SettingActivity.this, "OnCheckedChange!", Toast.LENGTH_SHORT).show();
                 ScoreActivity.setReLoadSocreList(true);
                 switch (buttonView.getId()) {
+                    case R.id.activity_setting_score_bixiu_checkbox: {
+                        OptionManager.setBixiu_select(getApplicationContext(), check_box_bixiu.isChecked());
+                        scoreConfigChanged = true;
+                        break;
+                    }
                     case R.id.activity_setting_score_xuanxiu_checkbox: {
-                        ScoreActivity.setXuanxiu_select(check_box_xuanxiu.isChecked());
+                        OptionManager.setXuanxiu_select(getApplicationContext(), check_box_xuanxiu.isChecked());
+                        scoreConfigChanged = true;
                         break;
                     }
                     case R.id.activity_setting_score_xianxuan_checkbox: {
-                        ScoreActivity.setXianxuan_select(check_box_xianxuan.isChecked());
+                        OptionManager.setXianxuan_select(getApplicationContext(), check_box_xianxuan.isChecked());
+                        scoreConfigChanged = true;
                         break;
                     }
                     case R.id.activity_setting_score_xiaoxuanxiu_checkbox: {
-                        ScoreActivity.setXiaoxuanxiu_select(check_box_xiaoxuanxiu.isChecked());
+                        OptionManager.setXiaoxuanxiu_select(getApplicationContext(), check_box_xiaoxuanxiu.isChecked());
+                        scoreConfigChanged = true;
                         break;
                     }
                     case R.id.activity_setting_score_PE_checkbox: {
-                        ScoreActivity.setPE_select(check_box_PE.isChecked());
+                        OptionManager.setPE_select(getApplicationContext(), check_box_PE.isChecked());
+                        scoreConfigChanged = true;
+                        break;
+                    }
+                    case R.id.activity_setting_score_chongxiu_checkbox: {
+                        OptionManager.setChongxiu_select(getApplicationContext(), check_box_chongxiu.isChecked());
+                        scoreConfigChanged = true;
                         break;
                     }
                     case R.id.activity_setting_score_cjcx_checkbox: {
@@ -166,21 +198,32 @@ public class SettingActivity extends BaseActivity {
                         MainActivity.setAcceptTestFun(check_box_test.isChecked());
                         break;
                     }
+                    case R.id.activity_setting_course_show_no_cur_week_checkbox: {
+                        OptionManager.setShow_not_current_week_course(getApplicationContext(), check_box_show_not_cur_week_course.isChecked());
+                        break;
+                    }
                 }
             }
         };
 
+        check_box_bixiu.setOnCheckedChangeListener(onCheckedChangeListener);
         check_box_xuanxiu.setOnCheckedChangeListener(onCheckedChangeListener);
         check_box_xianxuan.setOnCheckedChangeListener(onCheckedChangeListener);
         check_box_xiaoxuanxiu.setOnCheckedChangeListener(onCheckedChangeListener);
         check_box_PE.setOnCheckedChangeListener(onCheckedChangeListener);
+        check_box_chongxiu.setOnCheckedChangeListener(onCheckedChangeListener);
         check_box_cjcx_enable.setOnCheckedChangeListener(onCheckedChangeListener);
         check_box_test.setOnCheckedChangeListener(onCheckedChangeListener);
+        check_box_show_not_cur_week_course.setOnCheckedChangeListener(onCheckedChangeListener);
 
         View.OnClickListener text_onClick = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 switch (v.getId()) {
+                    case R.id.activity_setting_score_bixiu_text: {
+                        check_box_bixiu.setChecked(!check_box_bixiu.isChecked());
+                        break;
+                    }
                     case R.id.activity_setting_score_xuanxiu_text: {
                         check_box_xuanxiu.setChecked(!check_box_xuanxiu.isChecked());
                         break;
@@ -197,6 +240,10 @@ public class SettingActivity extends BaseActivity {
                         check_box_xiaoxuanxiu.setChecked(!check_box_xiaoxuanxiu.isChecked());
                         break;
                     }
+                    case R.id.activity_setting_score_chongxiu_text: {
+                        check_box_chongxiu.setChecked(!check_box_chongxiu.isChecked());
+                        break;
+                    }
                     case R.id.activity_setting_score_cjcx_text: {
                         check_box_cjcx_enable.setChecked(!check_box_cjcx_enable.isChecked());
                         break;
@@ -205,16 +252,23 @@ public class SettingActivity extends BaseActivity {
                         check_box_test.setChecked(!check_box_test.isChecked());
                         break;
                     }
+                    case R.id.activity_setting_course_show_no_cur_week_text: {
+                        check_box_show_not_cur_week_course.setChecked(!check_box_show_not_cur_week_course.isChecked());
+                        break;
+                    }
                 }
             }
         };
 
+        text_bixiu.setOnClickListener(text_onClick);
         text_xuanxiu.setOnClickListener(text_onClick);
         text_xianxuan.setOnClickListener(text_onClick);
         text_PE.setOnClickListener(text_onClick);
         text_xiaoxuanxiu.setOnClickListener(text_onClick);
+        text_chongxiu.setOnClickListener(text_onClick);
         text_cjcx_enable.setOnClickListener(text_onClick);
         text_test.setOnClickListener(text_onClick);
+        text_show_not_cur_week_course.setOnClickListener(text_onClick);
 
         layout_to_theme.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -260,6 +314,21 @@ public class SettingActivity extends BaseActivity {
         super.onWindowFocusChanged(hasFocus);
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(scoreConfigChanged){
+            Runnable runnable = new Runnable() {
+                @Override
+                public void run() {
+                    ScoreInf.setScoreListLoaded(false);
+                    ScoreInf.loadScoreList();
+                }
+            };
+            MyThreadController.commit(runnable);
+        }
+    }
+
     private void updateData(){
         email_edit_text.setText(InformationUploader.USER_MAIL);
     }
@@ -289,11 +358,14 @@ public class SettingActivity extends BaseActivity {
     }
 
     private void loadScoreSelect() {
-        check_box_xuanxiu.setChecked(ScoreActivity.isXuanxiu_select());
-        check_box_xianxuan.setChecked(ScoreActivity.isXianxuan_select());
-        check_box_xiaoxuanxiu.setChecked(ScoreActivity.isXiaoxuanxiu_select());
-        check_box_PE.setChecked(ScoreActivity.isPE_select());
+        check_box_bixiu.setChecked(OptionManager.isBixiu_select());
+        check_box_xuanxiu.setChecked(OptionManager.isXuanxiu_select());
+        check_box_xianxuan.setChecked(OptionManager.isXianxuan_select());
+        check_box_xiaoxuanxiu.setChecked(OptionManager.isXiaoxuanxiu_select());
+        check_box_PE.setChecked(OptionManager.isPE_select());
+        check_box_chongxiu.setChecked(OptionManager.isChongxiu_select());
         check_box_cjcx_enable.setChecked(ScoreConfig.isIsCJCXEnable());
+        check_box_show_not_cur_week_course.setChecked(OptionManager.isShow_not_current_week_course());
     }
 
     private void loadTestSelect(){

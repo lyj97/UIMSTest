@@ -204,8 +204,11 @@ public class VPNClient {
                 return 0;
             }
             else {
-                System.out.println("Start:" + start_index);
-                System.out.println("End:" + end_index);
+                String toMainStr = "<a href=\"/\">";
+                if(responseBodyStr.contains(toMainStr)){
+                    return 0;
+                }
+                else return -1;
             }
         }
         catch (Exception e){

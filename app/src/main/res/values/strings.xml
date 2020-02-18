@@ -51,4 +51,12 @@
     <!--MainActivity-->
     <string name="close">关 闭</string>
 
+    <!--设置-->
+    <string name="course_buxiu">必修课</string>
+    <string name="course_xuanxiu">选修课</string>
+    <string name="course_xianxuan">限选课</string>
+    <string name="course_PE">体育课</string>
+    <string name="course_xiaoxuanxiu">校选修(公选)课</string>
+    <string name="course_chongxiu">重修</string>
+
 </resources>

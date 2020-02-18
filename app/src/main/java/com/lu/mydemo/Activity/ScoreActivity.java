@@ -106,13 +106,6 @@ public class ScoreActivity extends BaseActivity
     private static double required_custom_GPASum = 0;
     private static double required_custom_CreditSum = 0;
 
-    private static boolean bixiu_select = true;
-    private static boolean xuanxiu_select = true;
-    private static boolean xianxuan_select = true;
-    private static boolean xiaoxuanxiu_select = false;
-    private static boolean PE_select = false;
-    private static boolean chongxiu_select = false;
-
     private static boolean reloadData = false;
 
     private boolean isScoreStatisticsLayoutShowing;
@@ -129,13 +122,6 @@ public class ScoreActivity extends BaseActivity
         context = getApplicationContext();
 
         appBarLayout = findViewById(R.id.activity_scrolling_app_bar);
-
-        bixiu_select = sp.getBoolean("bixiu_select", true);
-        xuanxiu_select = sp.getBoolean("xuanxiu_select", true);
-        xianxuan_select = sp.getBoolean("xianxuan_select", true);
-        xiaoxuanxiu_select = sp.getBoolean("xiaoxuanxiu_select", false);
-        PE_select = sp.getBoolean("PE_select", false);
-        chongxiu_select = sp.getBoolean("chongxiu_select", false);
 
         toolBar = new MyToolBar(this);
 
@@ -827,82 +813,6 @@ public class ScoreActivity extends BaseActivity
             }
         }
 
-    }
-
-    public static void loadScoreSelect(){
-        if(sp == null) sp = MainActivity.context.getApplicationContext().getSharedPreferences("ScoreSelectInfo", Context.MODE_PRIVATE);;
-        bixiu_select = sp.getBoolean("bixiu_select", true);
-        xuanxiu_select = sp.getBoolean("xuanxiu_select", true);
-        xianxuan_select = sp.getBoolean("xianxuan_select", true);
-        xiaoxuanxiu_select = sp.getBoolean("xiaoxuanxiu_select", false);
-        PE_select = sp.getBoolean("PE_select", false);
-        chongxiu_select = sp.getBoolean("chongxiu_select", false);
-    }
-
-    public static boolean isBixiu_select() {
-        return bixiu_select;
-    }
-
-    public static void setBixiu_select(boolean bixiu_select) {
-        ScoreActivity.bixiu_select = bixiu_select;
-        if(sp == null) sp = MainActivity.context.getApplicationContext().getSharedPreferences("ScoreSelectInfo", Context.MODE_PRIVATE);;
-        sp.edit().putBoolean("bixiu_select", ScoreActivity.bixiu_select).apply();
-        Log.i("ScoreCustom", "setBixiu_select:\t" + bixiu_select);
-    }
-
-    public static boolean isXuanxiu_select() {
-        return xuanxiu_select;
-    }
-
-    public static void setXuanxiu_select(boolean xuanxiu_select) {
-        ScoreActivity.xuanxiu_select = xuanxiu_select;
-        if(sp == null) sp = MainActivity.context.getApplicationContext().getSharedPreferences("ScoreSelectInfo", Context.MODE_PRIVATE);;
-        sp.edit().putBoolean("xuanxiu_select", ScoreActivity.xuanxiu_select).apply();
-        Log.i("ScoreCustom", "setXuanxiu_select:\t" + xuanxiu_select);
-    }
-
-    public static boolean isXianxuan_select() {
-        return xianxuan_select;
-    }
-
-    public static void setXianxuan_select(boolean xianxuan_select) {
-        ScoreActivity.xianxuan_select = xianxuan_select;
-        if(sp == null) sp = MainActivity.context.getApplicationContext().getSharedPreferences("ScoreSelectInfo", Context.MODE_PRIVATE);;
-        sp.edit().putBoolean("xianxuan_select", ScoreActivity.xianxuan_select).apply();
-        Log.i("ScoreCustom", "setXianxuan_select:\t" + xianxuan_select);
-    }
-
-    public static boolean isXiaoxuanxiu_select() {
-        return xiaoxuanxiu_select;
-    }
-
-    public static void setXiaoxuanxiu_select(boolean xiaoxuanxiu_select) {
-        ScoreActivity.xiaoxuanxiu_select = xiaoxuanxiu_select;
-        if(sp == null) sp = MainActivity.context.getApplicationContext().getSharedPreferences("ScoreSelectInfo", Context.MODE_PRIVATE);;
-        sp.edit().putBoolean("xiaoxuanxiu_select", ScoreActivity.xiaoxuanxiu_select).apply();
-        Log.i("ScoreCustom", "setXiaoxuanxiu_select:\t" + xiaoxuanxiu_select);
-    }
-
-    public static boolean isPE_select() {
-        return PE_select;
-    }
-
-    public static void setPE_select(boolean PE_select) {
-        ScoreActivity.PE_select = PE_select;
-        if(sp == null) sp = MainActivity.context.getApplicationContext().getSharedPreferences("ScoreSelectInfo", Context.MODE_PRIVATE);;
-        sp.edit().putBoolean("PE_select", ScoreActivity.PE_select).apply();
-        Log.i("ScoreCustom", "setPE_select:\t" + PE_select);
-    }
-
-    public static boolean isChongxiu_select() {
-        return chongxiu_select;
-    }
-
-    public static void setChongxiu_select(boolean chongxiu_select) {
-        ScoreActivity.chongxiu_select = chongxiu_select;
-        if(sp == null) sp = MainActivity.context.getApplicationContext().getSharedPreferences("ScoreSelectInfo", Context.MODE_PRIVATE);;
-        sp.edit().putBoolean("chongxiu_select", ScoreActivity.chongxiu_select).apply();
-        Log.i("ScoreCustom", "isChongxiu_select:\t" + chongxiu_select);
     }
 
     public static boolean isReLoadSocreList() {

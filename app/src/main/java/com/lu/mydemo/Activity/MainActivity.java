@@ -34,6 +34,7 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.lu.mydemo.Config.OptionManager;
 import com.lu.mydemo.Notification.AlertCenter;
 import com.lu.mydemo.OA.NewsClient;
 import com.lu.mydemo.R;
@@ -644,6 +645,7 @@ public class MainActivity extends BaseActivity {
                 CJCX.loadCJCXJSON(getApplicationContext());
                 CJCX.loadCJCXTermJSON(getApplicationContext());
                 ScoreActivity.context = getApplicationContext();
+                OptionManager.init(getApplicationContext());
 
                 ScoreInf.loadScoreList();
             }

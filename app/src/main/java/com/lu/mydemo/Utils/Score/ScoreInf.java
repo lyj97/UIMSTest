@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.lu.mydemo.CJCX.CJCX;
+import com.lu.mydemo.Config.OptionManager;
 import com.lu.mydemo.UIMS.UIMS;
 
 import static com.lu.mydemo.Activity.ScoreActivity.loadCJCXScore;
@@ -45,34 +46,8 @@ public class ScoreInf {
     static int update_count = -1;
 
     static boolean scoreListLoaded = false;
-//    static int index = 0;//懒加载标识
-//    static boolean loadFinished = false;//懒加载完成标识
 
     static List<Map<String, Object>> dataList;
-
-//    public static List<Map<String, Object>> getFirstPart(){
-//        index = 0;
-//        if(dataList.size() > 20) {
-//            index = 20;
-//            return dataList.subList(0, 20);
-//        }
-//        else {
-//            loadFinished = true;
-//            return dataList;
-//        }
-//    }
-//
-//    public static List<Map<String, Object>> getNextPart(){
-//        if(loadFinished) return null;
-//        if(dataList.size() > index + 20) {
-//            index += 20;
-//            return dataList.subList(index - 20, index);
-//        }
-//        else {
-//            loadFinished = true;
-//            return dataList.subList(index, dataList.size());
-//        }
-//    }
 
     public static void loadScoreList(){
         if(scoreListLoaded) return;
@@ -113,10 +88,6 @@ public class ScoreInf {
                         map.put("asId", asId);
                         index_id.put(i, asId);
                         map.put("title", courName + "(" + courseTypeID_courseType.get(type5) + ")");
-//                map.put("context1","成绩:" + courScore + "  \t  " +
-//                        "重修:" + isReselect);
-//                map.put("context2",
-//                        termName);
                         map.put("context1", termName + "   \t   " +
                                 "重修?  " + isReselect);
                         map.put("context2",
@@ -132,7 +103,6 @@ public class ScoreInf {
                         if (!chongxiu_select) {//排除所有重修
                             if (isReselect.equals("否")) {//排除所有重修
 
-//                    if (type5.equals("4161") || type5.equals("4162") || type5.equals("4164") ) {//体育/限选/选修（除校选修）
                                 if (xuanxiu_select && type5.equals("4161")) {//选修
                                     required_custom_ScoreSum += scoreNum * credit;
                                     required_custom_GPASum += Double.parseDouble(gPoint) * credit;
@@ -300,10 +270,12 @@ public class ScoreInf {
     }
 
     private static void loadScoreSelect() {
-        xuanxiu_select = ScoreActivity.isXuanxiu_select();
-        xianxuan_select = (ScoreActivity.isXianxuan_select());
-        xiaoxuanxiu_select = (ScoreActivity.isXiaoxuanxiu_select());
-        PE_select = ScoreActivity.isPE_select();
+        bixiu_select = OptionManager.isBixiu_select();
+        xuanxiu_select = OptionManager.isXuanxiu_select();
+        xianxuan_select = OptionManager.isXianxuan_select();
+        xiaoxuanxiu_select = OptionManager.isXiaoxuanxiu_select();
+        PE_select = OptionManager.isPE_select();
+        chongxiu_select = OptionManager.isChongxiu_select();
     }
 
     private static void setCountResult(){

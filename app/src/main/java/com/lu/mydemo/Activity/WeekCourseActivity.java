@@ -7,6 +7,7 @@ package com.lu.mydemo.Activity;
  * https://github.com/zfman/TimetableView
  */
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.database.sqlite.SQLiteDatabase;
@@ -23,6 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.lu.mydemo.Config.OptionManager;
 import com.lu.mydemo.R;
 import com.tapadoo.alerter.Alerter;
 import com.zhuangfei.timetable.TimetableView;
@@ -42,6 +44,8 @@ import com.lu.mydemo.Utils.Database.MyCourseDBHelper;
 import com.lu.mydemo.Utils.Thread.MyThreadController;
 import com.lu.mydemo.View.PopWindow.CourseDetailPopupWindow;
 import com.lu.mydemo.View.PopWindow.CourseListPopupWindow;
+
+import org.jetbrains.annotations.NotNull;
 
 public class WeekCourseActivity extends BaseActivity implements View.OnClickListener {
 
@@ -104,9 +108,6 @@ public class WeekCourseActivity extends BaseActivity implements View.OnClickList
         super.onRestart();
     }
 
-    /**
-     * 2秒后刷新界面，模拟网络请求
-     */
     private void requestData() {
         final MyCourseDBHelper dbHelper = new MyCourseDBHelper(getApplicationContext(), "Course_DB", null, 1);
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -129,9 +130,10 @@ public class WeekCourseActivity extends BaseActivity implements View.OnClickList
         handler.sendEmptyMessage(0x123);
     }
 
+    @SuppressLint("HandlerLeak")
     Handler handler= new Handler(){
         @Override
-        public void handleMessage(Message msg) {
+        public void handleMessage(@NotNull Message msg) {
             super.handleMessage(msg);
             if(alertDialog!=null) alertDialog.hide();
             if(mySubjects == null){
@@ -174,14 +176,11 @@ public class WeekCourseActivity extends BaseActivity implements View.OnClickList
                 .showView();
 
         mTimetableView.curWeek((int) MainActivity.now_week)
-                /**
-                 * 最大课程数
-                 */
+                //最大课程数
                 .maxSlideItem(11)
-                /**
-                 * 取消旗标布局
-                 */
+                // 取消旗标布局
                 .isShowFlaglayout(false)
+                .isShowNotCurWeek(OptionManager.isShow_not_current_week_course())
                 //透明度
                 //日期栏0.1f、侧边栏0.1f，周次选择栏0.6f
                 //透明度范围为0->1，0为全透明，1为不透明
@@ -193,14 +192,6 @@ public class WeekCourseActivity extends BaseActivity implements View.OnClickList
                         display(scheduleList);
                     }
                 })
-//                .callback(new ISchedule.OnItemLongClickListener() {
-//                    @Override
-//                    public void onLongClick(com.lu.mydemo.View v, int day, int start) {
-//                        Toast.makeText(WeekCourseActivity.this,
-//                                "长按:周" + day  + ",第" + start + "节",
-//                                Toast.LENGTH_SHORT).show();
-//                    }
-//                })
                 .callback(new ISchedule.OnWeekChangedListener() {
                     @Override
                     public void onWeekChanged(int curWeek) {
@@ -375,9 +366,4 @@ public class WeekCourseActivity extends BaseActivity implements View.OnClickList
         WeekCourseActivity.selectedCourseName = selectedCourseName;
     }
 
-    //    @Override
-//    public void finish() {
-//        super.finish();
-////        overridePendingTransition(R.anim.down_in, R.anim.down_out);
-//    }
 }
