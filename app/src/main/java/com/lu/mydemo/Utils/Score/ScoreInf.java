@@ -53,6 +53,7 @@ public class ScoreInf {
         if(scoreListLoaded) return;
         update_count = 0;
         loadScoreSelect();
+        initScoreSum();
         courseTypeID_courseType = UIMS.getCourseTypeId_courseType();
         dataList = new ArrayList<>();
         index_id = new HashMap<>();
@@ -267,6 +268,16 @@ public class ScoreInf {
             exceptionList.add(e);
             e.printStackTrace();
         }
+    }
+    
+    private static void initScoreSum() {
+        requiredScoreSum = 0;
+        requiredGPASum = 0;
+        requiredCreditSum = 0;
+
+        required_custom_ScoreSum = 0;
+        required_custom_GPASum = 0;
+        required_custom_CreditSum = 0;
     }
 
     private static void loadScoreSelect() {
