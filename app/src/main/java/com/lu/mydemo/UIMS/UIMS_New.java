@@ -197,14 +197,10 @@ public class UIMS_New {
                 assert responseJSON != null;
                 mCurrentUserInfoJSON = responseJSON;
                 JSONObject defRes = responseJSON.getJSONObject("defRes");
-                String nickName = responseJSON.getString("nickName");
                 personId = defRes.getInt("personId");
                 department = defRes.getInt("department");
                 teachingTerm = defRes.getInt("teachingTerm");
-                String campus = defRes.getString("campus");
                 System.out.println("department:" + department);
-                System.out.println("campus:" + campus);
-                System.out.println("nickName:" + nickName);
                 return true;
             }
             catch (Exception e){
@@ -406,6 +402,54 @@ public class UIMS_New {
         request_json.put("tag","archiveScore@queryCourseScore");
         request_json.put("branch","latest");
         request_json.put("rowLimit", 150);
+        request_json.put("params",params);
+
+        RequestBody requestBody = RequestBody.create(request_json.toString(), JSON);
+
+        Response response = HTTPTools.postResponse(url, headers, requestBody);
+
+        if(response == null){
+            return false;
+        }
+
+        String responseStr = HTTPTools.getOrOrOutResponse(response, true);
+        JSONObject responseJSON;
+        try {
+            responseJSON = JSONObject.fromObject(responseStr);
+            assert responseJSON != null;
+            mRecentScoreJSON = responseJSON;
+        }
+        catch (Exception e){
+            mExceptionList.add(e);
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
+    }
+
+    public boolean getHistoryScore(){
+        String url = Address.hostAddress + "/ntms/service/res.do";
+        if(mUseStudentVPN) url = mVPNBaseUrl + "/ntms/service/res.do?vpn-12-o2-uims.jlu.edu.cn";
+
+        HashMap<String, String> mHeaderList = new HashMap<>();
+        mHeaderList.put("User-Agent", UIMSStaticRes.UserAgentStr);
+        if(!mUseStudentVPN) {
+            mHeaderList.put("Cookie", cookie3);
+        }
+        if(mUseStudentVPN) {
+            mHeaderList.put("Cookie", mVPNClient.getCookie());
+        }
+        List<Map.Entry<String, String>> headers = new ArrayList<>(mHeaderList.entrySet());
+
+        JSONObject params = new JSONObject();
+        params.put("studId", personId);
+
+        JSONObject request_json = new JSONObject();
+        request_json.put("tag","archiveScore@queryCourseScore");
+        request_json.put("branch","byYear");
+        request_json.put("orderBy","teachingTerm.termId, course.courName");
+        request_json.put("type","search");
         request_json.put("params",params);
 
         RequestBody requestBody = RequestBody.create(request_json.toString(), JSON);

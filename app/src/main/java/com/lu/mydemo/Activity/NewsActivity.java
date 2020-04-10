@@ -622,16 +622,8 @@ public class NewsActivity extends BaseActivity {
 
     }
 
-    private void changeTheme(){
-        Window window = getWindow();
-//        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
-//                | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-//        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-//        window.setStatusBarColor(ColorManager.getNoCloor());
-        window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                |View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-        window.setStatusBarColor(Color.TRANSPARENT);
-
+    public void changeTheme(){
+        super.changeTheme();
         findViewById(R.id.activity_news).setBackground(ColorManager.getMainBackground_full());
     }
 

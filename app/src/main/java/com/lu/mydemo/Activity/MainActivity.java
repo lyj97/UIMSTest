@@ -93,7 +93,7 @@ public class MainActivity extends BaseActivity {
 
     private TextView enterWeekCourseTextView;
 
-    private LinearLayout to_setting_layout;
+    private TextView toSettingTv;
 
     private TextView load_internet_inf_tv;
     private TextView goToTestTv;
@@ -159,7 +159,7 @@ public class MainActivity extends BaseActivity {
 
         enterWeekCourseTextView = findViewById(R.id.enterWeekCourseTextView);
 
-        to_setting_layout = findViewById(R.id.login_goto_setting_layout_view);
+        toSettingTv = findViewById(R.id.login_goto_setting_text_view);
 
         login_main_view = findViewById(R.id.login_main_view);
         linearLayoutView_down_text = findViewById(R.id.LinearLayoutView_down_text);
@@ -314,7 +314,7 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        to_setting_layout.setOnClickListener(new View.OnClickListener() {
+        toSettingTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this,SettingActivity.class);
@@ -645,7 +645,6 @@ public class MainActivity extends BaseActivity {
                 CJCX.loadCJCXJSON(getApplicationContext());
                 CJCX.loadCJCXTermJSON(getApplicationContext());
                 ScoreActivity.context = getApplicationContext();
-                OptionManager.init(getApplicationContext());
 
                 ScoreInf.loadScoreList();
             }
@@ -1442,18 +1441,8 @@ public class MainActivity extends BaseActivity {
         });
     }
 
-    private void changeTheme(){
-//        Log.i("Theme", "Change theme.");
-//        StausBarControl.setNavigationBarStatusBarTranslucent(MainActivity.this);
-        Window window = getWindow();
-//        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
-//                | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-//        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-//        window.setStatusBarColor(ColorManager.getNoCloor());
-        window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                |View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-        window.setStatusBarColor(Color.TRANSPARENT);
-
+    public void changeTheme(){
+        super.changeTheme();
         activity_login.setBackground(ColorManager.getMainBackground_full());
         getNewsButton.setBackground(ColorManager.getLocalInformationButtonBackground());
         get_save_button.setBackground(ColorManager.getLocalInformationButtonBackground());

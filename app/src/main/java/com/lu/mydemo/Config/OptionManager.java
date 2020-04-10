@@ -23,6 +23,9 @@ public class OptionManager {
     //课程选项
     private static boolean show_not_current_week_course = true;
 
+    //状态栏沉浸选项
+    private static boolean transparent_navigation_bar = false;
+
     public static void init(Context context){
         SharedPreferences sp = context.getSharedPreferences("MyCustomOption", Context.MODE_PRIVATE);
         if(sp != null){
@@ -34,6 +37,8 @@ public class OptionManager {
             chongxiu_select = sp.getBoolean("chongxiu_select", false);
 
             show_not_current_week_course = sp.getBoolean("show_not_current_week_course", true);
+
+            transparent_navigation_bar = sp.getBoolean("transparent_navigation_bar", false);
 
             has_init = true;
         }
@@ -50,6 +55,8 @@ public class OptionManager {
             sp.edit().putBoolean("chongxiu_select", chongxiu_select).apply();
 
             sp.edit().putBoolean("show_not_current_week_course", show_not_current_week_course).apply();
+
+            sp.edit().putBoolean("transparent_navigation_bar", transparent_navigation_bar).apply();
         }
     }
 
@@ -117,6 +124,15 @@ public class OptionManager {
 
     public static void setShow_not_current_week_course(Context context, boolean show_not_current_week_course) {
         OptionManager.show_not_current_week_course = show_not_current_week_course;
+        saveConfig(context);
+    }
+
+    public static boolean isTransparent_navigation_bar() {
+        return transparent_navigation_bar;
+    }
+
+    public static void setTransparent_navigation_bar(Context context, boolean transparent_navigation_bar) {
+        OptionManager.transparent_navigation_bar = transparent_navigation_bar;
         saveConfig(context);
     }
 }

@@ -2,18 +2,15 @@ package com.lu.mydemo.Activity;
 
 import android.content.Intent;
 import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -69,9 +66,12 @@ public class SettingActivity extends BaseActivity {
     private CheckBox check_box_test;
     private TextView text_test;
 
+    private CheckBox check_box_transparent_navigation;
+    private TextView text_transparent_navigation;
+
     private LinearLayout layout_to_theme;
 
-    private EditText email_edit_text;
+    private TextView email_text_tv;
 
     private String theme = ColorManager.getThemeName();
 
@@ -106,9 +106,12 @@ public class SettingActivity extends BaseActivity {
         check_box_test = findViewById(R.id.activity_setting_test_enable_checkbox);
         text_test = findViewById(R.id.activity_setting_test_enable_text);
 
+        check_box_transparent_navigation = findViewById(R.id.activity_setting_transparent_navigation_enable_checkbox);
+        text_transparent_navigation = findViewById(R.id.activity_setting_transparent_navigation_enable_text);
+
         layout_to_theme = findViewById(R.id.activity_setting_to_theme_layout);
 
-        email_edit_text = findViewById(R.id.activity_setting_email);
+        email_text_tv = findViewById(R.id.activity_setting_email);
 
         changeTheme();
 
@@ -202,6 +205,10 @@ public class SettingActivity extends BaseActivity {
                         OptionManager.setShow_not_current_week_course(getApplicationContext(), check_box_show_not_cur_week_course.isChecked());
                         break;
                     }
+                    case R.id.activity_setting_transparent_navigation_enable_checkbox: {
+                        OptionManager.setTransparent_navigation_bar(getApplicationContext(), check_box_transparent_navigation.isChecked());
+                        break;
+                    }
                 }
             }
         };
@@ -215,6 +222,7 @@ public class SettingActivity extends BaseActivity {
         check_box_cjcx_enable.setOnCheckedChangeListener(onCheckedChangeListener);
         check_box_test.setOnCheckedChangeListener(onCheckedChangeListener);
         check_box_show_not_cur_week_course.setOnCheckedChangeListener(onCheckedChangeListener);
+        check_box_transparent_navigation.setOnCheckedChangeListener(onCheckedChangeListener);
 
         View.OnClickListener text_onClick = new View.OnClickListener() {
             @Override
@@ -256,6 +264,10 @@ public class SettingActivity extends BaseActivity {
                         check_box_show_not_cur_week_course.setChecked(!check_box_show_not_cur_week_course.isChecked());
                         break;
                     }
+                    case R.id.activity_setting_transparent_navigation_enable_text: {
+                        check_box_transparent_navigation.setChecked(!check_box_transparent_navigation.isChecked());
+                        break;
+                    }
                 }
             }
         };
@@ -269,6 +281,7 @@ public class SettingActivity extends BaseActivity {
         text_cjcx_enable.setOnClickListener(text_onClick);
         text_test.setOnClickListener(text_onClick);
         text_show_not_cur_week_course.setOnClickListener(text_onClick);
+        check_box_transparent_navigation.setOnClickListener(text_onClick);
 
         layout_to_theme.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -277,7 +290,6 @@ public class SettingActivity extends BaseActivity {
             }
         });
 
-        email_edit_text.setEnabled(false);
         View.OnClickListener emailClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -288,6 +300,7 @@ public class SettingActivity extends BaseActivity {
             }
         };
         findViewById(R.id.activity_setting_email_layout).setOnClickListener(emailClickListener);
+        email_text_tv.setOnClickListener(emailClickListener);
 
         toolBar.setSubTitle("设置");
         toolBar.setRightIcon(getDrawable(R.drawable.ic_info_outline_white_24dp));
@@ -330,7 +343,7 @@ public class SettingActivity extends BaseActivity {
     }
 
     private void updateData(){
-        email_edit_text.setText(InformationUploader.USER_MAIL);
+        email_text_tv.setText(InformationUploader.USER_MAIL);
     }
 
     private void setSpinnerItems(){
@@ -370,6 +383,7 @@ public class SettingActivity extends BaseActivity {
 
     private void loadTestSelect(){
         check_box_test.setChecked(MainActivity.isAcceptTestFun());
+        check_box_transparent_navigation.setChecked(OptionManager.isTransparent_navigation_bar());
     }
 
     private ColorStateList getColorStateListTest() {
@@ -385,18 +399,9 @@ public class SettingActivity extends BaseActivity {
         return new ColorStateList(states, colors);
     }
 
-    private void changeTheme(){
-        Window window = getWindow();
-//        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
-//                | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-//        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-//        window.setStatusBarColor(ColorManager.getNoCloor());
-        window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                |View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-        window.setStatusBarColor(Color.TRANSPARENT);
-
+    public void changeTheme(){
+        super.changeTheme();
         findViewById(R.id.activity_setting).setBackground(ColorManager.getMainBackground_full());
-
         check_box_xuanxiu.setForegroundTintList(getColorStateListTest());
         check_box_xianxuan.setForegroundTintList(getColorStateListTest());
         check_box_PE.setForegroundTintList(getColorStateListTest());

@@ -62,28 +62,6 @@ public class AboutActivity extends BaseActivity {
         if(Version.isIsBeta()) application_version_name.setText("Ver " + Version.getVersionName() + " (BETA)");
         else application_version_name.setText("Ver " + Version.getVersionName());
 
-//        application_icon_text_view.setOnClickListener(new com.lu.mydemo.View.OnClickListener() {
-//            @Override
-//            public void onClick(com.lu.mydemo.View v) {
-//                JSONObject object = new JSONObject();
-//                object.put("title", "关于UIMSTest");
-//                object.put("information", "为了简单&好用，我一直在努力.\n\n" +
-//                        "我的生日是19年3月14日.\n\n" +
-//                        "最初，主人作为后台开发者，把已经写好的教务接口调用提供给有需要的同学.\n" +
-//                        "这一天，主人创建了一个新工程，用来测试接口调用是否成功，取名“MyDemo”，这就是我呀.\n" +
-//                        "为了测试，主人给了我[成绩查询]功能.\n" +
-//                        "一直住在主人的Phone中的我，第一次跨过纵横交错的线缆，来到了某小仙女的Phone中；她微笑着对我点点头，在输入框中写下“长得还不错”，按下了发送键.\n\n" +
-//                        "这也许是我最开心的一天了吧.\n\n" +
-//                        "经历了两周的闭关修炼，我已不再是那时的样子，功能也正一天天变多，却一直保留着对你的思念.\n\n" +
-//                        "19年4月20日，我们第一次见面.\n" +
-//                        "初来乍到，我的功能很少，只能帮你查一下成绩；几天后，我能查看当日课程啦，这一天，主人帮我做了推广，我来到了更多人的Phone中，有了好多新家；很快，五一假期前，因为课程调整，主人在凌晨三点给我添加了新的功能，让我更懂你今天真正要上的课；随着校内通知在假期后恢复更新，我能帮你看校内通知，也能记住你需要的通知啦；转眼间，属于我们之间的第一个学期已经结束，学期的最后，我可以帮你记下即将到来的考试，见证这一学期的收获；暑假来啦，在校外，我可以帮你查成绩，也可以帮你记下常用的网站了哦~\n\n" +
-//                        "一路走来，也许你每天都会看看我，也许我只是静静的看着忙碌的你，不曾发出一点声响.\n" +
-//                        "但这又如何，我会一直陪着你，你也会见证我的成长，不是吗？");
-//                object.put("link_text", "");
-//                object.put("link", "");
-//                showInformation(AboutActivity.this, object);
-//            }
-//        });
         application_icon_text_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -204,16 +182,8 @@ public class AboutActivity extends BaseActivity {
         }
     }
 
-    private void changeTheme(){
-        Window window = getWindow();
-//        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
-//                | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-//        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-//        window.setStatusBarColor(ColorManager.getNoCloor());
-        window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                |View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-        window.setStatusBarColor(Color.TRANSPARENT);
-
+    public void changeTheme(){
+        super.changeTheme();
         findViewById(R.id.activity_about_layout).setBackground(ColorManager.getMainBackground_full());
     }
 

@@ -12,3 +12,13 @@
 /captures
 .externalNativeBuild
 /release
+/app/release/
+/app/debug/
+/app/build/
+/JSON/
+/build/
+/gradle/
+/Image/
+/KeyStore/
+/Temp/
+/TestJSON/

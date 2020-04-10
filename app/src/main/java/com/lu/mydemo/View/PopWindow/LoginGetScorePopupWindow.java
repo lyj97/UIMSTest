@@ -195,7 +195,7 @@ public class LoginGetScorePopupWindow extends PopupWindow {
                                 }
                                 dealCurrentUserInfoJSON(uims_new);
                                 UIMS.setCurrentUserInfoJSON(uims_new.getCurrentUserInfoJSON());
-                                if(!uims_new.getTeachingTerm() || !uims_new.getCourseSelectType() || !uims_new.getScoreStatistics() || !uims_new.getRecentScore()){
+                                if(!uims_new.getTeachingTerm() || !uims_new.getCourseSelectType() || !uims_new.getScoreStatistics() || !uims_new.getHistoryScore()){
                                     AlertCenter.showErrorAlertWithReportButton(context, "获取成绩失败，请稍后重试.", UIMS_New.getExceptionList(), UIMS.getUser());
                                     dealFinish("更新成绩");
                                     return;

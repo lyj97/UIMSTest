@@ -58,5 +58,6 @@
     <string name="course_PE">体育课</string>
     <string name="course_xiaoxuanxiu">校选修(公选)课</string>
     <string name="course_chongxiu">重修</string>
+    <string name="setting_test_function_introduction">这里的设置因人而异，也许开启它能提升你的使用体验，但也有可能会影响你使用一些功能。\n你可以根据自己的喜好，开启这里的功能。\n这里的设置会默认关闭。</string>
 
 </resources>

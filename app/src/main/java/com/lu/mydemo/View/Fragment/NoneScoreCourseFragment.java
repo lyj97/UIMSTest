@@ -656,13 +656,6 @@ public class NoneScoreCourseFragment extends Fragment {
     }
 
     private void changeTheme(){
-//        Window window = context.getWindow();
-//        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
-//                | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-//        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-//        window.setStatusBarColor(ColorManager.getPrimaryColor());
-
-//        myFragmentLayout.findViewById(R.id.none_score_course_layout).setBackground(ColorManager.getMainBackground_full());
         searchButton.setBackground(ColorManager.getInternetInformationButtonBackground());
         spinner.setBackground(ColorManager.getSpinnerBackground());
     }
