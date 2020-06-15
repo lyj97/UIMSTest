@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.drawable.GradientDrawable;
 import android.text.TextUtils;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -16,15 +14,18 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.lu.mydemo.Activity.MainActivity;
 import com.lu.mydemo.Activity.ScoreActivity;
 import com.lu.mydemo.CJCX.CJCX;
 import com.lu.mydemo.Config.ColorManager;
 import com.lu.mydemo.Notification.AlertCenter;
 import com.lu.mydemo.R;
+import com.lu.mydemo.ToolFor2045_Site.InformationUploader;
 import com.lu.mydemo.UIMS.UIMS;
 import com.lu.mydemo.UIMS.UIMS_New;
 import com.lu.mydemo.Utils.Score.ScoreConfig;
@@ -41,8 +42,11 @@ public class LoginGetScorePopupWindow extends PopupWindow {
 
     private View mMenuView;
 
+    private ImageView mVerifyCodeIv;
+
     private EditText user;
     private EditText password;
+    private EditText verifyCode;
 
     private View configLayout;
     private View vpnLayout;
@@ -63,6 +67,7 @@ public class LoginGetScorePopupWindow extends PopupWindow {
     private String passwordStr;
 
     private SharedPreferences sp;
+    private UIMS_New uims_new;
     private UIMS uims;
 
     public static boolean loginSuccess = false;
@@ -80,8 +85,11 @@ public class LoginGetScorePopupWindow extends PopupWindow {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mMenuView = inflater.inflate(R.layout.pop_window_login_get_score, null);
 
+        mVerifyCodeIv = mMenuView.findViewById(R.id.pop_window_login_verify_code_iv);
+
         user = mMenuView.findViewById(R.id.pop_window_login_get_score_id);
         password = mMenuView.findViewById(R.id.pop_window_login_get_score_password);
+        verifyCode = mMenuView.findViewById(R.id.pop_window_login_verify_code_edit_text);
 
         configLayout = mMenuView.findViewById(R.id.pop_window_login_get_score_config_layout);
         vpnLayout = mMenuView.findViewById(R.id.pop_window_login_get_score_VPN_layout);
@@ -127,10 +135,13 @@ public class LoginGetScorePopupWindow extends PopupWindow {
         useVPNTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LoginVPNPopupWindow window = new LoginVPNPopupWindow(context, context.findViewById(R.id.activity_scrolling_layout).getHeight(), context.findViewById(R.id.activity_scrolling_layout).getWidth());
+                context.dismissPopupWindow();
+                LoginVPNPopupWindow window = new LoginVPNPopupWindow(context,
+                        context.findViewById(R.id.activity_scrolling_layout).getHeight(),
+                        context.findViewById(R.id.activity_scrolling_layout).getWidth(), context);
                 window.setFocusable(true);
                 window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-                context.dismissShowNewPopupWindow(window);
+                context.showPopupWindow(window);
 //                Toast.makeText(context, "该功能尚未完成，敬请期待！", Toast.LENGTH_SHORT).show();
             }
         });
@@ -148,17 +159,62 @@ public class LoginGetScorePopupWindow extends PopupWindow {
                     vpnLayout.setVisibility(View.GONE);
                 }
             });
+            userStr = user.getText().toString();
+            passwordStr = password.getText().toString();
+            uims_new = new UIMS_New(vpnClient, userStr, passwordStr, true);
+            UIMS.setUser(userStr);
+            MyThreadController.commit(new Runnable() {
+                @Override
+                public void run() {
+                    byte[] bytes = uims_new.getVerifyCode();
+                    try{
+                        String code = InformationUploader.getVerifyCodeStr(bytes);
+                        code = JSONObject.fromObject(code).getString("data");
+                        setVerifyCode(bytes, code);
+                    } catch (Exception e){
+                        e.printStackTrace();
+                        setVerifyCode(bytes);
+                    }
+                }
+            });
         }
+
+        mVerifyCodeIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(vpnClient == null){
+                    AlertCenter.showWarningAlert(context, "暂未测试的功能",
+                            "校内使用暂时无法测试，如您有任何疑问，请通过【设置 - 右上角“关于” - 联系开发者】与我联系.");
+                    return;
+                }
+                MyThreadController.commit(new Runnable() {
+                    @Override
+                    public void run() {
+                        byte[] bytes = uims_new.getVerifyCode();
+                        try{
+                            String code = InformationUploader.getVerifyCodeStr(bytes);
+                            code = JSONObject.fromObject(code).getString("data");
+                            setVerifyCode(bytes, code);
+                        } catch (Exception e){
+                            e.printStackTrace();
+                            setVerifyCode(bytes);
+                        }
+                    }
+                });
+            }
+        });
 
         commitButton.setText("更新成绩");
 
         commitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (user.getText().length() != 8 || !(password.getText().length() > 0)) {
-                    AlertCenter.showWarningAlert(context, "用户名或密码不符合规则", "请输入正确的用户名和密码！");
+                if (user.getText().length() != 8 || !(password.getText().length() > 0) ||
+                        TextUtils.isEmpty(verifyCode.getText())) {
+                    AlertCenter.showWarningAlert(context, "输入信息不符合规则", "请输入正确的用户名、密码和验证码！");
                     if (user.getText().length() != 8) user.setError("请输入8位教学号");
                     if (!(password.getText().length() > 0)) password.setError("请输入密码");
+                    if(TextUtils.isEmpty(verifyCode.getText())) verifyCode.setError("请输入验证码");
                     return;
                 }
                 AlertCenter.showLoading(context, "登录中，请稍候...");
@@ -173,17 +229,23 @@ public class LoginGetScorePopupWindow extends PopupWindow {
                             sp.edit().putString("USER", userStr).apply();
                             sp.edit().putString("PASSWORD", passwordStr).apply();
 
+                            uims_new.setStudentId(userStr);
+                            uims_new.setPassword(passwordStr);
+
                             if(checkBox_VPN.isChecked() && vpnClient != null && !TextUtils.isEmpty(vpnClient.getCookie())){
-                                UIMS_New uims_new = new UIMS_New(vpnClient, userStr, passwordStr, true);
-                                UIMS.setUser(userStr);
                                 AlertCenter.showLoading(context, "正在连接到UIMS教务系统(使用学生VPN)...");
+
+                                if(uims_new == null){
+                                    throw new IllegalAccessException("UIMS_NEW is NULL!");
+                                }
+
                                 if(!uims_new.connectToUIMS()){
                                     AlertCenter.showWarningAlert(context, "未能连接到UIMS教务系统，请检查您的网络连接或稍后重试(也可能是学生VPN的问题).");
                                     dealFinish("重新登录");
                                     return;
                                 }
                                 AlertCenter.showLoading(context, "正在登录(使用学生VPN)...");
-                                if(!uims_new.loginUIMS()){
+                                if(!uims_new.loginUIMS(verifyCode.getText().toString())){
                                     AlertCenter.showWarningAlert(context, "登录UIMS教务系统失败，请检查您的用户名/密码后重试.");
                                     dealFinish("重新登录");
                                     return;
@@ -387,6 +449,28 @@ public class LoginGetScorePopupWindow extends PopupWindow {
 
     }
 
+    private void setVerifyCode(final byte[] bytes){
+        setVerifyCode(bytes, null);
+    }
+
+    private void setVerifyCode(final byte[] bytes, final String code){
+        context.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Glide.with(context).load(bytes).into(mVerifyCodeIv);
+                if(code.length() == 4){
+                    try{
+                        Integer.parseInt(code);
+                        verifyCode.setText(code);
+                    } catch (Exception e){
+                        e.printStackTrace();
+                        verifyCode.setText("");
+                    }
+                }
+            }
+        });
+    }
+
     private void dealing(final String commitButtonText){
         context.runOnUiThread(new Runnable() {
             @Override
@@ -448,7 +532,7 @@ public class LoginGetScorePopupWindow extends PopupWindow {
                     percentJSON = id_scorePercent.get(asId);
                 }
                 else {
-                    percentJSON = uims_new.getScorePercent(asId);
+                    percentJSON = uims_new.postScorePercent(asId);
                 }
                 assert percentJSON != null;
                 percentJSON.put("courName", temp2.getString("courName"));

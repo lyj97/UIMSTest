@@ -3,6 +3,7 @@ package com.lu.mydemo.UIMS;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.lu.mydemo.Net.HTTPTools;
 import com.lu.mydemo.Utils.Common.Address;
 
 import net.sf.json.JSONArray;
@@ -15,6 +16,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -120,12 +123,39 @@ public class UIMS {
         }
     }
 
-    public boolean login(){//登录
+    public byte[] getVerifyCode() {
+        String url = Address.hostAddress + "/ntms/open/get-captcha-image.do";
+
+        HashMap<String, String> mHeaderList = new HashMap<>();
+        mHeaderList.put("User-Agent", UIMSStaticRes.UserAgentStr);
+
+        List<Map.Entry<String, String>> headers = new ArrayList<>(mHeaderList.entrySet());
+
+        Response response = HTTPTools.getResponse(url, headers);
+        if (response == null || response.body() == null) {
+            return null;
+        }
+        try {
+            byte[] bytes = Objects.requireNonNull(response.body()).bytes();
+            Objects.requireNonNull(response.body()).close();
+            return bytes;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public boolean login(){
+        return login("");
+    }
+
+    public boolean login(String verifyCode){//登录
         try {
             FormBody formBody = new FormBody.Builder()
                     .add("username", user)
                     .add("password", GetMD5.getMD5Str("UIMS" + user + pass))
                     .add("mousePath", UIMSStaticRes.MouthPathStr)
+                    .add("vcode", verifyCode)
                     .build();
 
             Request request = new Request.Builder()

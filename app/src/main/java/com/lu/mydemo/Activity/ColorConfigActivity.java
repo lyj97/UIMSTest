@@ -33,7 +33,6 @@ public class ColorConfigActivity extends BaseActivity {
 
     private LinearLayout activity_color_config_layout;
 
-//    private LinearLayout config_text;
     private TextView chooseImage_tv;
     private TextView deleteImage_tv;
 
@@ -60,7 +59,6 @@ public class ColorConfigActivity extends BaseActivity {
 
         activity_color_config_layout = findViewById(R.id.activity_color_config_layout);
 
-//        config_text = findViewById(R.id.color_config_text_layout);
         chooseImage_tv = findViewById(R.id.color_config_choose_img);
         deleteImage_tv = findViewById(R.id.color_config_delete_custom_img);
 
@@ -107,8 +105,14 @@ public class ColorConfigActivity extends BaseActivity {
                     case R.id.color_config_choose_img : {
                         try {
                             checkFilePermission();
-                            Intent intent_gallery = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                            startActivityForResult(intent_gallery, 1);
+                            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                            intent.setType("image/*");
+                            intent.putExtra("crop", true);
+                            intent.putExtra("aspectX", activity_color_config_layout.getRootView().getWidth());
+                            intent.putExtra("aspectY",activity_color_config_layout.getRootView().getHeight());
+                            intent.putExtra("noFaceDetection", true);
+                            intent.putExtra("return-data", false);
+                            startActivityForResult(intent, 1);
                         }catch (Exception e){
                             e.printStackTrace();
                             AlertCenter.showWarningAlert(ColorConfigActivity.this, "自定义背景需要您授予\"访问外部存储空间\"权限，请您授权后重试。");
@@ -128,7 +132,6 @@ public class ColorConfigActivity extends BaseActivity {
             }
         };
 
-//        config_text.setOnClickListener(onClickListener);
         chooseImage_tv.setOnClickListener(onClickListener);
         deleteImage_tv.setOnClickListener(onClickListener);
 
@@ -142,6 +145,7 @@ public class ColorConfigActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Log.i("ColorConfigActivity", "ActivityResult:" + data);
+        checkFilePermission();
 
         if(!isGranted){
             AlertCenter.showWarningAlert(ColorConfigActivity.this, "自定义背景需要您授予\"访问外部存储空间\"权限，请您授权后重试。");
@@ -153,20 +157,26 @@ public class ColorConfigActivity extends BaseActivity {
             Uri selectedImage = data.getData();//返回的是uri
 
             String[] filePathColumn = {MediaStore.Images.Media.DATA};
-            Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-            cursor.moveToFirst();
-            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            String path = cursor.getString(columnIndex);
+            if(selectedImage != null) {
+                Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+                if (cursor != null) {
+                    cursor.moveToFirst();
+                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                    String path = cursor.getString(columnIndex);
+                    cursor.close();
 
-            Bitmap bitmap = BitmapFactory.decodeFile(path);
+                    Bitmap bitmap = BitmapFactory.decodeFile(path);
 
-//            Drawable drawable =new BitmapDrawable(bitmap);
-
-            ColorManager.setMainBackground(new BitmapDrawable(getResources(), bitmap));
-            ColorManager.saveCustomBg(path);
-            changeTheme();
-//            AlertCenter.showAlert(ColorConfigActivity.this, "自定义背景设置成功！");
-            showAlertWithCancelButton("提示", "自定义背景设置成功！", cancel_set_listener);
+                    ColorManager.setMainBackground(new BitmapDrawable(getResources(), bitmap));
+                    ColorManager.saveCustomBg(path);
+                    changeTheme();
+                    showAlertWithCancelButton("提示", "自定义背景设置成功！", cancel_set_listener);
+                } else {
+                    AlertCenter.showErrorAlert(this, "读取图片路径失败！");
+                }
+            } else {
+                AlertCenter.showErrorAlert(this, "获取图片失败！");
+            }
         }
 
     }

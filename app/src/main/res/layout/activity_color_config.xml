@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_color_config_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -18,76 +19,117 @@
     <View
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_weight="3"/>
+        android:layout_weight="20"/>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/color_config_custom_bg_text_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center">
+        android:background="@drawable/shape_card_background">
+
+        <TextView
+            android:id="@+id/color_config_custom_img_title_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            android:gravity="center"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:text="@string/activity_color_config_custom_img_title"/>
 
         <TextView
             android:id="@+id/color_config_delete_custom_img"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            app:layout_constraintTop_toBottomOf="@+id/color_config_custom_img_title_tv"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/color_config_choose_img"
             android:layout_margin="10dp"
-            android:text="删除自定义背景"
+            android:text="@string/activity_color_config_custom_img_delete"
             />
 
         <TextView
             android:id="@+id/color_config_choose_img"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            app:layout_constraintTop_toBottomOf="@+id/color_config_custom_img_title_tv"
+            app:layout_constraintStart_toEndOf="@+id/color_config_delete_custom_img"
+            app:layout_constraintEnd_toEndOf="parent"
             android:layout_margin="10dp"
-            android:text="选择自定义背景图"
+            android:text="@string/activity_color_config_custom_img_select"
             />
+        
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/color_config_delete_custom_img"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="5dp"
+            android:text="@string/activity_color_config_custom_img_tips"
+            android:textSize="12sp"/>
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_weight="1"/>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/color_config_text_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center">
+        android:background="@drawable/shape_card_background">
+
+        <TextView
+            android:id="@+id/color_config_theme_config_title_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            android:gravity="center"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:text="@string/activity_color_config_custom_theme_title"/>
 
         <TextView
             android:id="@+id/color_config_blue_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/color_config_theme_config_title_tv"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/color_config_pink_text"
             android:layout_margin="10dp"
             android:textColor="@color/colorPrimary"
-            android:text="蓝色"/>
+            android:text="@string/activity_color_config_custom_theme_text_blue"/>
 
         <TextView
             android:id="@+id/color_config_pink_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/color_config_theme_config_title_tv"
+            app:layout_constraintStart_toEndOf="@+id/color_config_blue_text"
+            app:layout_constraintEnd_toStartOf="@+id/color_config_green_text"
             android:layout_margin="10dp"
             android:textColor="@color/colorPrimary_Pink"
-            android:text="红色"/>
+            android:text="@string/activity_color_config_custom_theme_text_pink"/>
 
         <TextView
             android:id="@+id/color_config_green_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/color_config_theme_config_title_tv"
+            app:layout_constraintStart_toEndOf="@+id/color_config_pink_text"
+            app:layout_constraintEnd_toEndOf="parent"
             android:layout_margin="10dp"
             android:textColor="@color/colorPrimary_Green"
-            android:text="绿色"/>
+            android:text="@string/activity_color_config_custom_theme_text_green"/>
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_weight="4"/>
 
 </LinearLayout>

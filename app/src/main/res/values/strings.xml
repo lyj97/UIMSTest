@@ -1,11 +1,14 @@
 <resources>
     <string name="app_name">UIMSTest</string>
-    <string name="textlogin_id">教学号</string>
-    <string name="textlogin_password">教务密码</string>
-    <string name="rememberpassword">记住密码</string>
-    <string name="autologin">自动登录</string>
-    <string name="text_loginbutton">登录</string>
-    <string name="title_activity_test_botton_navigation">TestBottonNavigationActivity</string>
+    <string name="text_login_id">教学号</string>
+    <string name="text_login_password">教务密码</string>
+    <string name="text_login_verify_code">验证码</string>
+    <string name="remember_password">记住密码</string>
+    <string name="auto_login">自动登录</string>
+    <string name="use_student_vpn_login">使用学生VPN登录 ></string>
+    <string name="use_student_vpn">使用学生VPN</string>
+    <string name="text_login_button">登录</string>
+    <string name="title_activity_test_button_navigation">TestButtonNavigationActivity</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
@@ -59,5 +62,16 @@
     <string name="course_xiaoxuanxiu">校选修(公选)课</string>
     <string name="course_chongxiu">重修</string>
     <string name="setting_test_function_introduction">这里的设置因人而异，也许开启它能提升你的使用体验，但也有可能会影响你使用一些功能。\n你可以根据自己的喜好，开启这里的功能。\n这里的设置会默认关闭。</string>
+
+    <!--主题设置-->
+    <string name="activity_color_config_custom_img_title">背景设置</string>
+    <string name="activity_color_config_custom_img_delete">删除自定义背景</string>
+    <string name="activity_color_config_custom_img_select">选择自定义背景图</string>
+    <string name="activity_color_config_custom_img_tips">Tips: 选择较为简单的图片，可以获得较好的效果哦~</string>
+
+    <string name="activity_color_config_custom_theme_title">主题设置</string>
+    <string name="activity_color_config_custom_theme_text_blue">蓝色</string>
+    <string name="activity_color_config_custom_theme_text_pink">粉色</string>
+    <string name="activity_color_config_custom_theme_text_green">绿色</string>
 
 </resources>

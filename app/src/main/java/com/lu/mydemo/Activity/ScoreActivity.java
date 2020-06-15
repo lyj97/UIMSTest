@@ -18,7 +18,6 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -47,13 +46,13 @@ import com.lu.mydemo.R;
 import com.lu.mydemo.UIMS.UIMS;
 import com.lu.mydemo.Utils.Score.ScoreConfig;
 import com.lu.mydemo.Utils.Score.ScoreInf;
+import com.lu.mydemo.Utils.StudentVPN.VPNClient;
 import com.lu.mydemo.Utils.Thread.MyThreadController;
 import com.lu.mydemo.View.Listener.AppBarStateChangeListener;
 import com.lu.mydemo.View.MyView.MyToolBar;
 import com.lu.mydemo.View.PopWindow.LoginGetScorePopupWindow;
 import com.lu.mydemo.sample.adapter.BaseAdapter;
 import com.lu.mydemo.sample.adapter.MainAdapter;
-import com.tapadoo.alerter.Alerter;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 
 import net.sf.json.JSONArray;
@@ -409,6 +408,17 @@ public class ScoreActivity extends BaseActivity
 
     }
 
+    @Override
+    public void loginVPNSuccess(VPNClient vpnClient) {
+        dismissPopupWindow();
+        LoginGetScorePopupWindow window = new LoginGetScorePopupWindow(this,
+                findViewById(R.id.activity_scrolling_layout).getHeight(),
+                findViewById(R.id.activity_scrolling_layout).getWidth(), vpnClient);
+        window.setFocusable(true);
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        showPopupWindow(window);
+    }
+
     private void setData(final String asID, boolean isReSelect, final int position){
 
         if(pieDatas[position] != null){
@@ -562,7 +572,8 @@ public class ScoreActivity extends BaseActivity
         });
     }
 
-    public void dismissShowNewPopupWindow(final PopupWindow popupWindow){
+    public void showPopupWindow(final PopupWindow popupWindow){
+        super.showPopupWindow(popupWindow);
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -570,7 +581,8 @@ public class ScoreActivity extends BaseActivity
                     mPopUpWindow.dismiss();
                 }
                 mPopUpWindow = popupWindow;
-                popupWindow.showAtLocation(findViewById(R.id.activity_scrolling_layout), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
+                popupWindow.showAtLocation(findViewById(R.id.activity_scrolling_layout),
+                        Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
             }
         });
     }
@@ -893,4 +905,7 @@ public class ScoreActivity extends BaseActivity
     public static void setIndex_id(HashMap<Integer, String> index_id) {
         ScoreActivity.index_id = index_id;
     }
+
+
+
 }

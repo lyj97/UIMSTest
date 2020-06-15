@@ -75,6 +75,8 @@ import com.lu.mydemo.Utils.Score.ScoreInf;
 import com.lu.mydemo.Utils.Thread.MyThreadController;
 import com.lu.mydemo.View.PopWindow.*;
 
+import org.apache.commons.collections.CollectionUtils;
+
 public class MainActivity extends BaseActivity {
 
     private LinearLayout activity_login;
@@ -132,8 +134,6 @@ public class MainActivity extends BaseActivity {
     public LoginGetCourseSchedulePopupWindow courseSchedulePopupWindow;
 
     private static boolean acceptTestFun = false;
-
-    private Handler myViewHandler;
 
 //    private String theme = "blue";
 
@@ -199,17 +199,6 @@ public class MainActivity extends BaseActivity {
                 Animation.RELATIVE_TO_SELF, 0.0f,
                 Animation.RELATIVE_TO_SELF, 1.0f);
         mHiddenAction.setDuration(500);
-
-        myViewHandler = new Handler(){
-            @Override
-            public void handleMessage(Message msg) {
-                switch (msg.what){
-                    case 0 :{
-                        if(!isMainShow) login_main_view.setVisibility(View.GONE);
-                    }
-                }
-            }
-        };
 
         if(!(timeInformation.getText().length() > 0)) timeInformation.setText("时间(首次查询后刷新)");
 
@@ -476,7 +465,7 @@ public class MainActivity extends BaseActivity {
             login_main_view.setVisibility(View.INVISIBLE);
             linearLayoutView_down_text.setText("⇧显示下方区域");
             isMainShow = false;
-            myViewHandler.sendEmptyMessage(0);//刷新页面
+            setMainViewGone();
         }
         else {
             login_main_view.startAnimation(mHiddenAction);
@@ -488,7 +477,7 @@ public class MainActivity extends BaseActivity {
                 public void run() {
                     try {
                         Thread.sleep(500);
-                        myViewHandler.sendEmptyMessage(0);//刷新页面
+                        setMainViewGone();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -496,6 +485,15 @@ public class MainActivity extends BaseActivity {
             });
         }
         sp.edit().putBoolean("isMainShow", isMainShow).apply();
+    }
+
+    public void setMainViewGone(){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if(!isMainShow) login_main_view.setVisibility(View.GONE);
+            }
+        });
     }
 
     public void showMainView(){
@@ -1387,9 +1385,9 @@ public class MainActivity extends BaseActivity {
                             int detailLine = 4;
                             int linkLine = 6;
                             try{
-                                titleLine = configJSON.getInt("titleLine");
-                                detailLine = configJSON.getInt("detailLine");
-                                linkLine = configJSON.getInt("linkLine");
+                                titleLine = Integer.parseInt(configJSON.get("titleLine").toString());
+                                detailLine = Integer.parseInt(configJSON.get("detailLine").toString());
+                                linkLine = Integer.parseInt(configJSON.get("linkLine").toString());
                             } catch (Exception e){
                                 e.printStackTrace();
                             }
@@ -1430,9 +1428,13 @@ public class MainActivity extends BaseActivity {
     }
 
     private void initMessageList(final List<Map<String, Object>> list, final int titleMaxLine, final int detailMaxLine, final int linkMaxLine){
+        if(CollectionUtils.isEmpty(list)){
+            return;
+        }
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                mMessageListLv.setVisibility(View.VISIBLE);
                 mMessageListLv.setAdapter(new MessageListAdapter(context, list, R.layout.list_item_message,
                         new String[]{"title", "detail", "linkText"},
                         new int[]{R.id.list_item_message_detail_title, R.id.list_item_message_detail_context, R.id.list_item_message_link},

@@ -28,6 +28,10 @@ import com.lu.mydemo.Utils.Rom.EMUIUtils;
 import com.lu.mydemo.Utils.Rom.MIUIUtils;
 import com.lu.mydemo.View.PopWindow.InternetInformationPopupWindow;
 
+import dalvik.system.BaseDexClassLoader;
+import dalvik.system.DexClassLoader;
+import dalvik.system.PathClassLoader;
+
 public class AboutActivity extends BaseActivity {
 
     private TextView application_icon_text_view;
@@ -69,6 +73,13 @@ public class AboutActivity extends BaseActivity {
                         "可以点击页面中的❤鼓励一下我哦~\n\n" +
                         "如遇问题，请点击“和开发者聊聊；”.\n" +
                         "如果喜欢我，点击“加入内测”，让我变得更好吧~");
+            }
+        });
+        application_icon_text_view.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                ClassLoader classLoader = int.class.getClassLoader();
+                return true;
             }
         });
 

@@ -59,10 +59,7 @@ public class TestFunctionActivity extends BaseActivity {
             public void onItemClick(View view, int adapterPosition) {
                 switch (adapterPosition){
                     case 0:{
-                        if(MainActivity.isLocalValueLoaded)
-                            startActivity(new Intent(TestFunctionActivity.this, PingjiaoActivity.class));
-                        else
-                            AlertCenter.showErrorAlert(TestFunctionActivity.this, "还没有已经保存的信息，缺少必要信息无法教评哦，点击首页\"更新信息\"再试试吧(*^_^*).");
+                        startActivity(new Intent(TestFunctionActivity.this, PingjiaoActivity.class));
                         break;
                     }
                     case 1:{
@@ -131,11 +128,11 @@ public class TestFunctionActivity extends BaseActivity {
         findViewById(R.id.activity_test_function).setBackground(ColorManager.getMainBackground_full());
     }
 
-    class TestFunctionListAdapter extends MainAdapter {
+    public static class TestFunctionListAdapter extends MainAdapter {
 
         private List<Map<String,Object>> mDataList;
 
-        public TestFunctionListAdapter(Context context){
+        TestFunctionListAdapter(Context context){
             super(context);
         }
 
@@ -152,7 +149,7 @@ public class TestFunctionActivity extends BaseActivity {
         @NonNull
         @Override
         public MainAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            return new TestFunctionListAdapter.ViewHolder(getInflater().inflate(R.layout.list_item_news, parent, false));
+            return new ViewHolder(getInflater().inflate(R.layout.list_item_news, parent, false));
         }
 
         @Override
@@ -160,7 +157,7 @@ public class TestFunctionActivity extends BaseActivity {
             holder.setData((String) mDataList.get(position).get("title"), (String) mDataList.get(position).get("description"));
         }
 
-        class ViewHolder extends MainAdapter.ViewHolder {
+        public static class ViewHolder extends MainAdapter.ViewHolder {
 
             TextView tvTitle;
             TextView tvDepartment;

@@ -73,8 +73,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp"
+        android:visibility="gone"
         tools:listitem="@layout/list_item_message"
-        tools:visibility="gone"
         >
     </ListView>
 

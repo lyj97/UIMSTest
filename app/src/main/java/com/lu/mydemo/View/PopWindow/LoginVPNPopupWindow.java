@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.lu.mydemo.Activity.BaseActivity;
 import com.lu.mydemo.Activity.ScoreActivity;
 import com.lu.mydemo.Config.ColorManager;
 import com.lu.mydemo.Notification.AlertCenter;
@@ -45,10 +46,12 @@ public class LoginVPNPopupWindow extends PopupWindow {
     private TextView deleteSavedText;
 
     private Activity context;
+    private LoginVPNListener mLoginListener;
 
-    public LoginVPNPopupWindow(final ScoreActivity context, int height, int width) {
+    public LoginVPNPopupWindow(final BaseActivity context, int height, int width, LoginVPNListener listener) {
         super(context);
         this.context = context;
+        this.mLoginListener = listener;
         context.setPopUpWindow(this);
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -201,10 +204,7 @@ public class LoginVPNPopupWindow extends PopupWindow {
         context.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                LoginGetScorePopupWindow window = new LoginGetScorePopupWindow((ScoreActivity) context, context.findViewById(R.id.activity_scrolling_layout).getHeight(), context.findViewById(R.id.activity_scrolling_layout).getWidth(), vpnClient);
-                window.setFocusable(true);
-                window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-                ((ScoreActivity) context).dismissShowNewPopupWindow(window);
+                mLoginListener.loginVPNSuccess(vpnClient);
             }
         });
     }
@@ -246,6 +246,10 @@ public class LoginVPNPopupWindow extends PopupWindow {
         commitButton.setBackground(ColorManager.getInternetInformationButtonBackground_full());
         user.setBackground(ColorManager.getSpinnerBackground_full());
         password.setBackground(ColorManager.getSpinnerBackground_full());
+    }
+
+    public interface LoginVPNListener{
+        void loginVPNSuccess(final VPNClient vpnClient);
     }
 
 }

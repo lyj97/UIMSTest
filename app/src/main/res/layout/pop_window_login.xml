@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/pop_window_login_pop_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:padding="5dp"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:background="@drawable/background_login"
-    >
+    android:background="@drawable/background_login">
 
     <LinearLayout
         android:id="@+id/pop_window_login_pop_layout_main_information"
@@ -35,12 +35,13 @@
             android:layout_height="48dp"
             android:layout_gravity="center_horizontal"
             android:gravity="center"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="5dp"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
             android:background="@drawable/login_edit_text_background"
             android:windowSoftInputMode="stateHidden"
-            android:hint="@string/textlogin_id"/>
+            android:hint="@string/text_login_id"/>
+
         <EditText
             android:id="@+id/pop_window_login_password"
             android:inputType="textPassword"
@@ -48,21 +49,88 @@
             android:layout_height="48dp"
             android:layout_gravity="center_horizontal"
             android:gravity="center"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="5dp"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
             android:background="@drawable/login_edit_text_background"
             android:windowSoftInputMode="stateHidden"
-            android:hint="@string/textlogin_password"/>
+            android:hint="@string/text_login_password"/>
+
+        <LinearLayout
+            android:id="@+id/pop_window_login_verify_code_layout"
+            android:layout_width="match_parent"
+            android:layout_height="53dp"
+            android:gravity="center"
+            android:background="@drawable/login_edit_text_background"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/pop_window_login_verify_code_iv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@drawable/ic_autorenew_white_24dp"/>
+
+            <EditText
+                android:id="@+id/pop_window_login_verify_code_edit_text"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:hint="@string/text_login_verify_code"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/pop_window_login_use_student_vpn_login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/pop_window_login_pop_layout_main_information"
+        android:padding="5dp"
+        android:gravity="center"
+        android:text="@string/use_student_vpn_login"
+        android:visibility="gone"
+        tools:visibility="visible"
+        />
+
+    <LinearLayout
+        android:id="@+id/pop_window_login_get_score_VPN_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/pop_window_login_use_student_vpn_login"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:background="#00000000"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <CheckBox
+            android:id="@+id/pop_window_login_get_score_VPN_check_box"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/use_student_vpn"
+            />
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/pop_window_login_pop_layout_main_information"
+        android:layout_below="@+id/pop_window_login_get_score_VPN_layout"
         android:orientation="vertical"
-        android:padding="5dp"
+        android:paddingBottom="5dp"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp"
         >
 
         <Button

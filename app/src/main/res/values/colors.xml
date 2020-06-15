@@ -6,6 +6,7 @@
     <color name="color_whiteBackground">#FFFFFF</color>
 
     <color name="color_whiteText">#FFFFFF</color>
+    <color name="card_back_color">#4DFFFFFF</color>
 
     <color name="splash_background">#4FB3FF</color>
 
